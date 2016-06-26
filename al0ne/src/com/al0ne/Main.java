@@ -6,6 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
         Door a = new Door("Knock knock", "Sorry, did you knock?");
-        a.setToggled(false);
+        a.setToggled(true);
     }
 }
