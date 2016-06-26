@@ -1,8 +1,11 @@
 package com.al0ne;
 
+import com.al0ne.Interactables.Door;
+
 public class Main {
 
     public static void main(String[] args) {
-	System.out.println("hello world!");
+        Door a = new Door("Knock knock", "Sorry, did you knock?");
+        a.setToggled(true);
     }
 }
