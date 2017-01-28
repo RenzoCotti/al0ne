@@ -7,6 +7,6 @@ import com.al0ne.Interactables.Items.Archetypes.Cuttable;
  */
 public class Rope extends Cuttable{
     public Rope() {
-        super("You can see a rope here");
+        super("rope", "You can see a rope here.");
     }
 }

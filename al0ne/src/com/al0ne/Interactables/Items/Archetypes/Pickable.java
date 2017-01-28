@@ -7,32 +7,14 @@ import java.util.ArrayList;
  */
 public abstract class Pickable extends Interactable {
 
-
-    private String name;
-    private String description;
-    private double weight;
-    private ArrayList<String> uses;
-    private boolean toggled = false;
+    protected double weight;
+    protected ArrayList<String> uses;
+    protected boolean toggled = false;
 
     public Pickable(String name, String description, double weight) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
         this.weight = weight;
-    }
-
-    @Override
-    public void isToggled(Pickable item) {
-        toggled=true;
-    }
-
-    @Override
-    public void setToggled(boolean toggled) {
-        this.toggled=toggled;
-    }
-
-    @Override
-    public boolean getToggled() {
-        return toggled;
+        this.uses=new ArrayList<>();
     }
 
     public ArrayList<String> getUses() {
@@ -40,15 +22,7 @@ public abstract class Pickable extends Interactable {
     }
 
     public void setUses(String use) {
-        this.uses.add(use);
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        uses.add(use);
     }
 
     public double getWeight() {
@@ -59,7 +33,4 @@ public abstract class Pickable extends Interactable {
         this.weight = weight;
     }
 
-    public String getName() {
-        return name;
-    }
 }

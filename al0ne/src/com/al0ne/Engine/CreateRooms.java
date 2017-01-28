@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Interactables.Cuttable.Rope;
+import com.al0ne.Interactables.Items.Edible.Apple;
 import com.al0ne.Interactables.Items.Sharp.Knife;
 import com.al0ne.Room;
 
@@ -25,7 +26,8 @@ public class CreateRooms {
         Room cave2 = new Room("The rocks are crumbly here.", "Cave 2");
         cave2.addExit("cave1");
         cave2.addItem(new Knife());
-        cave2.addItem(new Rope());
+        cave2.addItem(new Apple());
+        cave2.addInteractable(new Rope());
 
         rooms.put("cave2", cave2);
 

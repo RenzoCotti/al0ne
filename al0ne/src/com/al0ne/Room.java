@@ -4,12 +4,13 @@ import com.al0ne.Interactables.Items.Archetypes.Interactable;
 import com.al0ne.Interactables.Items.Archetypes.Pickable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by BMW on 28/01/2017.
  *
  * a Room is:
- * an interactable, all obj that one can interact with
+ * an interactables, all obj that one can interact with
  * a description
  * a name
  * an exits, arraylist of strings, ids in hashmap
@@ -17,8 +18,8 @@ import java.util.ArrayList;
  */
 public class Room {
 
-    private ArrayList<Interactable> interactable;
-    private ArrayList<Pickable> items;
+    private HashMap<String, Interactable> interactables;
+    private HashMap<String, Pickable> items;
     private String description;
     private String name;
     private ArrayList<String> exits;
@@ -26,36 +27,47 @@ public class Room {
     public Room(String description, String name) {
         this.description = description;
         this.name = name;
-        this.interactable=new ArrayList<>();
-        this.items=new ArrayList<>();
+        this.interactables=new HashMap<>();
+        this.items=new HashMap<>();
         this.exits=new ArrayList<>();
     }
 
-    public ArrayList<Interactable> getInteractable() {
-        return interactable;
+    public HashMap<String, Interactable> getInteractables() {
+        return interactables;
     }
 
-//    public void printInteractables(){
-//        System.out.println("You can see:");
-//        for (Interactable item : items){
-//            System.out.println("- "+item.);
-//        }
-//    }
+    public void printInteractables(){
+        if (items.size()==0){
+            return;
+        } else {
+            for (Interactable item : interactables.values()) {
+                System.out.println(item.getDescription());
+            }
+        }
+    }
 
-    public ArrayList<Pickable> getItems() {
+    public HashMap<String, Pickable> getItems() {
         return items;
     }
 
     public void printItems(){
-        System.out.println("You can see:");
-        for (Pickable item : items){
-            System.out.println("- "+item.getName());
+        if (items.size()==0){
+            return;
+        } else {
+            System.out.println("You can see:");
+            for (Pickable item : items.values()) {
+                System.out.println("- " + item.getName());
+            }
         }
     }
 
 
     public String getDescription() {
         return description;
+    }
+
+    public void printDescription(){
+        System.out.println(description);
     }
 
     public String getName() {
@@ -67,11 +79,11 @@ public class Room {
     }
 
     public void addInteractable(Interactable item) {
-        this.interactable.add(item);
+        this.interactables.put(item.getName(), item);
     }
 
     public void addItem(Pickable item) {
-        this.items.add(item);
+        this.items.put(item.getName(), item);
     }
 
     public void addExit(String exit) {
