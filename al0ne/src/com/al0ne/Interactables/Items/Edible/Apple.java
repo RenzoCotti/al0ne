@@ -8,7 +8,7 @@ import com.al0ne.Interactables.Items.Archetypes.Edible;
 public class Apple extends Edible {
 
     public Apple() {
-        super("A fresh apple", 0.1);
+        super("Apple", "A fresh apple", 0.1);
     }
 
 

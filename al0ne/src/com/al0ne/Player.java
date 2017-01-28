@@ -16,10 +16,14 @@ public class Player {
 
     private ArrayList<Pickable> inventory;
     private Room currentRoom;
+    private double maxWeight;
+    private double currentWeight;
 
-    public Player(Room currentRoom, ArrayList<Pickable> inventory) {
+    public Player(Room currentRoom, ArrayList<Pickable> inventory, double maxWeight) {
         this.currentRoom = currentRoom;
         this.inventory = inventory;
+        this.maxWeight=maxWeight;
+        this.currentWeight=0;
     }
 
 
@@ -27,8 +31,8 @@ public class Player {
         return inventory;
     }
 
-    public void setInventory(ArrayList<Pickable> inventory) {
-        this.inventory = inventory;
+    public void addItem(Pickable item) {
+        this.inventory.add(item);
     }
 
 
@@ -39,5 +43,29 @@ public class Player {
 
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
+    }
+
+    public void pickUpItem(Pickable item){
+
+        for (Pickable object : currentRoom.getItems()){
+            if (object.getName().equals(item.getName())){
+                if (item.getWeight()+currentWeight > maxWeight ){
+                    System.out.println("Too heavy to carry.");
+                    return;
+                } else{
+                    addItem(item);
+                    System.out.println("Added "+ item.getName() + " to inventory.");
+                    return;
+                }
+            }
+        }
+
+        System.out.println("There is no such object");
+    }
+
+    public void moveToRoom(Room room){
+
+        for (String)
+
     }
 }

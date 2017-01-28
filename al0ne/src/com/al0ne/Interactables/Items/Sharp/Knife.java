@@ -7,6 +7,6 @@ import com.al0ne.Interactables.Items.Archetypes.Sharp;
  */
 public class Knife extends Sharp{
     public Knife() {
-        super("A rusty but sharp knife", 0.2);
+        super("Knife", "A rusty but sharp knife", 0.2);
     }
 }

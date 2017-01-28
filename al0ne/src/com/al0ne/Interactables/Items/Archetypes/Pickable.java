@@ -5,14 +5,17 @@ import java.util.ArrayList;
 /**
  * Created by BMW on 28/01/2017.
  */
-public abstract class Pickable implements Interactable {
+public abstract class Pickable extends Interactable {
 
+
+    private String name;
     private String description;
     private double weight;
     private ArrayList<String> uses;
     private boolean toggled = false;
 
-    public Pickable(String description, double weight) {
+    public Pickable(String name, String description, double weight) {
+        this.name = name;
         this.description = description;
         this.weight = weight;
     }
@@ -54,5 +57,9 @@ public abstract class Pickable implements Interactable {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public String getName() {
+        return name;
     }
 }
