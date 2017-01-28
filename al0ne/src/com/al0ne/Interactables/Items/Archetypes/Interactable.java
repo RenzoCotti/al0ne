@@ -31,7 +31,9 @@ public abstract class Interactable {
         return toggled;
     }
 
-    public void isInteractedWith(Pickable object){};
+    public void isInteractedWith(Pickable object){
+        System.out.println("You use the "+ object.name + " on the "+ getName());
+    }
 
     public void setToggled(boolean toggled) {
         this.toggled = toggled;

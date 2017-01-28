@@ -2,8 +2,6 @@ package com.al0ne;
 
 import com.al0ne.Interactables.Items.Archetypes.Interactable;
 import com.al0ne.Interactables.Items.Archetypes.Pickable;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -35,17 +33,37 @@ public class Player {
 
     public void printInventory(){
         if (inventory.size()==0){
+            System.out.println("You have no items.");
             return;
         } else {
             System.out.println("You have these items:");
             for (Interactable item : inventory.values()) {
                 System.out.println("- " + item.getName());
             }
+            System.out.println();
         }
     }
 
     public void addItem(Pickable item) {
         this.inventory.put(item.getName(), item);
+    }
+
+    public boolean hasItem(String item){
+        try{
+            inventory.get(item);
+            return true;
+        } catch (NullPointerException ex){
+            return false;
+        }
+    }
+
+    public Pickable getItem(String item){
+        if(hasItem(item)){
+            return inventory.get(item);
+        } else {
+            System.out.println("No such item in your inventory.");
+            return null;
+        }
     }
 
 
@@ -68,6 +86,7 @@ public class Player {
                 } else{
                     addItem(object);
                     System.out.println("Added "+ item + " to inventory.");
+                    currentRoom.getItems().remove(item);
                     return;
                 }
             }
@@ -86,11 +105,17 @@ public class Player {
                 return;
             }
         }
-        System.out.println("You can't figure out where to go");
+        System.out.println("You can't figure out how to get to " + room);
         System.out.println();
     }
 
     public void interactWith (Interactable target, Pickable item){
-        target.isInteractedWith(item);
+        if (target != null && item != null){
+            System.out.println("You use the " + item.getName() + " on the "+ target.getName());
+            target.isInteractedWith(item);
+        } else {
+            System.out.println("You can't see it.");
+        }
+
     }
 }

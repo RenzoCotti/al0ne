@@ -27,5 +27,9 @@ public class Game {
         return player;
     }
 
+    public Room getRoom(){
+        return player.getCurrentRoom();
+    }
+
 
 }

@@ -17,6 +17,11 @@ public abstract class Pickable extends Interactable {
         this.uses=new ArrayList<>();
     }
 
+    @Override
+    public void printDescription(){
+        System.out.println(name+": "+description+". Weighs "+weight+" kg");
+    }
+
     public ArrayList<String> getUses() {
         return uses;
     }

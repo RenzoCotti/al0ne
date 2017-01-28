@@ -89,4 +89,12 @@ public class Room {
     public void addExit(String exit) {
         this.exits.add(exit);
     }
+
+    public void printRoom(){
+        System.out.println(name);
+        printDescription();
+        printInteractables();
+        printItems();
+        System.out.println();
+    }
 }

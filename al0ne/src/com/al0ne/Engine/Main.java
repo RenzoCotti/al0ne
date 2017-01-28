@@ -20,10 +20,7 @@ public class Main {
 
         Player grog = game.getPlayer();
 
-        Room currentRoom = grog.getCurrentRoom();
-        currentRoom.printDescription();
-        currentRoom.printItems();
-        currentRoom.printInteractables();
+        game.getRoom().printRoom();
 
         grog.pickUpItem("apple");
 
@@ -31,10 +28,7 @@ public class Main {
         grog.moveToRoom("cave2", rooms);
 
 
-        currentRoom=grog.getCurrentRoom();
-        currentRoom.printDescription();
-        currentRoom.printInteractables();
-        currentRoom.printItems();
+        game.getRoom().printRoom();
 
         System.out.println();
 
@@ -46,11 +40,27 @@ public class Main {
 
         grog.getInventory().get("knife").printDescription();
 
-        grog.interactWith(currentRoom.getInteractables().get("rope"), grog.getInventory().get("apple"));
+        game.getRoom().printRoom();
 
-        grog.interactWith(currentRoom.getInteractables().get("rope"), grog.getInventory().get("knife"));
 
-        grog.interactWith(currentRoom.getInteractables().get("rope"), grog.getInventory().get("knife"));
+//        grog.moveToRoom("cave1", rooms);
+//
+//        currentRoom = grog.getCurrentRoom();
+//
+//        currentRoom.printRoom();
+//
+//
+//        grog.moveToRoom("cave2", rooms);
+//
+//        currentRoom = grog.getCurrentRoom();
+//
+//        currentRoom.printRoom();
+
+        grog.interactWith(game.getRoom().getInteractables().get("apple"), grog.getItem("apple"));
+
+//        grog.interactWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
+
+//        grog.interactWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
 
 
     }

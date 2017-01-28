@@ -24,7 +24,7 @@ public abstract class Cuttable extends Interactable {
                 return;
             }
         }
-        System.out.println("It doesn't do anything");
+        System.out.println(item.getName()+" is not sharp enough.");
     }
 
     @Override
