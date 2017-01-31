@@ -31,5 +31,9 @@ public class Game {
         return player.getCurrentRoom();
     }
 
+    public HashMap<String, Room> getAllRooms(){
+        return allRooms;
+    }
+
 
 }

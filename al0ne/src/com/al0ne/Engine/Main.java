@@ -1,10 +1,9 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Interactables.Items.Archetypes.Interactable;
-import com.al0ne.Interactables.Items.Archetypes.Pickable;
 import com.al0ne.Player;
 import com.al0ne.Room;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
 
@@ -22,46 +21,41 @@ public class Main {
 
         game.getRoom().printRoom();
 
+        Scanner userInput = new Scanner(System.in);
+
+        while (true){
+
+            if(userInput.hasNextLine()){
+                ParseInput.parse(userInput.nextLine(), game);
+            }
+
+        }
+
+//        grog.pickUpItem("health potion");
+//
+//        grog.moveToRoom("east", rooms);
+//
+//
+//
+//        grog.pickUpItem("knife");
 //        grog.pickUpItem("apple");
-
-        grog.moveToRoom("east", rooms);
-
-
-
-        grog.pickUpItem("knife");
-        grog.pickUpItem("apple");
-
-        grog.printInventory();
-
-        grog.getInventory().get("knife").printDescription();
-
-        game.getRoom().printRoom();
-
-//        game.getRoom().printInteractables();
-
-        grog.examine("rope");
-
-
-
-
-//        grog.moveToRoom("cave1", rooms);
 //
-//        currentRoom = grog.getCurrentRoom();
+//        grog.printInventory();
 //
-//        currentRoom.printRoom();
+//        grog.getInventory().get("knife").printDescription();
+//
+//        grog.examine("rope");
 //
 //
-//        grog.moveToRoom("cave2", rooms);
+//        grog.examine("apple");
 //
-//        currentRoom = grog.getCurrentRoom();
 //
-//        currentRoom.printRoom();
+//
+//        grog.interactOnWith("apple", "knife");
 
-//        grog.interactWith(game.getRoom().getInteractables().get("apple"), grog.getItem("apple"));
+//        grog.interactOnWith("rope", "knife");
 
-//        grog.interactWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
-
-//        grog.interactWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
+//        grog.interactOnWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
 
 
     }

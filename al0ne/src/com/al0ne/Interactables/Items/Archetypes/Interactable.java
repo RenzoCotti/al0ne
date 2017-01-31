@@ -31,11 +31,21 @@ public abstract class Interactable {
         return toggled;
     }
 
-    public void isInteractedWith(Pickable object){
+    public void isInteractedOnWith(Pickable object){
         System.out.println("You use the "+ object.name + " on the "+ getName());
+        toggle();
+
     }
 
-    public void setToggled(boolean toggled) {
-        this.toggled = toggled;
+    public void isInteractedWith(){
+        System.out.println("You use the" + getName());
+        this.toggle();
+    }
+
+    public void toggle() {
+
+        if (!this.toggled){
+            this.toggled = !toggled;
+        }
     }
 }

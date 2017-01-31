@@ -19,7 +19,7 @@ public abstract class Pickable extends Interactable {
 
     @Override
     public void printDescription(){
-        System.out.println(name+": "+description+". Weighs "+weight+" kg");
+        System.out.println(description+". Weighs "+weight+" kg");
     }
 
     public ArrayList<String> getUses() {
@@ -37,5 +37,6 @@ public abstract class Pickable extends Interactable {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+
 
 }

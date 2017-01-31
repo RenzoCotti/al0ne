@@ -10,7 +10,7 @@ public abstract class Cuttable extends Interactable {
     }
 
     @Override
-    public void isInteractedWith(Pickable item) {
+    public void isInteractedOnWith(Pickable item) {
 
         if (isToggled()) {
             printDescription();
@@ -19,7 +19,7 @@ public abstract class Cuttable extends Interactable {
 
         for (String s : item.getUses()){
             if (s.equals("sharp")){
-                setToggled(true);
+                toggle();
                 System.out.println(getName()+" is cut using the "+ item.getName());
                 return;
             }

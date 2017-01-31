@@ -2,6 +2,7 @@ package com.al0ne.Engine;
 
 import com.al0ne.Interactables.Cuttable.Rope;
 import com.al0ne.Interactables.Items.Edible.Apple;
+import com.al0ne.Interactables.Items.Potions.HealthPotion;
 import com.al0ne.Interactables.Items.Sharp.Knife;
 import com.al0ne.Room;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class CreateRooms {
 
         Room cave1 = new Room("You are in a pretty generic-looking cave. It feels pretty damp.", "Cave 1");
         cave1.addExit("east","cave2");
+        cave1.addItem(new HealthPotion());
 
         rooms.put("cave1", cave1);
 
