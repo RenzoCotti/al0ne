@@ -24,6 +24,9 @@ public class ParseInput {
 //                return lowerInput;
             case "open":
                 break;
+            case "look":
+                game.getRoom().printRoom();
+                break;
             case "north":
                 if (temp.length > 1) break;
                 else {
@@ -58,18 +61,10 @@ public class ParseInput {
                 System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x with y, open x");
                 break;
             case "quit":
-                System.out.println("Are you sure you want to quit? (Y/N)");
-                Scanner test = new Scanner(System.in);
-                while (true){
-                    if(test.hasNextLine()){
-                        if (test.nextLine().equals("Y")){
-                            System.exit(0);
-                        } else{
-                            System.out.println("Ok then, forget it.");
-                        }
-                    }
-                    break;
-                }
+                ParseInput.quit();
+                break;
+            case "exit":
+                ParseInput.quit();
                 break;
 
             default:
@@ -93,6 +88,21 @@ public class ParseInput {
             }
         }
         return -1;
+    }
+
+    public static void quit(){
+        System.out.println("Are you sure you want to quit? (Y/N)");
+        Scanner test = new Scanner(System.in);
+        while (true){
+            if(test.hasNextLine()){
+                if (test.nextLine().equals("Y")){
+                    System.exit(0);
+                } else{
+                    System.out.println("Ok then, forget it.");
+                }
+            }
+            break;
+        }
     }
 
 }
