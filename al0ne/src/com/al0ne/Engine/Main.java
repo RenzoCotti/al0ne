@@ -22,15 +22,10 @@ public class Main {
 
         game.getRoom().printRoom();
 
-        grog.pickUpItem("apple");
+//        grog.pickUpItem("apple");
 
-        grog.moveToRoom("cave1", rooms);
-        grog.moveToRoom("cave2", rooms);
+        grog.moveToRoom("east", rooms);
 
-
-        game.getRoom().printRoom();
-
-        System.out.println();
 
 
         grog.pickUpItem("knife");
@@ -41,6 +36,12 @@ public class Main {
         grog.getInventory().get("knife").printDescription();
 
         game.getRoom().printRoom();
+
+//        game.getRoom().printInteractables();
+
+        grog.examine("rope");
+
+
 
 
 //        grog.moveToRoom("cave1", rooms);
@@ -56,7 +57,7 @@ public class Main {
 //
 //        currentRoom.printRoom();
 
-        grog.interactWith(game.getRoom().getInteractables().get("apple"), grog.getItem("apple"));
+//        grog.interactWith(game.getRoom().getInteractables().get("apple"), grog.getItem("apple"));
 
 //        grog.interactWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
 

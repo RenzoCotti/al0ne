@@ -10,6 +10,8 @@ import java.util.HashMap;
  * a Player is:
  * an inventory
  * a currentRoom
+ * a maxWeight
+ * a currentWeight
  *
  */
 public class Player {
@@ -40,7 +42,6 @@ public class Player {
             for (Interactable item : inventory.values()) {
                 System.out.println("- " + item.getName());
             }
-            System.out.println();
         }
     }
 
@@ -95,17 +96,29 @@ public class Player {
         System.out.println("There is no such object");
     }
 
-    public void moveToRoom(String room, HashMap<String, Room> rooms){
+    //Room.exits: <north, cave1>
+    //rooms: <cave1, Room>
 
-        for (String s : currentRoom.getExits()){
-            if (s.equals(room)){
-                System.out.println("You move to "+room);
-                setCurrentRoom(rooms.get(room));
+    public void moveToRoom(String direction, HashMap<String, Room> rooms){
+
+        //iterate over all directions of currentRoom, eg. north
+        for (String s : currentRoom.getExits().keySet()){
+            //check them with the given direction
+            if (s.equals(direction)){ //north == north
+                System.out.println("You move "+direction);
+
+                //get the next room's ID
+                String nextRoomId = currentRoom.getExits().get(s);
+
+                //set next room
+                setCurrentRoom(rooms.get(nextRoomId));
+
                 System.out.println();
+                currentRoom.printRoom();
                 return;
             }
         }
-        System.out.println("You can't figure out how to get to " + room);
+        System.out.println("You can't figure out how to go " + direction);
         System.out.println();
     }
 
@@ -116,6 +129,23 @@ public class Player {
         } else {
             System.out.println("You can't see it.");
         }
+    }
 
+    public void examine(String target){
+        if (target != null){
+            try{
+                currentRoom.getInteractables().get(target).printDescription();
+            } catch (NullPointerException ex){
+                try{
+                    currentRoom.getItems().get(target).printDescription();
+                } catch (NullPointerException exception) {
+                    try{
+                        inventory.get(target).printDescription();
+                    } catch (NullPointerException notFound){
+                        System.out.println("You can't see that item.");
+                    }
+                }
+            }
+        }
     }
 }

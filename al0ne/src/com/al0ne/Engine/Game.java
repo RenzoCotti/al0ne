@@ -20,7 +20,7 @@ public class Game {
 
     public Game(Player player, HashMap<String, Room> allRooms) {
         this.player = player;
-        this.allRooms = new HashMap<>();
+        this.allRooms = allRooms;
     }
 
     public Player getPlayer() {
