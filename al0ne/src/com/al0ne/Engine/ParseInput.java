@@ -58,7 +58,7 @@ public class ParseInput {
                 player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
             case "help":
-                System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x with y, open x");
+                System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x with y, open x, look, quit, exit");
                 break;
             case "quit":
                 ParseInput.quit();
