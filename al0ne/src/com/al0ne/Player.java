@@ -4,6 +4,7 @@ import com.al0ne.Interactables.Items.Archetypes.Consumable;
 import com.al0ne.Interactables.Items.Archetypes.Interactable;
 import com.al0ne.Interactables.Items.Archetypes.Pickable;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Created by BMW on 28/01/2017.
@@ -65,6 +66,14 @@ public class Player {
         } else {
             System.out.println("No such item in your inventory.");
             return null;
+        }
+    }
+
+    public void removeFromInventory(String item){
+        if (hasItem(item)){
+            inventory.remove(item);
+        } else{
+            System.out.println("Error: tried removing non-existing object");
         }
     }
 
@@ -139,21 +148,37 @@ public class Player {
         }
     }
 
-    public void use(String target){
+    public boolean use(String target){
 
         Interactable interacted = getItem(target);
         Pickable inventoryItem = getItemFromInventory(target);
 
-        if (interacted != null && inventoryItem != null){
-            System.out.println("Which one, the one in your inventory or the one in the room?");
-        } else if (interacted != null){
-            System.out.println("You use the " + target);
-            interacted.toggle();
+        if (interacted != null && inventoryItem != null && inventoryItem != interacted){
+            System.out.println("Which one, the one in your inventory or the one in the room? (R/I)");
+            Scanner asd = new Scanner(System.in);
+            while (true){
+                if (asd.hasNextLine()){
+                    String input = asd.nextLine().toLowerCase();
+                    if (input.equals("R")){
+                        interacted.toggle();
+                        return true;
+                    } else if(input.equals("I")){
+                        inventoryItem.toggle();
+                        return true;
+                    }
+                }
+            }
         } else if (inventoryItem != null){
-            System.out.println("You use the "+target);
+            System.out.println("You use the " + target);
             inventoryItem.toggle();
+            return true;
+        } else if (interacted != null){
+            System.out.println("You use the "+target);
+            interacted.toggle();
+            return true;
         } else {
             System.out.println("You can't seem to find the "+target);
+            return false;
         }
     }
 

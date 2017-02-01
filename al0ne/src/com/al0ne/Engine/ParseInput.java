@@ -21,7 +21,18 @@ public class ParseInput {
 
         switch (temp[0]){
             case "use":
-//                return lowerInput;
+
+                int a = ParseInput.checkForToken(temp, "on");
+                if(a ==  -1){
+                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
+                    if (player.use(itemToUse)){
+                        player.removeFromInventory(itemToUse);
+                    }
+                } else if(a > -1){
+                    player.interactOnWith(ParseInput.stitchFromTo(temp, 1, a-1), ParseInput.stitchFromTo(temp, a+1, temp.length));
+                }
+                break;
+
             case "open":
                 break;
             case "look":
@@ -57,8 +68,11 @@ public class ParseInput {
             case "examine":
                 player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
+            case "inventory":
+                player.printInventory();
+                break;
             case "help":
-                System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x with y, open x, look, quit, exit");
+                System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x on y, open x, look, quit, exit");
                 break;
             case "quit":
                 ParseInput.quit();
