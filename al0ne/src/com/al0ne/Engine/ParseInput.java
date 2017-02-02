@@ -22,15 +22,15 @@ public class ParseInput {
         switch (temp[0]){
             case "use":
 
-                int a = ParseInput.checkForToken(temp, "on");
-                if(a ==  -1){
-                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
-                    if (player.use(itemToUse)){
-                        player.removeFromInventory(itemToUse);
-                    }
-                } else if(a > -1){
-                    player.interactOnWith(ParseInput.stitchFromTo(temp, 1, a-1), ParseInput.stitchFromTo(temp, a+1, temp.length));
-                }
+//                int a = ParseInput.checkForToken(temp, "on");
+//                if(a ==  -1){
+//                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
+//                    if (player.use(itemToUse)){
+//                        player.removeFromInventory(itemToUse);
+//                    }
+//                } else if(a > -1){
+//                    player.interactOnWith(ParseInput.stitchFromTo(temp, 1, a-1), ParseInput.stitchFromTo(temp, a+1, temp.length));
+//                }
                 break;
 
             case "open":
@@ -66,7 +66,7 @@ public class ParseInput {
                 player.pickUpItem(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
             case "examine":
-                player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
+//                player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
             case "inventory":
                 player.printInventory();

@@ -1,8 +1,7 @@
 package com.al0ne;
 
-import com.al0ne.Interactables.Items.Archetypes.Consumable;
-import com.al0ne.Interactables.Items.Archetypes.Interactable;
-import com.al0ne.Interactables.Items.Archetypes.Pickable;
+import com.al0ne.Items.Item;
+
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ import java.util.Scanner;
  */
 public class Player {
 
-    private HashMap<String, Pickable> inventory;
+    private HashMap<String, Item> inventory;
     private Room currentRoom;
     private double maxWeight;
     private double currentWeight;
@@ -31,7 +30,7 @@ public class Player {
     }
 
 
-    public HashMap<String, Pickable> getInventory() {
+    public HashMap<String, Item> getInventory() {
         return inventory;
     }
 
@@ -41,13 +40,13 @@ public class Player {
             return;
         } else {
             System.out.println("You have these items:");
-            for (Interactable item : inventory.values()) {
+            for (Item item : inventory.values()) {
                 System.out.println("- " + item.getName());
             }
         }
     }
 
-    public void addItem(Pickable item) {
+    public void addItem(Item item) {
         this.inventory.put(item.getName(), item);
     }
 
@@ -60,7 +59,7 @@ public class Player {
         }
     }
 
-    public Pickable getItemFromInventory(String item){
+    public Item getItemFromInventory(String item){
         if(hasItem(item)){
             return inventory.get(item);
         } else {
@@ -89,7 +88,7 @@ public class Player {
 
     public void pickUpItem(String item){
 
-        for (Pickable object : currentRoom.getItems().values()){
+        for (Item object : currentRoom.getItems().values()){
             if (object.getName().equals(item)){
                 if (object.getWeight()+currentWeight > maxWeight ){
                     System.out.println("Too heavy to carry.");
@@ -133,75 +132,75 @@ public class Player {
         System.out.println();
     }
 
-    public void interactOnWith(String target, String item){
-
-        Interactable interacted = getItem(target);
-        Pickable inventoryItem = getItemFromInventory(item);
-
-        if (interacted != null && inventoryItem != null){
-            System.out.println("You use the " + inventoryItem.getName() + " on the "+ interacted.getName());
-            interacted.isInteractedOnWith(inventoryItem);
-        } else {
-            System.out.println(interacted);
-            System.out.println(inventoryItem);
-            System.out.println("You can't see it.");
-        }
-    }
-
-    public boolean use(String target){
-
-        Interactable interacted = getItem(target);
-        Pickable inventoryItem = getItemFromInventory(target);
-
-        if (interacted != null && inventoryItem != null && inventoryItem != interacted){
-            System.out.println("Which one, the one in your inventory or the one in the room? (R/I)");
-            Scanner asd = new Scanner(System.in);
-            while (true){
-                if (asd.hasNextLine()){
-                    String input = asd.nextLine().toLowerCase();
-                    if (input.equals("R")){
-                        interacted.toggle();
-                        return true;
-                    } else if(input.equals("I")){
-                        inventoryItem.toggle();
-                        return true;
-                    }
-                }
-            }
-        } else if (inventoryItem != null){
-            System.out.println("You use the " + target);
-            inventoryItem.toggle();
-            return true;
-        } else if (interacted != null){
-            System.out.println("You use the "+target);
-            interacted.toggle();
-            return true;
-        } else {
-            System.out.println("You can't seem to find the "+target);
-            return false;
-        }
-    }
-
-    public void examine(String target){
-        if (getItem(target) != null){
-            getItem(target).printDescription();
-        }
-    }
-
-    public Interactable getItem(String target){
-        Interactable interactable = currentRoom.getInteractables().get(target);
-        Interactable item = currentRoom.getItems().get(target);
-        Interactable inventoryItem = getItemFromInventory(target);
-
-        if( interactable != null) {
-            return interactable;
-        } else if( item != null ){
-            return item;
-        } else if ( inventoryItem != null){
-            return inventoryItem;
-        } else{
-            System.out.println("You can't see that item.");
-            return null;
-        }
-    }
+//    public void interactOnWith(String target, String item){
+//
+//        Interactable interacted = getItem(target);
+//        Pickable inventoryItem = getItemFromInventory(item);
+//
+//        if (interacted != null && inventoryItem != null){
+//            System.out.println("You use the " + inventoryItem.getName() + " on the "+ interacted.getName());
+//            interacted.isInteractedOnWith(inventoryItem);
+//        } else {
+//            System.out.println(interacted);
+//            System.out.println(inventoryItem);
+//            System.out.println("You can't see it.");
+//        }
+//    }
+//
+//    public boolean use(String target){
+//
+//        Interactable interacted = getItem(target);
+//        Pickable inventoryItem = getItemFromInventory(target);
+//
+//        if (interacted != null && inventoryItem != null && inventoryItem != interacted){
+//            System.out.println("Which one, the one in your inventory or the one in the room? (R/I)");
+//            Scanner asd = new Scanner(System.in);
+//            while (true){
+//                if (asd.hasNextLine()){
+//                    String input = asd.nextLine().toLowerCase();
+//                    if (input.equals("R")){
+//                        interacted.toggle();
+//                        return true;
+//                    } else if(input.equals("I")){
+//                        inventoryItem.toggle();
+//                        return true;
+//                    }
+//                }
+//            }
+//        } else if (inventoryItem != null){
+//            System.out.println("You use the " + target);
+//            inventoryItem.toggle();
+//            return true;
+//        } else if (interacted != null){
+//            System.out.println("You use the "+target);
+//            interacted.toggle();
+//            return true;
+//        } else {
+//            System.out.println("You can't seem to find the "+target);
+//            return false;
+//        }
+//    }
+//
+//    public void examine(String target){
+//        if (getItem(target) != null){
+//            getItem(target).printDescription();
+//        }
+//    }
+//
+//    public Interactable getItem(String target){
+//        Interactable interactable = currentRoom.getInteractables().get(target);
+//        Interactable item = currentRoom.getItems().get(target);
+//        Interactable inventoryItem = getItemFromInventory(target);
+//
+//        if( interactable != null) {
+//            return interactable;
+//        } else if( item != null ){
+//            return item;
+//        } else if ( inventoryItem != null){
+//            return inventoryItem;
+//        } else{
+//            System.out.println("You can't see that item.");
+//            return null;
+//        }
+//    }
 }

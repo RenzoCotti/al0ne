@@ -1,7 +1,7 @@
 package com.al0ne;
 
-import com.al0ne.Interactables.Items.Archetypes.Interactable;
-import com.al0ne.Interactables.Items.Archetypes.Pickable;
+import com.al0ne.Items.Item;
+
 import java.util.HashMap;
 
 /**
@@ -17,8 +17,8 @@ import java.util.HashMap;
  */
 public class Room {
 
-    private HashMap<String, Interactable> interactables;
-    private HashMap<String, Pickable> items;
+//    private HashMap<String, Interactable> interactables;
+    private HashMap<String, Item> items;
     private String description;
     private String name;
     private HashMap<String, String> exits;
@@ -26,31 +26,31 @@ public class Room {
     public Room(String description, String name) {
         this.description = description;
         this.name = name;
-        this.interactables=new HashMap<>();
+//        this.interactables=new HashMap<>();
         this.items=new HashMap<>();
         this.exits=new HashMap<>();
     }
 
-    public HashMap<String, Interactable> getInteractables() {
-        return interactables;
-    }
+//    public HashMap<String, Interactable> getInteractables() {
+//        return interactables;
+//    }
+//
+//    public void printInteractables(){
+//        if (items.size()!=0){
+//            for (Interactable item : interactables.values()) {
+//                System.out.println(item.getDescription());
+//            }
+//        }
+//    }
 
-    public void printInteractables(){
-        if (items.size()!=0){
-            for (Interactable item : interactables.values()) {
-                System.out.println(item.getDescription());
-            }
-        }
-    }
-
-    public HashMap<String, Pickable> getItems() {
+    public HashMap<String, Item> getItems() {
         return items;
     }
 
     public void printItems(){
         if (items.size()!=0){
             System.out.println("You can see:");
-            for (Pickable item : items.values()) {
+            for (Item item : items.values()) {
                 System.out.println("- " + item.getName());
             }
         }
@@ -76,11 +76,11 @@ public class Room {
         System.out.println(name);
     }
 
-    public void addInteractable(Interactable item) {
-        this.interactables.put(item.getName(), item);
-    }
+//    public void addInteractable(Interactable item) {
+//        this.interactables.put(item.getName(), item);
+//    }
 
-    public void addItem(Pickable item) {
+    public void addItem(Item item) {
         this.items.put(item.getName(), item);
     }
 
