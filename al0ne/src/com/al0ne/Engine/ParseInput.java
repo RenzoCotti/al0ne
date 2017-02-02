@@ -22,15 +22,15 @@ public class ParseInput {
         switch (temp[0]){
             case "use":
 
-//                int a = ParseInput.checkForToken(temp, "on");
-//                if(a ==  -1){
+                int a = ParseInput.checkForToken(temp, "on");
+                if(a ==  -1){
 //                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
-//                    if (player.use(itemToUse)){
-//                        player.removeFromInventory(itemToUse);
-//                    }
-//                } else if(a > -1){
-//                    player.interactOnWith(ParseInput.stitchFromTo(temp, 1, a-1), ParseInput.stitchFromTo(temp, a+1, temp.length));
-//                }
+                } else if(a > -1){
+                    String firstItem = ParseInput.stitchFromTo(temp, 1, a);
+                    String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
+
+                    player.interactOnWith(secondItem, firstItem);
+                }
                 break;
 
             case "open":
@@ -39,34 +39,22 @@ public class ParseInput {
                 game.getRoom().printRoom();
                 break;
             case "north":
-                if (temp.length > 1) break;
-                else {
-                    player.moveToRoom("north", rooms);
-                    break;
-                }
+                ParseInput.move(player, rooms, "north", temp);
+                break;
             case "south":
-                if (temp.length > 1) break;
-                else {
-                    player.moveToRoom("south", rooms);
-                    break;
-                }
+                ParseInput.move(player, rooms, "south", temp);
+                break;
             case "east":
-                if (temp.length > 1) break;
-                else {
-                    player.moveToRoom("east", rooms);
-                    break;
-                }
+                ParseInput.move(player, rooms, "east", temp);
+                break;
             case "west":
-                if (temp.length > 1) break;
-                else {
-                    player.moveToRoom("west", rooms);
-                    break;
-                }
+                ParseInput.move(player, rooms, "west", temp);
+                break;
             case "take":
                 player.pickUpItem(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
             case "examine":
-//                player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
+                player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
             case "inventory":
                 player.printInventory();
@@ -92,7 +80,13 @@ public class ParseInput {
         for (int i = begin; i != end; i++){
             temp+=input[i]+" ";
         }
-        return temp.trim();
+
+
+
+        temp=temp.substring(0, temp.length()-1);
+
+//        System.out.println(expected.equals(temp));
+        return temp;
     }
 
     public static int checkForToken(String[] input, String token){
@@ -116,6 +110,18 @@ public class ParseInput {
                 }
             }
             break;
+        }
+    }
+
+    public static void move(Player player, HashMap<String, Room> rooms, String direction, String[] temp){
+        if (temp.length > 1) {
+            System.out.println("Sorry?");
+        }
+        else if(player.getCurrentRoom().isLocked(direction)){
+            System.out.println("The way "+direction+" is blocked.");
+        }
+        else {
+            player.moveToRoom(direction, rooms);
         }
     }
 

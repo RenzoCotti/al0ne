@@ -1,6 +1,8 @@
 package com.al0ne;
 
 import com.al0ne.Items.Item;
+import com.al0ne.Items.LockedDoor;
+import com.al0ne.Items.Prop;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -132,20 +134,47 @@ public class Player {
         System.out.println();
     }
 
-//    public void interactOnWith(String target, String item){
-//
-//        Interactable interacted = getItem(target);
-//        Pickable inventoryItem = getItemFromInventory(item);
-//
-//        if (interacted != null && inventoryItem != null){
-//            System.out.println("You use the " + inventoryItem.getName() + " on the "+ interacted.getName());
-//            interacted.isInteractedOnWith(inventoryItem);
-//        } else {
-//            System.out.println(interacted);
-//            System.out.println(inventoryItem);
-//            System.out.println("You can't see it.");
-//        }
-//    }
+    public void interactOnWith(String target, String item){
+
+        Prop prop = getProp(target);
+        Item inventoryItem = getItemFromInventory(item);
+
+        if (prop != null && inventoryItem != null){
+            System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
+            prop.usedWith(inventoryItem);
+            if(prop instanceof LockedDoor){
+                currentRoom.unlockDirection(prop.getName());
+            }
+        } else {
+            System.out.println("You can't see it.");
+        }
+    }
+
+    public void examine(String target){
+        Prop prop = getProp(target);
+        Item item = getItemFromInventory(target);
+        if (prop != null){
+            prop.printDescription();
+        } else if(item != null){
+            item.printDescription();
+        } else {
+            System.out.println("You can't see a "+target);
+        }
+    }
+
+    public Prop getProp(String target){
+        Prop prop = currentRoom.getProps().get(target);
+
+        if( prop != null) {
+            return prop;
+        } else{
+//            System.out.println("You can't see that item.");
+            return null;
+        }
+    }
+}
+
+
 //
 //    public boolean use(String target){
 //
@@ -181,26 +210,3 @@ public class Player {
 //        }
 //    }
 //
-//    public void examine(String target){
-//        if (getItem(target) != null){
-//            getItem(target).printDescription();
-//        }
-//    }
-//
-//    public Interactable getItem(String target){
-//        Interactable interactable = currentRoom.getInteractables().get(target);
-//        Interactable item = currentRoom.getItems().get(target);
-//        Interactable inventoryItem = getItemFromInventory(target);
-//
-//        if( interactable != null) {
-//            return interactable;
-//        } else if( item != null ){
-//            return item;
-//        } else if ( inventoryItem != null){
-//            return inventoryItem;
-//        } else{
-//            System.out.println("You can't see that item.");
-//            return null;
-//        }
-//    }
-}
