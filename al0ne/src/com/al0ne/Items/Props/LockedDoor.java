@@ -1,11 +1,13 @@
-package com.al0ne.Items;
+package com.al0ne.Items.Props;
 
 import com.al0ne.Items.Behaviours.Weapon;
+import com.al0ne.Items.Item;
+import com.al0ne.Items.Prop;
 
 /**
  * Created by BMW on 02/02/2017.
  */
-public class LockedDoor extends Prop{
+public class LockedDoor extends Prop {
     public LockedDoor(String id, String name, String description, String after, String key) {
         super(id, name, description, after);
         this.requiresItem=key;
@@ -19,8 +21,9 @@ public class LockedDoor extends Prop{
     @Override
     public boolean usedWith(Item item){
         if(item.hasProperty("key")){
-            System.out.println(requiresItem);
+//            System.out.println(requiresItem);
             if (item.getID().equals(requiresItem)){
+                System.out.println("The "+name+" is now open");
                 active=true;
                 return true;
             } else{

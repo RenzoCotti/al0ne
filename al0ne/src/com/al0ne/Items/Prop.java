@@ -40,7 +40,7 @@ public abstract class Prop {
         requiredType.add(type);
     }
 
-    public boolean usedWith(Item item){
+    public boolean usedWith(Item item) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
                 active=(!active);

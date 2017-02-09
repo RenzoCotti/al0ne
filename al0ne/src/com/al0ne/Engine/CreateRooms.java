@@ -3,7 +3,8 @@ package com.al0ne.Engine;
 import com.al0ne.Items.Items.Apple;
 import com.al0ne.Items.Items.Key;
 import com.al0ne.Items.Items.Knife;
-import com.al0ne.Items.LockedDoor;
+import com.al0ne.Items.Props.CuttableRope;
+import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Room;
 import java.util.HashMap;
 
@@ -20,16 +21,18 @@ public class CreateRooms {
 //        cave1.addItem(new Potion());
         cave1.addItem(new Key("cave1key","Ordinary Key"));
         cave1.addItem(new Key("cave2key","Next Room Key"));
-        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.lockDirection("door", "east");
+//        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
+//        cave1.lockDirection("door", "east");
 
         CreateRooms.putRoom(cave1);
 
 
-        Room cave2 = new Room("cave2", "Cave 2", "The rocks are crumbly here. A rope is secured tightly.");
+        Room cave2 = new Room("cave2", "Cave 2", "The rocks are crumbly here.");
         cave2.addExit("west","cave1");
         cave2.addItem(new Knife());
         cave2.addItem(new Apple());
+
+        cave2.addProp(new CuttableRope());
 
         CreateRooms.putRoom(cave2);
 

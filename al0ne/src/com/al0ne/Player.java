@@ -1,11 +1,10 @@
 package com.al0ne;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Items.LockedDoor;
+import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 /**
  * Created by BMW on 28/01/2017.
@@ -143,6 +142,7 @@ public class Player {
         if (prop != null && inventoryItem != null){
             System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
             prop.usedWith(inventoryItem);
+
             if(prop instanceof LockedDoor){
                 currentRoom.unlockDirection(prop.getID());
             }

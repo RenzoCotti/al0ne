@@ -36,12 +36,29 @@ public class ParseInput {
                     ArrayList<String> first = getPotentialItem(firstItem, player, 0);
                     ArrayList<String> second = getPotentialItem(secondItem, player, 1);
 
+                    if (first.size()>1 || second.size() >2){
+                        System.out.println("Be more specific.");
+
+
+                        break;
+                    }
+
 
 
                     try{
                         player.interactOnWith(second.get(0), first.get(0));
                     } catch (IndexOutOfBoundsException ex){
-                        System.out.println("You can't see such items");
+                        System.out.println("You can't see such items.");
+
+                        for (String b : first){
+                            System.out.println(b);
+                        }
+
+                        System.out.println();
+
+                        for (String b : second){
+                            System.out.println(b);
+                        }
                     }
                 }
                 break;
@@ -64,15 +81,19 @@ public class ParseInput {
                 ParseInput.move(player, rooms, "west", temp);
                 break;
             case "take":
+                if (temp.length<=1){
+                    System.out.println("Sorry?");
+                    break;
+                }
                 String item = ParseInput.stitchFromTo(temp, 1, temp.length);
                 ArrayList<String> possibleItems = getPotentialItem(item, player, 2);
 
                 if (possibleItems.size()>1){
-                    System.out.println("Be more specific");
+                    System.out.println("Be more specific.");
 
-                    for (String f : possibleItems){
-                        System.out.println(f);
-                    }
+//                    for (String f : possibleItems){
+//                        System.out.println(f);
+//                    }
                     break;
                 }
 
