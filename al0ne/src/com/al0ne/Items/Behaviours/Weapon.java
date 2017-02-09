@@ -7,8 +7,8 @@ import com.al0ne.Items.Item;
  */
 public abstract class Weapon extends Item{
     protected int damage;
-    public Weapon(String name, String description, double weight) {
-        super(name, description, weight);
+    public Weapon(String id, String name, String description, double weight) {
+        super(id, name, description, weight);
     }
 
     public int getDamage() {

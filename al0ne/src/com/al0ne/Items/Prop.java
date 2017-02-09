@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public abstract class Prop {
 
+    protected String id;
     protected String name;
     protected String description;
     protected String after;
@@ -14,7 +15,9 @@ public abstract class Prop {
     protected ArrayList<String> requiredType;
     protected boolean active;
 
-    public Prop(String name, String description) {
+
+    public Prop(String id, String name, String description) {
+        this.id = id;
         this.requiredType = new ArrayList<>();
         this.name = name;
         this.description = description;
@@ -23,7 +26,8 @@ public abstract class Prop {
         this.active=false;
     }
 
-    public Prop(String name, String description, String after) {
+    public Prop(String id, String name, String description, String after) {
+        this.id=id;
         this.requiredType = new ArrayList<>();
         this.name = name;
         this.description = description;
@@ -65,5 +69,9 @@ public abstract class Prop {
 
     public String getName() {
         return name;
+    }
+
+    public String getID(){
+        return id;
     }
 }

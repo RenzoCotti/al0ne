@@ -23,10 +23,12 @@ public class Room {
     private HashMap<String, Item> items;
     private String description;
     private String name;
+    private String id;
     private HashMap<String, String> exits;
     private HashMap<String, String> lockedDirections;
 
-    public Room(String description, String name) {
+    public Room(String id, String name, String description) {
+        this.id=id;
         this.description = description;
         this.name = name;
         this.props=new HashMap<>();
@@ -76,16 +78,20 @@ public class Room {
         return name;
     }
 
+    public String getId(){
+        return id;
+    }
+
     public void printName() {
         System.out.println(name);
     }
 
     public void addProp(Prop prop) {
-        this.props.put(prop.getName(), prop);
+        this.props.put(prop.getID(), prop);
     }
 
     public void addItem(Item item) {
-        this.items.put(item.getName(), item);
+        this.items.put(item.getID(), item);
     }
 
     public void addExit(String exit, String roomid) {
@@ -100,8 +106,8 @@ public class Room {
         System.out.println();
     }
 
-    public void lockDirection(String direction, String nameDoor){
-        lockedDirections.put(nameDoor, direction);
+    public void lockDirection(String direction, String idDoor){
+        lockedDirections.put(idDoor, direction);
     }
 
     public void unlockDirection(String nameDoor){

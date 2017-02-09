@@ -8,7 +8,7 @@ public class Door extends Prop{
         super("door", "A sturdy wooden door", "An opened wooden door");
     }
 
-    public Door(String name, String description) {
-        super(name, description);
+    public Door(String id, String name, String description) {
+        super(id, name, description);
     }
 }

@@ -49,7 +49,7 @@ public class Player {
     }
 
     public void addItem(Item item) {
-        this.inventory.put(item.getName(), item);
+        this.inventory.put(item.getID(), item);
     }
 
     public boolean hasItem(String item){
@@ -91,14 +91,15 @@ public class Player {
     public void pickUpItem(String item){
 
         for (Item object : currentRoom.getItems().values()){
-            if (object.getName().equals(item)){
+//            System.out.println(object.getName());
+            if (object.getName().toLowerCase().equals(item.toLowerCase())){
                 if (object.getWeight()+currentWeight > maxWeight ){
                     System.out.println("Too heavy to carry.");
                     return;
                 } else{
                     addItem(object);
                     currentWeight+=object.getWeight();
-                    System.out.println("Added "+ item + " to inventory.");
+                    System.out.println("Added "+ object.getName() + " to inventory.");
                     currentRoom.getItems().remove(item);
                     return;
                 }
@@ -143,7 +144,7 @@ public class Player {
             System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
             prop.usedWith(inventoryItem);
             if(prop instanceof LockedDoor){
-                currentRoom.unlockDirection(prop.getName());
+                currentRoom.unlockDirection(prop.getID());
             }
         } else {
             System.out.println("You can't see it.");

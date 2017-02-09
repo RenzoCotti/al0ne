@@ -7,9 +7,11 @@ import com.al0ne.Items.Item;
  * Created by BMW on 02/02/2017.
  */
 public class Knife extends Weapon {
+    private static int counter=0;
     public Knife() {
-        super("knife", "A rusty but sharp knife", 0.2);
+        super("knife"+counter, "Knife", "A rusty but sharp knife", 0.2);
         addProperty("sharp");
         damage=1;
+        counter++;
     }
 }

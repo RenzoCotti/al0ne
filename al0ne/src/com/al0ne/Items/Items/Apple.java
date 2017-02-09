@@ -7,7 +7,7 @@ import com.al0ne.Items.Item;
  */
 public class Apple extends Item {
     public Apple() {
-        super("apple", "A fresh apple", 0.1);
+        super("apple","Apple", "A fresh apple", 0.1);
         addProperty("consumable");
     }
 }

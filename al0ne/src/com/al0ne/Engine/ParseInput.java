@@ -1,9 +1,13 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Items.Item;
+import com.al0ne.Items.Prop;
 import com.al0ne.Player;
 import com.al0ne.Room;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 /**
@@ -29,7 +33,22 @@ public class ParseInput {
                     String firstItem = ParseInput.stitchFromTo(temp, 1, a);
                     String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
 
-                    player.interactOnWith(secondItem, firstItem);
+                    ArrayList<String> first = getPotentialItem(firstItem, player, true);
+                    ArrayList<String> second = getPotentialItem(secondItem, player, false);
+
+
+//                    for (String s : first){
+//                        System.out.println(s);
+//                    }
+//
+//                    System.out.println();
+//
+//                    for (String s : second){
+//                        System.out.println(s);
+//                    }
+
+
+                    player.interactOnWith(first.get(0), second.get(0));
                 }
                 break;
 
@@ -125,4 +144,36 @@ public class ParseInput {
         }
     }
 
+
+    public static ArrayList<String> getPotentialItem(String s, Player player, boolean inventory){
+        ArrayList<String> potentialItems = new ArrayList<>();
+
+        if(inventory){
+            String[] temp = s.split(" ");
+            for (String token : temp){
+                for(Item a : player.getCurrentRoom().getItems().values()){
+                    String[] currentItem = a.getName().split(" ");
+                    for (String b : currentItem){
+                        if (b.toLowerCase().equals(token)){
+                            potentialItems.add(a.getID());
+                        }
+                    }
+                }
+            }
+        } else{
+            String[] temp = s.split(" ");
+            for (String token : temp){
+                for(Prop a : player.getCurrentRoom().getProps().values()){
+                    String[] currentItem = a.getName().split(" ");
+                    for (String b : currentItem){
+                        if (b.toLowerCase().equals(token)){
+                            potentialItems.add(a.getID());
+                        }
+                    }
+                }
+            }
+        }
+
+        return potentialItems;
+    }
 }

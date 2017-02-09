@@ -6,20 +6,21 @@ import com.al0ne.Items.Behaviours.Weapon;
  * Created by BMW on 02/02/2017.
  */
 public class LockedDoor extends Prop{
-    public LockedDoor(String name, String description, String after, String key) {
-        super(name, description, after);
+    public LockedDoor(String id, String name, String description, String after, String key) {
+        super(id, name, description, after);
         this.requiresItem=key;
     }
 
-    public LockedDoor(String name, String key) {
-        super(name, "A sturdy wooden door");
+    public LockedDoor(String id, String name, String key) {
+        super(id, name, "A sturdy wooden door");
         this.requiresItem=key;
     }
 
     @Override
     public boolean usedWith(Item item){
         if(item.hasProperty("key")){
-            if (item.getName().equals(requiresItem)){
+            System.out.println(requiresItem);
+            if (item.getID().equals(requiresItem)){
                 active=true;
                 return true;
             } else{

@@ -10,13 +10,15 @@ import java.util.ArrayList;
 public abstract class Item {
 
     protected String name;
+    protected String ID;
     protected String description;
     protected double weight;
 
     protected ArrayList<String> properties;
 
 
-    public Item(String name, String description, double weight) {
+    public Item(String id, String name, String description, double weight) {
+        this.ID = id;
         this.name = name;
         this.weight = weight;
         this.description = description;
@@ -39,6 +41,10 @@ public abstract class Item {
 
     public String getName() {
         return name;
+    }
+
+    public String getID(){
+        return ID;
     }
 
     public String getDescription() {
