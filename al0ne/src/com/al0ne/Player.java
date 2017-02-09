@@ -92,7 +92,7 @@ public class Player {
 
         for (Item object : currentRoom.getItems().values()){
 //            System.out.println(object.getName());
-            if (object.getName().toLowerCase().equals(item.toLowerCase())){
+            if (object.getID().toLowerCase().equals(item.toLowerCase())){
                 if (object.getWeight()+currentWeight > maxWeight ){
                     System.out.println("Too heavy to carry.");
                     return;

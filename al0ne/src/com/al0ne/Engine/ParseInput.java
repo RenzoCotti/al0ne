@@ -33,22 +33,16 @@ public class ParseInput {
                     String firstItem = ParseInput.stitchFromTo(temp, 1, a);
                     String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
 
-                    ArrayList<String> first = getPotentialItem(firstItem, player, true);
-                    ArrayList<String> second = getPotentialItem(secondItem, player, false);
+                    ArrayList<String> first = getPotentialItem(firstItem, player, 0);
+                    ArrayList<String> second = getPotentialItem(secondItem, player, 1);
 
 
-//                    for (String s : first){
-//                        System.out.println(s);
-//                    }
-//
-//                    System.out.println();
-//
-//                    for (String s : second){
-//                        System.out.println(s);
-//                    }
 
-
-                    player.interactOnWith(first.get(0), second.get(0));
+                    try{
+                        player.interactOnWith(second.get(0), first.get(0));
+                    } catch (IndexOutOfBoundsException ex){
+                        System.out.println("You can't see such items");
+                    }
                 }
                 break;
 
@@ -70,7 +64,23 @@ public class ParseInput {
                 ParseInput.move(player, rooms, "west", temp);
                 break;
             case "take":
-                player.pickUpItem(ParseInput.stitchFromTo(temp, 1, temp.length));
+                String item = ParseInput.stitchFromTo(temp, 1, temp.length);
+                ArrayList<String> possibleItems = getPotentialItem(item, player, 2);
+
+                if (possibleItems.size()>1){
+                    System.out.println("Be more specific");
+
+                    for (String f : possibleItems){
+                        System.out.println(f);
+                    }
+                    break;
+                }
+
+                try{
+                    player.pickUpItem(possibleItems.get(0));
+                } catch (IndexOutOfBoundsException ex){
+                    System.out.println("You can't see such an item");
+                }
                 break;
             case "examine":
                 player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
@@ -87,6 +97,8 @@ public class ParseInput {
             case "exit":
                 ParseInput.quit();
                 break;
+            case "kill":
+                System.exit(0);
 
             default:
                 System.out.println("Sorry?");
@@ -99,8 +111,6 @@ public class ParseInput {
         for (int i = begin; i != end; i++){
             temp+=input[i]+" ";
         }
-
-
 
         temp=temp.substring(0, temp.length()-1);
 
@@ -145,34 +155,86 @@ public class ParseInput {
     }
 
 
-    public static ArrayList<String> getPotentialItem(String s, Player player, boolean inventory){
+    public static ArrayList<String> getPotentialItem(String s, Player player, int number){
         ArrayList<String> potentialItems = new ArrayList<>();
 
-        if(inventory){
+
+        //case inventory
+        if(number==0){
+
+            //check if there is an exact match
+            for (Item b : player.getInventory().values()){
+                if (b.getName().equals(s)){
+                    potentialItems.add(b.getID());
+//                    System.out.println("Perfect match found!");
+                    return potentialItems;
+                }
+            }
+
+            //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
             for (String token : temp){
-                for(Item a : player.getCurrentRoom().getItems().values()){
+                for(Item a : player.getInventory().values()){
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem){
                         if (b.toLowerCase().equals(token)){
-                            potentialItems.add(a.getID());
+                            if (!potentialItems.contains(a.getID())){
+                                potentialItems.add(a.getID());
+                            }
                         }
                     }
                 }
             }
-        } else{
+            //case prop
+        } else if (number==1){
+
+            for (Prop b : player.getCurrentRoom().getProps().values()){
+                if (b.getName().equals(s)){
+                    potentialItems.add(b.getID());
+                    return potentialItems;
+                }
+            }
+
+
             String[] temp = s.split(" ");
             for (String token : temp){
                 for(Prop a : player.getCurrentRoom().getProps().values()){
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem){
                         if (b.toLowerCase().equals(token)){
+                            if (!potentialItems.contains(a.getID())){
+                                potentialItems.add(a.getID());
+                            }
+                        }
+                    }
+                }
+            }
+            //case item
+        } else if(number==2){
+
+            for (Item b : player.getCurrentRoom().getItems().values()){
+                if (b.getName().toLowerCase().equals(s.toLowerCase())){
+                    potentialItems.add(b.getID());
+//                    System.out.println("Perfect match found!");
+                    return potentialItems;
+                }
+            }
+
+
+        String[] temp = s.split(" ");
+        for (String token : temp){
+            for(Item a : player.getCurrentRoom().getItems().values()){
+                String[] currentItem = a.getName().split(" ");
+                for (String b : currentItem){
+                    if (b.toLowerCase().equals(token)){
+                        if (!potentialItems.contains(a.getID())){
                             potentialItems.add(a.getID());
                         }
                     }
                 }
             }
         }
+    }
 
         return potentialItems;
     }
