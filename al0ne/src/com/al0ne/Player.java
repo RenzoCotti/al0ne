@@ -1,5 +1,6 @@
 package com.al0ne;
 
+import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
@@ -10,11 +11,12 @@ import java.util.HashMap;
  * Created by BMW on 28/01/2017.
  *
  * a Player is:
- * an inventory
- * a currentRoom
- * a maxWeight
- * a currentWeight
+ * an inventory, storing itemID and Items
+ * a currentRoom, a Room
+ * a maxWeight, double
+ * a currentWeight, double
  *
+ * TODO probably add health, belly
  */
 public class Player {
 
@@ -163,6 +165,18 @@ public class Player {
         }
     }
 
+    public void drop(String target){
+        Item item = getItemFromInventory(target);
+        if (item != null){
+            inventory.remove(item);
+            currentRoom.addItem(item);
+            System.out.println("You drop the "+item.getName());
+
+        } else {
+            System.out.println("You don't seem to have a "+target+" with you.");
+        }
+    }
+
     public Prop getProp(String target){
         Prop prop = currentRoom.getProps().get(target);
 
@@ -173,7 +187,34 @@ public class Player {
             return null;
         }
     }
+
+    public void simpleUse(String target){
+        Prop prop = getProp(target);
+        Item item = getItemFromInventory(target);
+
+        if (prop == null && item != null){
+            //case its an item in inventory
+            if(item.hasProperty("consumable")){
+                //// TODO: 11/02/2017
+            } else if( item.hasProperty("food")){
+                Food food = (Food) item;
+                food.used();
+                inventory.remove(item.getID());
+            } else {
+                System.out.println("You can't figure out how to use it.");
+            }
+
+        } else if (prop != null && item == null){
+            //case its a prop
+            prop.used();
+        } else {
+            System.out.println("You can't seem to see a "+target);
+
+        }
+
+    }
 }
+
 
 
 //

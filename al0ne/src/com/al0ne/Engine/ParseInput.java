@@ -22,13 +22,29 @@ public class ParseInput {
         String lowerInput = input.toLowerCase();
 
         String[] temp = lowerInput.split(" ");
+        
+        //// TODO: 11/02/2017 add turn counter 
 
         switch (temp[0]){
             case "use":
 
                 int a = ParseInput.checkForToken(temp, "on");
                 if(a ==  -1){
-//                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
+                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
+                    ArrayList<String> simpleUse = getPotentialItem(itemToUse, player, 0);
+
+                    if (simpleUse.size()>1){
+                        System.out.println("Be more specific.");
+                        break;
+                    }
+
+                    try{
+                        player.simpleUse(simpleUse.get(0));
+                    } catch (IndexOutOfBoundsException ex){
+                        System.out.println("You can't see such an item");
+                    }
+
+
                 } else if(a > -1){
                     String firstItem = ParseInput.stitchFromTo(temp, 1, a);
                     String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
@@ -36,7 +52,7 @@ public class ParseInput {
                     ArrayList<String> first = getPotentialItem(firstItem, player, 0);
                     ArrayList<String> second = getPotentialItem(secondItem, player, 1);
 
-                    if (first.size()>1 || second.size() >2){
+                    if (first.size()>1 || second.size() >1){
                         System.out.println("Be more specific.");
 
 
@@ -50,15 +66,15 @@ public class ParseInput {
                     } catch (IndexOutOfBoundsException ex){
                         System.out.println("You can't see such items.");
 
-                        for (String b : first){
-                            System.out.println(b);
-                        }
-
-                        System.out.println();
-
-                        for (String b : second){
-                            System.out.println(b);
-                        }
+//                        for (String b : first){
+//                            System.out.println(b);
+//                        }
+//
+//                        System.out.println();
+//
+//                        for (String b : second){
+//                            System.out.println(b);
+//                        }
                     }
                 }
                 break;
@@ -117,6 +133,26 @@ public class ParseInput {
                 break;
             case "exit":
                 ParseInput.quit();
+                break;
+            case "drop":
+                String toDrop = ParseInput.stitchFromTo(temp, 1, temp.length);
+                ArrayList<String> possibleDrop = getPotentialItem(toDrop, player, 0);
+
+                if (possibleDrop.size()>1){
+                    System.out.println("Be more specific.");
+
+//                    for (String f : possibleItems){
+//                        System.out.println(f);
+//                    }
+                    break;
+                }
+
+                try{
+                    player.drop(possibleDrop.get(0));
+                } catch (IndexOutOfBoundsException ex){
+                    System.out.println("You can't see such an item");
+                }
+
                 break;
             case "kill":
                 System.exit(0);
