@@ -1,5 +1,7 @@
 package com.al0ne.Items;
 
+import com.al0ne.Room;
+
 import java.util.ArrayList;
 
 /**
@@ -43,7 +45,7 @@ public abstract class Prop {
     public boolean usedWith(Item item) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
-                active=(!active);
+                active=true;
                 return true;
             }
         }
@@ -52,7 +54,26 @@ public abstract class Prop {
 
     public boolean used(){
         if (requiresItem.equals("none")){
-            active=(!active);
+            active=true;
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public boolean usedWith(Item item, Room currentRoom) {
+        for (String s: requiredType){
+            if (item.hasProperty(s)){
+                active=(!active);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean used(Room currentRoom){
+        if (requiresItem.equals("none")){
+            active=true;
             return true;
         } else{
             return false;

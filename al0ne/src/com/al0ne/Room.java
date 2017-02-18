@@ -15,6 +15,7 @@ import java.util.HashMap;
  * a description
  * a name
  * an exits, hashmap of direction - roomid
+ * an lockedDirection, hashmap of doorName - direction
  *
  */
 public class Room {
@@ -103,6 +104,7 @@ public class Room {
         printDescription();
         printProps();
         printItems();
+        printDirections();
         System.out.println();
     }
 
@@ -110,12 +112,35 @@ public class Room {
         lockedDirections.put(idDoor, direction);
     }
 
+    public void printDirections(){
+        boolean first=true;
+
+        for (String exit : exits.keySet()){
+            boolean free = true;
+            for (String direction : lockedDirections.values()){
+                if (direction.equals(exit)) {
+                    free = false;
+                }
+            }
+
+            if(free){
+                if (first){
+                    System.out.println("You can go:");
+                    first=false;
+                }
+                System.out.println(" - "+exit);
+            }
+        }
+    }
+
+
     public void unlockDirection(String nameDoor){
         lockedDirections.remove(nameDoor);
     }
 
     public boolean isLocked(String direction){
         for (String s : lockedDirections.values()){
+            System.out.println(s);
             if (s.equals(direction)){
                 return true;
             }

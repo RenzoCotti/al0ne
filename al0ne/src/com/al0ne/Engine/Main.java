@@ -1,5 +1,6 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Items.Items.Beer;
 import com.al0ne.Player;
 import com.al0ne.Room;
 import java.util.HashMap;
@@ -12,12 +13,16 @@ public class Main {
 
         HashMap<String, Room> rooms = CreateRooms.create();
 
-        Player Grog = new Player(rooms.get("cave1"), 10.0);
+        Player Grog = new Player(rooms.get("cave3"), 10.0);
 
         Game game = new Game(Grog, rooms);
 
 
         Player grog = game.getPlayer();
+
+        grog.addItem(new Beer());
+        grog.addItem(new Beer());
+        grog.addItem(new Beer());
 
         game.getRoom().printRoom();
 
@@ -30,33 +35,6 @@ public class Main {
             }
 
         }
-
-//        grog.pickUpItem("health potion");
-//
-//        grog.moveToRoom("east", rooms);
-//
-//
-//
-//        grog.pickUpItem("knife");
-//        grog.pickUpItem("apple");
-//
-//        grog.printInventory();
-//
-//        grog.getInventory().get("knife").printDescription();
-//
-//        grog.examine("rope");
-//
-//
-//        grog.examine("apple");
-//
-//
-//
-//        grog.interactOnWith("apple", "knife");
-
-//        grog.interactOnWith("rope", "knife");
-
-//        grog.interactOnWith(currentRoom.getInteractable("rope"), grog.getItem("knife"));
-
 
     }
 }

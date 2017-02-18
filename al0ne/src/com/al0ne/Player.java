@@ -71,13 +71,13 @@ public class Player {
         }
     }
 
-    public void removeFromInventory(String item){
-        if (hasItem(item)){
-            inventory.remove(item);
-        } else{
-            System.out.println("Error: tried removing non-existing object");
-        }
-    }
+//    public void removeFromInventory(String item){
+//        if (hasItem(item)){
+//            inventory.remove(item);
+//        } else{
+//            System.out.println("Error: tried removing non-existing object");
+//        }
+//    }
 
 
 
@@ -160,6 +160,7 @@ public class Player {
             prop.printDescription();
         } else if(item != null){
             item.printDescription();
+            //TODO need to add stacks of items; if item is already in inventory (same name), create a stack somehow.
         } else {
             System.out.println("You can't see a "+target);
         }
@@ -206,7 +207,9 @@ public class Player {
 
         } else if (prop != null && item == null){
             //case its a prop
+            System.out.println("yuppie!");
             prop.used();
+            prop.used(currentRoom);
         } else {
             System.out.println("You can't seem to see a "+target);
 
@@ -214,41 +217,3 @@ public class Player {
 
     }
 }
-
-
-
-//
-//    public boolean use(String target){
-//
-//        Interactable interacted = getItem(target);
-//        Pickable inventoryItem = getItemFromInventory(target);
-//
-//        if (interacted != null && inventoryItem != null && inventoryItem != interacted){
-//            System.out.println("Which one, the one in your inventory or the one in the room? (R/I)");
-//            Scanner asd = new Scanner(System.in);
-//            while (true){
-//                if (asd.hasNextLine()){
-//                    String input = asd.nextLine().toLowerCase();
-//                    if (input.equals("R")){
-//                        interacted.toggle();
-//                        return true;
-//                    } else if(input.equals("I")){
-//                        inventoryItem.toggle();
-//                        return true;
-//                    }
-//                }
-//            }
-//        } else if (inventoryItem != null){
-//            System.out.println("You use the " + target);
-//            inventoryItem.toggle();
-//            return true;
-//        } else if (interacted != null){
-//            System.out.println("You use the "+target);
-//            interacted.toggle();
-//            return true;
-//        } else {
-//            System.out.println("You can't seem to find the "+target);
-//            return false;
-//        }
-//    }
-//

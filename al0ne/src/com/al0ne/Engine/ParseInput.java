@@ -23,7 +23,7 @@ public class ParseInput {
 
         String[] temp = lowerInput.split(" ");
         
-        //// TODO: 11/02/2017 add turn counter 
+        //// TODO: 11/02/2017 add turn counter
 
         switch (temp[0]){
             case "use":
@@ -31,18 +31,36 @@ public class ParseInput {
                 int a = ParseInput.checkForToken(temp, "on");
                 if(a ==  -1){
                     String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
-                    ArrayList<String> simpleUse = getPotentialItem(itemToUse, player, 0);
+                    ArrayList<String> inventoryUse = getPotentialItem(itemToUse, player, 0);
+                    ArrayList<String> propUse = getPotentialItem(itemToUse, player, 1);
 
-                    if (simpleUse.size()>1){
+                    if (inventoryUse.size()>1 || propUse.size()>1 || (propUse.size()==1 && inventoryUse.size()==1)){
                         System.out.println("Be more specific.");
+
+//                                                for (String b : inventoryUse){
+//                            System.out.println(b);
+//                        }
+//                                                for (String b : propUse){
+//                            System.out.println(b);
+//                        }
+
                         break;
                     }
 
-                    try{
-                        player.simpleUse(simpleUse.get(0));
-                    } catch (IndexOutOfBoundsException ex){
-                        System.out.println("You can't see such an item");
-                    }
+//                    try{
+                        if (inventoryUse.size()==1){
+                            player.simpleUse(inventoryUse.get(0));
+                        } else if (propUse.size()==1){
+                            player.simpleUse(propUse.get(0));
+                        } else{
+                            System.out.println("You can't see such an item hihi");
+
+                            System.out.println(inventoryUse.size());
+                            System.out.println(propUse.size());
+                        }
+//                    } catch (IndexOutOfBoundsException ex){
+//                        System.out.println("You can't see such an item");
+//                    }
 
 
                 } else if(a > -1){
@@ -84,17 +102,24 @@ public class ParseInput {
             case "look":
                 game.getRoom().printRoom();
                 break;
+            case "n":
             case "north":
                 ParseInput.move(player, rooms, "north", temp);
                 break;
+            case "s":
             case "south":
                 ParseInput.move(player, rooms, "south", temp);
                 break;
+            case "e":
             case "east":
                 ParseInput.move(player, rooms, "east", temp);
                 break;
+            case "w":
             case "west":
                 ParseInput.move(player, rooms, "west", temp);
+                break;
+            case "down":
+                ParseInput.move(player, rooms, "down", temp);
                 break;
             case "take":
                 if (temp.length<=1){
@@ -119,18 +144,19 @@ public class ParseInput {
                     System.out.println("You can't see such an item");
                 }
                 break;
+            case "x":
             case "examine":
                 player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
                 break;
+            case "i":
             case "inventory":
                 player.printInventory();
                 break;
+            case "?":
             case "help":
                 System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x on y, open x, look, quit, exit");
                 break;
             case "quit":
-                ParseInput.quit();
-                break;
             case "exit":
                 ParseInput.quit();
                 break;
@@ -200,6 +226,7 @@ public class ParseInput {
     }
 
     public static void move(Player player, HashMap<String, Room> rooms, String direction, String[] temp){
+//        System.out.println(player.getCurrentRoom().isLocked(direction));
         if (temp.length > 1) {
             System.out.println("Sorry?");
         }
