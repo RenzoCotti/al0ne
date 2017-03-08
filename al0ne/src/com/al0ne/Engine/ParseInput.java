@@ -7,7 +7,6 @@ import com.al0ne.Room;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 /**
@@ -229,11 +228,7 @@ public class ParseInput {
 //        System.out.println(player.getCurrentRoom().isLocked(direction));
         if (temp.length > 1) {
             System.out.println("Sorry?");
-        }
-        else if(player.getCurrentRoom().isLocked(direction)){
-            System.out.println("The way "+direction+" is blocked.");
-        }
-        else {
+        } else {
             player.moveToRoom(direction, rooms);
         }
     }

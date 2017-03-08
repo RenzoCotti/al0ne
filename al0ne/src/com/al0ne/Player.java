@@ -20,23 +20,32 @@ import java.util.HashMap;
  */
 public class Player {
 
+    //Maps ItemID, Item
     private HashMap<String, Item> inventory;
     private Room currentRoom;
-    private double maxWeight;
+    
+    //Maximum carry weight of the player
+    private double maxWeight=60;
+    //Current carry weight of the player
     private double currentWeight;
+    
+    // TODO: 08/03/2017 add health, satiation
 
-    public Player(Room currentRoom, double maxWeight) {
+    //creates a new Player, sets the current Room to currentRoom
+    //inventory is empty, weight is 0
+    public Player(Room currentRoom) {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
-        this.maxWeight=maxWeight;
         this.currentWeight=0;
     }
 
 
+    //returns the inventory hashmap
     public HashMap<String, Item> getInventory() {
         return inventory;
     }
 
+    //prints the inventory
     public void printInventory(){
         if (inventory.size()==0){
             System.out.println("You have no items.");
@@ -49,10 +58,26 @@ public class Player {
         }
     }
 
+
+    //this function returns a prop, if it exists
+    public Prop getProp(String target){
+        Prop prop = currentRoom.getProps().get(target);
+
+        if( prop != null) {
+            return prop;
+        } else{
+            return null;
+        }
+    }
+
+    //this function adds an item to the inventory
     public void addItem(Item item) {
+        this.currentWeight+=item.getWeight();
         this.inventory.put(item.getID(), item);
     }
 
+    //this function checks if the player has an item in the inventory
+    //if there is no item, it returns false
     public boolean hasItem(String item){
         try{
             inventory.get(item);
@@ -62,6 +87,8 @@ public class Player {
         }
     }
 
+    //this function tries to get an item from the inventory
+    //if there is no such item, it returns null
     public Item getItemFromInventory(String item){
         if(hasItem(item)){
             return inventory.get(item);
@@ -71,50 +98,25 @@ public class Player {
         }
     }
 
-//    public void removeFromInventory(String item){
-//        if (hasItem(item)){
-//            inventory.remove(item);
-//        } else{
-//            System.out.println("Error: tried removing non-existing object");
-//        }
-//    }
-
-
-
+    //getter for currentRoom
     public Room getCurrentRoom() {
         return currentRoom;
     }
 
+    //setter for currentRoom
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
 
-    public void pickUpItem(String item){
 
-        for (Item object : currentRoom.getItems().values()){
-//            System.out.println(object.getName());
-            if (object.getID().toLowerCase().equals(item.toLowerCase())){
-                if (object.getWeight()+currentWeight > maxWeight ){
-                    System.out.println("Too heavy to carry.");
-                    return;
-                } else{
-                    addItem(object);
-                    currentWeight+=object.getWeight();
-                    System.out.println("Added "+ object.getName() + " to inventory.");
-                    currentRoom.getItems().remove(item);
-                    return;
-                }
-            }
-        }
-
-        System.out.println("There is no such object");
-    }
-
-    //Room.exits: <north, cave1>
-    //rooms: <cave1, Room>
-
+    //this function checks if the direction selected is accessible from the
+    //currentRoom and if it's not locked by a door, if so it moves there
     public void moveToRoom(String direction, HashMap<String, Room> rooms){
 
+        if(currentRoom.isLocked(direction)){
+            System.out.println("The way "+direction+" is blocked.");
+            return;
+        }
         //iterate over all directions of currentRoom, eg. north
         for (String s : currentRoom.getExits().keySet()){
             //check them with the given direction
@@ -136,59 +138,8 @@ public class Player {
         System.out.println();
     }
 
-    public void interactOnWith(String target, String item){
 
-        Prop prop = getProp(target);
-        Item inventoryItem = getItemFromInventory(item);
-
-        if (prop != null && inventoryItem != null){
-            System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
-            prop.usedWith(inventoryItem);
-
-            if(prop instanceof LockedDoor){
-                currentRoom.unlockDirection(prop.getID());
-            }
-        } else {
-            System.out.println("You can't see it.");
-        }
-    }
-
-    public void examine(String target){
-        Prop prop = getProp(target);
-        Item item = getItemFromInventory(target);
-        if (prop != null){
-            prop.printDescription();
-        } else if(item != null){
-            item.printDescription();
-            //TODO need to add stacks of items; if item is already in inventory (same name), create a stack somehow.
-        } else {
-            System.out.println("You can't see a "+target);
-        }
-    }
-
-    public void drop(String target){
-        Item item = getItemFromInventory(target);
-        if (item != null){
-            inventory.remove(item);
-            currentRoom.addItem(item);
-            System.out.println("You drop the "+item.getName());
-
-        } else {
-            System.out.println("You don't seem to have a "+target+" with you.");
-        }
-    }
-
-    public Prop getProp(String target){
-        Prop prop = currentRoom.getProps().get(target);
-
-        if( prop != null) {
-            return prop;
-        } else{
-//            System.out.println("You can't see that item.");
-            return null;
-        }
-    }
-
+    //this makes the player use an item
     public void simpleUse(String target){
         Prop prop = getProp(target);
         Item item = getItemFromInventory(target);
@@ -216,4 +167,76 @@ public class Player {
         }
 
     }
+
+
+    //this function makes the player use item on target, item is an inventory Item, target is a Prop
+    public void interactOnWith(String target, String item){
+
+        Prop prop = getProp(target);
+        Item inventoryItem = getItemFromInventory(item);
+
+        if (prop != null && inventoryItem != null){
+            System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
+            prop.usedWith(inventoryItem);
+
+            if(prop instanceof LockedDoor){
+                //// TODO: 08/03/2017 maybe fix this, somehow
+                currentRoom.unlockDirection(prop.getID());
+            }
+        } else {
+            System.out.println("You can't see it.");
+        }
+    }
+
+    //this function prints the description of target, be it a prop or an Item
+    public void examine(String target){
+        Prop prop = getProp(target);
+        Item item = getItemFromInventory(target);
+        if (prop != null){
+            prop.printDescription();
+        } else if(item != null){
+            item.printDescription();
+        } else {
+            System.out.println("You can't see a "+target);
+        }
+    }
+
+    //this function makes the player drop target, if it has it
+    public void drop(String target){
+        Item item = getItemFromInventory(target);
+        if (item != null){
+            inventory.remove(item);
+            currentRoom.addItem(item);
+            System.out.println("You drop the "+item.getName());
+
+        } else {
+            System.out.println("You don't seem to have a "+target+" with you.");
+        }
+    }
+
+
+    //this function tries to pick up an item in the currentRoom:
+    //it also checks if the player can carry the current item
+    //if it didn't succeed, print an error message
+    public void pickUpItem(String item){
+
+        for (Item object : currentRoom.getItems().values()){
+            if (object.getID().toLowerCase().equals(item.toLowerCase())){
+                if (object.getWeight()+currentWeight > maxWeight ){
+                    System.out.println("Too heavy to carry.");
+                    return;
+                } else{
+                    addItem(object);
+                    currentWeight+=object.getWeight();
+                    System.out.println("Added "+ object.getName() + " to inventory.");
+                    currentRoom.getItems().remove(item);
+                    return;
+                }
+            }
+        }
+
+        System.out.println("There is no such object");
+    }
+
+
 }

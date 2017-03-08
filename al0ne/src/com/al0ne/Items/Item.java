@@ -23,6 +23,7 @@ public abstract class Item {
         this.weight = weight;
         this.description = description;
         this.properties= new ArrayList<>();
+        //// TODO: 08/03/2017 add how many items here 
     }
 
     public void addProperty(String behaviour){
