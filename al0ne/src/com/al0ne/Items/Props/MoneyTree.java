@@ -1,0 +1,40 @@
+package com.al0ne.Items.Props;
+
+import com.al0ne.Items.Item;
+import com.al0ne.Items.Items.Money;
+import com.al0ne.Items.Prop;
+import com.al0ne.Room;
+
+/**
+ * Created by BMW on 09/03/2017.
+ */
+public class MoneyTree extends Prop{
+    private String usedMessage;
+    public MoneyTree() {
+        super("moneytree", "Money tree", "A tree with money instead of leaves is in the middle of the room", "The tree has no leaves anymore...");
+        this.usedMessage="You cut the leaves from the money tree.";
+    }
+
+    public MoneyTree(String name, String description, String after, String usedMessage) {
+        super("moneytree", name, description, after);
+        this.usedMessage=usedMessage;
+    }
+
+
+    @Override
+    public boolean usedWith(Item item, Room currentRoom) {
+
+        if(item.hasProperty("sharp")){
+            System.out.println(usedMessage);
+            currentRoom.addItem(new Money(), 100);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean used(Room currentRoom){
+        return false;
+    }
+
+}

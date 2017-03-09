@@ -5,10 +5,7 @@ import com.al0ne.Items.Items.Apple;
 import com.al0ne.Items.Items.Beer;
 import com.al0ne.Items.Items.Key;
 import com.al0ne.Items.Items.Knife;
-import com.al0ne.Items.Props.CuttableRope;
-import com.al0ne.Items.Props.Door;
-import com.al0ne.Items.Props.HideItem;
-import com.al0ne.Items.Props.LockedDoor;
+import com.al0ne.Items.Props.*;
 import com.al0ne.Room;
 import java.util.HashMap;
 
@@ -27,6 +24,8 @@ public class CreateRooms {
 //        cave1.addItem(new Key("cave2key","Next Room Key"));
         cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
 //        cave1.lockDirection("east", "cave1door");
+
+        cave1.addProp(new MoneyTree());
 
         CreateRooms.putRoom(cave1);
 

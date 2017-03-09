@@ -1,8 +1,8 @@
 package com.al0ne.Items.Props;
 
-import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
+import com.al0ne.Room;
 
 /**
  * Created by BMW on 09/02/2017.
@@ -15,7 +15,7 @@ public class CuttableRope extends Prop{
     }
 
     @Override
-    public boolean usedWith(Item item) {
+    public boolean usedWith(Item item, Room currentRoom) {
         if(( item.hasProperty("sharp"))){
             System.out.println("You cut the rope, freeing the Graken");
             active = true;

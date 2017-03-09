@@ -177,7 +177,7 @@ public class Player {
 
         if (prop != null && inventoryItem != null){
             System.out.println("You use the " + inventoryItem.getItem().getName() + " on the "+ prop.getName());
-            prop.usedWith(inventoryItem.getItem());
+            prop.usedWith(inventoryItem.getItem(), currentRoom);
 
             if(prop instanceof LockedDoor){
                 //// TODO: 08/03/2017 maybe fix this, somehow

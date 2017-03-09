@@ -3,6 +3,7 @@ package com.al0ne.Items.Props;
 import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
+import com.al0ne.Room;
 
 /**
  * Created by BMW on 02/02/2017.
@@ -19,7 +20,7 @@ public class LockedDoor extends Prop {
     }
 
     @Override
-    public boolean usedWith(Item item){
+    public boolean usedWith(Item item, Room currentRoom){
         if(item.hasProperty("key")){
 //            System.out.println(requiresItem);
             if (item.getID().equals(requiresItem)){

@@ -28,6 +28,7 @@ public abstract class Prop {
         this.after = description;
         this.requiresItem="none";
         this.active=false;
+        this.requiredCommand=new ArrayList<>();
     }
 
     public Prop(String id, String name, String description, String after) {
@@ -44,7 +45,7 @@ public abstract class Prop {
         requiredType.add(type);
     }
 
-    public boolean usedWith(Item item) {
+    public boolean usedWith(Item item, Room currentRoom) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
                 active=true;
@@ -61,16 +62,6 @@ public abstract class Prop {
         } else{
             return false;
         }
-    }
-
-    public boolean usedWith(Item item, Room currentRoom) {
-        for (String s: requiredType){
-            if (item.hasProperty(s)){
-                active=(!active);
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean used(Room currentRoom){

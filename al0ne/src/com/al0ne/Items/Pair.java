@@ -24,6 +24,10 @@ public class Pair {
         count++;
     }
 
+    public void setCount(Integer amount) {
+        count=amount;
+    }
+
     public boolean subCount() {
         count--;
         if (count <= 0){

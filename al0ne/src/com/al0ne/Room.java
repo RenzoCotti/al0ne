@@ -131,6 +131,15 @@ public class Room {
         }
     }
 
+    public void addItem(Item item, Integer amount) {
+        if (hasItem(item.getID())){
+            Pair currentPair=items.get(item.getID());
+            currentPair.setCount(amount);
+        } else{
+            this.items.put(item.getID(), new Pair(item, amount));
+        }
+    }
+
     public boolean hasItem(String id) {
 
         if (items.get(id) != null){
