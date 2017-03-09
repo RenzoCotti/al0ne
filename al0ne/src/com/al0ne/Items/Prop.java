@@ -17,6 +17,8 @@ public abstract class Prop {
     protected ArrayList<String> requiredType;
     protected boolean active;
 
+    protected ArrayList<String> requiredCommand;
+
 
     public Prop(String id, String name, String description) {
         this.id = id;

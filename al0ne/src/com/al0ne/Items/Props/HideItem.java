@@ -27,9 +27,9 @@ public class HideItem extends Prop{
     public boolean used(Room currentRoom){
         System.out.println(useMessage);
         currentRoom.getProps().remove(name);
-        for (Prop a : currentRoom.getProps().values()){
-            System.out.println(a.getName());
-        }
+//        for (Prop a : currentRoom.getProps().values()){
+//            System.out.println(a.getName());
+//        }
         currentRoom.getProps().put(hidden.getID(), hidden);
         return true;
     }

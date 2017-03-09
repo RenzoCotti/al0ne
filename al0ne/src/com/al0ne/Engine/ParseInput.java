@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Items.Item;
+import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
 import com.al0ne.Player;
 import com.al0ne.Room;
@@ -241,7 +242,8 @@ public class ParseInput {
         if(number==0){
 
             //check if there is an exact match
-            for (Item b : player.getInventory().values()){
+            for (Pair pair : player.getInventory().values()){
+                Item b = pair.getItem();
                 if (b.getName().equals(s)){
                     potentialItems.add(b.getID());
 //                    System.out.println("Perfect match found!");
@@ -252,7 +254,8 @@ public class ParseInput {
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
             for (String token : temp){
-                for(Item a : player.getInventory().values()){
+                for(Pair pair : player.getInventory().values()){
+                    Item a = pair.getItem();
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem){
                         if (b.toLowerCase().equals(token)){
@@ -290,7 +293,8 @@ public class ParseInput {
             //case item
         } else if(number==2){
 
-            for (Item b : player.getCurrentRoom().getItems().values()){
+            for (Pair pair : player.getCurrentRoom().getItems().values()){
+                Item b = pair.getItem();
                 if (b.getName().toLowerCase().equals(s.toLowerCase())){
                     potentialItems.add(b.getID());
 //                    System.out.println("Perfect match found!");
@@ -301,7 +305,8 @@ public class ParseInput {
 
         String[] temp = s.split(" ");
         for (String token : temp){
-            for(Item a : player.getCurrentRoom().getItems().values()){
+            for(Pair pair : player.getCurrentRoom().getItems().values()){
+                Item a = pair.getItem();
                 String[] currentItem = a.getName().split(" ");
                 for (String b : currentItem){
                     if (b.toLowerCase().equals(token)){

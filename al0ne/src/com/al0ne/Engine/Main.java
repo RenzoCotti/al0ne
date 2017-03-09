@@ -13,7 +13,7 @@ public class Main {
 
         HashMap<String, Room> rooms = CreateRooms.create();
 
-        Player Grog = new Player(rooms.get("cave3"));
+        Player Grog = new Player(rooms.get("cellar"));
 
         Game game = new Game(Grog, rooms);
 
@@ -22,9 +22,9 @@ public class Main {
 
         Player grog = game.getPlayer();
 
-        grog.addItem(new Beer());
-        grog.addItem(new Beer());
-        grog.addItem(new Beer());
+//        grog.addItem(new Beer());
+//        grog.addItem(new Beer());
+//        grog.addItem(new Beer());
 
         game.getRoom().printRoom();
 

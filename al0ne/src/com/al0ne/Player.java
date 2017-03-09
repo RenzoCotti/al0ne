@@ -2,6 +2,7 @@ package com.al0ne;
 
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Item;
+import com.al0ne.Items.Pair;
 import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
 
@@ -21,7 +22,7 @@ import java.util.HashMap;
 public class Player {
 
     //Maps ItemID, Item
-    private HashMap<String, Item> inventory;
+    private HashMap<String, Pair> inventory;
     private Room currentRoom;
     
     //Maximum carry weight of the player
@@ -41,7 +42,7 @@ public class Player {
 
 
     //returns the inventory hashmap
-    public HashMap<String, Item> getInventory() {
+    public HashMap<String, Pair> getInventory() {
         return inventory;
     }
 
@@ -52,8 +53,8 @@ public class Player {
             return;
         } else {
             System.out.println("You have these items:");
-            for (Item item : inventory.values()) {
-                System.out.println("- " + item.getName());
+            for (Pair pair : inventory.values()) {
+                System.out.println("- "+pair.getCount()+"x " + pair.getItem().getName());
             }
         }
     }
@@ -72,8 +73,7 @@ public class Player {
 
     //this function adds an item to the inventory
     public void addItem(Item item) {
-        this.currentWeight+=item.getWeight();
-        this.inventory.put(item.getID(), item);
+        this.inventory.put(item.getID(), new Pair(item, 1));
     }
 
     //this function checks if the player has an item in the inventory
@@ -89,7 +89,7 @@ public class Player {
 
     //this function tries to get an item from the inventory
     //if there is no such item, it returns null
-    public Item getItemFromInventory(String item){
+    public Pair getPairFromInventory(String item){
         if(hasItem(item)){
             return inventory.get(item);
         } else {
@@ -142,7 +142,7 @@ public class Player {
     //this makes the player use an item
     public void simpleUse(String target){
         Prop prop = getProp(target);
-        Item item = getItemFromInventory(target);
+        Item item = getPairFromInventory(target).getItem();
 
         if (prop == null && item != null){
             //case its an item in inventory
@@ -173,11 +173,11 @@ public class Player {
     public void interactOnWith(String target, String item){
 
         Prop prop = getProp(target);
-        Item inventoryItem = getItemFromInventory(item);
+        Pair inventoryItem = getPairFromInventory(item);
 
         if (prop != null && inventoryItem != null){
-            System.out.println("You use the " + inventoryItem.getName() + " on the "+ prop.getName());
-            prop.usedWith(inventoryItem);
+            System.out.println("You use the " + inventoryItem.getItem().getName() + " on the "+ prop.getName());
+            prop.usedWith(inventoryItem.getItem());
 
             if(prop instanceof LockedDoor){
                 //// TODO: 08/03/2017 maybe fix this, somehow
@@ -191,7 +191,7 @@ public class Player {
     //this function prints the description of target, be it a prop or an Item
     public void examine(String target){
         Prop prop = getProp(target);
-        Item item = getItemFromInventory(target);
+        Item item = getPairFromInventory(target).getItem();
         if (prop != null){
             prop.printDescription();
         } else if(item != null){
@@ -203,11 +203,18 @@ public class Player {
 
     //this function makes the player drop target, if it has it
     public void drop(String target){
-        Item item = getItemFromInventory(target);
+        Pair item = getPairFromInventory(target);
         if (item != null){
-            inventory.remove(item);
-            currentRoom.addItem(item);
-            System.out.println("You drop the "+item.getName());
+            if(item.subCount()){
+                inventory.remove(item.getItem().getID());
+            }
+            Pair roomItem = currentRoom.getPair(item.getItem().getID());
+            if (roomItem != null){
+                roomItem.addCount();
+            } else{
+                currentRoom.addItem(item.getItem());
+            }
+            System.out.println("You drop the "+item.getItem().getName());
 
         } else {
             System.out.println("You don't seem to have a "+target+" with you.");
@@ -220,8 +227,31 @@ public class Player {
     //if it didn't succeed, print an error message
     public void pickUpItem(String item){
 
-        for (Item object : currentRoom.getItems().values()){
+        Pair fromInventory = getPairFromInventory(item);
+        //if the item exists in the room, add it to inventory
+        for (Pair pair : currentRoom.getItems().values()){
+            Item object = pair.getItem();
             if (object.getID().toLowerCase().equals(item.toLowerCase())){
+
+
+                if ( fromInventory != null){
+                    if (fromInventory.getItem().getWeight()+currentWeight > maxWeight ){
+                        System.out.println("Too heavy to carry.");
+                        return;
+                    } else{
+                        fromInventory.addCount();
+                        if (pair.subCount()){
+                            currentRoom.getItems().remove(fromInventory.getItem().getID());
+                        }
+                        currentWeight+=fromInventory.getItem().getWeight();
+                        System.out.println("Added "+ fromInventory.getItem().getName() + " to inventory.");
+                        return;
+                    }
+
+                }
+
+
+
                 if (object.getWeight()+currentWeight > maxWeight ){
                     System.out.println("Too heavy to carry.");
                     return;
@@ -229,7 +259,9 @@ public class Player {
                     addItem(object);
                     currentWeight+=object.getWeight();
                     System.out.println("Added "+ object.getName() + " to inventory.");
-                    currentRoom.getItems().remove(item);
+                    if (pair.subCount()){
+                        currentRoom.getItems().remove(item);
+                    }
                     return;
                 }
             }

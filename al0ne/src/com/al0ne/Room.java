@@ -1,6 +1,7 @@
 package com.al0ne;
 
 import com.al0ne.Items.Item;
+import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
 import java.util.HashMap;
 
@@ -31,8 +32,8 @@ public class Room {
     private HashMap<String, String> lockedDirections;
     //maps propName - Prop
     private HashMap<String, Prop> props;
-    //maps itemName - Item
-    private HashMap<String, Item> items;
+    //maps itemID - (Item, count)
+    private HashMap<String, Pair> items;
 
     public Room(String id, String name, String description) {
         this.id=id;
@@ -48,7 +49,7 @@ public class Room {
         return props;
     }
 
-    public HashMap<String, Item> getItems() {
+    public HashMap<String, Pair> getItems() {
         return items;
     }
 
@@ -73,8 +74,9 @@ public class Room {
     public void printItems(){
         if (items.size()!=0){
             System.out.println("You can see:");
-            for (Item item : items.values()) {
-                System.out.println("- " + item.getName());
+            for (Pair item : items.values()) {
+                Item currentItem = item.getItem();
+                System.out.println("- " +item.getCount()+"x "+ currentItem.getName());
             }
         }
     }
@@ -121,7 +123,28 @@ public class Room {
     }
 
     public void addItem(Item item) {
-        this.items.put(item.getID(), item);
+        if (hasItem(item.getID())){
+            Pair currentPair=items.get(item.getID());
+            currentPair.addCount();
+        } else{
+            this.items.put(item.getID(), new Pair(item, 1));
+        }
+    }
+
+    public boolean hasItem(String id) {
+
+        if (items.get(id) != null){
+            return true;
+        }
+        return false;
+    }
+
+    public Pair getPair(String id) {
+
+        if (hasItem(id)){
+            return items.get(id);
+        }
+        else return null;
     }
 
     public void addExit(String exit, String roomid) {

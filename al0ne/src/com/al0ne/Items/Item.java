@@ -15,6 +15,8 @@ public abstract class Item {
     protected double weight;
 
     protected ArrayList<String> properties;
+    protected ArrayList<String> requiredCommand;
+//    protected int itemCount=0;
 
 
     public Item(String id, String name, String description, double weight) {
@@ -23,7 +25,7 @@ public abstract class Item {
         this.weight = weight;
         this.description = description;
         this.properties= new ArrayList<>();
-        //// TODO: 08/03/2017 add how many items here 
+//        this.itemCount=1;
     }
 
     public void addProperty(String behaviour){
@@ -48,6 +50,10 @@ public abstract class Item {
         return ID;
     }
 
+//    public int getCount() {
+//        return itemCount;
+//    }
+
     public String getDescription() {
         return description;
     }
@@ -59,4 +65,17 @@ public abstract class Item {
     public double getWeight() {
         return weight;
     }
+
+//    public void addItemCount() {
+//        this.itemCount++;
+//    }
+//
+//    public boolean removeItemCount() {
+//        this.itemCount--;
+//
+//        if(itemCount==0){
+//            return true;
+//        }
+//        return false;
+//    }
 }

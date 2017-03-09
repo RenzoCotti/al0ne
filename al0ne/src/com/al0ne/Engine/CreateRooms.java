@@ -54,6 +54,8 @@ public class CreateRooms {
         cellar.addExit("up", "cave3");
         cellar.addItem(new Beer());
         cellar.addItem(new Beer());
+        cellar.addItem(new Beer());
+        cellar.addItem(new Beer());
 
         CreateRooms.putRoom(cellar);
 
