@@ -17,6 +17,8 @@ public class Main {
 
         Game game = new Game(Grog, rooms);
 
+        int turnCounter=0;
+
 
         Player grog = game.getPlayer();
 
@@ -31,7 +33,10 @@ public class Main {
         while (true){
 
             if(userInput.hasNextLine()){
-                ParseInput.parse(userInput.nextLine(), game);
+                if(ParseInput.parse(userInput.nextLine(), game, turnCounter)){
+                    turnCounter++;
+                }
+                //check for turn counter?
             }
 
         }

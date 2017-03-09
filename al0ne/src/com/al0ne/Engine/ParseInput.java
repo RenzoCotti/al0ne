@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Created by BMW on 31/01/2017.
  */
 public class ParseInput {
-    public static void parse(String input, Game game){
+    public static boolean parse(String input, Game game, int turns){
 
         Player player = game.getPlayer();
         HashMap<String, Room> rooms = game.getAllRooms();
@@ -21,8 +21,6 @@ public class ParseInput {
         String lowerInput = input.toLowerCase();
 
         String[] temp = lowerInput.split(" ");
-        
-        //// TODO: 11/02/2017 add turn counter
 
         switch (temp[0]){
             case "use":
@@ -43,7 +41,7 @@ public class ParseInput {
 //                            System.out.println(b);
 //                        }
 
-                        break;
+                        return false;
                     }
 
 //                    try{
@@ -52,11 +50,13 @@ public class ParseInput {
                         } else if (propUse.size()==1){
                             player.simpleUse(propUse.get(0));
                         } else{
-                            System.out.println("You can't see such an item hihi");
+                            System.out.println("You can't see such an item");
 
                             System.out.println(inventoryUse.size());
                             System.out.println(propUse.size());
                         }
+
+                    return true;
 //                    } catch (IndexOutOfBoundsException ex){
 //                        System.out.println("You can't see such an item");
 //                    }
@@ -73,7 +73,7 @@ public class ParseInput {
                         System.out.println("Be more specific.");
 
 
-                        break;
+                        return false;
                     }
 
 
@@ -94,36 +94,44 @@ public class ParseInput {
 //                        }
                     }
                 }
-                break;
+                return true;
 
             case "open":
-                break;
+                return false;
             case "look":
                 game.getRoom().printRoom();
-                break;
+                return true;
             case "n":
             case "north":
-                ParseInput.move(player, rooms, "north", temp);
-                break;
+                if (ParseInput.move(player, rooms, "north", temp)){
+                    return true;
+                }
+                return false;
             case "s":
             case "south":
-                ParseInput.move(player, rooms, "south", temp);
-                break;
+                if (ParseInput.move(player, rooms, "south", temp)){
+                    return true;
+                }
+                return false;
             case "e":
             case "east":
                 ParseInput.move(player, rooms, "east", temp);
-                break;
+                return true;
             case "w":
             case "west":
-                ParseInput.move(player, rooms, "west", temp);
-                break;
+                if (ParseInput.move(player, rooms, "west", temp)){
+                    return true;
+                }
+                return false;
             case "down":
-                ParseInput.move(player, rooms, "down", temp);
-                break;
+                if (ParseInput.move(player, rooms, "down", temp)){
+                    return true;
+                }
+                return false;
             case "take":
                 if (temp.length<=1){
                     System.out.println("Sorry?");
-                    break;
+                    return false;
                 }
                 String item = ParseInput.stitchFromTo(temp, 1, temp.length);
                 ArrayList<String> possibleItems = getPotentialItem(item, player, 2);
@@ -134,7 +142,7 @@ public class ParseInput {
 //                    for (String f : possibleItems){
 //                        System.out.println(f);
 //                    }
-                    break;
+                    return false;
                 }
 
                 try{
@@ -142,23 +150,23 @@ public class ParseInput {
                 } catch (IndexOutOfBoundsException ex){
                     System.out.println("You can't see such an item");
                 }
-                break;
+                return true;
             case "x":
             case "examine":
                 player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
-                break;
+                return true;
             case "i":
             case "inventory":
                 player.printInventory();
-                break;
+                return true;
             case "?":
             case "help":
                 System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x on y, open x, look, quit, exit");
-                break;
+                return false;
             case "quit":
             case "exit":
                 ParseInput.quit();
-                break;
+                return false;
             case "drop":
                 String toDrop = ParseInput.stitchFromTo(temp, 1, temp.length);
                 ArrayList<String> possibleDrop = getPotentialItem(toDrop, player, 0);
@@ -169,7 +177,7 @@ public class ParseInput {
 //                    for (String f : possibleItems){
 //                        System.out.println(f);
 //                    }
-                    break;
+                    return false;
                 }
 
                 try{
@@ -178,16 +186,22 @@ public class ParseInput {
                     System.out.println("You can't see such an item");
                 }
 
-                break;
+                return true;
             case "kill":
                 System.exit(0);
 
+            case "time":
+                System.out.println(turns+" turns elapsed.");
+                return false;
+
             default:
                 System.out.println("Sorry?");
-                break;
+                return false;
         }
     }
 
+
+    //this function makes a string from the begin-th element of the array to the end-th
     public static String stitchFromTo(String[] input, int begin, int end){
         String temp="";
         for (int i = begin; i != end; i++){
@@ -200,6 +214,7 @@ public class ParseInput {
         return temp;
     }
 
+    //this function looks for token in input
     public static int checkForToken(String[] input, String token){
         for (int i = 0; i != input.length; i++){
             if (input[i].equals(token)){
@@ -209,6 +224,7 @@ public class ParseInput {
         return -1;
     }
 
+    //this function handles the command exit
     public static void quit(){
         System.out.println("Are you sure you want to quit? (Y/N)");
         Scanner test = new Scanner(System.in);
@@ -224,16 +240,22 @@ public class ParseInput {
         }
     }
 
-    public static void move(Player player, HashMap<String, Room> rooms, String direction, String[] temp){
+    //this handles moving: it checks for exactly one token after the command
+    public static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp){
 //        System.out.println(player.getCurrentRoom().isLocked(direction));
         if (temp.length > 1) {
             System.out.println("Sorry?");
+            return false;
         } else {
             player.moveToRoom(direction, rooms);
+            return true;
         }
     }
 
-
+    //this attempts to get items from a token;
+    //number = 0: tries to get from the inventory
+    //number = 1: tries to get from Props of currentRoom
+    //number = 2: tries to get from Items of currentRoom
     public static ArrayList<String> getPotentialItem(String s, Player player, int number){
         ArrayList<String> potentialItems = new ArrayList<>();
 
