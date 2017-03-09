@@ -239,4 +239,10 @@ public class Player {
     }
 
 
+    //// TODO: 09/03/2017 custom action for items, eg pull
+    public void customAction(String action, Item item){
+
+    };
+
+
 }

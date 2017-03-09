@@ -23,28 +23,25 @@ public class ParseInput {
         String[] temp = lowerInput.split(" ");
 
         switch (temp[0]){
+
+            //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
                 int a = ParseInput.checkForToken(temp, "on");
+
+                //case simple use
                 if(a ==  -1){
                     String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
                     ArrayList<String> inventoryUse = getPotentialItem(itemToUse, player, 0);
                     ArrayList<String> propUse = getPotentialItem(itemToUse, player, 1);
 
+                    //there are more possibilities from the items fetched
+                    //// TODO: 09/03/2017 maybe problems with multiple equal items
                     if (inventoryUse.size()>1 || propUse.size()>1 || (propUse.size()==1 && inventoryUse.size()==1)){
                         System.out.println("Be more specific.");
-
-//                                                for (String b : inventoryUse){
-//                            System.out.println(b);
-//                        }
-//                                                for (String b : propUse){
-//                            System.out.println(b);
-//                        }
-
                         return false;
                     }
 
-//                    try{
                         if (inventoryUse.size()==1){
                             player.simpleUse(inventoryUse.get(0));
                         } else if (propUse.size()==1){
@@ -57,11 +54,8 @@ public class ParseInput {
                         }
 
                     return true;
-//                    } catch (IndexOutOfBoundsException ex){
-//                        System.out.println("You can't see such an item");
-//                    }
 
-
+                //case complex use
                 } else if(a > -1){
                     String firstItem = ParseInput.stitchFromTo(temp, 1, a);
                     String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
@@ -71,27 +65,13 @@ public class ParseInput {
 
                     if (first.size()>1 || second.size() >1){
                         System.out.println("Be more specific.");
-
-
                         return false;
                     }
-
-
 
                     try{
                         player.interactOnWith(second.get(0), first.get(0));
                     } catch (IndexOutOfBoundsException ex){
                         System.out.println("You can't see such items.");
-
-//                        for (String b : first){
-//                            System.out.println(b);
-//                        }
-//
-//                        System.out.println();
-//
-//                        for (String b : second){
-//                            System.out.println(b);
-//                        }
                     }
                 }
                 return true;
@@ -128,6 +108,7 @@ public class ParseInput {
                     return true;
                 }
                 return false;
+            //we try to get the item the player wants to take
             case "take":
                 if (temp.length<=1){
                     System.out.println("Sorry?");
@@ -138,10 +119,6 @@ public class ParseInput {
 
                 if (possibleItems.size()>1){
                     System.out.println("Be more specific.");
-
-//                    for (String f : possibleItems){
-//                        System.out.println(f);
-//                    }
                     return false;
                 }
 
