@@ -25,6 +25,11 @@ public class ParseInput {
 
         switch (temp[0]){
 
+            case "drink":
+                ParseInput.customAction(temp, player, "drink");
+            case "move":
+                ParseInput.customAction(temp, player, "move");
+
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
@@ -71,6 +76,7 @@ public class ParseInput {
 
                     try{
                         player.interactOnWith(second.get(0), first.get(0));
+                        System.out.println("You use the " + secondItem + " on the "+ firstItem);
                     } catch (IndexOutOfBoundsException ex){
                         System.out.println("You can't see such items.");
                     }
@@ -78,7 +84,9 @@ public class ParseInput {
                 return true;
 
             case "open":
-                return false;
+
+                ParseInput.customAction(temp, player, "open");
+
             case "look":
                 game.getRoom().printRoom();
                 return true;
@@ -115,7 +123,17 @@ public class ParseInput {
                     System.out.println("Sorry?");
                     return false;
                 }
-                String item = ParseInput.stitchFromTo(temp, 1, temp.length);
+
+                boolean all = false;
+
+                String item = null;
+                if (temp.length >=2 && temp[1].equals("all")){
+                    all=true;
+                    item = ParseInput.stitchFromTo(temp, 2, temp.length);
+                } else {
+                    item = ParseInput.stitchFromTo(temp, 1, temp.length);
+                }
+
                 ArrayList<String> possibleItems = getPotentialItem(item, player, 2);
 
                 if (possibleItems.size()>1){
@@ -124,7 +142,12 @@ public class ParseInput {
                 }
 
                 try{
-                    player.pickUpItem(possibleItems.get(0));
+                    if (all){
+                        player.pickUpItem(possibleItems.get(0), true);
+                    } else{
+                        player.pickUpItem(possibleItems.get(0), false);
+                    }
+
                 } catch (IndexOutOfBoundsException ex){
                     System.out.println("You can't see such an item");
                 }
@@ -146,20 +169,30 @@ public class ParseInput {
                 ParseInput.quit();
                 return false;
             case "drop":
-                String toDrop = ParseInput.stitchFromTo(temp, 1, temp.length);
+
+                boolean dropAll = false;
+
+                String toDrop = null;
+                if (temp.length >=2 && temp[1].equals("all")){
+                    dropAll=true;
+                    toDrop = ParseInput.stitchFromTo(temp, 2, temp.length);
+                } else {
+                    toDrop = ParseInput.stitchFromTo(temp, 1, temp.length);
+                }
+
                 ArrayList<String> possibleDrop = getPotentialItem(toDrop, player, 0);
 
                 if (possibleDrop.size()>1){
                     System.out.println("Be more specific.");
-
-//                    for (String f : possibleItems){
-//                        System.out.println(f);
-//                    }
                     return false;
                 }
 
                 try{
-                    player.drop(possibleDrop.get(0));
+                    if (dropAll){
+                        player.drop(possibleDrop.get(0), true);
+                    } else{
+                        player.drop(possibleDrop.get(0), false);
+                    }
                 } catch (IndexOutOfBoundsException ex){
                     System.out.println("You can't see such an item");
                 }
@@ -227,6 +260,27 @@ public class ParseInput {
         } else {
             player.moveToRoom(direction, rooms);
             return true;
+        }
+    }
+
+
+
+    public static boolean customAction(String[] temp, Player player, String action){
+        String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
+
+        ArrayList<String> possibleProp = getPotentialItem(prop, player, 1);
+
+        try{
+            if(player.customAction(action, possibleProp.get(0))){
+                System.out.println("You "+action+" the "+prop);
+                return true;
+            } else{
+                System.out.println("You can't "+action+" it.");
+                return false;
+            }
+        } catch (IndexOutOfBoundsException ex){
+            System.out.println("You can't see a "+prop);
+            return false;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Items.Items.Beer;
+import com.al0ne.Items.Items.Knife;
 import com.al0ne.Player;
 import com.al0ne.Room;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class Main {
 
 //        grog.addItem(new Beer());
 //        grog.addItem(new Beer());
-//        grog.addItem(new Beer());
+        grog.addItem(new Knife());
 
         game.getRoom().printRoom();
 

@@ -76,6 +76,10 @@ public class Player {
         this.inventory.put(item.getID(), new Pair(item, 1));
     }
 
+    public void addItem(Item item, Integer amount) {
+        this.inventory.put(item.getID(), new Pair(item, amount));
+    }
+
     //this function checks if the player has an item in the inventory
     //if there is no item, it returns false
     public boolean hasItem(String item){
@@ -141,8 +145,14 @@ public class Player {
 
     //this makes the player use an item
     public void simpleUse(String target){
-        Prop prop = getProp(target);
-        Item item = getPairFromInventory(target).getItem();
+        Prop prop = null;
+        Item item = null;
+        try{
+            prop = getProp(target);
+
+        }catch (NullPointerException ex){
+            item = getPairFromInventory(target).getItem();
+        }
 
         if (prop == null && item != null){
             //case its an item in inventory
@@ -158,7 +168,6 @@ public class Player {
 
         } else if (prop != null && item == null){
             //case its a prop
-            System.out.println("yuppie!");
             prop.used();
             prop.used(currentRoom);
         } else {
@@ -176,7 +185,6 @@ public class Player {
         Pair inventoryItem = getPairFromInventory(item);
 
         if (prop != null && inventoryItem != null){
-            System.out.println("You use the " + inventoryItem.getItem().getName() + " on the "+ prop.getName());
             prop.usedWith(inventoryItem.getItem(), currentRoom);
 
             if(prop instanceof LockedDoor){
@@ -202,18 +210,32 @@ public class Player {
     }
 
     //this function makes the player drop target, if it has it
-    public void drop(String target){
+    public void drop(String target, boolean all){
         Pair item = getPairFromInventory(target);
         if (item != null){
-            if(item.subCount()){
-                inventory.remove(item.getItem().getID());
-            }
+
+            //case we drop 1
             Pair roomItem = currentRoom.getPair(item.getItem().getID());
-            if (roomItem != null){
+            if (!all && roomItem != null){
                 roomItem.addCount();
-            } else{
+            } else if (!all){
                 currentRoom.addItem(item.getItem());
             }
+
+            //case we drop all
+            if (all && roomItem != null){
+                roomItem.setCount(roomItem.getCount()+item.getCount());
+            } else if (all){
+                currentRoom.addItem(item.getItem(), item.getCount());
+            }
+
+            if(!all){
+                item.subCount();
+                inventory.remove(item.getItem().getID());
+            } else{
+                inventory.remove(item.getItem().getID());
+            }
+
             System.out.println("You drop the "+item.getItem().getName());
 
         } else {
@@ -225,7 +247,7 @@ public class Player {
     //this function tries to pick up an item in the currentRoom:
     //it also checks if the player can carry the current item
     //if it didn't succeed, print an error message
-    public void pickUpItem(String item){
+    public void pickUpItem(String item, boolean all){
 
         Pair fromInventory = getPairFromInventory(item);
         //if the item exists in the room, add it to inventory
@@ -233,12 +255,12 @@ public class Player {
             Item object = pair.getItem();
             if (object.getID().toLowerCase().equals(item.toLowerCase())){
 
-
+                //case we want just 1 item
                 if ( fromInventory != null){
-                    if (fromInventory.getItem().getWeight()+currentWeight > maxWeight ){
+                    if (!all && fromInventory.getItem().getWeight()+currentWeight > maxWeight ){
                         System.out.println("Too heavy to carry.");
                         return;
-                    } else{
+                    } else if (!all){
                         fromInventory.addCount();
                         if (pair.subCount()){
                             currentRoom.getItems().remove(fromInventory.getItem().getID());
@@ -248,20 +270,44 @@ public class Player {
                         return;
                     }
 
+
+                    //case we want to take all items
+                    if (all && (fromInventory.getItem().getWeight()*fromInventory.getCount())+currentWeight > maxWeight ){
+                        System.out.println("Too heavy to carry.");
+                        return;
+                    } else if (all){
+                        fromInventory.setCount(fromInventory.getCount()+pair.getCount());
+                        currentWeight+=(fromInventory.getItem().getWeight()*fromInventory.getCount());
+                        currentRoom.getItems().remove(object.getID());
+                        System.out.println("Added "+fromInventory.getCount()+" x "+ fromInventory.getItem().getName() + " to inventory.");
+                        return;
+                    }
+
                 }
 
 
 
-                if (object.getWeight()+currentWeight > maxWeight ){
+                if (!all && object.getWeight()+currentWeight > maxWeight ){
                     System.out.println("Too heavy to carry.");
                     return;
-                } else{
+                } else if (!all){
                     addItem(object);
                     currentWeight+=object.getWeight();
                     System.out.println("Added "+ object.getName() + " to inventory.");
                     if (pair.subCount()){
                         currentRoom.getItems().remove(item);
                     }
+                    return;
+                }
+
+                if (all && (object.getWeight()*pair.getCount())+currentWeight > maxWeight ){
+                    System.out.println("Too heavy to carry.");
+                    return;
+                } else if (all){
+                    addItem(object, pair.getCount());
+                    currentWeight+=(object.getWeight()*pair.getCount());
+                    System.out.println("Added "+pair.getCount()+" x "+ object.getName() + " to inventory.");
+                    currentRoom.getItems().remove(object.getID());
                     return;
                 }
             }
@@ -271,10 +317,17 @@ public class Player {
     }
 
 
-    //// TODO: 09/03/2017 custom action for items, eg pull
-    public void customAction(String action, Item item){
-
-    };
+    public boolean customAction(String action, String item){
+        Prop prop = getProp(item);
+        for (String command : prop.getRequiredCommand()){
+//            System.out.println(command);
+            if (command.equals(action)){
+                prop.used(currentRoom);
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }

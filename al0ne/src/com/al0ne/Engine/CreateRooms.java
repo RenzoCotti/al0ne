@@ -20,10 +20,11 @@ public class CreateRooms {
         Room cave1 = new Room("cave1", "Cave 1", "You are in a pretty generic-looking cave. It feels pretty damp. You can see passageway east.");
         cave1.addExit("east","cave2");
 //        cave1.addItem(new Potion());
-        cave1.addItem(new Key("cave1key","Ordinary Key"));
+//        cave1.addItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addItem(new Key("cave2key","Next Room Key"));
-        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-//        cave1.lockDirection("east", "cave1door");
+//        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
+        cave1.addProp(new Door("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east."));
+        cave1.lockDirection("east", "cave1door");
 
         cave1.addProp(new MoneyTree());
 
@@ -43,8 +44,10 @@ public class CreateRooms {
         Room cave3 = new Room("cave3", "Cave 3", "Nothing worth of notice here.");
         cave3.addExit("north", "cave2");
         cave3.addExit("down", "cellar");
-        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","The trapdoor is open.", "You open the trapdoor");
-        cave3.addProp(new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "The rug is now out of the way.", "You move the rug. You find a trapdoor underneath.", trapdoor1));
+        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","The trapdoor is open.");
+        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "The rug is now out of the way.", "You move the rug. You find a trapdoor underneath.", trapdoor1);
+        rug.addCommand("move");
+        cave3.addProp(rug);
         cave3.lockDirection("down", "trapdoor");
 
         CreateRooms.putRoom(cave3);

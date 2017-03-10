@@ -8,24 +8,24 @@ import com.al0ne.Room;
  */
 public class HideItem extends Prop{
 
-    private String useMessage;
+//    private String useMessage;
     private Prop hidden;
 
     public HideItem(String id, String name, String description, String after, String useMessage, Prop hidden) {
         super(id, name, description, after);
-        this.useMessage=useMessage;
+//        this.useMessage=useMessage;
         this.hidden=hidden;
     }
 
     public HideItem(String id, String name, String description, String useMessage, Prop hidden) {
         super(id, name, description);
-        this.useMessage=useMessage;
+//        this.useMessage=useMessage;
         this.hidden=hidden;
     }
 
     @Override
     public boolean used(Room currentRoom){
-        System.out.println(useMessage);
+//        System.out.println(useMessage);
         currentRoom.getProps().remove(name);
 //        for (Prop a : currentRoom.getProps().values()){
 //            System.out.println(a.getName());

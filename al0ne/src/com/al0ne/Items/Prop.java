@@ -16,7 +16,6 @@ public abstract class Prop {
     protected String requiresItem;
     protected ArrayList<String> requiredType;
     protected boolean active;
-
     protected ArrayList<String> requiredCommand;
 
 
@@ -39,10 +38,15 @@ public abstract class Prop {
         this.after = after;
         this.requiresItem="none";
         this.active=false;
+        this.requiredCommand=new ArrayList<>();
     }
 
     public void addType(String type){
         requiredType.add(type);
+    }
+
+    public void addCommand(String cmd){
+        requiredCommand.add(cmd);
     }
 
     public boolean usedWith(Item item, Room currentRoom) {
@@ -87,5 +91,9 @@ public abstract class Prop {
 
     public String getID(){
         return id;
+    }
+
+    public ArrayList<String> getRequiredCommand() {
+        return requiredCommand;
     }
 }

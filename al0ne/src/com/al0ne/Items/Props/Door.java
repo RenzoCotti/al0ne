@@ -9,15 +9,14 @@ import com.al0ne.Room;
  */
 public class Door extends Prop {
 
-    private String usedMessage;
     public Door() {
         super("door", "Door", "A sturdy wooden door");
-        this.usedMessage="You open the door";
+        addCommand("open");
     }
 
-    public Door(String id, String name, String description, String after, String usedMessage) {
+    public Door(String id, String name, String description, String after) {
         super(id, name, description, after);
-        this.usedMessage=usedMessage;
+        addCommand("open");
     }
 
     @Override
@@ -27,11 +26,7 @@ public class Door extends Prop {
 
     @Override
     public boolean used(Room currentRoom){
-        System.out.println(usedMessage);
         currentRoom.unlockDirection(id);
-
-        System.out.println(id);
-
 
         active=true;
         return true;
