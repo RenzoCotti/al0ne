@@ -1,5 +1,8 @@
 package com.al0ne.Items;
 
+import com.al0ne.Player;
+import com.al0ne.Room;
+
 import java.util.ArrayList;
 
 /**
@@ -24,6 +27,7 @@ public abstract class Item {
         this.weight = weight;
         this.description = description;
         this.properties= new ArrayList<>();
+        requiredCommand=new ArrayList<>();
     }
 
     public void addProperty(String behaviour){
@@ -37,6 +41,10 @@ public abstract class Item {
             }
         }
         return false;
+    }
+
+    public void used(Room currentRoom, Player player){
+
     }
 
 
@@ -59,5 +67,14 @@ public abstract class Item {
     public double getWeight() {
         return weight;
     }
+
+    public ArrayList<String> getRequiredCommand() {
+        return requiredCommand;
+    }
+
+    public void addCommand(String cmd){
+        requiredCommand.add(cmd);
+    }
+
 
 }

@@ -14,6 +14,8 @@ import java.util.Scanner;
  * Created by BMW on 31/01/2017.
  */
 public class ParseInput {
+//    static String last="help";
+
     public static boolean parse(String input, Game game, int turns){
 
         Player player = game.getPlayer();
@@ -23,12 +25,25 @@ public class ParseInput {
 
         String[] temp = lowerInput.split(" ");
 
+
+
         switch (temp[0]){
 
             case "drink":
-                ParseInput.customAction(temp, player, "drink");
+                if(ParseInput.customAction(temp, player, "drink")){
+                    return true;
+                }
+                return false;
+            case "eat":
+                if(ParseInput.customAction(temp, player, "eat")){
+                    return true;
+                }
+                return false;
             case "move":
-                ParseInput.customAction(temp, player, "move");
+                if(ParseInput.customAction(temp, player, "move")){
+                    return true;
+                }
+                return false;
 
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
@@ -42,7 +57,6 @@ public class ParseInput {
                     ArrayList<String> propUse = getPotentialItem(itemToUse, player, 1);
 
                     //there are more possibilities from the items fetched
-                    //// TODO: 09/03/2017 maybe problems with multiple equal items
                     if (inventoryUse.size()>1 || propUse.size()>1 || (propUse.size()==1 && inventoryUse.size()==1)){
                         System.out.println("Be more specific.");
                         return false;
@@ -85,7 +99,10 @@ public class ParseInput {
 
             case "open":
 
-                ParseInput.customAction(temp, player, "open");
+                if (ParseInput.customAction(temp, player, "open")){
+                    return true;
+                }
+                return false;
 
             case "look":
                 game.getRoom().printRoom();
@@ -126,7 +143,7 @@ public class ParseInput {
 
                 boolean all = false;
 
-                String item = null;
+                String item;
                 if (temp.length >=2 && temp[1].equals("all")){
                     all=true;
                     item = ParseInput.stitchFromTo(temp, 2, temp.length);
@@ -154,7 +171,34 @@ public class ParseInput {
                 return true;
             case "x":
             case "examine":
-                player.examine(ParseInput.stitchFromTo(temp, 1, temp.length));
+                if(temp.length<2){
+                    System.out.println("Sorry?");
+                    return false;
+                }
+                String toExamine = ParseInput.stitchFromTo(temp, 1, temp.length);
+                ArrayList<String> inventoryExamine = getPotentialItem(toExamine, player, 0);
+                ArrayList<String> itemExamine = getPotentialItem(toExamine, player, 2);
+                ArrayList<String> propExamine = getPotentialItem(toExamine, player, 1);
+
+                //there are more possibilities from the items fetched
+                if (!(inventoryExamine.size() + propExamine.size() + itemExamine.size() == 1)){
+                    System.out.println("Be more specific.");
+                    return false;
+                }
+
+                if (inventoryExamine.size()==1){
+                    player.examine(inventoryExamine.get(0));
+                } else if (propExamine.size()==1){
+                    player.examine(propExamine.get(0));
+                } else if (itemExamine.size() == 1){
+                    player.examine(itemExamine.get(0));
+                }else{
+                    System.out.println("You can't see such an item");
+
+//                    System.out.println(inventoryExamine.size());
+//                    System.out.println(propExamine.size());
+                }
+
                 return true;
             case "i":
             case "inventory":
@@ -167,6 +211,16 @@ public class ParseInput {
             case "quit":
             case "exit":
                 ParseInput.quit();
+                return false;
+            case "weight":
+                player.printWeight();
+                return false;
+            case "health":
+                player.printHealth();
+                return false;
+            case "g":
+//                last = ParseInput.stitchFromTo(temp, 0, temp.length);
+//                redo last
                 return false;
             case "drop":
 
@@ -209,6 +263,7 @@ public class ParseInput {
                 System.out.println("Sorry?");
                 return false;
         }
+
     }
 
 
@@ -269,14 +324,30 @@ public class ParseInput {
         String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
 
         ArrayList<String> possibleProp = getPotentialItem(prop, player, 1);
+        ArrayList<String> possibleItem = getPotentialItem(prop, player, 0);
+
+        if(!(possibleItem.size()+possibleProp.size()==1)){
+            System.out.println("Be more specific.");
+            return false;
+        }
 
         try{
-            if(player.customAction(action, possibleProp.get(0))){
-                System.out.println("You "+action+" the "+prop);
-                return true;
-            } else{
-                System.out.println("You can't "+action+" it.");
-                return false;
+            if (possibleProp.size()==1){
+                if(player.customAction(action, possibleProp.get(0))){
+                    System.out.println("You "+action+" the "+prop);
+                    return true;
+                } else{
+                    System.out.println("You can't "+action+" it.");
+                    return false;
+                }
+            } else {
+                if(player.customAction(action, possibleItem.get(0))){
+                    System.out.println("You "+action+" the "+prop+".");
+                    return true;
+                } else{
+                    System.out.println("You can't "+action+" it.");
+                    return false;
+                }
             }
         } catch (IndexOutOfBoundsException ex){
             System.out.println("You can't see a "+prop);

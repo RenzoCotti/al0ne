@@ -45,6 +45,10 @@ public class Room {
         this.lockedDirections =new HashMap<>();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public HashMap<String, Prop> getProps() {
         return props;
     }
@@ -110,7 +114,7 @@ public class Room {
     //this function prints every time a room is discovered
     //// TODO: 08/03/2017 maybe shortened version? once visited once
     public void printRoom(){
-        System.out.println(name);
+//        System.out.println(name);
         printDescription();
         printProps();
         printItems();
@@ -172,7 +176,7 @@ public class Room {
     //checks if the current direction is locked
     public boolean isLocked(String direction){
         for (String s : lockedDirections.values()){
-            System.out.println(s);
+//            System.out.println(s);
             if (s.equals(direction)){
                 return true;
             }

@@ -23,8 +23,6 @@ public class Main {
 
         Player grog = game.getPlayer();
 
-//        grog.addItem(new Beer());
-//        grog.addItem(new Beer());
         grog.addItem(new Knife());
 
         game.getRoom().printRoom();
@@ -37,7 +35,12 @@ public class Main {
                 if(ParseInput.parse(userInput.nextLine(), game, turnCounter)){
                     turnCounter++;
                 }
-                //check for turn counter?
+                if (!grog.isAlive()){
+                    System.out.println("Game over!");
+                    System.exit(0);
+                }
+                System.out.println(grog.getCurrentRoom().getName());
+
             }
 
         }

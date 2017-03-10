@@ -1,7 +1,7 @@
 package com.al0ne.Items.Props;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Items.Items.Money;
+import com.al0ne.Items.Items.Coin;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
@@ -11,7 +11,7 @@ import com.al0ne.Room;
 public class MoneyTree extends Prop{
     private String usedMessage;
     public MoneyTree() {
-        super("moneytree", "Money tree", "A tree with money instead of leaves is in the middle of the room", "The tree has no leaves anymore...");
+        super("moneytree", "Coin tree", "A tree with money instead of leaves is in the middle of the room", "The tree has no leaves anymore...");
         this.usedMessage="You cut the leaves from the money tree.";
     }
 
@@ -26,7 +26,7 @@ public class MoneyTree extends Prop{
 
         if(item.hasProperty("sharp")){
             System.out.println(usedMessage);
-            currentRoom.addItem(new Money(), 100);
+            currentRoom.addItem(new Coin(), 100);
             return true;
         }
         return false;
