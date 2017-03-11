@@ -23,7 +23,7 @@ public class CreateRooms {
 //        cave1.addItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.addProp(new Door("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east."));
+        cave1.addProp(new Door("cave1door", "Generic Door"));
         cave1.lockDirection("east", "cave1door");
 
         cave1.addProp(new MoneyTree());

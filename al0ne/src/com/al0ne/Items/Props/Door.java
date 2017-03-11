@@ -4,13 +4,10 @@ import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
-/**
- * Created by BMW on 02/02/2017.
- */
 public class Door extends Prop {
 
-    public Door() {
-        super("door", "Door", "A sturdy wooden door");
+    public Door(String id, String name) {
+        super(id, name, "A sturdy door.", "The door is now open.");
         addCommand("open");
     }
 

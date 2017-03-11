@@ -65,9 +65,10 @@ public class Player {
         System.out.println(currentWeight+"/"+maxWeight+" kg.");
     }
 
-    public boolean modifyWeight(double weight) {
+    private boolean modifyWeight(double weight) {
         if (this.currentWeight+weight <= maxWeight){
             this.currentWeight+=weight;
+            this.currentWeight=Math.round(currentWeight*10.0)/10.0;
 
             if (currentWeight < 0){
                 currentWeight=0;
@@ -92,7 +93,6 @@ public class Player {
     public void printInventory(){
         if (inventory.size()==0){
             System.out.println("You have no items.");
-            return;
         } else {
             System.out.println("You have these items:");
             for (Pair pair : inventory.values()) {
@@ -103,7 +103,7 @@ public class Player {
 
 
     //this function returns a prop, if it exists
-    public Prop getProp(String target){
+    private Prop getProp(String target){
         Prop prop = currentRoom.getProps().get(target);
 
         if( prop != null) {
@@ -118,13 +118,13 @@ public class Player {
         this.inventory.put(item.getID(), new Pair(item, 1));
     }
 
-    public void addItem(Item item, Integer amount) {
+    private void addItem(Item item, Integer amount) {
         this.inventory.put(item.getID(), new Pair(item, amount));
     }
 
     //this function checks if the player has an item in the inventory
     //if there is no item, it returns false
-    public boolean hasItem(String item){
+    private boolean hasItem(String item){
         try{
             inventory.get(item);
             return true;
@@ -208,7 +208,7 @@ public class Player {
                 System.out.println("You can't figure out how to use it.");
             }
 
-        } else if (prop != null && item == null){
+        } else if (prop != null){
             //case its a prop
             prop.used();
             prop.used(currentRoom);
@@ -221,20 +221,24 @@ public class Player {
 
 
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
-    public void interactOnWith(String target, String item){
+    public boolean interactOnWith(String target, String item){
 
         Prop prop = getProp(target);
         Pair inventoryItem = getPairFromInventory(item);
 
         if (prop != null && inventoryItem != null){
             prop.usedWith(inventoryItem.getItem(), currentRoom);
+//            System.out.println("You use the " + item + " on the "+ target);
 
             if(prop instanceof LockedDoor){
                 //// TODO: 08/03/2017 maybe fix this, somehow
                 currentRoom.unlockDirection(prop.getID());
             }
+
+            return true;
         } else {
-            System.out.println("You can't see it.");
+//            System.out.println("You can't see it.");
+            return false;
         }
     }
 
@@ -328,19 +332,19 @@ public class Player {
                         if (pair.subCount()){
                             currentRoom.getItems().remove(fromInventory.getItem().getID());
                         }
-                        modifyWeight(fromInventory.getItem().getWeight());
+//                        modifyWeight(fromInventory.getItem().getWeight());
                         System.out.println("Added "+ fromInventory.getItem().getName() + " to inventory.");
                         return;
                     }
 
 
                     //case we want to take all items & item is already in inventory
-                    if (all && !modifyWeight(fromInventory.getItem().getWeight()*fromInventory.getCount())){
+                    if (!modifyWeight(pair.getCount()*object.getWeight())){
                         System.out.println("Too heavy to carry.");
                         return;
-                    } else if (all){
+                    } else {
                         fromInventory.setCount(fromInventory.getCount()+pair.getCount());
-                        modifyWeight(fromInventory.getItem().getWeight()*fromInventory.getCount());
+//                        modifyWeight(pair.getItem().getWeight()*pair.getCount());
                         currentRoom.getItems().remove(object.getID());
                         System.out.println("Added "+pair.getCount()+" x "+ fromInventory.getItem().getName() + " to inventory.");
                         return;
@@ -355,7 +359,7 @@ public class Player {
                     return;
                 } else if (!all){
                     addItem(object);
-                    modifyWeight(object.getWeight());
+//                    modifyWeight(object.getWeight());
                     System.out.println("Added "+ object.getName() + " to inventory.");
                     if (pair.subCount()){
                         currentRoom.getItems().remove(item);
@@ -364,12 +368,12 @@ public class Player {
                 }
 
                 //case we want to take all items & item is not in inventory
-                if (all && !modifyWeight(object.getWeight()*pair.getCount())){
+                if (!modifyWeight(object.getWeight()*pair.getCount())){
                     System.out.println("Too heavy to carry.");
                     return;
-                } else if (all){
+                } else {
                     addItem(object, pair.getCount());
-                    modifyWeight(object.getWeight()*pair.getCount());
+//                    modifyWeight(object.getWeight()*pair.getCount());
                     System.out.println("Added "+pair.getCount()+" x "+ object.getName() + " to inventory.");
                     currentRoom.getItems().remove(object.getID());
                     return;
@@ -377,13 +381,13 @@ public class Player {
             }
         }
 
-        System.out.println("There is no such object");
+//        System.out.println("There is no such object");
     }
 
 
     public boolean customAction(String action, String item){
-        Prop prop=null;
-        Item inventoryItem=null;
+        Prop prop;
+        Item inventoryItem;
         try{
             prop = getProp(item);
             for (String command : prop.getRequiredCommand()){

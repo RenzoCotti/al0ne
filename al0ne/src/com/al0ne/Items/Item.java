@@ -13,12 +13,12 @@ import java.util.ArrayList;
 public abstract class Item {
 
     protected String name;
-    protected String ID;
-    protected String description;
-    protected double weight;
+    private String ID;
+    private String description;
+    private double weight;
 
-    protected ArrayList<String> properties;
-    protected ArrayList<String> requiredCommand;
+    private ArrayList<String> properties;
+    private ArrayList<String> requiredCommand;
 
 
     public Item(String id, String name, String description, double weight) {
@@ -30,21 +30,9 @@ public abstract class Item {
         requiredCommand=new ArrayList<>();
     }
 
-    public void addProperty(String behaviour){
-        properties.add(behaviour);
-    }
 
-    public boolean hasProperty(String property){
-        for (String s : properties){
-            if (s.equals(property)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void used(Room currentRoom, Player player){
-
     }
 
 
@@ -72,9 +60,21 @@ public abstract class Item {
         return requiredCommand;
     }
 
-    public void addCommand(String cmd){
+    protected void addCommand(String cmd){
         requiredCommand.add(cmd);
     }
 
+    protected void addProperty(String behaviour){
+        properties.add(behaviour);
+    }
+
+    public boolean hasProperty(String property){
+        for (String s : properties){
+            if (s.equals(property)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

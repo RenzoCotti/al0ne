@@ -9,197 +9,74 @@ import com.al0ne.Room;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-
-/**
- * Created by BMW on 31/01/2017.
- */
+/*
+* This class handles parsing the input correctly
+* */
 public class ParseInput {
 //    static String last="help";
 
-    public static boolean parse(String input, Game game, int turns){
+    public static boolean parse(String input, Game game, int turns) {
 
         Player player = game.getPlayer();
         HashMap<String, Room> rooms = game.getAllRooms();
 
         String lowerInput = input.toLowerCase();
 
-        String[] temp = lowerInput.split(" ");
+        String[] parsedInput = lowerInput.split(" ");
 
 
-
-        switch (temp[0]){
+        switch (parsedInput[0]) {
 
             case "drink":
-                if(ParseInput.customAction(temp, player, "drink")){
-                    return true;
-                }
-                return false;
+                return ParseInput.customAction(parsedInput, player, "drink");
             case "eat":
-                if(ParseInput.customAction(temp, player, "eat")){
-                    return true;
-                }
-                return false;
+                return ParseInput.customAction(parsedInput, player, "eat");
             case "move":
-                if(ParseInput.customAction(temp, player, "move")){
-                    return true;
-                }
-                return false;
+                return ParseInput.customAction(parsedInput, player, "move");
 
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
-                int a = ParseInput.checkForToken(temp, "on");
+                int tokenPosition = ParseInput.checkForToken(parsedInput, "on");
 
                 //case simple use
-                if(a ==  -1){
-                    String itemToUse = ParseInput.stitchFromTo(temp, 1, temp.length);
-                    ArrayList<String> inventoryUse = getPotentialItem(itemToUse, player, 0);
-                    ArrayList<String> propUse = getPotentialItem(itemToUse, player, 1);
-
-                    //there are more possibilities from the items fetched
-                    if (inventoryUse.size()>1 || propUse.size()>1 || (propUse.size()==1 && inventoryUse.size()==1)){
-                        System.out.println("Be more specific.");
-                        return false;
-                    }
-
-                        if (inventoryUse.size()==1){
-                            player.simpleUse(inventoryUse.get(0));
-                        } else if (propUse.size()==1){
-                            player.simpleUse(propUse.get(0));
-                        } else{
-                            System.out.println("You can't see such an item");
-
-                            System.out.println(inventoryUse.size());
-                            System.out.println(propUse.size());
-                        }
-
-                    return true;
-
-                //case complex use
-                } else if(a > -1){
-                    String firstItem = ParseInput.stitchFromTo(temp, 1, a);
-                    String secondItem = ParseInput.stitchFromTo(temp, a+1, temp.length);
-
-                    ArrayList<String> first = getPotentialItem(firstItem, player, 0);
-                    ArrayList<String> second = getPotentialItem(secondItem, player, 1);
-
-                    if (first.size()>1 || second.size() >1){
-                        System.out.println("Be more specific.");
-                        return false;
-                    }
-
-                    try{
-                        player.interactOnWith(second.get(0), first.get(0));
-                        System.out.println("You use the " + secondItem + " on the "+ firstItem);
-                    } catch (IndexOutOfBoundsException ex){
-                        System.out.println("You can't see such items.");
-                    }
+                if (tokenPosition == -1) {
+                    return ParseInput.useItem(parsedInput, player, false, tokenPosition);
                 }
-                return true;
+                //case complex use
+                else if (tokenPosition > -1) {
+                    return ParseInput.useItem(parsedInput, player, true, tokenPosition);
+                }
 
             case "open":
-
-                if (ParseInput.customAction(temp, player, "open")){
-                    return true;
-                }
-                return false;
-
+                return ParseInput.customAction(parsedInput, player, "open");
+            case "l":
             case "look":
                 game.getRoom().printRoom();
                 return true;
             case "n":
             case "north":
-                if (ParseInput.move(player, rooms, "north", temp)){
-                    return true;
-                }
-                return false;
+                return ParseInput.move(player, rooms, "north", parsedInput);
             case "s":
             case "south":
-                if (ParseInput.move(player, rooms, "south", temp)){
-                    return true;
-                }
-                return false;
+                return ParseInput.move(player, rooms, "south", parsedInput);
             case "e":
             case "east":
-                ParseInput.move(player, rooms, "east", temp);
-                return true;
+                return ParseInput.move(player, rooms, "east", parsedInput);
             case "w":
             case "west":
-                if (ParseInput.move(player, rooms, "west", temp)){
-                    return true;
-                }
-                return false;
+                return ParseInput.move(player, rooms, "west", parsedInput);
+            case "d":
             case "down":
-                if (ParseInput.move(player, rooms, "down", temp)){
-                    return true;
-                }
-                return false;
-            //we try to get the item the player wants to take
+                return ParseInput.move(player, rooms, "down", parsedInput);
+            case "u":
+            case "up":
+                return ParseInput.move(player, rooms, "up", parsedInput);
             case "take":
-                if (temp.length<=1){
-                    System.out.println("Sorry?");
-                    return false;
-                }
-
-                boolean all = false;
-
-                String item;
-                if (temp.length >=2 && temp[1].equals("all")){
-                    all=true;
-                    item = ParseInput.stitchFromTo(temp, 2, temp.length);
-                } else {
-                    item = ParseInput.stitchFromTo(temp, 1, temp.length);
-                }
-
-                ArrayList<String> possibleItems = getPotentialItem(item, player, 2);
-
-                if (possibleItems.size()>1){
-                    System.out.println("Be more specific.");
-                    return false;
-                }
-
-                try{
-                    if (all){
-                        player.pickUpItem(possibleItems.get(0), true);
-                    } else{
-                        player.pickUpItem(possibleItems.get(0), false);
-                    }
-
-                } catch (IndexOutOfBoundsException ex){
-                    System.out.println("You can't see such an item");
-                }
-                return true;
+                return ParseInput.takeOrDrop(parsedInput, player, false);
             case "x":
             case "examine":
-                if(temp.length<2){
-                    System.out.println("Sorry?");
-                    return false;
-                }
-                String toExamine = ParseInput.stitchFromTo(temp, 1, temp.length);
-                ArrayList<String> inventoryExamine = getPotentialItem(toExamine, player, 0);
-                ArrayList<String> itemExamine = getPotentialItem(toExamine, player, 2);
-                ArrayList<String> propExamine = getPotentialItem(toExamine, player, 1);
-
-                //there are more possibilities from the items fetched
-                if (!(inventoryExamine.size() + propExamine.size() + itemExamine.size() == 1)){
-                    System.out.println("Be more specific.");
-                    return false;
-                }
-
-                if (inventoryExamine.size()==1){
-                    player.examine(inventoryExamine.get(0));
-                } else if (propExamine.size()==1){
-                    player.examine(propExamine.get(0));
-                } else if (itemExamine.size() == 1){
-                    player.examine(itemExamine.get(0));
-                }else{
-                    System.out.println("You can't see such an item");
-
-//                    System.out.println(inventoryExamine.size());
-//                    System.out.println(propExamine.size());
-                }
-
-                return true;
+                return ParseInput.handleExamine(parsedInput, player);
             case "i":
             case "inventory":
                 player.printInventory();
@@ -219,44 +96,17 @@ public class ParseInput {
                 player.printHealth();
                 return false;
             case "g":
-//                last = ParseInput.stitchFromTo(temp, 0, temp.length);
+//                last = ParseInput.stitchFromTo(parsedInput, 0, parsedInput.length);
 //                redo last
                 return false;
             case "drop":
+                return takeOrDrop(parsedInput, player, true);
 
-                boolean dropAll = false;
-
-                String toDrop = null;
-                if (temp.length >=2 && temp[1].equals("all")){
-                    dropAll=true;
-                    toDrop = ParseInput.stitchFromTo(temp, 2, temp.length);
-                } else {
-                    toDrop = ParseInput.stitchFromTo(temp, 1, temp.length);
-                }
-
-                ArrayList<String> possibleDrop = getPotentialItem(toDrop, player, 0);
-
-                if (possibleDrop.size()>1){
-                    System.out.println("Be more specific.");
-                    return false;
-                }
-
-                try{
-                    if (dropAll){
-                        player.drop(possibleDrop.get(0), true);
-                    } else{
-                        player.drop(possibleDrop.get(0), false);
-                    }
-                } catch (IndexOutOfBoundsException ex){
-                    System.out.println("You can't see such an item");
-                }
-
-                return true;
             case "kill":
                 System.exit(0);
 
             case "time":
-                System.out.println(turns+" turns elapsed.");
+                System.out.println(turns + " turns elapsed.");
                 return false;
 
             default:
@@ -268,22 +118,20 @@ public class ParseInput {
 
 
     //this function makes a string from the begin-th element of the array to the end-th
-    public static String stitchFromTo(String[] input, int begin, int end){
-        String temp="";
-        for (int i = begin; i != end; i++){
-            temp+=input[i]+" ";
+    private static String stitchFromTo(String[] input, int begin, int end) {
+        String temp = "";
+        for (int i = begin; i != end; i++) {
+            temp += input[i] + " ";
         }
 
-        temp=temp.substring(0, temp.length()-1);
-
-//        System.out.println(expected.equals(temp));
+        temp = temp.substring(0, temp.length() - 1);
         return temp;
     }
 
     //this function looks for token in input
-    public static int checkForToken(String[] input, String token){
-        for (int i = 0; i != input.length; i++){
-            if (input[i].equals(token)){
+    private static int checkForToken(String[] input, String token) {
+        for (int i = 0; i != input.length; i++) {
+            if (input[i].equals(token)) {
                 return i;
             }
         }
@@ -291,24 +139,20 @@ public class ParseInput {
     }
 
     //this function handles the command exit
-    public static void quit(){
+    private static void quit() {
         System.out.println("Are you sure you want to quit? (Y/N)");
         Scanner test = new Scanner(System.in);
-        while (true){
-            if(test.hasNextLine()){
-                if (test.nextLine().equals("Y")){
+            if (test.hasNextLine()) {
+                if (test.nextLine().equals("Y")) {
                     System.exit(0);
-                } else{
+                } else {
                     System.out.println("Ok then, forget it.");
                 }
-            }
-            break;
         }
     }
 
     //this handles moving: it checks for exactly one token after the command
-    public static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp){
-//        System.out.println(player.getCurrentRoom().isLocked(direction));
+    private static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp) {
         if (temp.length > 1) {
             System.out.println("Sorry?");
             return false;
@@ -318,39 +162,44 @@ public class ParseInput {
         }
     }
 
-
-
-    public static boolean customAction(String[] temp, Player player, String action){
+    //this handles trying to apply custom commands on objects
+    private static boolean customAction(String[] temp, Player player, String action) {
         String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
 
         ArrayList<String> possibleProp = getPotentialItem(prop, player, 1);
-        ArrayList<String> possibleItem = getPotentialItem(prop, player, 0);
+        ArrayList<String> possibleItemFromInventory = getPotentialItem(prop, player, 0);
+        ArrayList<String> possibleItem = getPotentialItem(prop, player, 2);
 
-        if(!(possibleItem.size()+possibleProp.size()==1)){
+        if (!(possibleItemFromInventory.size() + possibleProp.size() + possibleItem.size() == 1)) {
             System.out.println("Be more specific.");
             return false;
         }
 
-        try{
-            if (possibleProp.size()==1){
-                if(player.customAction(action, possibleProp.get(0))){
-                    System.out.println("You "+action+" the "+prop);
+        if (possibleItem.size()== 1) {
+            System.out.println("You need to hold that item to "+action+" it.");
+            return false;
+        }
+
+        try {
+            if (possibleProp.size() == 1) {
+                if (player.customAction(action, possibleProp.get(0))) {
+                    System.out.println("You " + action + " the " + prop);
                     return true;
-                } else{
-                    System.out.println("You can't "+action+" it.");
+                } else {
+                    System.out.println("You can't " + action + " it.");
                     return false;
                 }
             } else {
-                if(player.customAction(action, possibleItem.get(0))){
-                    System.out.println("You "+action+" the "+prop+".");
+                if (player.customAction(action, possibleItemFromInventory.get(0))) {
+                    System.out.println("You " + action + " the " + prop + ".");
                     return true;
-                } else{
-                    System.out.println("You can't "+action+" it.");
+                } else {
+                    System.out.println("You can't " + action + " it.");
                     return false;
                 }
             }
-        } catch (IndexOutOfBoundsException ex){
-            System.out.println("You can't see a "+prop);
+        } catch (IndexOutOfBoundsException ex) {
+            System.out.println("You can't see a " + prop);
             return false;
         }
     }
@@ -359,32 +208,31 @@ public class ParseInput {
     //number = 0: tries to get from the inventory
     //number = 1: tries to get from Props of currentRoom
     //number = 2: tries to get from Items of currentRoom
-    public static ArrayList<String> getPotentialItem(String s, Player player, int number){
+    private static ArrayList<String> getPotentialItem(String s, Player player, int number) {
         ArrayList<String> potentialItems = new ArrayList<>();
 
 
         //case inventory
-        if(number==0){
+        if (number == 0) {
 
             //check if there is an exact match
-            for (Pair pair : player.getInventory().values()){
+            for (Pair pair : player.getInventory().values()) {
                 Item b = pair.getItem();
-                if (b.getName().equals(s)){
+                if (b.getName().equals(s)) {
                     potentialItems.add(b.getID());
-//                    System.out.println("Perfect match found!");
                     return potentialItems;
                 }
             }
 
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
-            for (String token : temp){
-                for(Pair pair : player.getInventory().values()){
+            for (String token : temp) {
+                for (Pair pair : player.getInventory().values()) {
                     Item a = pair.getItem();
                     String[] currentItem = a.getName().split(" ");
-                    for (String b : currentItem){
-                        if (b.toLowerCase().equals(token)){
-                            if (!potentialItems.contains(a.getID())){
+                    for (String b : currentItem) {
+                        if (b.toLowerCase().equals(token)) {
+                            if (!potentialItems.contains(a.getID())) {
                                 potentialItems.add(a.getID());
                             }
                         }
@@ -392,23 +240,23 @@ public class ParseInput {
                 }
             }
             //case prop
-        } else if (number==1){
-
-            for (Prop b : player.getCurrentRoom().getProps().values()){
-                if (b.getName().equals(s)){
+        } else if (number == 1) {
+            //we look for perfect match
+            for (Prop b : player.getCurrentRoom().getProps().values()) {
+                if (b.getName().equals(s)) {
                     potentialItems.add(b.getID());
                     return potentialItems;
                 }
             }
 
-
+            //we look for partial matches
             String[] temp = s.split(" ");
-            for (String token : temp){
-                for(Prop a : player.getCurrentRoom().getProps().values()){
+            for (String token : temp) {
+                for (Prop a : player.getCurrentRoom().getProps().values()) {
                     String[] currentItem = a.getName().split(" ");
-                    for (String b : currentItem){
-                        if (b.toLowerCase().equals(token)){
-                            if (!potentialItems.contains(a.getID())){
+                    for (String b : currentItem) {
+                        if (b.toLowerCase().equals(token)) {
+                            if (!potentialItems.contains(a.getID())) {
                                 potentialItems.add(a.getID());
                             }
                         }
@@ -416,34 +264,195 @@ public class ParseInput {
                 }
             }
             //case item
-        } else if(number==2){
+        } else if (number == 2) {
 
-            for (Pair pair : player.getCurrentRoom().getItems().values()){
+            //we iterate over all items in the room, we look for a perfect match
+            for (Pair pair : player.getCurrentRoom().getItems().values()) {
                 Item b = pair.getItem();
-                if (b.getName().toLowerCase().equals(s.toLowerCase())){
+                if (b.getName().toLowerCase().equals(s.toLowerCase())) {
                     potentialItems.add(b.getID());
-//                    System.out.println("Perfect match found!");
                     return potentialItems;
                 }
             }
 
-
-        String[] temp = s.split(" ");
-        for (String token : temp){
-            for(Pair pair : player.getCurrentRoom().getItems().values()){
-                Item a = pair.getItem();
-                String[] currentItem = a.getName().split(" ");
-                for (String b : currentItem){
-                    if (b.toLowerCase().equals(token)){
-                        if (!potentialItems.contains(a.getID())){
-                            potentialItems.add(a.getID());
+            //otherwise, we look for partial matches
+            String[] temp = s.split(" ");
+            for (String token : temp) {
+                for (Pair pair : player.getCurrentRoom().getItems().values()) {
+                    Item a = pair.getItem();
+                    String[] currentItem = a.getName().split(" ");
+                    for (String b : currentItem) {
+                        if (b.toLowerCase().equals(token)) {
+                            if (!potentialItems.contains(a.getID())) {
+                                potentialItems.add(a.getID());
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
         return potentialItems;
     }
+
+    /*this function is used to handle using an item:
+    * boolean complex: if true, assumes the action is like USE x ON y, otherwise it's USE x*/
+    private static boolean useItem(String[] temp, Player player, boolean complex, int tokenPosition) {
+        String firstItem;
+        String secondItem;
+
+        ArrayList<String> inventoryUse;
+        ArrayList<String> propUse;
+        ArrayList<String> itemUse;
+        //case complex use: check we have exactly two items, then make the player use them
+        if (complex) {
+            firstItem = ParseInput.stitchFromTo(temp, 1, tokenPosition);
+            secondItem = ParseInput.stitchFromTo(temp, tokenPosition + 1, temp.length);
+
+            inventoryUse = getPotentialItem(firstItem, player, 0);
+            propUse = getPotentialItem(secondItem, player, 1);
+            itemUse = getPotentialItem(firstItem, player, 2);
+
+            if (!(inventoryUse.size() == 1) || !(propUse.size() == 1)) {
+                System.out.println("Be more specific.");
+                return false;
+            }
+
+            if (itemUse.size() > 0) {
+                System.out.println("You need to be holding that item to use it.");
+            }
+
+            if (inventoryUse.size() == 1 && propUse.size() == 1) {
+                player.interactOnWith(propUse.get(0), inventoryUse.get(0));
+            } else {
+                System.out.println("You can't see such items");
+            }
+
+            return true;
+        //case simple use: check we have just one item, then we make the player use it.
+        } else {
+            firstItem = ParseInput.stitchFromTo(temp, 1, temp.length);
+
+            inventoryUse = getPotentialItem(firstItem, player, 0);
+            propUse = getPotentialItem(firstItem, player, 1);
+            itemUse = getPotentialItem(firstItem, player, 2);
+
+            //there are more possibilities from the items fetched
+            if (!(inventoryUse.size() + propUse.size() == 1)) {
+                System.out.println("Be more specific.");
+                return false;
+            }
+
+            if (itemUse.size() > 0) {
+                System.out.println("You need to be holding that item to use it.");
+            }
+
+            if (inventoryUse.size() == 1) {
+                player.simpleUse(inventoryUse.get(0));
+            } else if (propUse.size() == 1) {
+                player.simpleUse(propUse.get(0));
+            } else {
+                System.out.println("You can't see such an item");
+
+                System.out.println(inventoryUse.size());
+                System.out.println(propUse.size());
+            }
+
+            return true;
+        }
+
+    }
+
+    //this function handles both dropping and taking items:
+    //drop: false-> it's a TAKE action, true-> it's a DROP action
+    //we check if it's a drop/take all action, then we check if we have exactly
+    //1 item, then we take/drop (all)
+    private static boolean takeOrDrop(String[] temp, Player player, boolean drop) {
+
+        player.printWeight();
+
+        if (temp.length <= 1) {
+            System.out.println("Sorry?");
+            return false;
+        }
+
+        boolean all = false;
+
+        String item;
+        if (temp.length >= 2 && temp[1].equals("all")) {
+            all = true;
+            item = ParseInput.stitchFromTo(temp, 2, temp.length);
+        } else {
+            item = ParseInput.stitchFromTo(temp, 1, temp.length);
+        }
+
+        ArrayList<String> possibleItems;
+        if (!drop) {
+            possibleItems = getPotentialItem(item, player, 2);
+
+            if (possibleItems.size() > 1) {
+                System.out.println("Be more specific.");
+                return false;
+            }
+
+
+            if (all && possibleItems.size() == 1) {
+                player.pickUpItem(possibleItems.get(0), true);
+            } else if (possibleItems.size() == 1) {
+                player.pickUpItem(possibleItems.get(0), false);
+            } else {
+                System.out.println("You can't see such an item (take)");
+            }
+        } else {
+            possibleItems = getPotentialItem(item, player, 0);
+
+            if (possibleItems.size() > 1) {
+                System.out.println("Be more specific.");
+                return false;
+            }
+
+
+            if (all && possibleItems.size() == 1) {
+                player.drop(possibleItems.get(0), true);
+            } else if (possibleItems.size() == 1) {
+                player.drop(possibleItems.get(0), false);
+            } else {
+                System.out.println("You can't see such an item (drop) "+possibleItems.size());
+            }
+        }
+
+        player.printWeight();
+        return true;
+
+    }
+
+    //this function handles examining an object:
+    //we look in the room for props and items, as well as in the player's inventory
+    //if the search returns exactly one item, we examine it
+    private static boolean handleExamine(String[] temp, Player player){
+
+        String toExamine = ParseInput.stitchFromTo(temp, 1, temp.length);
+        ArrayList<String> inventoryExamine = getPotentialItem(toExamine, player, 0);
+        ArrayList<String> propExamine = getPotentialItem(toExamine, player, 1);
+        ArrayList<String> itemExamine = getPotentialItem(toExamine, player, 2);
+
+        //there are more possibilities from the items fetched
+        if (!(inventoryExamine.size() + propExamine.size() + itemExamine.size() == 1)){
+            System.out.println("Be more specific.");
+            return false;
+        }
+
+        if (inventoryExamine.size()==1){
+            player.examine(inventoryExamine.get(0));
+        } else if (propExamine.size()==1){
+            player.examine(propExamine.get(0));
+        } else if (itemExamine.size() == 1){
+            player.examine(itemExamine.get(0));
+        }else{
+            System.out.println("You can't see such an item");
+        }
+
+        return true;
+    }
+
 }

@@ -57,7 +57,7 @@ public class Room {
         return items;
     }
 
-    public HashMap<String, String> getExits() {
+    protected HashMap<String, String> getExits() {
         return exits;
     }
 
@@ -66,16 +66,14 @@ public class Room {
     }
 
     //prints props in the room
-    public void printProps(){
+    private void printProps(){
         if (props.size()!=0){
-            for (Prop prop : props.values()) {
-                prop.printDescription();
-            }
+            props.values().forEach(Prop::printDescription);
         }
     }
 
     //prints items in the room
-    public void printItems(){
+    private void printItems(){
         if (items.size()!=0){
             System.out.println("You can see:");
             for (Pair item : items.values()) {
@@ -90,8 +88,18 @@ public class Room {
     }
 
     //prints available travel directions that are not locked
-    public void printDirections(){
+    private void printDirections(){
         boolean first=true;
+        String toPrint="";
+
+        for (String door : lockedDirections.keySet()){
+            String currentDirection = lockedDirections.get(door);
+            try{
+                System.out.println("The way "+currentDirection+" is blocked by "+props.get(door).getDescription().toLowerCase());
+            } catch (NullPointerException ex){
+                System.out.println("Shhhh c:");
+            }
+        }
 
         for (String exit : exits.keySet()){
             boolean free = true;
@@ -102,13 +110,16 @@ public class Room {
             }
 
             if(free){
+                System.out.print(toPrint);
                 if (first){
-                    System.out.println("You can go:");
+                    toPrint="You can go "+exit;
                     first=false;
+                } else{
+                    toPrint=", "+exit;
                 }
-                System.out.println(" - "+exit);
             }
         }
+        System.out.print(toPrint);
     }
 
     //this function prints every time a room is discovered
@@ -144,15 +155,11 @@ public class Room {
         }
     }
 
-    public boolean hasItem(String id) {
-
-        if (items.get(id) != null){
-            return true;
-        }
-        return false;
+    protected boolean hasItem(String id) {
+        return items.get(id) != null;
     }
 
-    public Pair getPair(String id) {
+    protected Pair getPair(String id) {
 
         if (hasItem(id)){
             return items.get(id);
@@ -176,7 +183,6 @@ public class Room {
     //checks if the current direction is locked
     public boolean isLocked(String direction){
         for (String s : lockedDirections.values()){
-//            System.out.println(s);
             if (s.equals(direction)){
                 return true;
             }

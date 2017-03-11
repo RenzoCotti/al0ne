@@ -7,6 +7,6 @@ import com.al0ne.Items.Item;
  */
 public class Coin extends Item{
     public Coin() {
-        super("money", "Coin", "a golden coin.", 1);
+        super("coin", "Coin", "a golden coin.", 1);
     }
 }

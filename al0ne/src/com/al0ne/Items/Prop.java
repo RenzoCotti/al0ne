@@ -5,18 +5,26 @@ import com.al0ne.Room;
 import java.util.ArrayList;
 
 /**
- * Created by BMW on 02/02/2017.
+ * A Prop has:
+ * - id: used to reference to that prop code-wise
+ * - name: actual name of the item
+ * - description: description of the prop, displayed when examining
+ * - after: description of the prop *after* activation
+ * - requiresItem: ItemID required for activation, e.g. cave1key, can be default
+ * - active: true if the item has been activated
+ * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
+ * - requiredCommand: custom actions that can be applied to the item
  */
 public abstract class Prop {
 
     protected String id;
     protected String name;
     protected String description;
-    protected String after;
+    private String after;
     protected String requiresItem;
-    protected ArrayList<String> requiredType;
     protected boolean active;
-    protected ArrayList<String> requiredCommand;
+    private ArrayList<String> requiredType;
+    private ArrayList<String> requiredCommand;
 
 
     public Prop(String id, String name, String description) {
@@ -41,7 +49,7 @@ public abstract class Prop {
         this.requiredCommand=new ArrayList<>();
     }
 
-    public void addType(String type){
+    protected void addType(String type){
         requiredType.add(type);
     }
 
@@ -82,6 +90,14 @@ public abstract class Prop {
             System.out.println(description);
         } else {
             System.out.println(after);
+        }
+    }
+
+    public String getDescription() {
+        if(!active){
+            return description;
+        } else {
+            return after;
         }
     }
 

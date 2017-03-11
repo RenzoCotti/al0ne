@@ -39,6 +39,7 @@ public class Main {
                     System.out.println("Game over!");
                     System.exit(0);
                 }
+                System.out.println();
                 System.out.println(grog.getCurrentRoom().getName());
 
             }
