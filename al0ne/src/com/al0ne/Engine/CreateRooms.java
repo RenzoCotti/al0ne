@@ -1,10 +1,9 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Items.Apple;
 import com.al0ne.Items.Items.Beer;
-import com.al0ne.Items.Items.Key;
 import com.al0ne.Items.Items.Knife;
+import com.al0ne.Items.NPC;
 import com.al0ne.Items.Props.*;
 import com.al0ne.Room;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ public class CreateRooms {
 
         Room cave2 = new Room("cave2", "Cave 2", "The rocks are crumbly here.");
         cave2.addExit("west","cave1");
+        cave2.addExit("north","cave4");
         cave2.addExit("south","cave3");
         cave2.addItem(new Knife());
         cave2.addItem(new Apple());
@@ -61,11 +61,21 @@ public class CreateRooms {
 
         CreateRooms.putRoom(cellar);
 
+        Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
+        cave4.addExit("south", "cave2");
+        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.");
+        emon.addSubject("keys", "\"Yup, I fix small keys.\"");
+        emon.addSubject("beer", "\"I love beer!\"");
+        cave4.addNPC(emon);
+
+        CreateRooms.putRoom(cave4);
+//        cellar.addItem(new Beer());
+
         return rooms;
 
     }
 
     public static void putRoom(Room room){
-        rooms.put(room.getId(), room);
+        rooms.put(room.getID(), room);
     }
 }

@@ -1,6 +1,7 @@
 package com.al0ne;
 
 import com.al0ne.Items.Item;
+import com.al0ne.Items.NPC;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
 import java.util.HashMap;
@@ -35,6 +36,10 @@ public class Room {
     //maps itemID - (Item, count)
     private HashMap<String, Pair> items;
 
+    private HashMap<String, NPC> npcList;
+
+
+
     public Room(String id, String name, String description) {
         this.id=id;
         this.description = description;
@@ -42,8 +47,32 @@ public class Room {
         this.props=new HashMap<>();
         this.items=new HashMap<>();
         this.exits=new HashMap<>();
+        this.npcList=new HashMap<>();
         this.lockedDirections =new HashMap<>();
     }
+
+
+    public HashMap<String, NPC> getNPCList() {
+        return npcList;
+    }
+
+    public void addNPC(NPC npc) {
+        this.npcList.put(npc.getID(), npc);
+    }
+
+    public NPC getNPC(String name) {
+        if (npcList.get(name) != null){
+            return npcList.get(name);
+        }
+        return null;
+    }
+
+    public void printNPCs() {
+        for (NPC npc : npcList.values()){
+            System.out.println("You can see "+npc.getName()+" here.");
+        }
+    }
+
 
     public String getName() {
         return name;
@@ -61,7 +90,7 @@ public class Room {
         return exits;
     }
 
-    public String getId(){
+    public String getID(){
         return id;
     }
 
@@ -129,6 +158,7 @@ public class Room {
         printDescription();
         printProps();
         printItems();
+        printNPCs();
         printDirections();
         System.out.println();
     }

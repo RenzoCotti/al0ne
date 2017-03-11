@@ -2,6 +2,7 @@ package com.al0ne;
 
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Item;
+import com.al0ne.Items.NPC;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
@@ -411,6 +412,14 @@ public class Player {
         }
 
 
+    }
+
+    public boolean talkToNPC(String name, String subject){
+        NPC npc = currentRoom.getNPC(name);
+        if (npc != null && npc.talkAbout(subject)){
+            return true;
+        }
+        return false;
     }
 
 

@@ -29,6 +29,26 @@ public class ParseInput {
 
             case "drink":
                 return ParseInput.customAction(parsedInput, player, "drink");
+            case "talk":
+                int b = ParseInput.checkForToken(parsedInput, "with");
+                if( b == -1 || !(parsedInput[1].equals("about")) ){
+                    System.out.println("The syntax is: TALK ABOUT x WITH y");
+                } else if( b > -1 ){
+                    String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
+                    String npc = ParseInput.stitchFromTo(parsedInput, b+1, parsedInput.length);
+
+                    if (player.getCurrentRoom().getNPC(npc) == null){
+                        System.out.println("You can't see "+npc+" here.");
+                        return false;
+                    }
+
+                    if( player.talkToNPC(npc, subject) ){
+                        return true;
+                    } else{
+                        System.out.println("\"Sorry, I don't know anything about it.\"");
+                        return false;
+                    }
+                }
             case "eat":
                 return ParseInput.customAction(parsedInput, player, "eat");
             case "move":
@@ -83,7 +103,10 @@ public class ParseInput {
                 return true;
             case "?":
             case "help":
-                System.out.println("Commands: help, north, west, east, south, take x, examine x, use x, use x on y, open x, look, quit, exit");
+                System.out.println("Commands:");
+                for (Command command: Command.values()){
+                    System.out.println(command);
+                }
                 return false;
             case "quit":
             case "exit":
