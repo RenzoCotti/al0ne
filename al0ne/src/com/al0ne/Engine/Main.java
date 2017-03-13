@@ -1,7 +1,5 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Items.Items.Beer;
-import com.al0ne.Items.Items.Knife;
 import com.al0ne.Player;
 import com.al0ne.Room;
 import java.util.HashMap;
@@ -14,18 +12,20 @@ public class Main {
 
         HashMap<String, Room> rooms = CreateRooms.create();
 
-        Player Grog = new Player(rooms.get("cave1"));
+        Player grog = new Player(rooms.get("cave2"));
 
-        Game game = new Game(Grog, rooms);
+        Game game = new Game(grog, rooms);
+
+        Room currentRoom = grog.getCurrentRoom();
 
         int turnCounter=0;
 
+//        ParseInput.printWelcome();
 
-        Player grog = game.getPlayer();
+        currentRoom.printRoom();
+        System.out.println();
 
-        grog.addItem(new Knife());
-
-        game.getRoom().printRoom();
+        currentRoom.printName();
 
         Scanner userInput = new Scanner(System.in);
 
@@ -36,11 +36,13 @@ public class Main {
                     turnCounter++;
                 }
                 if (!grog.isAlive()){
+                    System.out.println("You have died...");
+                    System.out.println();
                     System.out.println("Game over!");
                     System.exit(0);
                 }
                 System.out.println();
-                System.out.println(grog.getCurrentRoom().getName());
+                grog.getCurrentRoom().printName();
 
             }
 

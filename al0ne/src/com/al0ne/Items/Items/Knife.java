@@ -8,8 +8,8 @@ import com.al0ne.Items.Item;
  */
 public class Knife extends Weapon {
     public Knife() {
-        super("knife", "Knife", "A rusty but sharp knife", 0.2);
+        super("knife", "Knife", "A rusty but sharp knife", "sharp", 0.2);
         addProperty("sharp");
-        damage=1;
+        damage=2;
     }
 }

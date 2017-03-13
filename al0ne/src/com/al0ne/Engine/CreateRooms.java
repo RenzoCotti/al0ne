@@ -3,9 +3,11 @@ package com.al0ne.Engine;
 import com.al0ne.Items.Items.Apple;
 import com.al0ne.Items.Items.Beer;
 import com.al0ne.Items.Items.Knife;
-import com.al0ne.Items.NPC;
+import com.al0ne.NPC;
 import com.al0ne.Items.Props.*;
 import com.al0ne.Room;
+import com.al0ne.Wolf;
+
 import java.util.HashMap;
 
 public class CreateRooms {
@@ -34,6 +36,7 @@ public class CreateRooms {
         cave2.addExit("west","cave1");
         cave2.addExit("north","cave4");
         cave2.addExit("south","cave3");
+        cave2.addExit("east","bossroom");
         cave2.addItem(new Knife());
         cave2.addItem(new Apple());
 
@@ -69,7 +72,13 @@ public class CreateRooms {
         cave4.addNPC(emon);
 
         CreateRooms.putRoom(cave4);
-//        cellar.addItem(new Beer());
+
+        Room bossRoom = new Room("bossroom", "Boss Room", "Lots of bones cover the ground. You shiver.");
+        bossRoom.addExit("west", "cave2");
+        Wolf boss = new Wolf();
+        bossRoom.addEnemy(boss);
+
+        CreateRooms.putRoom(bossRoom);
 
         return rooms;
 

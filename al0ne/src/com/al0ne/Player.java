@@ -1,8 +1,8 @@
 package com.al0ne;
 
 import com.al0ne.Items.Behaviours.Food;
+import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
-import com.al0ne.Items.NPC;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
@@ -34,6 +34,8 @@ public class Player {
     private int health=10;
     private static int maxHealth=10;
     private boolean alive = true;
+
+    private Weapon wieldedWeapon;
     
     // TODO: 08/03/2017 add health, satiation
 
@@ -43,6 +45,29 @@ public class Player {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
         this.currentWeight=0;
+        this.wieldedWeapon = null;
+    }
+
+    public boolean wield(Item weapon){
+        for (Pair pair : inventory.values()){
+            Item currentItem = pair.getItem();
+
+            if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
+                wieldedWeapon = (Weapon) weapon;
+                System.out.println("You now wield the "+weapon.getName());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void printWielded(){
+        if(wieldedWeapon == null){
+            System.out.println("You're using your fists");
+            return;
+        }
+
+        System.out.println("You're using your "+wieldedWeapon.getName());
     }
 
     public int getHealth() {
@@ -50,14 +75,14 @@ public class Player {
     }
 
     public void printHealth() {
-        System.out.println(health+"/"+maxHealth+" HP.");
+        System.out.println("You have "+health+"/"+maxHealth+" HP.");
     }
 
     public void modifyHealth(int health) {
         if (this.health+health <= maxHealth){
             this.health+=health;
         }
-        if (health <= 0){
+        if (this.health <= 0){
             alive=false;
         }
     }
@@ -158,11 +183,11 @@ public class Player {
 
     //this function checks if the direction selected is accessible from the
     //currentRoom and if it's not locked by a door, if so it moves there
-    public void moveToRoom(String direction, HashMap<String, Room> rooms){
+    public boolean moveToRoom(String direction, HashMap<String, Room> rooms){
 
         if(currentRoom.isLocked(direction)){
             System.out.println("The way "+direction+" is blocked.");
-            return;
+            return false;
         }
         //iterate over all directions of currentRoom, eg. north
         for (String s : currentRoom.getExits().keySet()){
@@ -176,13 +201,12 @@ public class Player {
                 //set next room
                 setCurrentRoom(rooms.get(nextRoomId));
 
-                System.out.println();
-                currentRoom.printRoom();
-                return;
+                return true;
             }
         }
         System.out.println("You can't figure out how to go " + direction);
-        System.out.println();
+//        System.out.println();
+        return false;
     }
 
 
@@ -418,6 +442,35 @@ public class Player {
         NPC npc = currentRoom.getNPC(name);
         if (npc != null && npc.talkAbout(subject)){
             return true;
+        }
+        return false;
+    }
+
+    public boolean attack(String name){
+        printHealth();
+        Enemy enemy = currentRoom.getEnemy(name);
+        enemy.printHealth();
+        String type;
+        if(wieldedWeapon==null){
+            type="fists";
+        } else{
+            type=wieldedWeapon.getType();
+        }
+        if (enemy != null){
+            if (enemy.isWeakAgainst(type)) {
+                enemy.modifyHealth(-wieldedWeapon.getDamage());
+            } else{
+                System.out.println("The "+name+" seem not to be affected");
+            }
+            if (enemy.isAttacked(this, currentRoom)) {
+//                enemy.addLoot(currentRoom);
+                currentRoom.getEnemyList().remove(enemy.getID());
+            }
+            printHealth();
+            enemy.printHealth();
+            return true;
+        } else {
+            System.out.println("You can't seem to see a fiend.");
         }
         return false;
     }

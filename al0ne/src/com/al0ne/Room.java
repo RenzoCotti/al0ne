@@ -1,7 +1,6 @@
 package com.al0ne;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Items.NPC;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
 import java.util.HashMap;
@@ -38,6 +37,8 @@ public class Room {
 
     private HashMap<String, NPC> npcList;
 
+    private HashMap<String, Enemy> enemyList;
+
 
 
     public Room(String id, String name, String description) {
@@ -49,6 +50,28 @@ public class Room {
         this.exits=new HashMap<>();
         this.npcList=new HashMap<>();
         this.lockedDirections =new HashMap<>();
+        this.enemyList = new HashMap<>();
+    }
+
+    public HashMap<String, Enemy> getEnemyList() {
+        return enemyList;
+    }
+
+    public void addEnemy(Enemy enemy) {
+        this.enemyList.put(enemy.getID(), enemy);
+    }
+
+    public Enemy getEnemy(String name) {
+        if (enemyList.get(name) != null){
+            return enemyList.get(name);
+        }
+        return null;
+    }
+
+    public void printEnemy() {
+        for (Enemy enemy : enemyList.values()){
+            System.out.println("You can see "+enemy.getName()+" here.");
+        }
     }
 
 
@@ -112,6 +135,10 @@ public class Room {
         }
     }
 
+    public void printName(){
+        System.out.println(name);
+    }
+
     private void printDescription(){
         System.out.println(description);
     }
@@ -159,6 +186,7 @@ public class Room {
         printProps();
         printItems();
         printNPCs();
+        printEnemy();
         printDirections();
         System.out.println();
     }

@@ -14,6 +14,6 @@ public class Apple extends Food {
 
     @Override
     public void used(Room currentRoom, Player player){
-        player.modifyHealth(-10);
+        player.modifyHealth(+2);
     }
 }

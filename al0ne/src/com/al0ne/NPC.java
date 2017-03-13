@@ -1,4 +1,6 @@
-package com.al0ne.Items;
+package com.al0ne;
+
+import com.al0ne.Items.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;

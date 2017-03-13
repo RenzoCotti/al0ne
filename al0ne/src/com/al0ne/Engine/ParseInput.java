@@ -53,6 +53,9 @@ public class ParseInput {
                 return ParseInput.customAction(parsedInput, player, "eat");
             case "move":
                 return ParseInput.customAction(parsedInput, player, "move");
+            case "attack":
+                String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
+                return player.attack(enemy);
 
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
@@ -70,6 +73,8 @@ public class ParseInput {
 
             case "open":
                 return ParseInput.customAction(parsedInput, player, "open");
+            case "wield":
+                return ParseInput.handleWield(parsedInput, player);
             case "l":
             case "look":
                 game.getRoom().printRoom();
@@ -180,8 +185,13 @@ public class ParseInput {
             System.out.println("Sorry?");
             return false;
         } else {
-            player.moveToRoom(direction, rooms);
-            return true;
+            if (player.moveToRoom(direction, rooms)){
+                ParseInput.clearScreen();
+                player.getCurrentRoom().printRoom();
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -392,7 +402,7 @@ public class ParseInput {
     //1 item, then we take/drop (all)
     private static boolean takeOrDrop(String[] temp, Player player, boolean drop) {
 
-        player.printWeight();
+//        player.printWeight();
 
         if (temp.length <= 1) {
             System.out.println("Sorry?");
@@ -444,7 +454,7 @@ public class ParseInput {
             }
         }
 
-        player.printWeight();
+//        player.printWeight();
         return true;
 
     }
@@ -476,6 +486,54 @@ public class ParseInput {
         }
 
         return true;
+    }
+
+    public static boolean handleWield(String[] parsedInput, Player player){
+        String wieldItem = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
+
+        ArrayList<String> possibleItems = getPotentialItem(wieldItem, player, 0);
+
+        if(possibleItems.size() == 1){
+            Item item = player.getPairFromInventory(possibleItems.get(0)).getItem();
+
+            if(player.wield(item)){
+                return true;
+            } else{
+                System.out.println("You don't seem to have a "+wieldItem);
+                return false;
+            }
+        } else {
+            System.out.println("Be more specific.");
+            return false;
+        }
+    }
+
+
+    //clears the screen by printing 20 new lines
+    private static void clearScreen(){
+        for (int i=0; i<30; i++){
+            System.out.println();
+        }
+    }
+
+    public static void printWelcome(){
+        System.out.println("Welcome to my textual adventure game!");
+        System.out.println("I hope you enjoy your time playing");
+        System.out.println();
+        System.out.println("Please report any weird/unexpected behaviour to me");
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("Press ENTER to continue...");
+        try
+        {
+            System.in.read();
+            clearScreen();
+        }
+        catch(Exception e)
+        {}
     }
 
 }
