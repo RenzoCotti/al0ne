@@ -49,7 +49,7 @@ public class NPC {
     public boolean talkAbout(String subject){
         for (String s : subjects.keySet()){
             if (s.equals(subject)){
-                System.out.println(subjects.get(s));
+                System.out.println("\""+subjects.get(s)+"\"");
                 return true;
             }
         }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
  * - requiredCommand: custom actions that can be applied to the item
  */
-public abstract class Prop {
+public class Prop {
 
     protected String id;
     protected String name;

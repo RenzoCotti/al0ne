@@ -57,8 +57,22 @@ public class Enemy {
         if (this.currentHealth+health <= maxHealth){
             this.currentHealth+=health;
         }
-        if (this.currentHealth <= 0){
-            alive=false;
+        int percentage = (currentHealth/maxHealth)*100;
+
+        if (percentage >= 80){
+            System.out.println("The "+name+" seems mostly fine.");
+        } else if (percentage >= 60 && percentage < 80){
+            System.out.println("The "+name+" has taken a good beating.");
+        } else if (percentage >= 40 && percentage < 60){
+            System.out.println("The "+name+" is bleeding.");
+        } else if (percentage >= 20 && percentage < 40){
+            System.out.println("The "+name+" is bleeding heavily");
+        } else {
+            if (this.currentHealth <= 0){
+                alive=false;
+            } else {
+                System.out.println("The "+name+" seems almost dead.");
+            }
         }
     }
 
@@ -127,7 +141,6 @@ public class Enemy {
             return true;
         }
         player.modifyHealth(-damage);
-        System.out.println("The "+ name+" hits you for "+damage+" damage!");
         return false;
     }
 

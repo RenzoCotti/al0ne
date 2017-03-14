@@ -10,7 +10,7 @@ import com.al0ne.Wolf;
 
 import java.util.HashMap;
 
-public class CreateRooms {
+public class CreateSmallCave {
 
     private static HashMap<String, Room> rooms = new HashMap<>();
 
@@ -29,7 +29,7 @@ public class CreateRooms {
 
         cave1.addProp(new MoneyTree());
 
-        CreateRooms.putRoom(cave1);
+        CreateSmallCave.putRoom(cave1);
 
 
         Room cave2 = new Room("cave2", "Cave 2", "The rocks are crumbly here.");
@@ -42,7 +42,7 @@ public class CreateRooms {
 
         cave2.addProp(new CuttableRope());
 
-        CreateRooms.putRoom(cave2);
+        CreateSmallCave.putRoom(cave2);
 
         Room cave3 = new Room("cave3", "Cave 3", "Nothing worth of notice here.");
         cave3.addExit("north", "cave2");
@@ -53,7 +53,7 @@ public class CreateRooms {
         cave3.addProp(rug);
         cave3.lockDirection("down", "trapdoor");
 
-        CreateRooms.putRoom(cave3);
+        CreateSmallCave.putRoom(cave3);
 
         Room cellar = new Room("cellar", "Cellar", "Very damp and filled to the brim with bottles of beer! :D");
         cellar.addExit("up", "cave3");
@@ -62,23 +62,23 @@ public class CreateRooms {
         cellar.addItem(new Beer());
         cellar.addItem(new Beer());
 
-        CreateRooms.putRoom(cellar);
+        CreateSmallCave.putRoom(cellar);
 
         Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
         cave4.addExit("south", "cave2");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.");
-        emon.addSubject("keys", "\"Yup, I fix small keys.\"");
-        emon.addSubject("beer", "\"I love beer!\"");
+        emon.addSubject("keys", "Yup, I fix small keys.");
+        emon.addSubject("beer", "I love beer!");
         cave4.addNPC(emon);
 
-        CreateRooms.putRoom(cave4);
+        CreateSmallCave.putRoom(cave4);
 
         Room bossRoom = new Room("bossroom", "Boss Room", "Lots of bones cover the ground. You shiver.");
         bossRoom.addExit("west", "cave2");
         Wolf boss = new Wolf();
         bossRoom.addEnemy(boss);
 
-        CreateRooms.putRoom(bossRoom);
+        CreateSmallCave.putRoom(bossRoom);
 
         return rooms;
 

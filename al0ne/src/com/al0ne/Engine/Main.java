@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        HashMap<String, Room> rooms = CreateRooms.create();
+        HashMap<String, Room> rooms = CreateSmallCave.create();
 
         Player grog = new Player(rooms.get("cave2"));
 

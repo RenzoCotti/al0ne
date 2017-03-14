@@ -18,7 +18,7 @@ import java.util.HashMap;
  * a maxWeight, double
  * a currentWeight, double
  *
- * TODO probably add health, belly
+ * TODO probably add currentHealth, belly
  */
 public class Player {
 
@@ -31,13 +31,13 @@ public class Player {
     //Current carry weight of the player
     private double currentWeight;
 
-    private int health=10;
+    private int currentHealth =10;
     private static int maxHealth=10;
     private boolean alive = true;
 
     private Weapon wieldedWeapon;
     
-    // TODO: 08/03/2017 add health, satiation
+    // TODO: 08/03/2017 add currentHealth, satiation
 
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
@@ -70,21 +70,37 @@ public class Player {
         System.out.println("You're using your "+wieldedWeapon.getName());
     }
 
-    public int getHealth() {
-        return health;
+    public int getCurrentHealth() {
+        return currentHealth;
     }
 
     public void printHealth() {
-        System.out.println("You have "+health+"/"+maxHealth+" HP.");
+        System.out.println("You have "+ currentHealth +"/"+maxHealth+" HP.");
     }
 
     public void modifyHealth(int health) {
-        if (this.health+health <= maxHealth){
-            this.health+=health;
+        if (this.currentHealth +health <= maxHealth){
+            this.currentHealth +=health;
         }
-        if (this.health <= 0){
-            alive=false;
+
+        int percentage = (currentHealth/maxHealth)*100;
+
+        if (percentage >= 80){
+            System.out.println("You're mostly fine.");
+        } else if (percentage >= 60 && percentage < 80){
+            System.out.println("You've taken a good beating.");
+        } else if (percentage >= 40 && percentage < 60){
+            System.out.println("You need to medicate.");
+        } else if (percentage >= 20 && percentage < 40){
+            System.out.println("You're bleeding heavily");
+        } else {
+            if (this.currentHealth <= 0){
+                alive=false;
+            } else {
+                System.out.println("You're alive by a miracle");
+            }
         }
+
     }
 
     public void printWeight() {
@@ -447,9 +463,7 @@ public class Player {
     }
 
     public boolean attack(String name){
-        printHealth();
         Enemy enemy = currentRoom.getEnemy(name);
-        enemy.printHealth();
         String type;
         if(wieldedWeapon==null){
             type="fists";
@@ -457,17 +471,16 @@ public class Player {
             type=wieldedWeapon.getType();
         }
         if (enemy != null){
-            if (enemy.isWeakAgainst(type)) {
+            if (enemy.isWeakAgainst(type) && type.equals("fists")) {
+                enemy.modifyHealth(-1);
+            }else if(enemy.isWeakAgainst(type) ){
                 enemy.modifyHealth(-wieldedWeapon.getDamage());
             } else{
                 System.out.println("The "+name+" seem not to be affected");
             }
             if (enemy.isAttacked(this, currentRoom)) {
-//                enemy.addLoot(currentRoom);
                 currentRoom.getEnemyList().remove(enemy.getID());
             }
-            printHealth();
-            enemy.printHealth();
             return true;
         } else {
             System.out.println("You can't seem to see a fiend.");
