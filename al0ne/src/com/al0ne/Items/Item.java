@@ -1,6 +1,6 @@
 package com.al0ne.Items;
 
-import com.al0ne.Player;
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.al0ne.Items.Items;
 
 import com.al0ne.Items.Behaviours.Food;
-import com.al0ne.Player;
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
 public class Apple extends Food {

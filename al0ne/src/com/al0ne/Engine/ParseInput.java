@@ -3,8 +3,10 @@ package com.al0ne.Engine;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
-import com.al0ne.Player;
+import com.al0ne.Entities.NPC;
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
+import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,10 @@ public class ParseInput {
                     String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
                     String npc = ParseInput.stitchFromTo(parsedInput, b+1, parsedInput.length);
 
-                    if (player.getCurrentRoom().getNPC(npc) == null){
+                    NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+                    if (character == null || !(character.getName().toLowerCase().equals(npc))){
                         System.out.println("You can't see "+npc+" here.");
                         return false;
                     }
@@ -51,6 +56,31 @@ public class ParseInput {
                 }
             case "eat":
                 return ParseInput.customAction(parsedInput, player, "eat");
+            case "buy":
+                int c = ParseInput.checkForToken(parsedInput, "from");
+                if( c == -1){
+                    System.out.println("The syntax is: BUY x FROM y");
+                } else if( c > -1 ){
+                    String item = ParseInput.stitchFromTo(parsedInput, 1, c);
+                    String npc = ParseInput.stitchFromTo(parsedInput, c+1, parsedInput.length);
+
+                    NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+                    if (character == null || !(character.getName().toLowerCase().equals(npc))){
+                        System.out.println("You can't see "+npc+" here.");
+                        return false;
+                    }
+
+                    if( character.isShopkeeper()){
+                        Shopkeeper shopkeeper = (Shopkeeper) character;
+                        shopkeeper.buy(player, item);
+                        return true;
+                    } else{
+                        System.out.println("\"Sorry, I don't have it.\"");
+                        return false;
+                    }
+                }
             case "move":
                 return ParseInput.customAction(parsedInput, player, "move");
             case "attack":

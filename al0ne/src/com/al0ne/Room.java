@@ -1,5 +1,7 @@
 package com.al0ne;
 
+import com.al0ne.Entities.Enemy;
+import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
@@ -62,8 +64,10 @@ public class Room {
     }
 
     public Enemy getEnemy(String name) {
-        if (enemyList.get(name) != null){
-            return enemyList.get(name);
+        for (Enemy e : enemyList.values()){
+            if (e.getName().toLowerCase().equals(name)){
+                return e;
+            }
         }
         return null;
     }
@@ -84,8 +88,10 @@ public class Room {
     }
 
     public NPC getNPC(String name) {
-        if (npcList.get(name) != null){
-            return npcList.get(name);
+        for (NPC n : npcList.values()){
+            if (n.getName().toLowerCase().equals(name)){
+                return n;
+            }
         }
         return null;
     }
@@ -109,7 +115,7 @@ public class Room {
         return items;
     }
 
-    protected HashMap<String, String> getExits() {
+    public HashMap<String, String> getExits() {
         return exits;
     }
 
@@ -213,11 +219,11 @@ public class Room {
         }
     }
 
-    protected boolean hasItem(String id) {
+    public boolean hasItem(String id) {
         return items.get(id) != null;
     }
 
-    protected Pair getPair(String id) {
+    public Pair getPair(String id) {
 
         if (hasItem(id)){
             return items.get(id);

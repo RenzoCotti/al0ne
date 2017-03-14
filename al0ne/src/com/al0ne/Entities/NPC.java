@@ -1,4 +1,4 @@
-package com.al0ne;
+package com.al0ne.Entities;
 
 import com.al0ne.Items.Item;
 
@@ -25,6 +25,9 @@ public class NPC {
     protected ArrayList<String> reactionItems;
     protected ArrayList<Item> inventory;
 
+
+    protected boolean isShopkeeper=false;
+
     public NPC(String id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -32,6 +35,11 @@ public class NPC {
         this.subjects = new HashMap<>();
         this.reactionItems = new ArrayList<>();
         this.inventory = new ArrayList<>();
+    }
+
+
+    public boolean isShopkeeper() {
+        return isShopkeeper;
     }
 
     public String getID() {

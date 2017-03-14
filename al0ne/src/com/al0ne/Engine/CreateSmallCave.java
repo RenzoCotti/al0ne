@@ -3,10 +3,10 @@ package com.al0ne.Engine;
 import com.al0ne.Items.Items.Apple;
 import com.al0ne.Items.Items.Beer;
 import com.al0ne.Items.Items.Knife;
-import com.al0ne.NPC;
+import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Props.*;
 import com.al0ne.Room;
-import com.al0ne.Wolf;
+import com.al0ne.Entities.Enemies.Wolf;
 
 import java.util.HashMap;
 

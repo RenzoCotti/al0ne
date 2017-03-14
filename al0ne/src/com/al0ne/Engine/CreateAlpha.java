@@ -1,18 +1,13 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Items.Item;
 import com.al0ne.Items.Items.Apple;
-import com.al0ne.Items.Items.Beer;
 import com.al0ne.Items.Items.Knife;
 import com.al0ne.Items.Items.Mushroom;
 import com.al0ne.Items.Prop;
-import com.al0ne.Items.Props.CuttableRope;
-import com.al0ne.Items.Props.Door;
-import com.al0ne.Items.Props.HideItem;
-import com.al0ne.Items.Props.MoneyTree;
-import com.al0ne.NPC;
+import com.al0ne.Entities.NPC;
 import com.al0ne.Room;
-import com.al0ne.Wolf;
+import com.al0ne.Entities.NPCs.Shopkeeper;
+import com.al0ne.Entities.Enemies.Wolf;
 
 import java.util.HashMap;
 
@@ -28,7 +23,7 @@ public class CreateAlpha {
 
         Room startRoom = new Room("startroom", "Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
         startRoom.addExit("north","daggerroom");
-        startRoom.addExit("north","mushroomroom");
+        startRoom.addExit("south","mushroomroom");
 
         CreateAlpha.putRoom(startRoom);
 
@@ -37,7 +32,7 @@ public class CreateAlpha {
         ladderRoom.addExit("up", "emonroom");
         CreateAlpha.putRoom(ladderRoom);
 
-        Room daggerRoom = new Room("daggerRoom", "Empty room", "The room is completely empty.");
+        Room daggerRoom = new Room("daggerroom", "Empty room", "The room is completely empty.");
         daggerRoom.addItem(new Knife());
         daggerRoom.addExit("south", "startroom");
         daggerRoom.addExit("east", "wolfroom");
@@ -57,6 +52,20 @@ public class CreateAlpha {
         mushRoom.addExit("east", "cavernroom");
         CreateAlpha.putRoom(mushRoom);
 
+        Room wolfRoom = new Room("wolfroom", "Wolf Room", "You see some bones scattered on the ground.");
+        wolfRoom.addEnemy(new Wolf());
+        wolfRoom.addExit("west", "daggerroom");
+        wolfRoom.addExit("north", "shoproom");
+        wolfRoom.addExit("down", "priestroom");
+        CreateAlpha.putRoom(wolfRoom);
+
+        Room shopRoom = new Room("shoproom", "Shop", "You see several items neatly disposed on a table");
+        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "A fairly chubby man with a glint in his eyes.");
+        bob.addToInventory(new Knife(), 5);
+        bob.addToInventory(new Apple(), 2);
+        shopRoom.addNPC(bob);
+        shopRoom.addExit("south", "wolfroom");
+        CreateAlpha.putRoom(shopRoom);
 
 
 

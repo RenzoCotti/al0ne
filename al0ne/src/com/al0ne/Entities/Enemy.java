@@ -1,7 +1,8 @@
-package com.al0ne;
+package com.al0ne.Entities;
 
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
+import com.al0ne.Room;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class Enemy {
         if (this.currentHealth+health <= maxHealth){
             this.currentHealth+=health;
         }
-        int percentage = (currentHealth/maxHealth)*100;
+        double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
             System.out.println("The "+name+" seems mostly fine.");
@@ -116,13 +117,13 @@ public class Enemy {
                 //case the item is already in the room
                 if (currentItem.getID().equals(id)){
                     addedItem=true;
-                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
+//                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
 
                     room.addItem(currentItem, pair.getCount()+room.getItems().get(id).getCount());
                 } else{
                     addedItem=true;
                     room.addItem(currentItem, pair.getCount());
-                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
+//                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
                 }
             }
 
@@ -140,6 +141,7 @@ public class Enemy {
             addLoot(room);
             return true;
         }
+        System.out.println("The "+name+" attacks and hits you.");
         player.modifyHealth(-damage);
         return false;
     }

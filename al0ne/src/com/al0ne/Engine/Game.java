@@ -1,9 +1,8 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Player;
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

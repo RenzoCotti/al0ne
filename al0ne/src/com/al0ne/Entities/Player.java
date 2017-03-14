@@ -1,11 +1,14 @@
-package com.al0ne;
+package com.al0ne.Entities;
 
+import com.al0ne.Entities.Enemy;
+import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
+import com.al0ne.Room;
 
 import java.util.HashMap;
 
@@ -35,6 +38,10 @@ public class Player {
     private static int maxHealth=10;
     private boolean alive = true;
 
+
+
+//    private int money;
+
     private Weapon wieldedWeapon;
     
     // TODO: 08/03/2017 add currentHealth, satiation
@@ -45,8 +52,21 @@ public class Player {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
         this.currentWeight=0;
+//        this.money=0;
         this.wieldedWeapon = null;
     }
+
+//    public int getMoney() {
+//        return money;
+//    }
+
+//    public boolean modifyMoney(int amount) {
+//        if ( money + amount > 0){
+//            money+=amount;
+//            return true;
+//        }
+//        return false;
+//    }
 
     public boolean wield(Item weapon){
         for (Pair pair : inventory.values()){
@@ -83,7 +103,7 @@ public class Player {
             this.currentHealth +=health;
         }
 
-        int percentage = (currentHealth/maxHealth)*100;
+        double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
             System.out.println("You're mostly fine.");
@@ -160,7 +180,7 @@ public class Player {
         this.inventory.put(item.getID(), new Pair(item, 1));
     }
 
-    private void addItem(Item item, Integer amount) {
+    public void addItem(Item item, Integer amount) {
         this.inventory.put(item.getID(), new Pair(item, amount));
     }
 
@@ -486,6 +506,17 @@ public class Player {
             System.out.println("You can't seem to see a fiend.");
         }
         return false;
+    }
+
+
+    public boolean hasEnoughMoney(int amt){
+        Pair pair = inventory.get("coin");
+        if(pair != null){
+            int amount = pair.getCount();
+            return amount - amt >= 0;
+        } else {
+            return false;
+        }
     }
 
 

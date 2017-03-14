@@ -1,6 +1,6 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Player;
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -10,9 +10,9 @@ public class Main {
     public static void main(String[] args) {
 
 
-        HashMap<String, Room> rooms = CreateSmallCave.create();
+        HashMap<String, Room> rooms = CreateAlpha.create();
 
-        Player grog = new Player(rooms.get("cave2"));
+        Player grog = new Player(rooms.get("daggerroom"));
 
         Game game = new Game(grog, rooms);
 
