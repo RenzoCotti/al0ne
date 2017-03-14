@@ -87,6 +87,34 @@ public class ParseInput {
                 String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
                 return player.attack(enemy);
 
+            case "give":
+                int d = ParseInput.checkForToken(parsedInput, "to");
+                if( d == -1){
+                    System.out.println("The syntax is: GIVE x TO y");
+                } else if( d > -1 ) {
+                    String item = ParseInput.stitchFromTo(parsedInput, 1, d);
+                    String npc = ParseInput.stitchFromTo(parsedInput, d + 1, parsedInput.length);
+
+                    ArrayList<String> possibleItemFromInventory = getPotentialItem(item, player, 0);
+
+                    if (!(possibleItemFromInventory.size() == 1)) {
+                        System.out.println("Be more specific.");
+                        return false;
+                    } else if (possibleItemFromInventory.size() > 0) {
+
+                        NPC character = player.getCurrentRoom().getNPC(npc);
+
+                        if (character == null || !(character.getName().toLowerCase().equals(npc))) {
+                            System.out.println("You can't see " + npc + " here.");
+                            return false;
+                        }
+
+                        if (player.give(character, possibleItemFromInventory.get(0))) {
+                            return true;
+                        }
+                    }
+                }
+
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 

@@ -22,7 +22,7 @@ public class NPC {
     protected String description;
     //maps subjects to answers
     protected HashMap<String, String> subjects;
-    protected ArrayList<String> reactionItems;
+    protected HashMap<String, Item> reactionItems;
     protected ArrayList<Item> inventory;
 
 
@@ -33,7 +33,7 @@ public class NPC {
         this.name = name;
         this.description = description;
         this.subjects = new HashMap<>();
-        this.reactionItems = new ArrayList<>();
+        this.reactionItems = new HashMap<>();
         this.inventory = new ArrayList<>();
     }
 
@@ -54,6 +54,11 @@ public class NPC {
         subjects.put(subject, answer);
     }
 
+    public void addReactionItem(String itemid, Item item){
+        reactionItems.put(itemid, item);
+    }
+
+
     public boolean talkAbout(String subject){
         for (String s : subjects.keySet()){
             if (s.equals(subject)){
@@ -61,6 +66,23 @@ public class NPC {
                 return true;
             }
         }
+        return false;
+    }
+
+    public boolean isGiven(Item item, Player player){
+        for (String s : reactionItems.keySet()){
+//            System.out.println(s);
+
+            if (item.getID().toLowerCase().equals(s)){
+                System.out.println("\"Thank you, i really needed a "+item.getName()+".\"");
+                System.out.println("\"Here's a "+reactionItems.get(s).getName()+" as a reward.\"");
+                //removes *all* items
+                player.getInventory().remove(item.getID());
+                player.addItem(reactionItems.get(s));
+                return true;
+            }
+        }
+        System.out.println("\"Sorry, I don't need it.\"");
         return false;
     }
 }

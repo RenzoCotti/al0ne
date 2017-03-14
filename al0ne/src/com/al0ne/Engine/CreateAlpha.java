@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Items.Items.Apple;
+import com.al0ne.Items.Items.Key;
 import com.al0ne.Items.Items.Knife;
 import com.al0ne.Items.Items.Mushroom;
 import com.al0ne.Items.Prop;
@@ -24,6 +25,7 @@ public class CreateAlpha {
         Room startRoom = new Room("startroom", "Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
+        startRoom.addExit("west","ladderroom");
 
         CreateAlpha.putRoom(startRoom);
 
@@ -40,9 +42,11 @@ public class CreateAlpha {
 
         Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.");
-        emonRoom.addExit("down", "ladderRoom");
+        emonRoom.addExit("down", "ladderroom");
+        emonRoom.addItem(new Key("key", "Emon's key", "a key that smells of fish."));
         emon.addSubject("keys", "Yup, I fix small keys.");
         emon.addSubject("beer", "I love beer!");
+        emon.addReactionItem("key", new Apple());
         emonRoom.addNPC(emon);
         CreateAlpha.putRoom(emonRoom);
 

@@ -52,21 +52,9 @@ public class Player {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
         this.currentWeight=0;
-//        this.money=0;
         this.wieldedWeapon = null;
     }
 
-//    public int getMoney() {
-//        return money;
-//    }
-
-//    public boolean modifyMoney(int amount) {
-//        if ( money + amount > 0){
-//            money+=amount;
-//            return true;
-//        }
-//        return false;
-//    }
 
     public boolean wield(Item weapon){
         for (Pair pair : inventory.values()){
@@ -516,6 +504,21 @@ public class Player {
             return amount - amt >= 0;
         } else {
             return false;
+        }
+    }
+
+    public boolean give(NPC npc, String item){
+        if(hasItem(item)){
+            Pair pair = getPairFromInventory(item);
+
+            if (npc.isGiven(pair.getItem(), this)){
+                return true;
+            } else{
+                return false;
+            }
+        } else{
+            System.out.println("You don't have it.");
+            return true;
         }
     }
 

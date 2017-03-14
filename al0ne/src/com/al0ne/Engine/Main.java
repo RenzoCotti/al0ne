@@ -12,7 +12,7 @@ public class Main {
 
         HashMap<String, Room> rooms = CreateAlpha.create();
 
-        Player grog = new Player(rooms.get("daggerroom"));
+        Player grog = new Player(rooms.get("ladderroom"));
 
         Game game = new Game(grog, rooms);
 
