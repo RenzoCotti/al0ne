@@ -1,5 +1,6 @@
 package com.al0ne.Items;
 
+import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
 import java.util.ArrayList;
@@ -76,7 +77,8 @@ public class Prop {
         }
     }
 
-    public boolean used(Room currentRoom){
+
+    public boolean used(Room currentRoom, Player player){
         if (requiresItem.equals("none")){
             active=true;
             return true;

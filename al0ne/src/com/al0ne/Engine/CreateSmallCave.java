@@ -66,7 +66,7 @@ public class CreateSmallCave {
 
         Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
         cave4.addExit("south", "cave2");
-        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.");
+        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "Hi, i'm eamon and i fix small keys");
         emon.addSubject("keys", "Yup, I fix small keys.");
         emon.addSubject("beer", "I love beer!");
         cave4.addNPC(emon);

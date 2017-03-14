@@ -24,17 +24,19 @@ public class NPC {
     protected HashMap<String, String> subjects;
     protected HashMap<String, Item> reactionItems;
     protected ArrayList<Item> inventory;
+    protected String intro;
 
 
     protected boolean isShopkeeper=false;
 
-    public NPC(String id, String name, String description) {
+    public NPC(String id, String name, String description, String intro) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.inventory = new ArrayList<>();
+        this.intro=intro;
     }
 
 
@@ -84,5 +86,9 @@ public class NPC {
         }
         System.out.println("\"Sorry, I don't need it.\"");
         return false;
+    }
+
+    public void printIntro(){
+        System.out.println(intro);
     }
 }

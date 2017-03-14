@@ -1,5 +1,6 @@
 package com.al0ne.Items.Props;
 
+import com.al0ne.Entities.Player;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
@@ -24,7 +25,7 @@ public class HideItem extends Prop{
     }
 
     @Override
-    public boolean used(Room currentRoom){
+    public boolean used(Room currentRoom, Player player){
 //        System.out.println(useMessage);
         currentRoom.getProps().remove(name);
 //        for (Prop a : currentRoom.getProps().values()){

@@ -8,9 +8,10 @@ import com.al0ne.Items.Item;
 public abstract class Weapon extends Item{
     protected int damage;
     protected String type;
-    public Weapon(String id, String name, String description, String type, double weight) {
+    public Weapon(String id, String name, String description, String type, int damage, double weight) {
         super(id, name, description, weight);
         this.type=type;
+        this.damage=damage;
     }
 
     public int getDamage() {
@@ -19,5 +20,9 @@ public abstract class Weapon extends Item{
 
     public String getType(){
         return type;
+    }
+
+    public void setType(String s){
+        type=s;
     }
 }

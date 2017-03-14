@@ -1,7 +1,5 @@
 package com.al0ne.Entities;
 
-import com.al0ne.Entities.Enemy;
-import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
@@ -82,9 +80,22 @@ public class Player {
         return currentHealth;
     }
 
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
     public void printHealth() {
         System.out.println("You have "+ currentHealth +"/"+maxHealth+" HP.");
     }
+
+    public void setHealth(int amount) {
+        if(currentHealth+amount > maxHealth){
+            currentHealth=maxHealth;
+        } else if(currentHealth+amount < 0){
+            alive=false;
+        }
+    }
+
 
     public void modifyHealth(int health) {
         if (this.currentHealth +health <= maxHealth){
@@ -260,7 +271,7 @@ public class Player {
         } else if (prop != null){
             //case its a prop
             prop.used();
-            prop.used(currentRoom);
+            prop.used(currentRoom, this);
         } else {
             System.out.println("You can't seem to see a "+target);
 
@@ -442,7 +453,7 @@ public class Player {
             for (String command : prop.getRequiredCommand()){
 //            System.out.println(command);
                 if (command.equals(action)){
-                    prop.used(currentRoom);
+                    prop.used(currentRoom, this);
                     return true;
                 }
             }

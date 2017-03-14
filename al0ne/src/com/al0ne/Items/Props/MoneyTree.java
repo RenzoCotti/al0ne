@@ -1,5 +1,6 @@
 package com.al0ne.Items.Props;
 
+import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Items.Coin;
 import com.al0ne.Items.Prop;
@@ -33,7 +34,7 @@ public class MoneyTree extends Prop{
     }
 
     @Override
-    public boolean used(Room currentRoom){
+    public boolean used(Room currentRoom, Player player){
         return false;
     }
 

@@ -15,8 +15,8 @@ public class Shopkeeper extends NPC {
     private HashMap<String, Pricepair> inventory;
     private String list;
 
-    public Shopkeeper(String id, String name, String description) {
-        super(id, name, description);
+    public Shopkeeper(String id, String name, String description, String intro) {
+        super(id, name, description, intro);
         inventory = new HashMap<>();
         list="Items: ";
         isShopkeeper=true;
