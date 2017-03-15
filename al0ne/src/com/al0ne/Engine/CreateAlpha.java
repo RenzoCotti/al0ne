@@ -1,5 +1,6 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Entities.Enemies.Demon;
 import com.al0ne.Items.Items.*;
 import com.al0ne.Items.Prop;
 import com.al0ne.Entities.NPC;
@@ -44,7 +45,7 @@ public class CreateAlpha {
         Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
         emonRoom.addExit("down", "ladderroom");
-        emonRoom.addItem(new Key("key", "Emon's key", "a key that smells of fish."));
+//        emonRoom.addItem(new Key("key", "Emon's key", "a key that smells of fish."));
         emon.addSubject("keys", "Yup, I fix small keys.");
         emon.addSubject("beer", "I love beer!");
         emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you."));
@@ -79,6 +80,10 @@ public class CreateAlpha {
 
         Room sanctuary = new Room("sanctuary", "Sanctuary", "There is a holy aura permeating this place.");
         NPC priest = new NPC("priest", "Asdolfo", "A holy man, hood up.", "Greetings, child. I can bless items for you. Should you be wounded, you can use this fountain to strengthen your spirits.");
+        HolySword sword = new HolySword();
+        sword.setType("holy");
+        sword.setDamage(8);
+        priest.addReactionItem("holysword", sword);
         sanctuary.addNPC(priest);
         sanctuary.addExit("up", "wolfroom");
         sanctuary.addProp(new HolyFountain());
@@ -150,15 +155,17 @@ public class CreateAlpha {
 
         Room gateRoom = new Room("gateroom", "Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         gateRoom.addExit("east", "bossroom");
+        gateRoom.addExit("west", "brokenkeyroom");
         gateRoom.addProp(new LockedDoor("bossgate", "Huge gate", "This gate has a huge lock on it.", "The gate is open now.","bosskey"));
         gateRoom.lockDirection("east", "bossgate");
         CreateAlpha.putRoom(gateRoom);
 
-        Room bossRoom = new Room("bossroom", "Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt");
+        Room bossRoom = new Room("bossroom", "Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
+        bossRoom.addCustomDirection("You sense a magical barrier east.");
         bossRoom.addExit("west", "gateroom");
         bossRoom.addExit("east", "princessroom");
         bossRoom.lockDirection("east", "boss");
-        //add boss
+        bossRoom.addEnemy(new Demon());
         CreateAlpha.putRoom(bossRoom);
 
         Room princessRoom = new Room("princessroom", "Princess room", "a royal room, full of decorations.");

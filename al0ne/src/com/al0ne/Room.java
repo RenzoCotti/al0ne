@@ -167,7 +167,7 @@ public class Room {
             try{
                 System.out.println("The way "+currentDirection+" is blocked by "+props.get(door).getDescription().toLowerCase());
             } catch (NullPointerException ex){
-                System.out.println("Shhhh c:");
+//                System.out.println("Shhhh c:");
             }
         }
 

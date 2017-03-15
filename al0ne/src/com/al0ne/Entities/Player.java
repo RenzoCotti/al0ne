@@ -126,7 +126,7 @@ public class Player {
         System.out.println(currentWeight+"/"+maxWeight+" kg.");
     }
 
-    private boolean modifyWeight(double weight) {
+    public boolean modifyWeight(double weight) {
         if (this.currentWeight+weight <= maxWeight){
             this.currentWeight+=weight;
             this.currentWeight=Math.round(currentWeight*10.0)/10.0;
@@ -482,6 +482,11 @@ public class Player {
     }
 
     public boolean attack(String name){
+        NPC npc = currentRoom.getNPC(name);
+        if(npc != null){
+            System.out.println("It's best not to attack "+name);
+            return false;
+        }
         Enemy enemy = currentRoom.getEnemy(name);
         String type;
         if(wieldedWeapon==null){

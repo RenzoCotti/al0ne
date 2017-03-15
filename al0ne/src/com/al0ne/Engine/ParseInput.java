@@ -32,75 +32,13 @@ public class ParseInput {
             case "drink":
                 return ParseInput.customAction(parsedInput, player, "drink");
             case "talk":
-                int b = ParseInput.checkForToken(parsedInput, "with");
-                int to = ParseInput.checkForToken(parsedInput, "to");
-                if(parsedInput[1].equals("to")) {
-                    String npc = ParseInput.stitchFromTo(parsedInput, to + 1, parsedInput.length);
-
-                    NPC character = player.getCurrentRoom().getNPC(npc);
-
-
-                    if (character == null || !(character.getName().toLowerCase().equals(npc))) {
-                        System.out.println("You can't see " + npc + " here.");
-                        return false;
-                    }
-
-                    character.printIntro();
-                } else if( b == -1 || !(parsedInput[1].equals("about")) ){
-                    System.out.println("The syntax is: TALK ABOUT x WITH y");
-                } else if( b > -1 ){
-                    String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
-                    String npc = ParseInput.stitchFromTo(parsedInput, b+1, parsedInput.length);
-
-                    NPC character = player.getCurrentRoom().getNPC(npc);
-
-
-                    if (character == null || !(character.getName().toLowerCase().equals(npc))){
-                        System.out.println("You can't see "+npc+" here.");
-                        return false;
-                    }
-
-                    if( player.talkToNPC(npc, subject) ){
-                        return true;
-                    } else{
-                        System.out.println("\"Sorry, I don't know anything about it.\"");
-                        return false;
-                    }
-                }
+                return ParseInput.handleTalk(parsedInput, player);
             case "eat":
                 return ParseInput.customAction(parsedInput, player, "eat");
             case "read":
                 return ParseInput.customAction(parsedInput, player, "read");
-//                String toRead = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
-//                ArrayList<String> possibleItems = ParseInput.getPotentialItem(toRead, player, 0);
-
-
-
             case "buy":
-                int c = ParseInput.checkForToken(parsedInput, "from");
-                if( c == -1){
-                    System.out.println("The syntax is: BUY x FROM y");
-                } else if( c > -1 ){
-                    String item = ParseInput.stitchFromTo(parsedInput, 1, c);
-                    String npc = ParseInput.stitchFromTo(parsedInput, c+1, parsedInput.length);
-
-                    NPC character = player.getCurrentRoom().getNPC(npc);
-
-
-                    if (character == null || !(character.getName().toLowerCase().equals(npc))){
-                        System.out.println("You can't see "+npc+" here.");
-                        return false;
-                    }
-
-                    if( character.isShopkeeper()){
-                        Shopkeeper shopkeeper = (Shopkeeper) character;
-                        shopkeeper.buy(player, item);
-                        return true;
-                    } else{
-                        System.out.println("\"Sorry, I don't have it.\"");
-                        return false;
-                    }
-                }
+                return ParseInput.handleBuy(parsedInput, player);
             case "move":
                 return ParseInput.customAction(parsedInput, player, "move");
             case "attack":
@@ -108,33 +46,7 @@ public class ParseInput {
                 return player.attack(enemy);
 
             case "give":
-                int d = ParseInput.checkForToken(parsedInput, "to");
-                if( d == -1){
-                    System.out.println("The syntax is: GIVE x TO y");
-                } else if( d > -1 ) {
-                    String item = ParseInput.stitchFromTo(parsedInput, 1, d);
-                    String npc = ParseInput.stitchFromTo(parsedInput, d + 1, parsedInput.length);
-
-                    ArrayList<String> possibleItemFromInventory = getPotentialItem(item, player, 0);
-
-                    if (!(possibleItemFromInventory.size() == 1)) {
-                        System.out.println("Be more specific.");
-                        return false;
-                    } else if (possibleItemFromInventory.size() > 0) {
-
-                        NPC character = player.getCurrentRoom().getNPC(npc);
-
-                        if (character == null || !(character.getName().toLowerCase().equals(npc))) {
-                            System.out.println("You can't see " + npc + " here.");
-                            return false;
-                        }
-
-                        if (player.give(character, possibleItemFromInventory.get(0))) {
-                            return true;
-                        }
-                    }
-                }
-
+                return ParseInput.handleGive(parsedInput, player);
                 //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
@@ -275,6 +187,10 @@ public class ParseInput {
 
     //this handles trying to apply custom commands on objects
     private static boolean customAction(String[] temp, Player player, String action) {
+        if(temp.length==1){
+            System.out.println("Sorry?");
+            return false;
+        }
         String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
 
         ArrayList<String> possibleProp = getPotentialItem(prop, player, 1);
@@ -409,6 +325,11 @@ public class ParseInput {
     /*this function is used to handle using an item:
     * boolean complex: if true, assumes the action is like USE x ON y, otherwise it's USE x*/
     private static boolean useItem(String[] temp, Player player, boolean complex, int tokenPosition) {
+        if(temp.length==1){
+            System.out.println("Sorry?");
+            return false;
+        }
+
         String firstItem;
         String secondItem;
 
@@ -542,10 +463,23 @@ public class ParseInput {
     //if the search returns exactly one item, we examine it
     private static boolean handleExamine(String[] temp, Player player){
 
+        if(temp.length==1){
+            System.out.println("Sorry?");
+            return false;
+        }
+
+
         String toExamine = ParseInput.stitchFromTo(temp, 1, temp.length);
         ArrayList<String> inventoryExamine = getPotentialItem(toExamine, player, 0);
         ArrayList<String> propExamine = getPotentialItem(toExamine, player, 1);
         ArrayList<String> itemExamine = getPotentialItem(toExamine, player, 2);
+
+        NPC npc = player.getCurrentRoom().getNPC(toExamine);
+
+        if ( npc != null){
+            npc.printDescription();
+            return true;
+        }
 
         //there are more possibilities from the items fetched
         if (!(inventoryExamine.size() + propExamine.size() + itemExamine.size() == 1)){
@@ -567,6 +501,12 @@ public class ParseInput {
     }
 
     public static boolean handleWield(String[] parsedInput, Player player){
+
+        if(parsedInput.length==1){
+            System.out.println("Sorry?");
+            return false;
+        }
+
         String wieldItem = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
 
         ArrayList<String> possibleItems = getPotentialItem(wieldItem, player, 0);
@@ -612,6 +552,116 @@ public class ParseInput {
         }
         catch(Exception e)
         {}
+    }
+
+
+    public static boolean handleTalk(String[] parsedInput, Player player){
+
+        if(parsedInput.length==1){
+            System.out.println("Sorry?");
+            return false;
+        }
+
+        int b = ParseInput.checkForToken(parsedInput, "with");
+        int to = ParseInput.checkForToken(parsedInput, "to");
+        if (parsedInput[1].equals("to")) {
+            String npc = ParseInput.stitchFromTo(parsedInput, to + 1, parsedInput.length);
+
+            NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+            if (character == null || !(character.getName().toLowerCase().equals(npc))) {
+                System.out.println("You can't see " + npc + " here.");
+                return true;
+            }
+
+            character.printIntro();
+            return true;
+        } else if( b == -1 || !(parsedInput[1].equals("about")) ){
+            System.out.println("The syntax is: TALK ABOUT x WITH y");
+            return false;
+        } else {
+            String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
+            String npc = ParseInput.stitchFromTo(parsedInput, b+1, parsedInput.length);
+
+            NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+            if (character == null || !(character.getName().toLowerCase().equals(npc))){
+                System.out.println("You can't see "+npc+" here.");
+                return true;
+            }
+
+            if( player.talkToNPC(npc, subject) ){
+                return true;
+            } else{
+                System.out.println("\"Sorry, I don't know anything about it.\"");
+                return true;
+            }
+        }
+    }
+
+    public static boolean handleBuy(String[] parsedInput, Player player){
+        int c = ParseInput.checkForToken(parsedInput, "from");
+        if( c == -1){
+            System.out.println("The syntax is: BUY x FROM y");
+            return false;
+        } else {
+            String item = ParseInput.stitchFromTo(parsedInput, 1, c);
+            String npc = ParseInput.stitchFromTo(parsedInput, c+1, parsedInput.length);
+
+            NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+            if (character == null || !(character.getName().toLowerCase().equals(npc))){
+                System.out.println("You can't see "+npc+" here.");
+                return false;
+            }
+
+            if( character.isShopkeeper()){
+                Shopkeeper shopkeeper = (Shopkeeper) character;
+                shopkeeper.buy(player, item);
+                return true;
+            } else{
+                System.out.println("\"Sorry, I don't have it.\"");
+                return false;
+            }
+        }
+    }
+
+    public static boolean handleGive(String[] parsedInput, Player player){
+
+        int d = ParseInput.checkForToken(parsedInput, "to");
+        if( d == -1){
+            System.out.println("The syntax is: GIVE x TO y");
+            return false;
+        } else {
+            String item = ParseInput.stitchFromTo(parsedInput, 1, d);
+            String npc = ParseInput.stitchFromTo(parsedInput, d + 1, parsedInput.length);
+
+            ArrayList<String> possibleItemFromInventory = getPotentialItem(item, player, 0);
+
+            if (!(possibleItemFromInventory.size() == 1)) {
+                System.out.println("Be more specific.");
+                return false;
+            } else {
+
+                NPC character = player.getCurrentRoom().getNPC(npc);
+
+                if (character == null || !(character.getName().toLowerCase().equals(npc))) {
+                    System.out.println("You can't see " + npc + " here.");
+                    return false;
+                }
+
+                if (player.give(character, possibleItemFromInventory.get(0))) {
+                    return true;
+                } else{
+                    return false;
+                }
+
+            }
+        }
+
     }
 
 }

@@ -81,6 +81,7 @@ public class NPC {
                 //removes *all* items
                 player.getInventory().remove(item.getID());
                 player.addItem(reactionItems.get(s));
+                player.modifyWeight(reactionItems.get(s).getWeight());
                 return true;
             }
         }
@@ -91,4 +92,9 @@ public class NPC {
     public void printIntro(){
         System.out.println(intro);
     }
+
+    public void printDescription(){
+        System.out.println(description);
+    }
+
 }

@@ -10,18 +10,18 @@ import java.util.ArrayList;
  * Created by BMW on 13/03/2017.
  */
 public class Enemy {
-    private String id;
-    private String name;
-    private String description;
+    protected String id;
+    protected String name;
+    protected String description;
 
-    private int currentHealth;
-    private int maxHealth;
-    private int damage;
+    protected int currentHealth;
+    protected int maxHealth;
+    protected int damage;
 
     private ArrayList<String> resistances;
     private ArrayList<Pair> loot;
 
-    boolean alive = true;
+    protected boolean alive = true;
 
     public Enemy(String id, String name, String description, int maxHealth, int damage) {
         this.id = id;

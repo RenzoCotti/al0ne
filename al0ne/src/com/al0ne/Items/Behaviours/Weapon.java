@@ -25,4 +25,8 @@ public abstract class Weapon extends Item{
     public void setType(String s){
         type=s;
     }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
 }
