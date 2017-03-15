@@ -10,53 +10,43 @@ import java.util.ArrayList;
  * - id: used to reference to that prop code-wise
  * - name: actual name of the item
  * - description: description of the prop, displayed when examining
- * - after: description of the prop *after* activation
+ * - afterDescription: description of the prop *afterDescription* activation
  * - requiresItem: ItemID required for activation, e.g. cave1key, can be default
  * - active: true if the item has been activated
  * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
  * - requiredCommand: custom actions that can be applied to the item
  */
-public class Prop {
+public class Prop extends Entity{
 
-    protected String id;
-    protected String name;
-    protected String description;
-    private String after;
+    private String afterDescription;
     protected String requiresItem;
     protected boolean active;
     private ArrayList<String> requiredType;
-    private ArrayList<String> requiredCommand;
 
 
     public Prop(String id, String name, String description) {
-        this.id = id;
+        super(id, name, description);
         this.requiredType = new ArrayList<>();
-        this.name = name;
-        this.description = description;
-        this.after = description;
+        this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
-        this.requiredCommand=new ArrayList<>();
+        this.type='p';
     }
 
     public Prop(String id, String name, String description, String after) {
-        this.id=id;
+        super(id, name, description);
         this.requiredType = new ArrayList<>();
-        this.name = name;
-        this.description = description;
-        this.after = after;
+        this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
-        this.requiredCommand=new ArrayList<>();
+        this.type='p';
     }
+
 
     protected void addType(String type){
         requiredType.add(type);
     }
 
-    public void addCommand(String cmd){
-        requiredCommand.add(cmd);
-    }
 
     public boolean usedWith(Item item, Room currentRoom) {
         for (String s: requiredType){
@@ -65,16 +55,11 @@ public class Prop {
                 return true;
             }
         }
-        return false;
-    }
-
-    public boolean used(){
-        if (requiresItem.equals("none")){
+        if (requiresItem.equals(item.getID())){
             active=true;
             return true;
-        } else{
-            return false;
         }
+        return false;
     }
 
 
@@ -87,31 +72,22 @@ public class Prop {
         }
     }
 
+    @Override
     public void printDescription(){
         if(!active){
             System.out.println(description);
         } else {
-            System.out.println(after);
+            System.out.println(afterDescription);
         }
     }
 
+    @Override
     public String getDescription() {
         if(!active){
             return description;
         } else {
-            return after;
+            return afterDescription;
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getID(){
-        return id;
-    }
-
-    public ArrayList<String> getRequiredCommand() {
-        return requiredCommand;
-    }
 }

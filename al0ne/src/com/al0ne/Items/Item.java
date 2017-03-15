@@ -10,59 +10,26 @@ import java.util.ArrayList;
  *
  * Item interface
  */
-public abstract class Item {
+public abstract class Item extends Entity{
 
-    protected String name;
-    private String ID;
-    private String description;
-    private double weight;
+    protected double weight;
+    protected ArrayList<String> properties;
 
-    private ArrayList<String> properties;
-    private ArrayList<String> requiredCommand;
 
 
     public Item(String id, String name, String description, double weight) {
-        this.ID = id;
-        this.name = name;
+        super(id, name, description);
         this.weight = weight;
-        this.description = description;
-        this.properties= new ArrayList<>();
-        requiredCommand=new ArrayList<>();
-    }
-
-
-
-    public void used(Room currentRoom, Player player){
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public String getID(){
-        return ID;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void printDescription() {
-        System.out.println(description);
+        this.properties = new ArrayList<>();
+        addCommand("take");
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public ArrayList<String> getRequiredCommand() {
-        return requiredCommand;
-    }
+    public abstract boolean used(Room currentRoom, Player player);
 
-    protected void addCommand(String cmd){
-        requiredCommand.add(cmd);
-    }
 
     protected void addProperty(String behaviour){
         properties.add(behaviour);

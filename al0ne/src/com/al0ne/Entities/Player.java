@@ -2,6 +2,7 @@ package com.al0ne.Entities;
 
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Behaviours.Weapon;
+import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Props.LockedDoor;
@@ -445,11 +446,15 @@ public class Player {
     }
 
 
-    public boolean customAction(String action, String item){
+    public boolean customAction(String action, Entity item){
         Prop prop;
-        Item inventoryItem;
+        if(item.getType()=='i'){
+
+        } else if (item.getType() == 'p'){
+            prop = (Prop) item;
+        }
         try{
-            prop = getProp(item);
+            prop = getProp(item.getID());
             for (String command : prop.getRequiredCommand()){
 //            System.out.println(command);
                 if (command.equals(action)){

@@ -2,9 +2,12 @@ package com.al0ne;
 
 import com.al0ne.Entities.Enemy;
 import com.al0ne.Entities.NPC;
+import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,113 +22,156 @@ import java.util.HashMap;
  * an lockedDirection, HashMap of doorName - direction
  *
  */
-public class Room {
+public class Room extends Entity{
 
-
-    //room description
-    private String description;
-    //room name
-    private String name;
-    //room ID
-    private String id;
     //maps direction - room ID
     private HashMap<String, String> exits;
     //maps door ID - direction
     private HashMap<String, String> lockedDirections;
     //maps propName - Prop
-    private HashMap<String, Prop> props;
-    //maps itemID - (Item, count)
-    private HashMap<String, Pair> items;
+//    private HashMap<String, Prop> props;
 
-    private HashMap<String, NPC> npcList;
 
-    private HashMap<String, Enemy> enemyList;
+//    //maps itemID - (Item, count)
+//    private HashMap<String, Pair> items;
+//
+//    private HashMap<String, NPC> npcList;
+//
+//    private HashMap<String, Enemy> enemyList;
+
+    //maps entityID - Pair(Entity, amt)
+    private HashMap<String, Pair> entities;
+
 
     private String customDirections;
 
 
 
     public Room(String id, String name, String description) {
-        this.id=id;
-        this.description = description;
-        this.name = name;
-        this.props=new HashMap<>();
-        this.items=new HashMap<>();
+        super(id, name, description);
+//        this.props=new HashMap<>();
+//        this.items=new HashMap<>();
         this.exits=new HashMap<>();
-        this.npcList=new HashMap<>();
+//        this.npcList=new HashMap<>();
         this.lockedDirections =new HashMap<>();
-        this.enemyList = new HashMap<>();
+//        this.enemyList = new HashMap<>();
         customDirections = null;
     }
 
-    public HashMap<String, Enemy> getEnemyList() {
+    public ArrayList<Enemy> getEnemyList() {
+        ArrayList<Enemy> enemyList = new ArrayList<>();
+        for (Pair p : entities.values()){
+            Entity e = p.getEntity();
+            if (e.getType()=='e'){
+                Enemy enemy = (Enemy) e;
+                enemyList.add(enemy);
+            }
+        }
+        if(enemyList.size()==0){
+            return null;
+        }
         return enemyList;
     }
 
-    public void addEnemy(Enemy enemy) {
-        this.enemyList.put(enemy.getID(), enemy);
+    public HashMap<String, Pair> getEntities() {
+        return entities;
+    }
+
+    public void addEntity(Entity entity) {
+        this.entities.put(entity.getID(), new Pair(entity, 1));
+    }
+
+    public void addEntity(Entity entity, int qty) {
+        this.entities.put(entity.getID(), new Pair(entity, qty));
     }
 
     public Enemy getEnemy(String name) {
-        for (Enemy e : enemyList.values()){
+        ArrayList<Enemy> enemies = getEnemyList();
+        for (Entity e : enemies){
             if (e.getName().toLowerCase().contains(name)){
-                return e;
+                return (Enemy) e;
             }
         }
         return null;
     }
 
     public void printEnemy() {
-        for (Enemy enemy : enemyList.values()){
+        ArrayList<Enemy> enemies = getEnemyList();
+        for (Enemy enemy : enemies){
             System.out.println("You can see a "+enemy.getName()+" here.");
         }
     }
 
 
-    public HashMap<String, NPC> getNPCList() {
+    public ArrayList<NPC> getNPCList() {
+        ArrayList<NPC> npcList = new ArrayList<>();
+        for (Pair p : entities.values()){
+            Entity e = p.getEntity();
+            if (e.getType()=='n'){
+                NPC npc = (NPC) e;
+                npcList.add(npc);
+            }
+        }
+        if(npcList.size()==0){
+            return null;
+        }
         return npcList;
     }
 
-    public void addNPC(NPC npc) {
-        this.npcList.put(npc.getID(), npc);
-    }
-
     public NPC getNPC(String name) {
-        for (NPC n : npcList.values()){
-            if (n.getName().toLowerCase().equals(name)){
-                return n;
+        ArrayList<NPC> npcs = getNPCList();
+        for (Entity e : npcs){
+            if (e.getName().toLowerCase().equals(name)){
+                return (NPC) e;
             }
         }
         return null;
     }
 
     public void printNPCs() {
-        for (NPC npc : npcList.values()){
-            System.out.println("You can see "+npc.getName()+" here.");
+        ArrayList<NPC> npcs = getNPCList();
+        for (NPC enemy : npcs){
+            System.out.println("You can see "+enemy.getName()+" here.");
         }
     }
 
 
-    public String getName() {
-        return name;
+    public ArrayList<Prop> getPropList() {
+        ArrayList<Prop> propList = new ArrayList<>();
+        for (Pair p : entities.values()){
+            Entity e = p.getEntity();
+            if (e.getType()=='p'){
+                Prop prop = (Prop) e;
+                propList.add(prop);
+            }
+        }
+        if(propList.size()==0){
+            return null;
+        }
+        return propList;
     }
 
-    public HashMap<String, Prop> getProps() {
-        return props;
-    }
-
-    public HashMap<String, Pair> getItems() {
-        return items;
+    public ArrayList<Pair> getItemList() {
+        ArrayList<Pair> itemList = new ArrayList<>();
+        for (Pair p : entities.values()){
+            Entity e = p.getEntity();
+            if (e.getType()=='i'){
+                itemList.add(p);
+            }
+        }
+        if(itemList.size()==0){
+            return null;
+        }
+        return itemList;
     }
 
     public HashMap<String, String> getExits() {
         return exits;
     }
 
-    public String getID(){
-        return id;
-    }
 
+
+    //// TODO: 15/03/2017
 //    //prints props in the room
 //    private void printProps(){
 //        if (props.size()!=0){
@@ -133,23 +179,21 @@ public class Room {
 //        }
 //    }
 
+
     //prints items in the room
     private void printItems(){
+        ArrayList<Pair> items = getItemList();
         if (items.size()!=0){
             System.out.println("You can see:");
-            for (Pair item : items.values()) {
-                Item currentItem = item.getItem();
-                System.out.println("- " +item.getCount()+"x "+ currentItem.getName());
+            for (Pair p : items) {
+                Item currentItem = (Item) p.getEntity();
+                System.out.println("- " +p.getCount()+"x "+ currentItem.getName());
             }
         }
     }
 
     public void printName(){
         System.out.println(name);
-    }
-
-    private void printDescription(){
-        System.out.println(description);
     }
 
     public void addCustomDirection(String s){
@@ -165,7 +209,8 @@ public class Room {
         for (String door : lockedDirections.keySet()){
             String currentDirection = lockedDirections.get(door);
             try{
-                System.out.println("The way "+currentDirection+" is blocked by "+props.get(door).getDescription().toLowerCase());
+                //// TODO: 15/03/2017
+//                System.out.println("The way "+currentDirection+" is blocked by "+props.get(door).getDescription().toLowerCase());
             } catch (NullPointerException ex){
 //                System.out.println("Shhhh c:");
             }
@@ -208,36 +253,43 @@ public class Room {
         System.out.println();
     }
 
-    public void addProp(Prop prop) {
-        this.props.put(prop.getID(), prop);
-    }
+//    public void addProp(Prop prop) {
+//        this.props.put(prop.getID(), prop);
+//    }
 
     public void addItem(Item item) {
         if (hasItem(item.getID())){
-            Pair currentPair=items.get(item.getID());
+            Pair currentPair=entities.get(item.getID());
             currentPair.addCount();
         } else{
-            this.items.put(item.getID(), new Pair(item, 1));
+            entities.put(item.getID(), new Pair(item, 1));
         }
     }
 
     public void addItem(Item item, Integer amount) {
         if (hasItem(item.getID())){
-            Pair currentPair=items.get(item.getID());
-            currentPair.setCount(amount);
+            Pair currentPair=entities.get(item.getID());
+            currentPair.modifyCount(amount);
         } else{
-            this.items.put(item.getID(), new Pair(item, amount));
+            entities.put(item.getID(), new Pair(item, amount));
         }
     }
 
     public boolean hasItem(String id) {
-        return items.get(id) != null;
+        ArrayList<Pair> items = getItemList();
+        for (Pair p : items){
+            Item currentItem = (Item) p.getEntity();
+            if (currentItem.getID().equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public Pair getPair(String id) {
 
         if (hasItem(id)){
-            return items.get(id);
+            return entities.get(id);
         }
         else return null;
     }

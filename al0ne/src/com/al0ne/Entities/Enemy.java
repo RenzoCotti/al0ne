@@ -1,5 +1,6 @@
 package com.al0ne.Entities;
 
+import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Room;
@@ -9,50 +10,32 @@ import java.util.ArrayList;
 /**
  * Created by BMW on 13/03/2017.
  */
-public class Enemy {
-    protected String id;
-    protected String name;
-    protected String description;
+public class Enemy extends Character{
 
-    protected int currentHealth;
+    protected boolean alive;
+
     protected int maxHealth;
+    protected int currentHealth;
     protected int damage;
 
-    private ArrayList<String> resistances;
-    private ArrayList<Pair> loot;
-
-    protected boolean alive = true;
+    protected ArrayList<String> resistances;
+    protected ArrayList<Pair> loot;
 
     public Enemy(String id, String name, String description, int maxHealth, int damage) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.currentHealth = maxHealth;
-        this.maxHealth = maxHealth;
+        super(id, name, description);
+        this.maxHealth=maxHealth;
         this.damage = damage;
+        this.currentHealth=maxHealth;
         this.resistances = new ArrayList<>();
         this.loot = new ArrayList<>();
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void printDescription() {
-        System.out.println(description);
+        this.alive = true;
+        this.type='e';
     }
 
     public void printHealth() {
         System.out.println(currentHealth+"/"+maxHealth+" HP.");
     }
+
 
     public void modifyHealth(int health) {
         if (this.currentHealth+health <= maxHealth){
@@ -63,11 +46,11 @@ public class Enemy {
         if (percentage >= 80){
             System.out.println("The "+name+" seems mostly fine.");
         } else if (percentage >= 60 && percentage < 80){
-            System.out.println("The "+name+" has taken a good beating.");
+            System.out.println("The "+name+" doesn't look its best");
         } else if (percentage >= 40 && percentage < 60){
-            System.out.println("The "+name+" is bleeding.");
+            System.out.println("The "+name+" is staggering.");
         } else if (percentage >= 20 && percentage < 40){
-            System.out.println("The "+name+" is bleeding heavily");
+            System.out.println("The "+name+" falls, then gets up again.");
         } else {
             if (this.currentHealth <= 0){
                 alive=false;
@@ -77,13 +60,6 @@ public class Enemy {
         }
     }
 
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
 
     public ArrayList<String> getResistances() {
         return resistances;
@@ -109,27 +85,8 @@ public class Enemy {
 
     public void addLoot(Room room) {
         for (Pair pair : loot){
-            boolean addedItem=false;
-            Item currentItem = pair.getItem();
-//            System.out.println(currentItem.getID());
-            for (String id : room.getItems().keySet()){
-
-                //case the item is already in the room
-                if (currentItem.getID().equals(id)){
-                    addedItem=true;
-//                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
-
-                    room.addItem(currentItem, pair.getCount()+room.getItems().get(id).getCount());
-                } else{
-                    addedItem=true;
-                    room.addItem(currentItem, pair.getCount());
-//                    System.out.println("Adding"+currentItem.getName()+"x"+pair.getCount());
-                }
-            }
-
-            if (!addedItem){
-                room.addItem(currentItem, pair.getCount());
-            }
+            Item currentLoot = (Item) pair.getEntity();
+            room.addItem(currentLoot, pair.getCount());
         }
     }
 

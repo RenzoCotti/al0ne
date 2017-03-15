@@ -4,16 +4,16 @@ package com.al0ne.Items;
  * Created by BMW on 09/03/2017.
  */
 public class Pair {
-    private Item item;
+    private Entity entity;
     private int count;
 
-    public Pair(Item item, int count) {
-        this.item = item;
+    public Pair(Entity entity, int count) {
+        this.entity = entity;
         this.count = count;
     }
 
-    public Item getItem() {
-        return item;
+    public Entity getEntity() {
+        return entity;
     }
 
     public int getCount() {
@@ -26,6 +26,10 @@ public class Pair {
 
     public void setCount(Integer amount) {
         count=amount;
+    }
+
+    public void modifyCount(Integer amount) {
+        count+=amount;
     }
 
     public boolean subCount() {

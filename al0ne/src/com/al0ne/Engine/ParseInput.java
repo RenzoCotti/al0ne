@@ -1,5 +1,6 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
@@ -193,23 +194,24 @@ public class ParseInput {
         }
         String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<String> possibleProp = getPotentialItem(prop, player, 1);
-        ArrayList<String> possibleItemFromInventory = getPotentialItem(prop, player, 0);
-        ArrayList<String> possibleItem = getPotentialItem(prop, player, 2);
+        ArrayList<Entity> possibleEntities = getPotentialItem(prop, player, 1);
+        ArrayList<Entity> possibleItems = getPotentialItem(prop, player, 0);
+//        ArrayList<String> possibleItemFromInventory = getPotentialItem(prop, player, 0);
+//        ArrayList<String> possibleItem = getPotentialItem(prop, player, 2);
 
-        if (!(possibleItemFromInventory.size() + possibleProp.size() + possibleItem.size() == 1)) {
+        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
             System.out.println("Be more specific.");
             return false;
         }
 
-        if (possibleItem.size()== 1) {
-            System.out.println("You need to hold that item to "+action+" it.");
-            return false;
-        }
+//        if (possibleEntities.size()== 1) {
+//            System.out.println("You need to hold that item to "+action+" it.");
+//            return false;
+//        }
 
         try {
-            if (possibleProp.size() == 1) {
-                if (player.customAction(action, possibleProp.get(0))) {
+            if (possibleEntities.size() == 1) {
+                if (player.customAction(action, possibleEntities.get(0))) {
                     System.out.println("You " + action + " the " + prop);
                     return true;
                 } else {
@@ -217,7 +219,7 @@ public class ParseInput {
                     return false;
                 }
             } else {
-                if (player.customAction(action, possibleItemFromInventory.get(0))) {
+                if (player.customAction(action, possibleEntities.get(0))) {
                     System.out.println("You " + action + " the " + prop + ".");
                     return true;
                 } else {
@@ -235,32 +237,34 @@ public class ParseInput {
     //number = 0: tries to get from the inventory
     //number = 1: tries to get from Props of currentRoom
     //number = 2: tries to get from Items of currentRoom
-    private static ArrayList<String> getPotentialItem(String s, Player player, int number) {
-        ArrayList<String> potentialItems = new ArrayList<>();
+    private static ArrayList<Entity> getPotentialItem(String s, Player player, int number) {
+        ArrayList<Entity> potentialItems = new ArrayList<>();
 
 
-        //case inventory
+                //case inventory
         if (number == 0) {
 
             //check if there is an exact match
             for (Pair pair : player.getInventory().values()) {
                 Item b = pair.getItem();
                 if (b.getName().equals(s)) {
-                    potentialItems.add(b.getID());
+                    potentialItems.add(b);
                     return potentialItems;
                 }
             }
 
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
+            //we check the given string token by token
             for (String token : temp) {
+                //and we check with each pair in inventory if it contains the token
                 for (Pair pair : player.getInventory().values()) {
                     Item a = pair.getItem();
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem) {
                         if (b.toLowerCase().equals(token)) {
-                            if (!potentialItems.contains(a.getID())) {
-                                potentialItems.add(a.getID());
+                            if (!potentialItems.contains(a)) {
+                                potentialItems.add(a);
                             }
                         }
                     }
@@ -269,9 +273,9 @@ public class ParseInput {
             //case prop
         } else if (number == 1) {
             //we look for perfect match
-            for (Prop b : player.getCurrentRoom().getProps().values()) {
-                if (b.getName().equals(s)) {
-                    potentialItems.add(b.getID());
+            for (Entity e : player.getCurrentRoom().getEntities().values()) {
+                if (e.getName().equals(s)) {
+                    potentialItems.add(e);
                     return potentialItems;
                 }
             }
@@ -279,45 +283,105 @@ public class ParseInput {
             //we look for partial matches
             String[] temp = s.split(" ");
             for (String token : temp) {
-                for (Prop a : player.getCurrentRoom().getProps().values()) {
-                    String[] currentItem = a.getName().split(" ");
+                for (Entity e : player.getCurrentRoom().getEntities().values()) {
+                    String[] currentItem = e.getName().split(" ");
                     for (String b : currentItem) {
                         if (b.toLowerCase().equals(token)) {
-                            if (!potentialItems.contains(a.getID())) {
-                                potentialItems.add(a.getID());
+                            if (!potentialItems.contains(e)) {
+                                potentialItems.add(e);
                             }
                         }
                     }
                 }
             }
             //case item
-        } else if (number == 2) {
-
-            //we iterate over all items in the room, we look for a perfect match
-            for (Pair pair : player.getCurrentRoom().getItems().values()) {
-                Item b = pair.getItem();
-                if (b.getName().toLowerCase().equals(s.toLowerCase())) {
-                    potentialItems.add(b.getID());
-                    return potentialItems;
-                }
-            }
-
-            //otherwise, we look for partial matches
-            String[] temp = s.split(" ");
-            for (String token : temp) {
-                for (Pair pair : player.getCurrentRoom().getItems().values()) {
-                    Item a = pair.getItem();
-                    String[] currentItem = a.getName().split(" ");
-                    for (String b : currentItem) {
-                        if (b.toLowerCase().equals(token)) {
-                            if (!potentialItems.contains(a.getID())) {
-                                potentialItems.add(a.getID());
-                            }
-                        }
-                    }
-                }
-            }
         }
+
+
+
+
+
+
+
+//        //case inventory
+//        if (number == 0) {
+//
+//            //check if there is an exact match
+//            for (Pair pair : player.getInventory().values()) {
+//                Item b = pair.getItem();
+//                if (b.getName().equals(s)) {
+//                    potentialItems.add(b.getID());
+//                    return potentialItems;
+//                }
+//            }
+//
+//            //otherwise, parse and check for partial matches
+//            String[] temp = s.split(" ");
+//            for (String token : temp) {
+//                for (Pair pair : player.getInventory().values()) {
+//                    Item a = pair.getItem();
+//                    String[] currentItem = a.getName().split(" ");
+//                    for (String b : currentItem) {
+//                        if (b.toLowerCase().equals(token)) {
+//                            if (!potentialItems.contains(a.getID())) {
+//                                potentialItems.add(a.getID());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            //case prop
+//        } else if (number == 1) {
+//            //we look for perfect match
+//            for (Prop b : player.getCurrentRoom().getProps().values()) {
+//                if (b.getName().equals(s)) {
+//                    potentialItems.add(b.getID());
+//                    return potentialItems;
+//                }
+//            }
+//
+//            //we look for partial matches
+//            String[] temp = s.split(" ");
+//            for (String token : temp) {
+//                for (Prop a : player.getCurrentRoom().getProps().values()) {
+//                    String[] currentItem = a.getName().split(" ");
+//                    for (String b : currentItem) {
+//                        if (b.toLowerCase().equals(token)) {
+//                            if (!potentialItems.contains(a.getID())) {
+//                                potentialItems.add(a.getID());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            //case item
+//        } else if (number == 2) {
+//
+//            //we iterate over all items in the room, we look for a perfect match
+//            for (Pair pair : player.getCurrentRoom().getItems().values()) {
+//                Item b = pair.getItem();
+//                if (b.getName().toLowerCase().equals(s.toLowerCase())) {
+//                    potentialItems.add(b.getID());
+//                    return potentialItems;
+//                }
+//            }
+//
+//            //otherwise, we look for partial matches
+//            String[] temp = s.split(" ");
+//            for (String token : temp) {
+//                for (Pair pair : player.getCurrentRoom().getItems().values()) {
+//                    Item a = pair.getItem();
+//                    String[] currentItem = a.getName().split(" ");
+//                    for (String b : currentItem) {
+//                        if (b.toLowerCase().equals(token)) {
+//                            if (!potentialItems.contains(a.getID())) {
+//                                potentialItems.add(a.getID());
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         return potentialItems;
     }
@@ -333,19 +397,18 @@ public class ParseInput {
         String firstItem;
         String secondItem;
 
-        ArrayList<String> inventoryUse;
-        ArrayList<String> propUse;
-        ArrayList<String> itemUse;
+        ArrayList<Entity> inventoryUse;
+        ArrayList<Entity> itemUse;
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
             firstItem = ParseInput.stitchFromTo(temp, 1, tokenPosition);
             secondItem = ParseInput.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
             inventoryUse = getPotentialItem(firstItem, player, 0);
-            propUse = getPotentialItem(secondItem, player, 1);
-            itemUse = getPotentialItem(firstItem, player, 2);
+            itemUse = getPotentialItem(secondItem, player, 1);
+//            itemUse = getPotentialItem(firstItem, player, 2);
 
-            if (!(inventoryUse.size() == 1) || !(propUse.size() == 1)) {
+            if (!(inventoryUse.size() == 1) || !(itemUse.size() == 1)) {
                 System.out.println("Be more specific.");
                 return false;
             }
@@ -354,8 +417,8 @@ public class ParseInput {
                 System.out.println("You need to be holding that item to use it.");
             }
 
-            if (inventoryUse.size() == 1 && propUse.size() == 1) {
-                player.interactOnWith(propUse.get(0), inventoryUse.get(0));
+            if (inventoryUse.size() == 1 && itemUse.size() == 1) {
+                player.interactOnWith(itemUse.get(0), inventoryUse.get(0));
             } else {
                 System.out.println("You can't see such items");
             }
