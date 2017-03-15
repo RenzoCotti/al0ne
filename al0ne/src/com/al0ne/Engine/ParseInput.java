@@ -403,7 +403,7 @@ public class ParseInput {
 
 //        player.printWeight();
 
-        if (temp.length <= 1) {
+        if (temp.length < 3) {
             System.out.println("Sorry?");
             return false;
         }

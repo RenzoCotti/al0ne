@@ -77,7 +77,7 @@ public class Room {
 
     public void printEnemy() {
         for (Enemy enemy : enemyList.values()){
-            System.out.println("You can see "+enemy.getName()+" here.");
+            System.out.println("You can see a "+enemy.getName()+" here.");
         }
     }
 

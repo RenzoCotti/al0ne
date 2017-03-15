@@ -36,7 +36,7 @@ public class CreateAlpha {
         ladderRoom.addExit("east", "startroom");
         CreateAlpha.putRoom(ladderRoom);
 
-        Room daggerRoom = new Room("daggerroom", "Empty room", "The room is completely empty.");
+        Room daggerRoom = new Room("daggerroom", "Empty room", "The room is completely empty, except for a knife on the floor.");
         daggerRoom.addItem(new Knife());
         daggerRoom.addExit("south", "startroom");
         daggerRoom.addExit("east", "wolfroom");
