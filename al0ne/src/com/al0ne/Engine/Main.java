@@ -15,7 +15,7 @@ public class Main {
         HashMap<String, Room> rooms = CreateAlpha.create();
 
         Player grog = new Player(rooms.get("startroom"));
-        grog.addItem(new HolySword());
+//        grog.addItem(new HolySword());
 
         Game game = new Game(grog, rooms);
 

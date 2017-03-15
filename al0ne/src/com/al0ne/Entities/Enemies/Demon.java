@@ -23,7 +23,7 @@ public class Demon extends Enemy{
             System.out.println("You defeated the "+ name);
             System.out.println("The "+name+" drops some items.");
             addLoot(room);
-            player.getCurrentRoom().unlockDirection("west");
+            player.getCurrentRoom().unlockDirection("boss");
             System.out.println("You feel the magical barrier waning.");
             return true;
         }

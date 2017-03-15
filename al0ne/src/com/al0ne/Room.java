@@ -68,7 +68,7 @@ public class Room {
 
     public Enemy getEnemy(String name) {
         for (Enemy e : enemyList.values()){
-            if (e.getName().toLowerCase().equals(name)){
+            if (e.getName().toLowerCase().contains(name)){
                 return e;
             }
         }
