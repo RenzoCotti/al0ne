@@ -34,7 +34,19 @@ public class ParseInput {
             case "talk":
                 int b = ParseInput.checkForToken(parsedInput, "with");
                 int to = ParseInput.checkForToken(parsedInput, "to");
-                if( b == -1 || !(parsedInput[1].equals("about")) ){
+                if(parsedInput[1].equals("to")) {
+                    String npc = ParseInput.stitchFromTo(parsedInput, to + 1, parsedInput.length);
+
+                    NPC character = player.getCurrentRoom().getNPC(npc);
+
+
+                    if (character == null || !(character.getName().toLowerCase().equals(npc))) {
+                        System.out.println("You can't see " + npc + " here.");
+                        return false;
+                    }
+
+                    character.printIntro();
+                } else if( b == -1 || !(parsedInput[1].equals("about")) ){
                     System.out.println("The syntax is: TALK ABOUT x WITH y");
                 } else if( b > -1 ){
                     String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
@@ -54,21 +66,16 @@ public class ParseInput {
                         System.out.println("\"Sorry, I don't know anything about it.\"");
                         return false;
                     }
-                } else if(parsedInput[2].equals("to")){
-                    String npc = ParseInput.stitchFromTo(parsedInput, to+1, parsedInput.length);
-
-                    NPC character = player.getCurrentRoom().getNPC(npc);
-
-
-                    if (character == null || !(character.getName().toLowerCase().equals(npc))){
-                        System.out.println("You can't see "+npc+" here.");
-                        return false;
-                    }
-
-                    character.printIntro();
                 }
             case "eat":
                 return ParseInput.customAction(parsedInput, player, "eat");
+            case "read":
+                return ParseInput.customAction(parsedInput, player, "read");
+//                String toRead = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
+//                ArrayList<String> possibleItems = ParseInput.getPotentialItem(toRead, player, 0);
+
+
+
             case "buy":
                 int c = ParseInput.checkForToken(parsedInput, "from");
                 if( c == -1){
@@ -128,7 +135,7 @@ public class ParseInput {
                     }
                 }
 
-            //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
+                //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
                 int tokenPosition = ParseInput.checkForToken(parsedInput, "on");
@@ -241,12 +248,12 @@ public class ParseInput {
     private static void quit() {
         System.out.println("Are you sure you want to quit? (Y/N)");
         Scanner test = new Scanner(System.in);
-            if (test.hasNextLine()) {
-                if (test.nextLine().equals("Y")) {
-                    System.exit(0);
-                } else {
-                    System.out.println("Ok then, forget it.");
-                }
+        if (test.hasNextLine()) {
+            if (test.nextLine().equals("Y")) {
+                System.exit(0);
+            } else {
+                System.out.println("Ok then, forget it.");
+            }
         }
     }
 
@@ -433,7 +440,7 @@ public class ParseInput {
             }
 
             return true;
-        //case simple use: check we have just one item, then we make the player use it.
+            //case simple use: check we have just one item, then we make the player use it.
         } else {
             firstItem = ParseInput.stitchFromTo(temp, 1, temp.length);
 

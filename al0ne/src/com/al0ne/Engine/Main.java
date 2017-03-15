@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Entities.Player;
+import com.al0ne.Items.Items.Coin;
 import com.al0ne.Room;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -12,7 +13,8 @@ public class Main {
 
         HashMap<String, Room> rooms = CreateAlpha.create();
 
-        Player grog = new Player(rooms.get("ladderroom"));
+        Player grog = new Player(rooms.get("startroom"));
+//        grog.addItem(new Coin(), 20);
 
         Game game = new Game(grog, rooms);
 

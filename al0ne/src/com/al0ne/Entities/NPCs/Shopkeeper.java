@@ -33,14 +33,25 @@ public class Shopkeeper extends NPC {
     }
 
     public boolean hasItem(String item) {
-        if (this.inventory.get(item) != null){
-            return true;
+        for (Pricepair p : inventory.values()){
+            Item currentItem = p.getItem();
+            //maybe need to use different check
+            if (currentItem.getName().toLowerCase().equals(item.toLowerCase())){
+                return true;
+            }
         }
         return false;
     }
 
     public Pricepair getItem(String item) {
-        return this.inventory.get(item);
+        for (Pricepair p : inventory.values()){
+            Item currentItem = p.getItem();
+            //maybe need to use different check
+            if (currentItem.getName().toLowerCase().equals(item.toLowerCase())){
+                return p;
+            }
+        }
+        return null;
     }
 
     public void buy(Player player, String toBuy){

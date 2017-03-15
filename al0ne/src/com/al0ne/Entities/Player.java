@@ -270,7 +270,7 @@ public class Player {
 
         } else if (prop != null){
             //case its a prop
-            prop.used();
+            prop.used();                      //// TODO: 15/03/2017 put boolean return to avoid a double use
             prop.used(currentRoom, this);
         } else {
             System.out.println("You can't seem to see a "+target);

@@ -29,7 +29,8 @@ public class CreateAlpha {
         CreateAlpha.putRoom(startRoom);
 
         Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");
-        ladderRoom.addProp(new Prop("ladder", "Ladder", "a wooden ladder"));
+        ladderRoom.addProp(new Prop("ladder", "Ladder", "a wooden ladder heading in the ceiling"));
+        ladderRoom.addCustomDirection("You can see a ladder going up. You see an opening to the east.");
         ladderRoom.addExit("up", "emonroom");
         ladderRoom.addExit("east", "startroom");
         CreateAlpha.putRoom(ladderRoom);
@@ -50,13 +51,14 @@ public class CreateAlpha {
         emonRoom.addNPC(emon);
         CreateAlpha.putRoom(emonRoom);
 
-        Room mushRoom = new Room("mushroomroom", "Mushy Room", "The air is very damp");
+        Room mushRoom = new Room("mushroomroom", "Mushy Room", "The air is very damp.");
         mushRoom.addItem(new Mushroom());
         mushRoom.addExit("north", "startroom");
         mushRoom.addExit("east", "cavernroom");
         CreateAlpha.putRoom(mushRoom);
 
         Room wolfRoom = new Room("wolfroom", "Wolf Room", "You see some bones scattered on the ground.");
+        wolfRoom.addProp(new Prop("bones", "bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's."));
         wolfRoom.addEnemy(new Wolf());
         wolfRoom.addExit("west", "daggerroom");
         wolfRoom.addExit("north", "shoproom");
@@ -64,9 +66,13 @@ public class CreateAlpha {
         CreateAlpha.putRoom(wolfRoom);
 
         Room shopRoom = new Room("shoproom", "Shop", "You see several items neatly disposed on a table");
+        shopRoom.addProp(new Prop("table", "table", "You can see a knife and an apple on the table"));
+        shopRoom.addProp(new Prop("appleshop", "apple", "A knife. Probably better not to take it."));
+        shopRoom.addProp(new Prop("knifeshop", "knife", "A red apple.Probably better not to take it."));
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "A fairly chubby man with a glint in his eyes.", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
         bob.addToInventory(new Knife(), 5);
         bob.addToInventory(new Apple(), 2);
+        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll", "Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addNPC(bob);
         shopRoom.addExit("south", "wolfroom");
         CreateAlpha.putRoom(shopRoom);
@@ -124,6 +130,8 @@ public class CreateAlpha {
 
         Room swordRoom = new Room("swordroom", "Lake in the mountain", "You suddenly find yourself at the coast of a lake. A little path leads you to a circle of stones, in which you see an exquisitely crafted sword.");
         swordRoom.addItem(new HolySword());
+        swordRoom.addProp(new Prop("lake", "lake", "A stunningly beautiful lake, very calming"));
+        swordRoom.addProp(new Prop("circlestones", "Circle of stones", "a circle made with roundish stones, around 5 m wide"));
         swordRoom.addExit("north", "mazemain");
         CreateAlpha.putRoom(swordRoom);
 
@@ -135,6 +143,8 @@ public class CreateAlpha {
         Room brokenKeyRoom = new Room("brokenkeyroom", "Hearth room", "This room is quite warm, due to a lit hearth. There is a wooden table, with what seems a broken key on it.");
         brokenKeyRoom.addExit("west", "cavernroom");
         brokenKeyRoom.addExit("east", "gateroom");
+        brokenKeyRoom.addProp(new Prop("hearth", "hearth", "the hearth is alit. somebody has been here recently"));
+        brokenKeyRoom.addProp(new Prop("table", "table", "a wooden table. It has a broken key on top."));
         brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two."));
         CreateAlpha.putRoom(brokenKeyRoom);
 

@@ -41,6 +41,8 @@ public class Room {
 
     private HashMap<String, Enemy> enemyList;
 
+    private String customDirections;
+
 
 
     public Room(String id, String name, String description) {
@@ -53,6 +55,7 @@ public class Room {
         this.npcList=new HashMap<>();
         this.lockedDirections =new HashMap<>();
         this.enemyList = new HashMap<>();
+        customDirections = null;
     }
 
     public HashMap<String, Enemy> getEnemyList() {
@@ -123,12 +126,12 @@ public class Room {
         return id;
     }
 
-    //prints props in the room
-    private void printProps(){
-        if (props.size()!=0){
-            props.values().forEach(Prop::printDescription);
-        }
-    }
+//    //prints props in the room
+//    private void printProps(){
+//        if (props.size()!=0){
+//            props.values().forEach(Prop::printDescription);
+//        }
+//    }
 
     //prints items in the room
     private void printItems(){
@@ -149,8 +152,13 @@ public class Room {
         System.out.println(description);
     }
 
+    public void addCustomDirection(String s){
+        customDirections=s;
+    }
+
     //prints available travel directions that are not locked
     private void printDirections(){
+
         boolean first=true;
         String toPrint="";
 
@@ -161,6 +169,11 @@ public class Room {
             } catch (NullPointerException ex){
                 System.out.println("Shhhh c:");
             }
+        }
+
+        if(customDirections != null){
+            System.out.println(customDirections);
+            return;
         }
 
         for (String exit : exits.keySet()){
@@ -185,11 +198,9 @@ public class Room {
     }
 
     //this function prints every time a room is discovered
-    //// TODO: 08/03/2017 maybe shortened version? once visited once
     public void printRoom(){
-//        System.out.println(name);
         printDescription();
-        printProps();
+//        printProps();
         printItems();
         printNPCs();
         printEnemy();
