@@ -67,7 +67,7 @@ public abstract class Entity {
         return requiredCommand;
     }
 
-    protected void addCommand(String cmd){
+    public void addCommand(String cmd){
         requiredCommand.add(cmd);
     }
 

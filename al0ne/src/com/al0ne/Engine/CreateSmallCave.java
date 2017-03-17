@@ -24,10 +24,10 @@ public class CreateSmallCave {
 //        cave1.addItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.addProp(new Door("cave1door", "Generic Door"));
+        cave1.addEntity(new Door("cave1door", "Generic Door"));
         cave1.lockDirection("east", "cave1door");
 
-        cave1.addProp(new MoneyTree());
+        cave1.addEntity(new MoneyTree());
 
         CreateSmallCave.putRoom(cave1);
 
@@ -40,7 +40,7 @@ public class CreateSmallCave {
         cave2.addItem(new Knife());
         cave2.addItem(new Apple());
 
-        cave2.addProp(new CuttableRope());
+        cave2.addEntity(new CuttableRope());
 
         CreateSmallCave.putRoom(cave2);
 
@@ -48,9 +48,9 @@ public class CreateSmallCave {
         cave3.addExit("north", "cave2");
         cave3.addExit("down", "cellar");
         Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","The trapdoor is open.");
-        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "The rug is now out of the way.", "You move the rug. You find a trapdoor underneath.", trapdoor1);
+        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "The rug is now out of the way.", trapdoor1);
         rug.addCommand("move");
-        cave3.addProp(rug);
+        cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");
 
         CreateSmallCave.putRoom(cave3);
@@ -69,14 +69,14 @@ public class CreateSmallCave {
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "Hi, i'm eamon and i fix small keys");
         emon.addSubject("keys", "Yup, I fix small keys.");
         emon.addSubject("beer", "I love beer!");
-        cave4.addNPC(emon);
+        cave4.addEntity(emon);
 
         CreateSmallCave.putRoom(cave4);
 
         Room bossRoom = new Room("bossroom", "Boss Room", "Lots of bones cover the ground. You shiver.");
         bossRoom.addExit("west", "cave2");
         Wolf boss = new Wolf();
-        bossRoom.addEnemy(boss);
+        bossRoom.addEntity(boss);
 
         CreateSmallCave.putRoom(bossRoom);
 

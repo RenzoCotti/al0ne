@@ -8,7 +8,6 @@ public class Apple extends Food {
     public Apple() {
         super("apple","Apple", "A fresh apple", 0.1);
         addProperty("food");
-        value=1;
         addCommand("eat");
     }
 

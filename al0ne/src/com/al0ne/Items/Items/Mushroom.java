@@ -8,13 +8,13 @@ public class Mushroom extends Food {
     public Mushroom() {
         super("mushroom","Brown mushroom", "It has a very pungent smell", 0.2);
         addProperty("food");
-        value=1;
         addCommand("eat");
     }
 
     @Override
-    public void used(Room currentRoom, Player player){
+    public boolean used(Room currentRoom, Player player){
         System.out.println("The mushroom is poisonous!");
         player.modifyHealth(-5);
+        return true;
     }
 }

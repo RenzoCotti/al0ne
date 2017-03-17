@@ -10,7 +10,6 @@ public class Beer extends Food {
         super("beer","Beer", "A fresh beer", 0.5);
         addProperty("food");
         addCommand("drink");
-        value=1;
 //        addProperty("usable");
     }
 

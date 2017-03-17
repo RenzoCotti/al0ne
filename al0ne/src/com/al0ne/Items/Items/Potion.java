@@ -16,7 +16,8 @@ public class Potion extends Item {
     }
 
     @Override
-    public void used(Room currentRoom, Player player){
+    public boolean used(Room currentRoom, Player player){
         player.modifyHealth(+20);
+        return true;
     }
 }

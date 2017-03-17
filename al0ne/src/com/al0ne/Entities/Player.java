@@ -159,21 +159,34 @@ public class Player {
     }
 
     //this function adds an item to the inventory
-    public void addItem(Item item) {
-        if (hasItemInInventory(item.getID())){
-            Pair fromInventory = inventory.get(item.getID());
-            fromInventory.addCount();
+    //returns false if item is not in inv or weight is nope
+    public boolean addItem(Item item) {
+        if (modifyWeight(item.getWeight())){
+            if (hasItemInInventory(item.getID())){
+                Pair fromInventory = inventory.get(item.getID());
+                fromInventory.addCount();
+                return true;
+            } else {
+                inventory.put(item.getID(), new Pair(item, 1));
+                return true;
+            }
         } else {
-            inventory.put(item.getID(), new Pair(item, 1));
+            return false;
         }
     }
 
-    public void addItem(Item item, Integer amount) {
-        if (hasItemInInventory(item.getID())){
-            Pair fromInventory = inventory.get(item.getID());
-            fromInventory.setCount(amount);
+    public boolean addItem(Item item, Integer amount) {
+        if (modifyWeight(item.getWeight() * amount)){
+            if (hasItemInInventory(item.getID())){
+                Pair fromInventory = inventory.get(item.getID());
+                fromInventory.modifyCount(amount);
+                return true;
+            } else {
+                inventory.put(item.getID(), new Pair(item, amount));
+                return true;
+            }
         } else {
-            inventory.put(item.getID(), new Pair(item, amount));
+            return false;
         }
     }
 
@@ -239,41 +252,48 @@ public class Player {
 
 
     //this makes the player use an item
-    public boolean simpleUse(String target){
+    public boolean simpleUse(Entity target){
 
-        Pair roomPair = currentRoom.getEntityPair(target);
-        Pair invPair = getItemPair(target);
+        if (target.getType() == 'p'){
+            Prop prop = (Prop) target;
+            return prop.used(currentRoom, this);
 
-        Item item = (Item) invPair.getEntity();
-        if (!item.used(currentRoom, this)){
-            if (!roomPair.getEntity().used(currentRoom, this)){
-                return false;
-            }
+        } else if (target.getType() == 'i'){
+            Item item = (Item) target;
+            return item.used(currentRoom, this);
         }
         return true;
     }
 
 
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
-    public boolean interactOnWith(String target, String item){
+    public boolean interactOnWith(Entity target, Entity item){
 
-        Entity entity = null;
-        Item invItem = null;
+//        Prop entity = null;
+//        Item invItem = null;
+//
+//        if (currentRoom.hasEntity(target)){
+//            entity = (Prop) currentRoom.getEntityPair(target).getEntity();
+//        } else if( this.hasItemInInventory(target) ){
+//            invItem = (Item) getItemPair(target).getEntity();
+//        }
+//
+//        if (currentRoom.hasEntity(item)){
+//            entity = (Prop) currentRoom.getEntityPair(item).getEntity();
+//        } else if( this.hasItemInInventory(target) ){
+//            invItem = (Item) getItemPair(target).getEntity();
+//        }
 
-        if (currentRoom.hasEntity(target)){
-            entity = currentRoom.getEntityPair(target).getEntity();
-        } else if( this.hasItemInInventory(target) ){
-            invItem = (Item) getItemPair(target).getEntity();
-        }
-
-        if (currentRoom.hasEntity(item)){
-            entity = currentRoom.getEntityPair(item).getEntity();
-        } else if( this.hasItemInInventory(target) ){
-            invItem = (Item) getItemPair(target).getEntity();
-        }
+//        if (entity!= null && invItem!=null){
+//            return entity.usedWith(invItem, currentRoom);
+//        } else {
+//            return false;
+//        }
 
 
 
+        Prop prop = (Prop) target;
+        return prop.usedWith((Item) item, currentRoom);
 
 
 
@@ -297,67 +317,51 @@ public class Player {
     }
 
     //this function prints the description of target, be it a prop or an Item
-    public void examine(String target){
-        Prop prop = getProp(target);
+    public boolean examine(Entity target){
 
-        Item groundItem=null;
-        if (currentRoom.hasItem(target)){
-            groundItem=currentRoom.getItems().get(target).getItem();
+        if(target != null){
+            target.printDescription();
+            return true;
         }
+        return false;
 
-        Pair pair= getItemPair(target);
-        Item item=null;
-
-        if(pair != null){
-            item = pair.getItem();
-        }
-
-        if (prop != null){
-            prop.printDescription();
-        } else if(item != null){
-            item.printDescription();
-        } else if(groundItem != null){
-            groundItem.printDescription();
-        } else {
-            System.out.println("You can't see a "+target);
-        }
     }
 
     //this function makes the player drop target, if it has it
-    public void drop(String target, boolean all){
-        Pair item = getItemPair(target);
-        if (item != null){
+    public void drop(Pair target, boolean all){
+        if (target != null){
+            Item item = (Item) target.getEntity();
 
-            //case we drop 1 & item is in room
-            Pair roomItem = currentRoom.getEntityPair(item.getItem().getID());
+            //case we drop 1 & target is in room
+            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
             if (!all && roomItem != null){
                 roomItem.addCount();
-                //case we drop 1 & item is not in room
+                //case we drop 1 & target is not in room
             } else if (!all){
-                currentRoom.addItem(item.getItem());
-                modifyWeight(-item.getItem().getWeight());
+                currentRoom.addItem((Item) target.getEntity());
+                modifyWeight(-((Item) target.getEntity()).getWeight());
             }
 
-            //case we drop all & item is in room
+            //case we drop all & target is in room
             if (all && roomItem != null){
-                roomItem.setCount(roomItem.getCount()+item.getCount());
+                roomItem.setCount(roomItem.getCount()+target.getCount());
             } else if (all){
-                currentRoom.addItem(item.getItem(), item.getCount());
+                currentRoom.addItem((Item) target.getEntity(), target.getCount());
             }
 
             //we dropped 1
             if(!all){
-                modifyWeight(-item.getItem().getWeight());
-                if (item.subCount()){
-                    inventory.remove(item.getItem().getID());
+                modifyWeight(-((Item) target.getEntity()).getWeight());
+                if (target.subCount()){
+                    inventory.remove(target.getEntity().getID());
                 }
                 //we dropped all
             } else{
-                modifyWeight(-((item.getItem().getWeight()*item.getCount())));
-                inventory.remove(item.getItem().getID());
+                modifyWeight(-(((Item) target.getEntity()).getWeight()*target.getCount()));
+                inventory.remove(target.getEntity().getID());
             }
 
-            System.out.println("You drop the "+item.getItem().getName());
+            System.out.println("You drop the "+target.getEntity().getName());
 
         } else {
             System.out.println("You don't seem to have a "+target+" with you.");
@@ -368,107 +372,110 @@ public class Player {
     //this function tries to pick up an item in the currentRoom:
     //it also checks if the player can carry the current item
     //if it didn't succeed, print an error message
-    public void pickUpItem(String item, boolean all){
+    public boolean pickUpItem(Pair item, boolean all){
 
-        Pair fromInventory = getItemPair(item);
-        //if the item exists in the room, add it to inventory
-        for (Pair pair : currentRoom.getItems().values()){
-            Item object = pair.getItem();
-            if (object.getID().toLowerCase().equals(item.toLowerCase())){
-
-                //case we want just 1 item & item is already in inventory
-                if ( fromInventory != null){
-                    if (!all && !modifyWeight(fromInventory.getItem().getWeight())){
-                        System.out.println("Too heavy to carry.");
-                        return;
-                    } else if (!all){
-                        fromInventory.addCount();
-                        if (pair.subCount()){
-                            currentRoom.getItems().remove(fromInventory.getItem().getID());
-                        }
-//                        modifyWeight(fromInventory.getItem().getWeight());
-                        System.out.println("Added "+ fromInventory.getItem().getName() + " to inventory.");
-                        return;
-                    }
-
-
-                    //case we want to take all items & item is already in inventory
-                    if (!modifyWeight(pair.getCount()*object.getWeight())){
-                        System.out.println("Too heavy to carry.");
-                        return;
-                    } else {
-                        fromInventory.setCount(fromInventory.getCount()+pair.getCount());
-//                        modifyWeight(pair.getItem().getWeight()*pair.getCount());
-                        currentRoom.getItems().remove(object.getID());
-                        System.out.println("Added "+pair.getCount()+" x "+ fromInventory.getItem().getName() + " to inventory.");
-                        return;
-                    }
-
-                }
-
-
-                //case we want to take 1 item & item is not already in inventory
-                if (!all && !modifyWeight(object.getWeight())){
-                    System.out.println("Too heavy to carry.");
-                    return;
-                } else if (!all){
-                    addItem(object);
-//                    modifyWeight(object.getWeight());
-                    System.out.println("Added "+ object.getName() + " to inventory.");
-                    if (pair.subCount()){
-                        currentRoom.getItems().remove(item);
-                    }
-                    return;
-                }
-
-                //case we want to take all items & item is not in inventory
-                if (!modifyWeight(object.getWeight()*pair.getCount())){
-                    System.out.println("Too heavy to carry.");
-                    return;
-                } else {
-                    addItem(object, pair.getCount());
-//                    modifyWeight(object.getWeight()*pair.getCount());
-                    System.out.println("Added "+pair.getCount()+" x "+ object.getName() + " to inventory.");
-                    currentRoom.getItems().remove(object.getID());
-                    return;
-                }
+        Item toAdd = (Item) item.getEntity();
+        if (all){
+            if (!addItem(toAdd, item.getCount())){
+                System.out.println("Too heavy to carry.");
+            }
+        } else {
+            if (!addItem(toAdd)){
+                System.out.println("Too heavy to carry.");
             }
         }
+        return true;
+
+//        Pair fromInventory = getItemPair(item.getID());
+//        //if the item exists in the room, add it to inventory
+//        for (Pair pair : currentRoom.getEntities().values()){
+//            Item object = (Item) pair.getEntity();
+//            if (object.getID().toLowerCase().equals(item.getID().toLowerCase())){
+//
+//                //case we want just 1 item & item is already in inventory
+//                if ( fromInventory != null){
+//                    if (!all && !modifyWeight(((Item) fromInventory.getEntity()).getWeight())){
+//                        System.out.println("Too heavy to carry.");
+//                        return;
+//                    } else if (!all){
+//                        fromInventory.addCount();
+//                        if (pair.subCount()){
+//                            currentRoom.getEntities().remove(fromInventory.getEntity().getID());
+//                        }
+////                        modifyWeight(fromInventory.getItem().getWeight());
+//                        System.out.println("Added "+ fromInventory.getEntity().getName() + " to inventory.");
+//                        return;
+//                    }
+//
+//
+//                    //case we want to take all items & item is already in inventory
+//                    if (!modifyWeight(pair.getCount()*object.getWeight())){
+//
+//                        return;
+//                    } else {
+//                        fromInventory.setCount(fromInventory.getCount()+pair.getCount());
+////                        modifyWeight(pair.getItem().getWeight()*pair.getCount());
+//                        currentRoom.getEntities().remove(object.getID());
+//                        System.out.println("Added "+pair.getCount()+" x "+ fromInventory.getEntity().getName() + " to inventory.");
+//                        return;
+//                    }
+//
+//                }
+//
+//
+//                //case we want to take 1 item & item is not already in inventory
+//                if (!all && !modifyWeight(object.getWeight())){
+//                    System.out.println("Too heavy to carry.");
+//                    return;
+//                } else if (!all){
+//                    addItem(object);
+////                    modifyWeight(object.getWeight());
+//                    System.out.println("Added "+ object.getName() + " to inventory.");
+//                    if (pair.subCount()){
+//                        currentRoom.getEntities().remove(item);
+//                    }
+//                    return;
+//                }
+//
+//                //case we want to take all items & item is not in inventory
+//                if (!modifyWeight(object.getWeight()*pair.getCount())){
+//                    System.out.println("Too heavy to carry.");
+//                    return;
+//                } else {
+//                    addItem(object, pair.getCount());
+////                    modifyWeight(object.getWeight()*pair.getCount());
+//                    System.out.println("Added "+pair.getCount()+" x "+ object.getName() + " to inventory.");
+//                    currentRoom.getEntities().remove(object.getID());
+//                    return;
+//                }
+//            }
+//        }
 
 //        System.out.println("There is no such object");
     }
 
 
     public boolean customAction(String action, Entity item){
-        Prop prop;
+
         if(item.getType()=='i'){
+            Item inventoryItem = (Item) item;
+            for (String command : item.getRequiredCommand()){
+                if (command.equals(action)){
+                    item.used(currentRoom, this);
+                    return true;
+                }
+            }
 
         } else if (item.getType() == 'p'){
-            prop = (Prop) item;
-        }
-        try{
-            prop = getProp(item.getID());
+            Prop prop = (Prop) item;
             for (String command : prop.getRequiredCommand()){
-//            System.out.println(command);
                 if (command.equals(action)){
                     prop.used(currentRoom, this);
                     return true;
                 }
             }
-            return false;
-        } catch(NullPointerException ex){
-            inventoryItem = getItemPair(item).getItem();
-            for (String command : inventoryItem.getRequiredCommand()){
-//            System.out.println(command);
-                if (command.equals(action)){
-                    inventoryItem.used(currentRoom, this);
-                    return true;
-                }
-            }
-            return false;
         }
-
-
+        return false;
     }
 
     public boolean talkToNPC(String name, String subject){
@@ -480,19 +487,18 @@ public class Player {
     }
 
     public boolean attack(String name){
-        NPC npc = currentRoom.getNPC(name);
-        if(npc != null){
+        Entity entity = currentRoom.getEntityPair(name).getEntity();
+        if(entity.getType() == 'n'){
             System.out.println("It's best not to attack "+name);
             return false;
-        }
-        Enemy enemy = currentRoom.getEnemy(name);
-        String type;
-        if(wieldedWeapon==null){
-            type="fists";
-        } else{
-            type=wieldedWeapon.getDamageType();
-        }
-        if (enemy != null){
+        } else if (entity.getType() == 'e'){
+            Enemy enemy = (Enemy) entity;
+            String type;
+            if(wieldedWeapon==null){
+                type="fists";
+            } else{
+                type=wieldedWeapon.getDamageType();
+            }
             if (enemy.isWeakAgainst(type) && type.equals("fists")) {
                 enemy.modifyHealth(-1);
             }else if(enemy.isWeakAgainst(type) ){
@@ -508,6 +514,7 @@ public class Player {
             System.out.println("You can't seem to see a fiend.");
         }
         return false;
+
     }
 
 
@@ -521,11 +528,11 @@ public class Player {
         }
     }
 
-    public boolean give(NPC npc, String item){
-        if(hasItemInInventory(item)){
-            Pair pair = getItemPair(item);
+    public boolean give(NPC npc, Entity item){
+        if(hasItemInInventory(item.getID())){
+            Pair pair = getItemPair(item.getID());
 
-            if (npc.isGiven(pair.getItem(), this)){
+            if (npc.isGiven((Item) pair.getEntity(), this)){
                 return true;
             } else{
                 return false;

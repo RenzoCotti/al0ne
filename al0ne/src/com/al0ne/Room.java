@@ -43,6 +43,7 @@ public class Room extends Entity{
         this.exits=new HashMap<>();
         this.lockedDirections =new HashMap<>();
         customDirections = null;
+        entities = new HashMap<>();
     }
 
     @Override
@@ -59,9 +60,6 @@ public class Room extends Entity{
                 enemyList.add(enemy);
             }
         }
-        if(enemyList.size()==0){
-            return null;
-        }
         return enemyList;
     }
 
@@ -70,7 +68,8 @@ public class Room extends Entity{
     }
 
     public void addEntity(Entity entity) {
-        this.entities.put(entity.getID(), new Pair(entity, 1));
+        this.entities.put(entity.getID(),
+                new Pair(entity, 1));
     }
 
     public void addEntity(Entity entity, int qty) {
@@ -103,9 +102,6 @@ public class Room extends Entity{
                 NPC npc = (NPC) e;
                 npcList.add(npc);
             }
-        }
-        if(npcList.size()==0){
-            return null;
         }
         return npcList;
     }
@@ -150,9 +146,6 @@ public class Room extends Entity{
             if (e.getType()=='i'){
                 itemList.add(p);
             }
-        }
-        if(itemList.size()==0){
-            return null;
         }
         return itemList;
     }
@@ -255,6 +248,9 @@ public class Room extends Entity{
 
     public boolean hasItem(String id) {
         ArrayList<Pair> items = getItemList();
+        if (items == null){
+            return false;
+        }
         for (Pair p : items){
             Item currentItem = (Item) p.getEntity();
             if (currentItem.getID().equals(id)){

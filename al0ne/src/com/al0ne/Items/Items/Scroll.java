@@ -16,8 +16,9 @@ public class Scroll extends Item{
     }
 
     @Override
-    public void used(Room currentRoom, Player player){
+    public boolean used(Room currentRoom, Player player){
         System.out.println("\""+content+"\"");
+        return true;
     }
 
 

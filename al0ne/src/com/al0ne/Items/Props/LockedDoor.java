@@ -1,5 +1,6 @@
 package com.al0ne.Items.Props;
 
+import com.al0ne.Entities.Player;
 import com.al0ne.Items.Behaviours.Weapon;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
@@ -49,7 +50,7 @@ public class LockedDoor extends Prop {
     }
 
     @Override
-    public boolean used(){
+    public boolean used(Room currentRoom, Player player) {
         System.out.println("The door is locked.");
         return false;
     }
