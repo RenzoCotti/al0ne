@@ -2,7 +2,8 @@ package com.al0ne;
 
 import com.al0ne.Entities.Enemy;
 import com.al0ne.Entities.NPC;
-import com.al0ne.Items.Entity;
+import com.al0ne.Entities.Entity;
+import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
@@ -28,16 +29,6 @@ public class Room extends Entity{
     private HashMap<String, String> exits;
     //maps door ID - direction
     private HashMap<String, String> lockedDirections;
-    //maps propName - Prop
-//    private HashMap<String, Prop> props;
-
-
-//    //maps itemID - (Item, count)
-//    private HashMap<String, Pair> items;
-//
-//    private HashMap<String, NPC> npcList;
-//
-//    private HashMap<String, Enemy> enemyList;
 
     //maps entityID - Pair(Entity, amt)
     private HashMap<String, Pair> entities;
@@ -49,13 +40,14 @@ public class Room extends Entity{
 
     public Room(String id, String name, String description) {
         super(id, name, description);
-//        this.props=new HashMap<>();
-//        this.items=new HashMap<>();
         this.exits=new HashMap<>();
-//        this.npcList=new HashMap<>();
         this.lockedDirections =new HashMap<>();
-//        this.enemyList = new HashMap<>();
         customDirections = null;
+    }
+
+    @Override
+    public boolean used(Room currentRoom, Player player) {
+        return false;
     }
 
     public ArrayList<Enemy> getEnemyList() {
@@ -170,16 +162,6 @@ public class Room extends Entity{
     }
 
 
-
-    //// TODO: 15/03/2017
-//    //prints props in the room
-//    private void printProps(){
-//        if (props.size()!=0){
-//            props.values().forEach(Prop::printDescription);
-//        }
-//    }
-
-
     //prints items in the room
     private void printItems(){
         ArrayList<Pair> items = getItemList();
@@ -253,10 +235,6 @@ public class Room extends Entity{
         System.out.println();
     }
 
-//    public void addProp(Prop prop) {
-//        this.props.put(prop.getID(), prop);
-//    }
-
     public void addItem(Item item) {
         if (hasItem(item.getID())){
             Pair currentPair=entities.get(item.getID());
@@ -286,9 +264,18 @@ public class Room extends Entity{
         return false;
     }
 
-    public Pair getPair(String id) {
+    public boolean hasEntity(String id) {
+        for (Pair p : entities.values()){
+            if (p.getEntity().getID().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        if (hasItem(id)){
+    public Pair getEntityPair(String id) {
+
+        if (hasEntity(id)){
             return entities.get(id);
         }
         else return null;

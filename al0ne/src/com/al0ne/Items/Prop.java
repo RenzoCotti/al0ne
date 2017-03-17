@@ -1,5 +1,6 @@
 package com.al0ne.Items;
 
+import com.al0ne.Entities.Entity;
 import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
  * - requiredCommand: custom actions that can be applied to the item
  */
-public class Prop extends Entity{
+public class Prop extends Entity {
 
     private String afterDescription;
     protected String requiresItem;
@@ -63,6 +64,7 @@ public class Prop extends Entity{
     }
 
 
+    @Override
     public boolean used(Room currentRoom, Player player){
         if (requiresItem.equals("none")){
             active=true;

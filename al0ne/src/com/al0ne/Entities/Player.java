@@ -1,11 +1,8 @@
 package com.al0ne.Entities;
 
-import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Items.Behaviours.Weapon;
-import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
-import com.al0ne.Items.Props.LockedDoor;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
@@ -57,7 +54,7 @@ public class Player {
 
     public boolean wield(Item weapon){
         for (Pair pair : inventory.values()){
-            Item currentItem = pair.getItem();
+            Item currentItem = (Item) pair.getEntity();
 
             if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
                 wieldedWeapon = (Weapon) weapon;
@@ -77,10 +74,6 @@ public class Player {
         System.out.println("You're using your "+wieldedWeapon.getName());
     }
 
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
     public int getMaxHealth() {
         return maxHealth;
     }
@@ -93,6 +86,7 @@ public class Player {
         if(currentHealth+amount > maxHealth){
             currentHealth=maxHealth;
         } else if(currentHealth+amount < 0){
+            currentHealth=0;
             alive=false;
         }
     }
@@ -158,48 +152,47 @@ public class Player {
         } else {
             System.out.println("You have these items:");
             for (Pair pair : inventory.values()) {
-                System.out.println("- "+pair.getCount()+"x " + pair.getItem().getName()+". "+pair.getItem().getWeight()*pair.getCount()+" kg.");
+                Item currentItem = (Item) pair.getEntity();
+                System.out.println("- "+pair.getCount()+"x " + currentItem.getName()+". "+currentItem.getWeight()*pair.getCount()+" kg.");
             }
-        }
-    }
-
-
-    //this function returns a prop, if it exists
-    private Prop getProp(String target){
-        Prop prop = currentRoom.getProps().get(target);
-
-        if( prop != null) {
-            return prop;
-        } else{
-            return null;
         }
     }
 
     //this function adds an item to the inventory
     public void addItem(Item item) {
-        this.inventory.put(item.getID(), new Pair(item, 1));
+        if (hasItemInInventory(item.getID())){
+            Pair fromInventory = inventory.get(item.getID());
+            fromInventory.addCount();
+        } else {
+            inventory.put(item.getID(), new Pair(item, 1));
+        }
     }
 
     public void addItem(Item item, Integer amount) {
-        this.inventory.put(item.getID(), new Pair(item, amount));
+        if (hasItemInInventory(item.getID())){
+            Pair fromInventory = inventory.get(item.getID());
+            fromInventory.setCount(amount);
+        } else {
+            inventory.put(item.getID(), new Pair(item, amount));
+        }
     }
 
     //this function checks if the player has an item in the inventory
     //if there is no item, it returns false
-    private boolean hasItem(String item){
-        try{
-            inventory.get(item);
-            return true;
-        } catch (NullPointerException ex){
-            return false;
+    private boolean hasItemInInventory(String item){
+        for (Pair p : inventory.values()){
+            if (p.getEntity().getID().equals(item)){
+                return true;
+            }
         }
+        return false;
     }
 
     //this function tries to get an item from the inventory
     //if there is no such item, it returns null
-    public Pair getPairFromInventory(String item){
-        if(hasItem(item)){
-            return inventory.get(item);
+    public Pair getItemPair(String itemID){
+        if(hasItemInInventory(itemID)){
+            return inventory.get(itemID);
         } else {
             System.out.println("No such item in your inventory.");
             return null;
@@ -241,66 +234,66 @@ public class Player {
             }
         }
         System.out.println("You can't figure out how to go " + direction);
-//        System.out.println();
         return false;
     }
 
 
     //this makes the player use an item
-    public void simpleUse(String target){
-        Prop prop = null;
-        Item item = null;
-        try{
-            prop = getProp(target);
+    public boolean simpleUse(String target){
 
-        }catch (NullPointerException ex){
-            item = getPairFromInventory(target).getItem();
-        }
+        Pair roomPair = currentRoom.getEntityPair(target);
+        Pair invPair = getItemPair(target);
 
-        if (prop == null && item != null){
-            //case its an item in inventory
-            if(item.hasProperty("consumable")){
-                //// TODO: 11/02/2017
-            } else if( item.hasProperty("food")){
-                Food food = (Food) item;
-                food.used();
-                inventory.remove(item.getID());
-            } else {
-                System.out.println("You can't figure out how to use it.");
+        Item item = (Item) invPair.getEntity();
+        if (!item.used(currentRoom, this)){
+            if (!roomPair.getEntity().used(currentRoom, this)){
+                return false;
             }
-
-        } else if (prop != null){
-            //case its a prop
-            prop.used();                      //// TODO: 15/03/2017 put boolean return to avoid a double use
-            prop.used(currentRoom, this);
-        } else {
-            System.out.println("You can't seem to see a "+target);
-
         }
-
+        return true;
     }
 
 
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
     public boolean interactOnWith(String target, String item){
 
-        Prop prop = getProp(target);
-        Pair inventoryItem = getPairFromInventory(item);
+        Entity entity = null;
+        Item invItem = null;
 
-        if (prop != null && inventoryItem != null){
-            prop.usedWith(inventoryItem.getItem(), currentRoom);
-//            System.out.println("You use the " + item + " on the "+ target);
-
-            if(prop instanceof LockedDoor){
-                //// TODO: 08/03/2017 maybe fix this, somehow
-                currentRoom.unlockDirection(prop.getID());
-            }
-
-            return true;
-        } else {
-//            System.out.println("You can't see it.");
-            return false;
+        if (currentRoom.hasEntity(target)){
+            entity = currentRoom.getEntityPair(target).getEntity();
+        } else if( this.hasItemInInventory(target) ){
+            invItem = (Item) getItemPair(target).getEntity();
         }
+
+        if (currentRoom.hasEntity(item)){
+            entity = currentRoom.getEntityPair(item).getEntity();
+        } else if( this.hasItemInInventory(target) ){
+            invItem = (Item) getItemPair(target).getEntity();
+        }
+
+
+
+
+
+
+//        Prop prop = getProp(target);
+//        Pair inventoryItem = getItemPair(item);
+//
+//        if (prop != null && inventoryItem != null){
+//            prop.usedWith(inventoryItem.getItem(), currentRoom);
+////            System.out.println("You use the " + item + " on the "+ target);
+//
+//            if(prop instanceof LockedDoor){
+//                //// TODO: 08/03/2017 maybe fix this, somehow
+//                currentRoom.unlockDirection(prop.getID());
+//            }
+//
+//            return true;
+//        } else {
+////            System.out.println("You can't see it.");
+//            return false;
+//        }
     }
 
     //this function prints the description of target, be it a prop or an Item
@@ -312,7 +305,7 @@ public class Player {
             groundItem=currentRoom.getItems().get(target).getItem();
         }
 
-        Pair pair=getPairFromInventory(target);
+        Pair pair= getItemPair(target);
         Item item=null;
 
         if(pair != null){
@@ -332,11 +325,11 @@ public class Player {
 
     //this function makes the player drop target, if it has it
     public void drop(String target, boolean all){
-        Pair item = getPairFromInventory(target);
+        Pair item = getItemPair(target);
         if (item != null){
 
             //case we drop 1 & item is in room
-            Pair roomItem = currentRoom.getPair(item.getItem().getID());
+            Pair roomItem = currentRoom.getEntityPair(item.getItem().getID());
             if (!all && roomItem != null){
                 roomItem.addCount();
                 //case we drop 1 & item is not in room
@@ -377,7 +370,7 @@ public class Player {
     //if it didn't succeed, print an error message
     public void pickUpItem(String item, boolean all){
 
-        Pair fromInventory = getPairFromInventory(item);
+        Pair fromInventory = getItemPair(item);
         //if the item exists in the room, add it to inventory
         for (Pair pair : currentRoom.getItems().values()){
             Item object = pair.getItem();
@@ -464,7 +457,7 @@ public class Player {
             }
             return false;
         } catch(NullPointerException ex){
-            inventoryItem = getPairFromInventory(item).getItem();
+            inventoryItem = getItemPair(item).getItem();
             for (String command : inventoryItem.getRequiredCommand()){
 //            System.out.println(command);
                 if (command.equals(action)){
@@ -497,7 +490,7 @@ public class Player {
         if(wieldedWeapon==null){
             type="fists";
         } else{
-            type=wieldedWeapon.getType();
+            type=wieldedWeapon.getDamageType();
         }
         if (enemy != null){
             if (enemy.isWeakAgainst(type) && type.equals("fists")) {
@@ -529,8 +522,8 @@ public class Player {
     }
 
     public boolean give(NPC npc, String item){
-        if(hasItem(item)){
-            Pair pair = getPairFromInventory(item);
+        if(hasItemInInventory(item)){
+            Pair pair = getItemPair(item);
 
             if (npc.isGiven(pair.getItem(), this)){
                 return true;

@@ -1,16 +1,18 @@
 package com.al0ne.Items.Behaviours;
 
+import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
+import com.al0ne.Room;
 
 /**
  * Created by BMW on 02/02/2017.
  */
 public abstract class Weapon extends Item{
     protected int damage;
-    protected String type;
-    public Weapon(String id, String name, String description, String type, int damage, double weight) {
+    protected String damageType;
+    public Weapon(String id, String name, String description, String damageType, int damage, double weight) {
         super(id, name, description, weight);
-        this.type=type;
+        this.damageType=damageType;
         this.damage=damage;
     }
 
@@ -18,15 +20,20 @@ public abstract class Weapon extends Item{
         return damage;
     }
 
-    public String getType(){
-        return type;
+    public String getDamageType(){
+        return damageType;
     }
 
     public void setType(String s){
-        type=s;
+        damageType=s;
     }
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    @Override
+    public boolean used(Room currentRoom, Player player) {
+        return false;
     }
 }

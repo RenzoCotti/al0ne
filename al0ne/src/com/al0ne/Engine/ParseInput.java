@@ -1,9 +1,8 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Items.Entity;
+import com.al0ne.Entities.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
-import com.al0ne.Items.Prop;
 import com.al0ne.Entities.NPC;
 import com.al0ne.Entities.Player;
 import com.al0ne.Room;
@@ -246,7 +245,7 @@ public class ParseInput {
 
             //check if there is an exact match
             for (Pair pair : player.getInventory().values()) {
-                Item b = pair.getItem();
+                Item b = (Item) pair.getEntity();
                 if (b.getName().equals(s)) {
                     potentialItems.add(b);
                     return potentialItems;
@@ -575,7 +574,7 @@ public class ParseInput {
         ArrayList<String> possibleItems = getPotentialItem(wieldItem, player, 0);
 
         if(possibleItems.size() == 1){
-            Item item = player.getPairFromInventory(possibleItems.get(0)).getItem();
+            Item item = player.getItemPair(possibleItems.get(0)).getItem();
 
             if(player.wield(item)){
                 return true;

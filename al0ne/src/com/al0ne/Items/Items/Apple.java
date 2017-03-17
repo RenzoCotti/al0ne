@@ -13,7 +13,8 @@ public class Apple extends Food {
     }
 
     @Override
-    public void used(Room currentRoom, Player player){
+    public boolean used(Room currentRoom, Player player){
         player.modifyHealth(+2);
+        return true;
     }
 }

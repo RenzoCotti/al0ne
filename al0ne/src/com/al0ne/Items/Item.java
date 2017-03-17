@@ -1,5 +1,6 @@
 package com.al0ne.Items;
 
+import com.al0ne.Entities.Entity;
 import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  *
  * Item interface
  */
-public abstract class Item extends Entity{
+public abstract class Item extends Entity {
 
     protected double weight;
     protected ArrayList<String> properties;
@@ -28,7 +29,8 @@ public abstract class Item extends Entity{
         return weight;
     }
 
-    public abstract boolean used(Room currentRoom, Player player);
+
+
 
 
     protected void addProperty(String behaviour){

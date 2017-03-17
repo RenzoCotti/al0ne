@@ -15,7 +15,8 @@ public class Beer extends Food {
     }
 
     @Override
-    public void used(Room currentRoom, Player player){
+    public boolean used(Room currentRoom, Player player){
         player.modifyHealth(+1);
+        return true;
     }
 }

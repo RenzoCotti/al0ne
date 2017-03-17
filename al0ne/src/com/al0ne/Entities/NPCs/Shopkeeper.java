@@ -61,7 +61,7 @@ public class Shopkeeper extends NPC {
                 Pair pairCoin = player.getInventory().get("coin");
                 pairCoin.setCount(pairCoin.getCount()-item.getPrice());
 
-                Pair pairInv = player.getPairFromInventory(item.getItem().getID());
+                Pair pairInv = player.getItemPair(item.getItem().getID());
                 if(pairInv != null){
                     pairInv.setCount(pairInv.getCount()+1);
                 } else {

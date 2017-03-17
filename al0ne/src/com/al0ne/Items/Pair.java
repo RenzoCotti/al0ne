@@ -1,5 +1,7 @@
 package com.al0ne.Items;
 
+import com.al0ne.Entities.Entity;
+
 /**
  * Created by BMW on 09/03/2017.
  */

@@ -1,4 +1,4 @@
-package com.al0ne.Items;
+package com.al0ne.Entities;
 
 import com.al0ne.Entities.Player;
 import com.al0ne.Room;
@@ -37,6 +37,7 @@ public abstract class Entity {
     }
 
 
+    public abstract boolean used(Room currentRoom, Player player);
 
 
 

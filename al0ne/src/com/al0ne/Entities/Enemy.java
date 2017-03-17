@@ -1,6 +1,5 @@
 package com.al0ne.Entities;
 
-import com.al0ne.Items.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Room;
