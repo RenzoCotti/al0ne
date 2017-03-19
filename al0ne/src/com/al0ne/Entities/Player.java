@@ -91,30 +91,36 @@ public class Player {
         }
     }
 
-
     public void modifyHealth(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
         }
+    }
 
+
+    public void modifyHealthPrint(int health) {
+        if (this.currentHealth +health <= maxHealth){
+            this.currentHealth +=health;
+        }
+
+        printStatus();
+
+    }
+
+    public void printStatus(){
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
             System.out.println("You're mostly fine.");
         } else if (percentage >= 60 && percentage < 80){
-            System.out.println("You've taken a good beating.");
+            System.out.println("You're mostly fine.");
         } else if (percentage >= 40 && percentage < 60){
             System.out.println("You need to medicate.");
         } else if (percentage >= 20 && percentage < 40){
             System.out.println("You're bleeding heavily");
         } else {
-            if (this.currentHealth <= 0){
-                alive=false;
-            } else {
-                System.out.println("You're alive by a miracle");
-            }
+            System.out.println("You're alive by a miracle");
         }
-
     }
 
     public void printWeight() {
@@ -155,19 +161,24 @@ public class Player {
                 Item currentItem = (Item) pair.getEntity();
                 System.out.println("- "+pair.getCount()+"x " + currentItem.getName()+". "+currentItem.getWeight()*pair.getCount()+" kg.");
             }
+            System.out.println();
+            printWeight();
         }
     }
 
     //this function adds an item to the inventory
     //returns false if item is not in inv or weight is nope
-    public boolean addItem(Item item) {
+    public boolean addItem(Pair pair) {
+        Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight())){
             if (hasItemInInventory(item.getID())){
                 Pair fromInventory = inventory.get(item.getID());
                 fromInventory.addCount();
+                pair.subCount();
                 return true;
             } else {
                 inventory.put(item.getID(), new Pair(item, 1));
+                pair.subCount();
                 return true;
             }
         } else {
@@ -175,7 +186,25 @@ public class Player {
         }
     }
 
-    public boolean addItem(Item item, Integer amount) {
+    public boolean addItem(Pair pair, Integer amount) {
+        Item item = (Item) pair.getEntity();
+        if (modifyWeight(item.getWeight() * amount)){
+            if (hasItemInInventory(item.getID())){
+                Pair fromInventory = inventory.get(item.getID());
+                fromInventory.modifyCount(amount);
+                pair.modifyCount(-amount);
+                return true;
+            } else {
+                inventory.put(item.getID(), new Pair(item, amount));
+                pair.modifyCount(-amount);
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public boolean simpleAddItem(Item item, Integer amount) {
         if (modifyWeight(item.getWeight() * amount)){
             if (hasItemInInventory(item.getID())){
                 Pair fromInventory = inventory.get(item.getID());
@@ -259,8 +288,20 @@ public class Player {
             return prop.used(currentRoom, this);
 
         } else if (target.getType() == 'i'){
-            Item item = (Item) target;
-            return item.used(currentRoom, this);
+            Pair pair = inventory.get(target.getID());
+            Item item = (Item) pair.getEntity();
+            if(item.used(currentRoom, this)){
+                if (item.hasProperty("consumable")){
+//                    System.out.println("used :"+pair.getCount());
+
+                    if(!getItemPair(item.getID()).modifyCount(-1)){
+                        inventory.remove(item.getID());
+                    }
+
+                }
+
+                return true;
+            }
         }
         return true;
     }
@@ -316,11 +357,11 @@ public class Player {
 //        }
     }
 
-    //this function prints the description of target, be it a prop or an Item
+    //this function prints the longDescription of target, be it a prop or an Item
     public boolean examine(Entity target){
 
         if(target != null){
-            target.printDescription();
+            target.printLongDescription();
             return true;
         }
         return false;
@@ -328,10 +369,8 @@ public class Player {
     }
 
     //this function makes the player drop target, if it has it
-    public void drop(Pair target, boolean all){
+    public boolean drop(Pair target, boolean all){
         if (target != null){
-            Item item = (Item) target.getEntity();
-
             //case we drop 1 & target is in room
             Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
             if (!all && roomItem != null){
@@ -352,7 +391,7 @@ public class Player {
             //we dropped 1
             if(!all){
                 modifyWeight(-((Item) target.getEntity()).getWeight());
-                if (target.subCount()){
+                if (!target.subCount()){
                     inventory.remove(target.getEntity().getID());
                 }
                 //we dropped all
@@ -361,10 +400,10 @@ public class Player {
                 inventory.remove(target.getEntity().getID());
             }
 
-            System.out.println("You drop the "+target.getEntity().getName());
+            return true;
 
         } else {
-            System.out.println("You don't seem to have a "+target+" with you.");
+            return false;
         }
     }
 
@@ -376,107 +415,91 @@ public class Player {
 
         Item toAdd = (Item) item.getEntity();
         if (all){
-            if (!addItem(toAdd, item.getCount())){
+            if (!addItem(item, item.getCount())){
                 System.out.println("Too heavy to carry.");
+                return false;
+            } else {
+                if (item.isEmpty()){
+                    currentRoom.getEntities().remove(toAdd.getID());
+                }
             }
         } else {
-            if (!addItem(toAdd)){
+            if (!addItem(item)){
                 System.out.println("Too heavy to carry.");
+                return false;
+            } else {
+//                System.out.println(item.getCount());
+                if (item.isEmpty()){
+                    currentRoom.getEntities().remove(toAdd.getID());
+                }
             }
         }
         return true;
-
-//        Pair fromInventory = getItemPair(item.getID());
-//        //if the item exists in the room, add it to inventory
-//        for (Pair pair : currentRoom.getEntities().values()){
-//            Item object = (Item) pair.getEntity();
-//            if (object.getID().toLowerCase().equals(item.getID().toLowerCase())){
-//
-//                //case we want just 1 item & item is already in inventory
-//                if ( fromInventory != null){
-//                    if (!all && !modifyWeight(((Item) fromInventory.getEntity()).getWeight())){
-//                        System.out.println("Too heavy to carry.");
-//                        return;
-//                    } else if (!all){
-//                        fromInventory.addCount();
-//                        if (pair.subCount()){
-//                            currentRoom.getEntities().remove(fromInventory.getEntity().getID());
-//                        }
-////                        modifyWeight(fromInventory.getItem().getWeight());
-//                        System.out.println("Added "+ fromInventory.getEntity().getName() + " to inventory.");
-//                        return;
-//                    }
-//
-//
-//                    //case we want to take all items & item is already in inventory
-//                    if (!modifyWeight(pair.getCount()*object.getWeight())){
-//
-//                        return;
-//                    } else {
-//                        fromInventory.setCount(fromInventory.getCount()+pair.getCount());
-////                        modifyWeight(pair.getItem().getWeight()*pair.getCount());
-//                        currentRoom.getEntities().remove(object.getID());
-//                        System.out.println("Added "+pair.getCount()+" x "+ fromInventory.getEntity().getName() + " to inventory.");
-//                        return;
-//                    }
-//
-//                }
-//
-//
-//                //case we want to take 1 item & item is not already in inventory
-//                if (!all && !modifyWeight(object.getWeight())){
-//                    System.out.println("Too heavy to carry.");
-//                    return;
-//                } else if (!all){
-//                    addItem(object);
-////                    modifyWeight(object.getWeight());
-//                    System.out.println("Added "+ object.getName() + " to inventory.");
-//                    if (pair.subCount()){
-//                        currentRoom.getEntities().remove(item);
-//                    }
-//                    return;
-//                }
-//
-//                //case we want to take all items & item is not in inventory
-//                if (!modifyWeight(object.getWeight()*pair.getCount())){
-//                    System.out.println("Too heavy to carry.");
-//                    return;
-//                } else {
-//                    addItem(object, pair.getCount());
-////                    modifyWeight(object.getWeight()*pair.getCount());
-//                    System.out.println("Added "+pair.getCount()+" x "+ object.getName() + " to inventory.");
-//                    currentRoom.getEntities().remove(object.getID());
-//                    return;
-//                }
-//            }
-//        }
-
-//        System.out.println("There is no such object");
     }
 
 
-    public boolean customAction(String action, Entity item){
+    public boolean customAction(String action, Entity entity){
 
-        if(item.getType()=='i'){
-            Item inventoryItem = (Item) item;
-            for (String command : item.getRequiredCommand()){
+        if(entity.getType()=='i'){
+            boolean inRoom = false;
+            Pair pair = inventory.get(entity.getID());
+            if (pair == null){
+                inRoom = true;
+                pair = currentRoom.getEntityPair(entity.getID());
+            }
+            if (pair == null){
+                return false;
+            }
+            Item item = (Item) pair.getEntity();
+
+            if (item == null){
+                return false;
+            }
+
+            for (String command : entity.getRequiredCommand()){
                 if (command.equals(action)){
-                    item.used(currentRoom, this);
+                    if(item.used(currentRoom, this)){
+                        if (item.hasProperty("consumable")){
+//                            System.out.println("used :"+pair.getCount());
+
+                            if(!inRoom && !getItemPair(entity.getID()).modifyCount(-1)){
+                                inventory.remove(entity.getID());
+                            } else {
+                                if(!pair.modifyCount(-1)){
+                                    currentRoom.getEntities().remove(item.getID());
+                                }
+                            }
+
+                        }
+                    }
                     return true;
                 }
             }
 
-        } else if (item.getType() == 'p'){
-            Prop prop = (Prop) item;
+
+
+
+        } else if (entity.getType() == 'p'){
+            Prop prop = (Prop) entity;
             for (String command : prop.getRequiredCommand()){
-                if (command.equals(action)){
+
                     prop.used(currentRoom, this);
                     return true;
                 }
             }
-        }
+
+//        else if (item.getType() == 'n'){
+//            NPC npc = (NPC) item;
+//            for (String command : npc.getRequiredCommand()){
+//                if (command.equals(action)){
+//                    npc.used(currentRoom, this);
+//                    return true;
+//                }
+//            }
+//        }
         return false;
     }
+
 
     public boolean talkToNPC(String name, String subject){
         NPC npc = currentRoom.getNPC(name);

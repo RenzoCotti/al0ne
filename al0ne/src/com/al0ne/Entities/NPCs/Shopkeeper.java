@@ -15,8 +15,8 @@ public class Shopkeeper extends NPC {
     private HashMap<String, Pricepair> inventory;
     private String list;
 
-    public Shopkeeper(String id, String name, String description, String intro) {
-        super(id, name, description, intro);
+    public Shopkeeper(String id, String name, String description, String shortDescription, String intro) {
+        super(id, name, description,shortDescription, intro);
         inventory = new HashMap<>();
         list="Items: ";
         isShopkeeper=true;
@@ -65,7 +65,7 @@ public class Shopkeeper extends NPC {
                 if(pairInv != null){
                     pairInv.setCount(pairInv.getCount()+1);
                 } else {
-                    player.addItem(item.getItem(), 1);
+                    player.simpleAddItem(item.getItem(), 1);
                 }
                 System.out.println("\"There you go!\"");
                 System.out.println("You received 1 "+item.getItem().getName());

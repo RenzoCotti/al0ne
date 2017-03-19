@@ -1,6 +1,5 @@
 package com.al0ne.Entities;
 
-import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 
 import java.util.ArrayList;
@@ -14,7 +13,8 @@ public abstract class Entity {
 
     protected String name;
     protected String ID;
-    protected String description;
+    protected String longDescription;
+    protected String shortDescription;
 
 
     /**
@@ -28,10 +28,11 @@ public abstract class Entity {
     protected ArrayList<String> requiredCommand;
 
 
-    public Entity(String id, String name, String description) {
+    public Entity(String id, String name, String longDescription, String shortDescription) {
         this.ID = id;
         this.name = name;
-        this.description = description;
+        this.longDescription = longDescription;
+        this.shortDescription=shortDescription;
         this.requiredCommand=new ArrayList<>();
         addCommand("examine");
     }
@@ -54,12 +55,20 @@ public abstract class Entity {
         return ID;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLongDescription() {
+        return longDescription;
     }
 
-    public void printDescription() {
-        System.out.println(description);
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void printLongDescription() {
+        System.out.println(longDescription);
+    }
+
+    public void printShortDescription() {
+        System.out.println(shortDescription);
     }
 
 

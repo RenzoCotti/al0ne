@@ -9,7 +9,7 @@ import com.al0ne.Room;
  */
 public class HolyFountain extends Prop{
     public HolyFountain() {
-        super("holyf", "Holy Fountain", "The water in this decorated fountain seems so clear and refreshing");
+        super("holyf", "Holy Fountain", "The water in this decorated fountain seems so clear and refreshing", "water fountain");
     }
 
     @Override

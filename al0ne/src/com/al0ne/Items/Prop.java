@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * A Prop has:
  * - id: used to reference to that prop code-wise
  * - name: actual name of the item
- * - description: description of the prop, displayed when examining
- * - afterDescription: description of the prop *afterDescription* activation
+ * - longDescription: longDescription of the prop, displayed when examining
+ * - afterDescription: longDescription of the prop *afterDescription* activation
  * - requiresItem: ItemID required for activation, e.g. cave1key, can be default
  * - active: true if the item has been activated
  * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
@@ -25,8 +25,8 @@ public class Prop extends Entity {
     private ArrayList<String> requiredType;
 
 
-    public Prop(String id, String name, String description) {
-        super(id, name, description);
+    public Prop(String id, String name, String description, String shortDescription) {
+        super(id, name, description, shortDescription);
         this.requiredType = new ArrayList<>();
         this.afterDescription = description;
         this.requiresItem="none";
@@ -34,8 +34,8 @@ public class Prop extends Entity {
         this.type='p';
     }
 
-    public Prop(String id, String name, String description, String after) {
-        super(id, name, description);
+    public Prop(String id, String name, String description, String shortDescription, String after) {
+        super(id, name, description, shortDescription);
         this.requiredType = new ArrayList<>();
         this.afterDescription = after;
         this.requiresItem="none";
@@ -75,18 +75,18 @@ public class Prop extends Entity {
     }
 
     @Override
-    public void printDescription(){
+    public void printLongDescription(){
         if(!active){
-            System.out.println(description);
+            System.out.println(longDescription);
         } else {
             System.out.println(afterDescription);
         }
     }
 
     @Override
-    public String getDescription() {
+    public String getLongDescription() {
         if(!active){
-            return description;
+            return longDescription;
         } else {
             return afterDescription;
         }

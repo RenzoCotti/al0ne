@@ -13,13 +13,13 @@ public class HideItem extends Prop{
 //    private String useMessage;
     private Prop hidden;
 
-    public HideItem(String id, String name, String description, String after, Prop hidden) {
-        super(id, name, description, after);
+    public HideItem(String id, String name, String description, String shortDescription, String after, Prop hidden) {
+        super(id, name, description, shortDescription, after);
         this.hidden=hidden;
     }
 
-    public HideItem(String id, String name, String description, Prop hidden) {
-        super(id, name, description);
+    public HideItem(String id, String name, String description, String shortDescription, Prop hidden) {
+        super(id, name, description, shortDescription);
         this.hidden=hidden;
     }
 

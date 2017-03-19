@@ -7,8 +7,8 @@ import com.al0ne.Room;
  */
 public abstract class Character extends Entity{
 
-    public Character(String id, String name, String description) {
-        super(id, name, description);
+    public Character(String id, String name, String description, String shortDescription) {
+        super(id, name, description, shortDescription);
     }
 
     @Override

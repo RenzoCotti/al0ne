@@ -18,11 +18,12 @@ public abstract class Item extends Entity {
 
 
 
-    public Item(String id, String name, String description, double weight) {
-        super(id, name, description);
+    public Item(String id, String name, String description, String shortDescription, double weight) {
+        super(id, name, description, shortDescription);
         this.weight = weight;
         this.properties = new ArrayList<>();
         addCommand("take");
+        this.type='i';
     }
 
     public double getWeight() {

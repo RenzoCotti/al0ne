@@ -7,6 +7,6 @@ import com.al0ne.Items.Behaviours.Weapon;
  */
 public class HolySword extends Weapon{
     public HolySword() {
-        super("holysword", "Holy sword", "A finely crafted silver sword.", "sharp", 5, 1.3);
+        super("holysword", "Holy sword", "A finely crafted silver sword.","holy sword", "sharp", 5, 1.3);
     }
 }

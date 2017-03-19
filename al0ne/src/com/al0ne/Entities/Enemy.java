@@ -20,8 +20,8 @@ public class Enemy extends Character{
     protected ArrayList<String> resistances;
     protected ArrayList<Pair> loot;
 
-    public Enemy(String id, String name, String description, int maxHealth, int damage) {
-        super(id, name, description);
+    public Enemy(String id, String name, String description, String shortDescription, int maxHealth, int damage) {
+        super(id, name, description, shortDescription);
         this.maxHealth=maxHealth;
         this.damage = damage;
         this.currentHealth=maxHealth;
@@ -98,7 +98,7 @@ public class Enemy extends Character{
             return true;
         }
         System.out.println("The "+name+" attacks and hits you.");
-        player.modifyHealth(-damage);
+        player.modifyHealthPrint(-damage);
         return false;
     }
 

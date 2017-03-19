@@ -17,7 +17,7 @@ import java.util.HashMap;
  * a Room is:
  * a props, all props in the room
  * an items, all objects you can pickup
- * a description of the room
+ * a longDescription of the room
  * a name of the room
  * an exits, HashMap of direction - roomid
  * an lockedDirection, HashMap of doorName - direction
@@ -39,7 +39,7 @@ public class Room extends Entity{
 
 
     public Room(String id, String name, String description) {
-        super(id, name, description);
+        super(id, name, description, name);
         this.exits=new HashMap<>();
         this.lockedDirections =new HashMap<>();
         customDirections = null;
@@ -81,6 +81,16 @@ public class Room extends Entity{
         for (Entity e : enemies){
             if (e.getName().toLowerCase().contains(name)){
                 return (Enemy) e;
+            }
+        }
+        return null;
+    }
+
+    public Entity getEntity(String name) {
+        for (Pair p : entities.values()){
+            Entity currentEntity = p.getEntity();
+            if (currentEntity.getName().toLowerCase().contains(name)){
+                return currentEntity;
             }
         }
         return null;
@@ -133,9 +143,6 @@ public class Room extends Entity{
                 propList.add(prop);
             }
         }
-        if(propList.size()==0){
-            return null;
-        }
         return propList;
     }
 
@@ -144,6 +151,7 @@ public class Room extends Entity{
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
             if (e.getType()=='i'){
+//                System.out.println(e.getID());
                 itemList.add(p);
             }
         }
@@ -167,6 +175,25 @@ public class Room extends Entity{
         }
     }
 
+    //prints props in the room
+    private void printProps(){
+        ArrayList<Prop> items = getPropList();
+        if (items.size()!=0){
+            System.out.print("There is ");
+            for (int i=0; i<items.size(); i++) {
+                System.out.print(items.get(i).getShortDescription());
+                if(i==items.size()-2){
+                    System.out.print(" and ");
+                } else if(i!=items.size()-1){
+                    System.out.print(", ");
+                } else{
+                    System.out.print(" here.");
+                    System.out.println();
+                }
+            }
+        }
+    }
+
     public void printName(){
         System.out.println(name);
     }
@@ -184,10 +211,9 @@ public class Room extends Entity{
         for (String door : lockedDirections.keySet()){
             String currentDirection = lockedDirections.get(door);
             try{
-                //// TODO: 15/03/2017
-//                System.out.println("The way "+currentDirection+" is blocked by "+props.get(door).getDescription().toLowerCase());
+                System.out.println("The way "+currentDirection+" is blocked by "+entities.get(door).getEntity().getLongDescription().toLowerCase());
             } catch (NullPointerException ex){
-//                System.out.println("Shhhh c:");
+                System.out.println("Nothing more to see here >_>");
             }
         }
 
@@ -219,9 +245,9 @@ public class Room extends Entity{
 
     //this function prints every time a room is discovered
     public void printRoom(){
-        printDescription();
-//        printProps();
+        printLongDescription();
         printItems();
+        printProps();
         printNPCs();
         printEnemy();
         printDirections();

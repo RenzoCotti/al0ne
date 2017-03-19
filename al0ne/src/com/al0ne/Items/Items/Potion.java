@@ -9,7 +9,7 @@ import com.al0ne.Room;
  */
 public class Potion extends Item {
     public Potion() {
-        super("healthp", "Health Potion", "A potion for dire moments.", 0.2);
+        super("healthp", "Health Potion", "A potion for dire moments.", "blue potion", 0.2);
         addProperty("consumable");
         addProperty("healing");
         addCommand("drink");

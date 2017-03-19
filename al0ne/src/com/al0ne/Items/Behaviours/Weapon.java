@@ -10,8 +10,8 @@ import com.al0ne.Room;
 public abstract class Weapon extends Item{
     protected int damage;
     protected String damageType;
-    public Weapon(String id, String name, String description, String damageType, int damage, double weight) {
-        super(id, name, description, weight);
+    public Weapon(String id, String name, String description, String shortDescription, String damageType, int damage, double weight) {
+        super(id, name, description, shortDescription, weight);
         this.damageType=damageType;
         this.damage=damage;
     }

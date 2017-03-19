@@ -30,15 +30,23 @@ public class Pair {
         count=amount;
     }
 
-    public void modifyCount(Integer amount) {
+    public boolean modifyCount(Integer amount) {
         count+=amount;
+        if(count <= 0){
+            return false;
+        }
+        return true;
     }
 
     public boolean subCount() {
         count--;
         if (count <= 0){
-            return true;
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    public boolean isEmpty(){
+        return count <= 0;
     }
 }

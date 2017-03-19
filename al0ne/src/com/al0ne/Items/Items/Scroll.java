@@ -9,8 +9,8 @@ import com.al0ne.Room;
  */
 public class Scroll extends Item{
     private String content;
-    public Scroll(String id, String name, String description, String content, double weight) {
-        super(id, name, description, weight);
+    public Scroll(String id, String name, String description, String shortDescription, String content, double weight) {
+        super(id, name, description, shortDescription, weight);
         addCommand("read");
         this.content=content;
     }

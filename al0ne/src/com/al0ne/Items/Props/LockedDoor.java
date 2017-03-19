@@ -10,13 +10,13 @@ import com.al0ne.Room;
  * Created by BMW on 02/02/2017.
  */
 public class LockedDoor extends Prop {
-    public LockedDoor(String id, String name, String description, String after, String key) {
-        super(id, name, description, after);
+    public LockedDoor(String id, String name, String description, String shortDescription, String after, String key) {
+        super(id, name, description, shortDescription, after);
         this.requiresItem=key;
     }
 
     public LockedDoor(String id, String name, String key) {
-        super(id, name, "A sturdy wooden door");
+        super(id, name, "A sturdy wooden door", "wooden door");
         this.requiresItem=key;
     }
 

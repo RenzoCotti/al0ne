@@ -38,7 +38,7 @@ public class CreateSmallCave {
         cave2.addExit("south","cave3");
         cave2.addExit("east","bossroom");
         cave2.addItem(new Knife());
-        cave2.addItem(new Apple());
+        cave2.addItem(new Apple(), 2);
 
         cave2.addEntity(new CuttableRope());
 
@@ -47,8 +47,8 @@ public class CreateSmallCave {
         Room cave3 = new Room("cave3", "Cave 3", "Nothing worth of notice here.");
         cave3.addExit("north", "cave2");
         cave3.addExit("down", "cellar");
-        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","The trapdoor is open.");
-        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "The rug is now out of the way.", trapdoor1);
+        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor");
+        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "a dusty rug", "The rug is now out of the way.", trapdoor1);
         rug.addCommand("move");
         cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");
@@ -66,7 +66,7 @@ public class CreateSmallCave {
 
         Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
         cave4.addExit("south", "cave2");
-        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "Hi, i'm eamon and i fix small keys");
+        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
         emon.addSubject("keys", "Yup, I fix small keys.");
         emon.addSubject("beer", "I love beer!");
         cave4.addEntity(emon);

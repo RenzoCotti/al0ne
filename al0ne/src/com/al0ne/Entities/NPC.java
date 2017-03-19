@@ -1,6 +1,7 @@
 package com.al0ne.Entities;
 
 import com.al0ne.Items.Item;
+import com.al0ne.Items.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
  * - dialogue options
  * - objects to react
  * - name
- * - description
+ * - longDescription
  * - life?
  * - inventory
  */
@@ -25,8 +26,8 @@ public class NPC extends Character{
 
     protected boolean isShopkeeper=false;
 
-    public NPC(String id, String name, String description, String intro) {
-        super(id, name, description);
+    public NPC(String id, String name, String description, String shortDescription, String intro) {
+        super(id, name, description, shortDescription);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.inventory = new ArrayList<>();
@@ -67,7 +68,7 @@ public class NPC extends Character{
                 System.out.println("\"Here's a "+reactionItems.get(s).getName()+" as a reward.\"");
                 //removes *all* items of that type
                 player.getInventory().remove(item.getID());
-                player.addItem(reactionItems.get(s));
+                player.simpleAddItem(reactionItems.get(s), 1);
                 player.modifyWeight(reactionItems.get(s).getWeight());
                 return true;
             }
@@ -80,8 +81,8 @@ public class NPC extends Character{
         System.out.println(intro);
     }
 
-    public void printDescription(){
-        System.out.println(description);
+    public void printLongDescription(){
+        System.out.println(longDescription);
     }
 
 }

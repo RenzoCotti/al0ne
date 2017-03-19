@@ -8,8 +8,8 @@ import com.al0ne.Room;
  * Created by BMW on 11/02/2017.
  */
 public abstract class Food extends Item {
-    public Food(String id, String name, String description, double weight) {
-        super(id, name, description, weight);
+    public Food(String id, String name, String description, String shortDescription, double weight) {
+        super(id, name, description, shortDescription, weight);
     }
 
 //    @Override

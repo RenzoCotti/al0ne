@@ -11,7 +11,7 @@ import com.al0ne.Room;
 public class Demon extends Enemy{
 
     public Demon() {
-        super("boss", "Hellish demon", "A huge horned demon with snake skin.", 20, 3);
+        super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon", 20, 3);
         addItemLoot(new Coin(), 100);
         addResistance("fists");
         addResistance("sharp");
@@ -28,7 +28,7 @@ public class Demon extends Enemy{
             return true;
         }
         System.out.println("The "+name+" attacks and hits you.");
-        player.modifyHealth(-damage);
+        player.modifyHealthPrint(-damage);
         return false;
     }
 }

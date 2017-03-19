@@ -8,7 +8,7 @@ import com.al0ne.Room;
 public class Door extends Prop {
 
     public Door(String id, String name) {
-        super(id, name, "A sturdy door.", "The door is now open.");
+        super(id, name, "a sturdy door", "a sturdy door", "The door is now open.");
         addCommand("open");
     }
 

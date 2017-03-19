@@ -12,7 +12,7 @@ import com.al0ne.Room;
 public class MoneyTree extends Prop{
     private String usedMessage;
     public MoneyTree() {
-        super("moneytree", "Coin tree", "A tree with money instead of leaves is in the middle of the room", "The tree has no leaves anymore...");
+        super("moneytree", "Coin tree", "A tree with money instead of leaves is in the middle of the room", "a tree", "The tree has no leaves anymore...");
         this.usedMessage="You cut the leaves from the money tree.";
     }
 

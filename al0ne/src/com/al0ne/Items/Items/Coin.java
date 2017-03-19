@@ -9,7 +9,7 @@ import com.al0ne.Room;
  */
 public class Coin extends Item{
     public Coin() {
-        super("coin", "Coin", "a golden coin.", 0.01);
+        super("coin", "Coin", "A shiny golden coin", "golden coin.", 0.01);
     }
 
     @Override

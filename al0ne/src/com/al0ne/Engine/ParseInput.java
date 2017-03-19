@@ -41,10 +41,9 @@ public class ParseInput {
                 return ParseInput.handleBuy(parsedInput, player);
             case "move":
                 return ParseInput.customAction(parsedInput, player, "move");
+            case "kill":
             case "attack":
-                String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
-                return player.attack(enemy);
-
+                return handleAttack(parsedInput, player);
             case "give":
                 return ParseInput.handleGive(parsedInput, player);
                 //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
@@ -112,6 +111,7 @@ public class ParseInput {
                 return false;
             case "health":
                 player.printHealth();
+//                player.printStatus();
                 return false;
             case "g":
 //                last = ParseInput.stitchFromTo(parsedInput, 0, parsedInput.length);
@@ -120,7 +120,7 @@ public class ParseInput {
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
 
-            case "kill":
+            case "qqq":
                 System.exit(0);
 
             case "time":
@@ -188,43 +188,41 @@ public class ParseInput {
     //this handles trying to apply custom commands on objects
     private static boolean customAction(String[] temp, Player player, String action) {
         if(temp.length==1){
-            System.out.println("Sorry?");
+            System.out.println("The syntax is "+action.toUpperCase()+" x.");
             return false;
         }
-        String prop = ParseInput.stitchFromTo(temp, 1, temp.length);
+        String item = ParseInput.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialItem(prop, player, 1);
-        ArrayList<Pair> possibleItems = getPotentialItem(prop, player, 0);
-//        ArrayList<String> possibleItemFromInventory = getPotentialItem(prop, player, 0);
-//        ArrayList<String> possibleItem = getPotentialItem(prop, player, 2);
+        ArrayList<Pair> possibleEntities = getPotentialItem(item, player, 1);
+        ArrayList<Pair> possibleItems = getPotentialItem(item, player, 0);
 
-        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
-            System.out.println("Be more specific.");
-            return false;
-        }
-
-//        if (possibleEntities.size()== 1) {
-//            System.out.println("You need to hold that item to "+action+" it.");
+//        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
+//            System.out.println("Be more specific.");
 //            return false;
 //        }
 
-            if (possibleEntities.size() == 1) {
-                if (player.customAction(action, possibleEntities.get(0).getEntity())) {
-                    System.out.println("You " + action + " the " + prop);
-                    return true;
-                } else {
-                    System.out.println("You can't " + action + " it.");
-                    return false;
-                }
-            } else {
-                if (player.customAction(action, possibleItems.get(0).getEntity())) {
-                    System.out.println("You " + action + " the " + prop + ".");
-                    return true;
-                } else {
-                    System.out.println("You can't " + action + " it.");
-                    return false;
-                }
-            }
+        if (possibleItems.size()==1 && player.customAction(action, possibleItems.get(0).getEntity())){
+            System.out.println("You " + action + " the " + item);
+            return true;
+        } else if (possibleEntities.size()==1 && player.customAction(action, possibleEntities.get(0).getEntity())) {
+            System.out.println("You " + action + " the " + item);
+            return true;
+        } else if (possibleEntities.size() == 0 && possibleItems.size()==0){
+            System.out.println("You can't see it.");
+            return true;
+        }else{
+            System.out.println("You can't " + action + " it.");
+            return true;
+        }
+//            else {
+//                if (player.customAction(action, possibleItems.get(0).getEntity())) {
+//                    System.out.println("You " + action + " the " + prop + ".");
+//                    return true;
+//                } else {
+//                    System.out.println("You can't " + action + " it.");
+//                    return false;
+//                }
+//            }
     }
 
     private static ArrayList<Pair> getAllItemsMatching (String s, Player player){
@@ -235,8 +233,7 @@ public class ParseInput {
 
     //this attempts to get items from a token;
     //number = 0: tries to get from the inventory
-    //number = 1: tries to get from Props of currentRoom
-    //number = 2: tries to get from Items of currentRoom
+    //number = 1: tries to get from Entities
     private static ArrayList<Pair> getPotentialItem(String s, Player player, int number) {
 
         ArrayList<Pair> potentialItems = new ArrayList<>();
@@ -327,16 +324,11 @@ public class ParseInput {
             inventoryUse = getPotentialItem(firstItem, player, 0);
             //prop from room
             itemUse = getPotentialItem(secondItem, player, 1);
-//            itemUse = getPotentialItem(firstItem, player, 2);
 
             if (!(inventoryUse.size() == 1) || !(itemUse.size() == 1)) {
                 System.out.println("Be more specific.");
                 return false;
             }
-
-//            if (itemUse.size() > 0) {
-//                System.out.println("You need to be holding that item to use it.");
-//            }
 
             if (inventoryUse.size() == 1 && itemUse.size() == 1) {
                 player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity());
@@ -356,7 +348,6 @@ public class ParseInput {
             firstItem = ParseInput.stitchFromTo(temp, 1, temp.length);
 
             inventoryUse = getPotentialItem(firstItem, player, 0);
-//            propUse = getPotentialItem(firstItem, player, 1);
             itemUse = getPotentialItem(firstItem, player, 2);
 
             //there are more possibilities from the items fetched
@@ -365,19 +356,12 @@ public class ParseInput {
                 return false;
             }
 
-//            if (itemUse.size() > 0) {
-//                System.out.println("You need to be holding that item to use it.");
-//            }
-
             if (inventoryUse.size() == 1) {
                 player.simpleUse(inventoryUse.get(0).getEntity());
             } else if (itemUse.size() == 1) {
                 player.simpleUse(itemUse.get(0).getEntity());
             } else {
                 System.out.println("You can't use it.");
-//
-//                System.out.println(inventoryUse.size());
-//                System.out.println(propUse.size());
             }
 
             return true;
@@ -390,9 +374,6 @@ public class ParseInput {
     //we check if it's a drop/take all action, then we check if we have exactly
     //1 item, then we take/drop (all)
     private static boolean takeOrDrop(String[] temp, Player player, boolean drop) {
-
-
-
 
 
         ArrayList<Pair> possibleItems;
@@ -415,20 +396,37 @@ public class ParseInput {
 
 
 
-            possibleItems = getPotentialItem(item, player, 2);
+            possibleItems = getPotentialItem(item, player, 1);
 
-            if (possibleItems.size() > 1) {
+            ArrayList<Pair> items = new ArrayList<>();
+
+            for (Pair p : possibleItems){
+                if (p.getEntity().getType()=='i'){
+                    items.add(p);
+                }
+            }
+
+
+
+            if (items.size() > 1) {
                 System.out.println("Be more specific.");
                 return false;
             }
 
 
-            if (all && possibleItems.size() == 1) {
-                player.pickUpItem(possibleItems.get(0), true);
-            } else if (possibleItems.size() == 1) {
-                player.pickUpItem(possibleItems.get(0), false);
+            if (all && items.size() == 1) {
+                if (player.pickUpItem(items.get(0), true)){
+                    System.out.println(items.get(0).getEntity().getName()+" added to your inventory.");
+                }
+
+            } else if (items.size() == 1) {
+                if (player.pickUpItem(items.get(0), false)){
+                    System.out.println(items.get(0).getEntity().getName()+" added to your inventory.");
+                }
+            } else if(possibleItems.size() != 0){
+                System.out.println("You can't take it.");
             } else {
-                System.out.println("You can't see such an item.");
+                System.out.println("You can't see such an item to take.");
             }
         } else {
 
@@ -459,11 +457,19 @@ public class ParseInput {
 
 
             if (all && possibleItems.size() == 1) {
-                player.drop(possibleItems.get(0), true);
+                if(player.drop(possibleItems.get(0), true)){
+                    System.out.println("You drop all the "+possibleItems.get(0).getEntity().getName());
+                } else {
+                    System.out.println("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
+                }
             } else if (possibleItems.size() == 1) {
-                player.drop(possibleItems.get(0), false);
+                if (player.drop(possibleItems.get(0), false)){
+                    System.out.println("You drop the "+possibleItems.get(0).getEntity().getName());
+                } else {
+                    System.out.println("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
+                }
             } else {
-                System.out.println("You can't see such an item (drop) "+possibleItems.size());
+                System.out.println("You can't see such an item to drop. ");
             }
         }
 
@@ -478,7 +484,7 @@ public class ParseInput {
     private static boolean handleExamine(String[] temp, Player player){
 
         if(temp.length==1){
-            System.out.println("Sorry?");
+            System.out.println("The syntax is EXAMINE x");
             return false;
         }
 
@@ -490,7 +496,7 @@ public class ParseInput {
         NPC npc = player.getCurrentRoom().getNPC(toExamine);
 
         if ( npc != null){
-            npc.printDescription();
+            npc.printLongDescription();
             return true;
         }
 
@@ -510,7 +516,7 @@ public class ParseInput {
     public static boolean handleWield(String[] parsedInput, Player player){
 
         if(parsedInput.length==1){
-            System.out.println("Sorry?");
+            System.out.println("The syntax is WIELD x");
             return false;
         }
 
@@ -576,10 +582,8 @@ public class ParseInput {
 
             NPC character = player.getCurrentRoom().getNPC(npc);
 
-
-            if (character == null || !(character.getName().toLowerCase().equals(npc))) {
-                System.out.println("You can't see " + npc + " here.");
-                return true;
+            if (!ParseInput.isNPC(character,player, npc)){
+                return false;
             }
 
             character.printIntro();
@@ -593,11 +597,7 @@ public class ParseInput {
 
             NPC character = player.getCurrentRoom().getNPC(npc);
 
-
-            if (character == null || !(character.getName().toLowerCase().equals(npc))){
-                System.out.println("You can't see "+npc+" here.");
-                return true;
-            }
+            ParseInput.isNPC(character,player, npc);
 
             if( player.talkToNPC(npc, subject) ){
                 return true;
@@ -620,8 +620,7 @@ public class ParseInput {
             NPC character = player.getCurrentRoom().getNPC(npc);
 
 
-            if (character == null || !(character.getName().toLowerCase().equals(npc))){
-                System.out.println("You can't see "+npc+" here.");
+            if (!ParseInput.isNPC(character,player, npc)){
                 return false;
             }
 
@@ -655,8 +654,7 @@ public class ParseInput {
 
                 NPC character = player.getCurrentRoom().getNPC(npc);
 
-                if (character == null || !(character.getName().toLowerCase().equals(npc))) {
-                    System.out.println("You can't see " + npc + " here.");
+                if (!ParseInput.isNPC(character,player, npc)){
                     return false;
                 }
 
@@ -669,6 +667,28 @@ public class ParseInput {
             }
         }
 
+    }
+
+    public static boolean handleAttack(String[] parsedInput, Player player){
+        if(parsedInput.length==1){
+            System.out.println("The syntax is ATTACK x or KILL x");
+            return false;
+        }
+        String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
+        return player.attack(enemy);
+    }
+
+    public static boolean isNPC(NPC character, Player player, String npc){
+        Entity entity = player.getCurrentRoom().getEntity(npc);
+
+        if ((character == null ) && entity == null) {
+            System.out.println("You can't see " + npc + " here.");
+            return false;
+        } else if (entity != null && entity.getType() != 'n'){
+            System.out.println("You can't talk to it. ");
+            return false;
+        }
+        return true;
     }
 
 }
