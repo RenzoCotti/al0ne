@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Entities.Player;
+import com.al0ne.Items.Items.Beer;
 import com.al0ne.Items.Items.Coin;
 import com.al0ne.Items.Items.HolySword;
 import com.al0ne.Room;
@@ -15,7 +16,6 @@ public class Main {
         HashMap<String, Room> rooms = CreateAlpha.create();
 
         Player grog = new Player(rooms.get("startroom"));
-//        grog.addItem(new HolySword());
 
         Game game = new Game(grog, rooms);
 
@@ -32,10 +32,13 @@ public class Main {
 
         Scanner userInput = new Scanner(System.in);
 
+        String currentCommand = "";
+
         while (true){
 
             if(userInput.hasNextLine()){
-                if(ParseInput.parse(userInput.nextLine(), game, turnCounter)){
+                currentCommand = userInput.nextLine();
+                if(ParseInput.parse(currentCommand, game, turnCounter)){
                     turnCounter++;
                 }
                 if (!grog.isAlive()){
@@ -43,6 +46,11 @@ public class Main {
                     System.out.println();
                     System.out.println("Game over!");
                     System.exit(0);
+                } else if(ParseInput.wrongCommand >= 3){
+                    System.out.println("Maybe you need some help? type \"help\" to see a list of all available commands");
+                }
+                if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
+                    ParseInput.lastCommand = currentCommand;
                 }
                 System.out.println();
                 grog.getCurrentRoom().printName();

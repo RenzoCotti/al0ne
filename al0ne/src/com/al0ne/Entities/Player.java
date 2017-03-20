@@ -35,12 +35,10 @@ public class Player {
     private boolean alive = true;
 
 
-
-//    private int money;
-
     private Weapon wieldedWeapon;
     
-    // TODO: 08/03/2017 add currentHealth, satiation
+    // TODO: 08/03/2017 add satiation, thirst level
+    // add also money pouch?
 
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0

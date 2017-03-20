@@ -65,7 +65,9 @@ public class Shopkeeper extends NPC {
                 if(pairInv != null){
                     pairInv.setCount(pairInv.getCount()+1);
                 } else {
-                    player.simpleAddItem(item.getItem(), 1);
+                    if (!player.simpleAddItem(item.getItem(), 1)){
+                        player.getCurrentRoom().addEntity(item.getItem(), 1);
+                    }
                 }
                 System.out.println("\"There you go!\"");
                 System.out.println("You received 1 "+item.getItem().getName());

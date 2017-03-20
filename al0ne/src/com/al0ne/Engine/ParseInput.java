@@ -16,6 +16,8 @@ import java.util.Scanner;
 * */
 public class ParseInput {
 //    static String last="help";
+    public static int wrongCommand=0;
+    public static String lastCommand ="";
 
     public static boolean parse(String input, Game game, int turns) {
 
@@ -49,15 +51,18 @@ public class ParseInput {
                 //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
-                int tokenPosition = ParseInput.checkForToken(parsedInput, "on");
+                int tokenOn = ParseInput.checkForToken(parsedInput, "on");
+                int tokenWith = ParseInput.checkForToken(parsedInput, "with");
 
                 //case simple use
-                if (tokenPosition == -1) {
-                    return ParseInput.useItem(parsedInput, player, false, tokenPosition);
+                if (tokenOn == -1 && tokenWith == -1) {
+                    return ParseInput.useItem(parsedInput, player, false, tokenOn);
                 }
                 //case complex use
-                else if (tokenPosition > -1) {
-                    return ParseInput.useItem(parsedInput, player, true, tokenPosition);
+                else if (tokenOn > -1) {
+                    return ParseInput.useItem(parsedInput, player, true, tokenWith);
+                } else if (tokenWith > -1){
+                    return ParseInput.useItem(parsedInput, player, true, tokenOn);
                 }
 
             case "open":
@@ -67,6 +72,7 @@ public class ParseInput {
             case "l":
             case "look":
                 game.getRoom().printRoom();
+                wrongCommand=0;
                 return true;
             case "n":
             case "north":
@@ -101,6 +107,7 @@ public class ParseInput {
                 for (Command command: Command.values()){
                     System.out.println(command);
                 }
+                wrongCommand=0;
                 return false;
             case "quit":
             case "exit":
@@ -114,9 +121,9 @@ public class ParseInput {
 //                player.printStatus();
                 return false;
             case "g":
-//                last = ParseInput.stitchFromTo(parsedInput, 0, parsedInput.length);
-//                redo last
-                return false;
+            case "again":
+                System.out.println("Using last command:");
+                return parse(lastCommand, game, turns);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
 
@@ -125,9 +132,10 @@ public class ParseInput {
 
             case "time":
                 System.out.println(turns + " turns elapsed.");
+                wrongCommand=0;
                 return false;
-
             default:
+                wrongCommand++;
                 System.out.println("Sorry?");
                 return false;
         }
@@ -158,6 +166,7 @@ public class ParseInput {
 
     //this function handles the command exit
     private static void quit() {
+        wrongCommand=0;
         System.out.println("Are you sure you want to quit? (Y to exit)");
         Scanner test = new Scanner(System.in);
         if (test.hasNextLine()) {
@@ -172,9 +181,11 @@ public class ParseInput {
     //this handles moving: it checks for exactly one token after the command
     private static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp) {
         if (temp.length > 1) {
+            wrongCommand++;
             System.out.println("Sorry?");
             return false;
         } else {
+            wrongCommand=0;
             if (player.moveToRoom(direction, rooms)){
                 ParseInput.clearScreen();
                 player.getCurrentRoom().printRoom();
@@ -188,9 +199,11 @@ public class ParseInput {
     //this handles trying to apply custom commands on objects
     private static boolean customAction(String[] temp, Player player, String action) {
         if(temp.length==1){
+            wrongCommand++;
             System.out.println("The syntax is "+action.toUpperCase()+" x.");
             return false;
         }
+        wrongCommand=0;
         String item = ParseInput.stitchFromTo(temp, 1, temp.length);
 
         ArrayList<Pair> possibleEntities = getPotentialItem(item, player, 1);
@@ -314,9 +327,12 @@ public class ParseInput {
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
             if(temp.length==1){
+                wrongCommand++;
                 System.out.println("The syntax is USE x WITH y");
                 return false;
             }
+            wrongCommand=0;
+
 
             firstItem = ParseInput.stitchFromTo(temp, 1, tokenPosition);
             secondItem = ParseInput.stitchFromTo(temp, tokenPosition + 1, temp.length);
@@ -341,9 +357,12 @@ public class ParseInput {
         } else {
 
             if(temp.length==1){
+                wrongCommand++;
                 System.out.println("The syntax is USE x");
                 return false;
             }
+            wrongCommand=0;
+
 
             firstItem = ParseInput.stitchFromTo(temp, 1, temp.length);
 
@@ -380,9 +399,12 @@ public class ParseInput {
         if (!drop) {
 
             if(temp.length==1){
+                wrongCommand++;
                 System.out.println("The syntax is TAKE (ALL) x");
                 return false;
             }
+            wrongCommand=0;
+
 
             boolean all = false;
 
@@ -432,9 +454,13 @@ public class ParseInput {
 
 
             if(temp.length==1){
+                wrongCommand++;
                 System.out.println("The syntax is DROP (ALL) x");
                 return false;
             }
+
+            wrongCommand=0;
+
 
 
             boolean all = false;
@@ -484,9 +510,12 @@ public class ParseInput {
     private static boolean handleExamine(String[] temp, Player player){
 
         if(temp.length==1){
+            wrongCommand++;
             System.out.println("The syntax is EXAMINE x");
             return false;
         }
+        wrongCommand=0;
+
 
 
         String toExamine = ParseInput.stitchFromTo(temp, 1, temp.length);
@@ -516,9 +545,12 @@ public class ParseInput {
     public static boolean handleWield(String[] parsedInput, Player player){
 
         if(parsedInput.length==1){
+            wrongCommand++;
             System.out.println("The syntax is WIELD x");
             return false;
         }
+
+        wrongCommand=0;
 
         String wieldItem = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
 
@@ -571,9 +603,12 @@ public class ParseInput {
     public static boolean handleTalk(String[] parsedInput, Player player){
 
         if(parsedInput.length < 3){
+            wrongCommand++;
             System.out.println("The syntax is TALK ABOUT x WITH y or also TALK TO y");
             return false;
         }
+        wrongCommand=0;
+
 
         int b = ParseInput.checkForToken(parsedInput, "with");
         int to = ParseInput.checkForToken(parsedInput, "to");
@@ -609,11 +644,14 @@ public class ParseInput {
     }
 
     public static boolean handleBuy(String[] parsedInput, Player player){
+
         int c = ParseInput.checkForToken(parsedInput, "from");
         if( c == -1){
+            wrongCommand++;
             System.out.println("The syntax is: BUY x FROM y");
             return false;
         } else {
+            wrongCommand=0;
             String item = ParseInput.stitchFromTo(parsedInput, 1, c);
             String npc = ParseInput.stitchFromTo(parsedInput, c+1, parsedInput.length);
 
@@ -639,9 +677,12 @@ public class ParseInput {
 
         int d = ParseInput.checkForToken(parsedInput, "to");
         if( d == -1){
+            wrongCommand++;
             System.out.println("The syntax is: GIVE x TO y");
             return false;
         } else {
+            wrongCommand=0;
+
             String item = ParseInput.stitchFromTo(parsedInput, 1, d);
             String npc = ParseInput.stitchFromTo(parsedInput, d + 1, parsedInput.length);
 
@@ -671,9 +712,12 @@ public class ParseInput {
 
     public static boolean handleAttack(String[] parsedInput, Player player){
         if(parsedInput.length==1){
+            wrongCommand++;
             System.out.println("The syntax is ATTACK x or KILL x");
             return false;
         }
+        wrongCommand=0;
+
         String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
         return player.attack(enemy);
     }

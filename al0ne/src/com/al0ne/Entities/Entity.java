@@ -48,7 +48,7 @@ public abstract class Entity {
 
 
     public String getName() {
-        return name;
+        return name.toLowerCase();
     }
 
     public String getID(){

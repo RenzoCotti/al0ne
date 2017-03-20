@@ -68,8 +68,9 @@ public class NPC extends Character{
                 System.out.println("\"Here's a "+reactionItems.get(s).getName()+" as a reward.\"");
                 //removes *all* items of that type
                 player.getInventory().remove(item.getID());
-                player.simpleAddItem(reactionItems.get(s), 1);
-                player.modifyWeight(reactionItems.get(s).getWeight());
+                if (!player.simpleAddItem(reactionItems.get(s), 1)){
+                    player.getCurrentRoom().addEntity(reactionItems.get(s), 1);
+                }
                 return true;
             }
         }
