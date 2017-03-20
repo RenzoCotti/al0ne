@@ -11,6 +11,9 @@ import com.al0ne.Entities.NPCs.Shopkeeper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import static com.al0ne.Engine.Main.printToLog;
+
 /*
 * This class handles parsing the input correctly
 * */
@@ -102,10 +105,13 @@ public class ParseInput {
                 player.printInventory();
                 return true;
             case "?":
+                printHelp();
+                wrongCommand=0;
+                return false;
             case "help":
-                System.out.println("Commands:");
+                printToLog("Commands:");
                 for (Command command: Command.values()){
-                    System.out.println(command);
+                    printToLog(command.toString());
                 }
                 wrongCommand=0;
                 return false;
@@ -122,7 +128,7 @@ public class ParseInput {
                 return false;
             case "g":
             case "again":
-                System.out.println("Using last command:");
+                printToLog("Using last command:");
                 return parse(lastCommand, game, turns);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
@@ -131,12 +137,12 @@ public class ParseInput {
                 System.exit(0);
 
             case "time":
-                System.out.println(turns + " turns elapsed.");
+                printToLog(turns + " turns elapsed.");
                 wrongCommand=0;
                 return false;
             default:
                 wrongCommand++;
-                System.out.println("Sorry?");
+                printToLog("Sorry?");
                 return false;
         }
 
@@ -167,22 +173,17 @@ public class ParseInput {
     //this function handles the command exit
     private static void quit() {
         wrongCommand=0;
-        System.out.println("Are you sure you want to quit? (Y to exit)");
-        Scanner test = new Scanner(System.in);
-        if (test.hasNextLine()) {
-            if (test.nextLine().equals("Y")) {
-                System.exit(0);
-            } else {
-                System.out.println("Ok then, forget it.");
-            }
+        if (lastCommand.equals("quit")){
+            System.exit(0);
         }
+        printToLog("Are you sure you want to quit? (retype \"quit\" to exit)");
     }
 
     //this handles moving: it checks for exactly one token after the command
     private static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp) {
         if (temp.length > 1) {
             wrongCommand++;
-            System.out.println("Sorry?");
+            printToLog("Sorry?");
             return false;
         } else {
             wrongCommand=0;
@@ -200,7 +201,7 @@ public class ParseInput {
     private static boolean customAction(String[] temp, Player player, String action) {
         if(temp.length==1){
             wrongCommand++;
-            System.out.println("The syntax is "+action.toUpperCase()+" x.");
+            printToLog("The syntax is "+action.toUpperCase()+" x.");
             return false;
         }
         wrongCommand=0;
@@ -210,29 +211,29 @@ public class ParseInput {
         ArrayList<Pair> possibleItems = getPotentialItem(item, player, 0);
 
 //        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
-//            System.out.println("Be more specific.");
+//            printToLog("Be more specific.");
 //            return false;
 //        }
 
         if (possibleItems.size()==1 && player.customAction(action, possibleItems.get(0).getEntity())){
-            System.out.println("You " + action + " the " + item);
+            printToLog("You " + action + " the " + item);
             return true;
         } else if (possibleEntities.size()==1 && player.customAction(action, possibleEntities.get(0).getEntity())) {
-            System.out.println("You " + action + " the " + item);
+            printToLog("You " + action + " the " + item);
             return true;
         } else if (possibleEntities.size() == 0 && possibleItems.size()==0){
-            System.out.println("You can't see it.");
+            printToLog("You can't see it.");
             return true;
         }else{
-            System.out.println("You can't " + action + " it.");
+            printToLog("You can't " + action + " it.");
             return true;
         }
 //            else {
 //                if (player.customAction(action, possibleItems.get(0).getEntity())) {
-//                    System.out.println("You " + action + " the " + prop + ".");
+//                    printToLog("You " + action + " the " + prop + ".");
 //                    return true;
 //                } else {
-//                    System.out.println("You can't " + action + " it.");
+//                    printToLog("You can't " + action + " it.");
 //                    return false;
 //                }
 //            }
@@ -328,7 +329,7 @@ public class ParseInput {
         if (complex) {
             if(temp.length==1){
                 wrongCommand++;
-                System.out.println("The syntax is USE x WITH y");
+                printToLog("The syntax is USE x WITH y");
                 return false;
             }
             wrongCommand=0;
@@ -342,14 +343,14 @@ public class ParseInput {
             itemUse = getPotentialItem(secondItem, player, 1);
 
             if (!(inventoryUse.size() == 1) || !(itemUse.size() == 1)) {
-                System.out.println("Be more specific.");
+                printToLog("Be more specific.");
                 return false;
             }
 
             if (inventoryUse.size() == 1 && itemUse.size() == 1) {
                 player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity());
             } else {
-                System.out.println("You can't see such items");
+                printToLog("You can't see such items");
             }
 
             return true;
@@ -358,7 +359,7 @@ public class ParseInput {
 
             if(temp.length==1){
                 wrongCommand++;
-                System.out.println("The syntax is USE x");
+                printToLog("The syntax is USE x");
                 return false;
             }
             wrongCommand=0;
@@ -371,7 +372,7 @@ public class ParseInput {
 
             //there are more possibilities from the items fetched
             if (!(inventoryUse.size() + itemUse.size() == 1)) {
-                System.out.println("Be more specific.");
+                printToLog("Be more specific.");
                 return false;
             }
 
@@ -380,7 +381,7 @@ public class ParseInput {
             } else if (itemUse.size() == 1) {
                 player.simpleUse(itemUse.get(0).getEntity());
             } else {
-                System.out.println("You can't use it.");
+                printToLog("You can't use it.");
             }
 
             return true;
@@ -400,7 +401,7 @@ public class ParseInput {
 
             if(temp.length==1){
                 wrongCommand++;
-                System.out.println("The syntax is TAKE (ALL) x");
+                printToLog("The syntax is TAKE (ALL) x");
                 return false;
             }
             wrongCommand=0;
@@ -431,31 +432,31 @@ public class ParseInput {
 
 
             if (items.size() > 1) {
-                System.out.println("Be more specific.");
+                printToLog("Be more specific.");
                 return false;
             }
 
 
             if (all && items.size() == 1) {
                 if (player.pickUpItem(items.get(0), true)){
-                    System.out.println(items.get(0).getEntity().getName()+" added to your inventory.");
+                    printToLog(items.get(0).getEntity().getName()+" added to your inventory.");
                 }
 
             } else if (items.size() == 1) {
                 if (player.pickUpItem(items.get(0), false)){
-                    System.out.println(items.get(0).getEntity().getName()+" added to your inventory.");
+                    printToLog(items.get(0).getEntity().getName()+" added to your inventory.");
                 }
             } else if(possibleItems.size() != 0){
-                System.out.println("You can't take it.");
+                printToLog("You can't take it.");
             } else {
-                System.out.println("You can't see such an item to take.");
+                printToLog("You can't see such an item to take.");
             }
         } else {
 
 
             if(temp.length==1){
                 wrongCommand++;
-                System.out.println("The syntax is DROP (ALL) x");
+                printToLog("The syntax is DROP (ALL) x");
                 return false;
             }
 
@@ -477,25 +478,25 @@ public class ParseInput {
             possibleItems = getPotentialItem(item, player, 0);
 
             if (possibleItems.size() > 1) {
-                System.out.println("Be more specific.");
+                printToLog("Be more specific.");
                 return false;
             }
 
 
             if (all && possibleItems.size() == 1) {
                 if(player.drop(possibleItems.get(0), true)){
-                    System.out.println("You drop all the "+possibleItems.get(0).getEntity().getName());
+                    printToLog("You drop all the "+possibleItems.get(0).getEntity().getName());
                 } else {
-                    System.out.println("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
+                    printToLog("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
                 }
             } else if (possibleItems.size() == 1) {
                 if (player.drop(possibleItems.get(0), false)){
-                    System.out.println("You drop the "+possibleItems.get(0).getEntity().getName());
+                    printToLog("You drop the "+possibleItems.get(0).getEntity().getName());
                 } else {
-                    System.out.println("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
+                    printToLog("You don't seem to have a "+possibleItems.get(0).getEntity().getName()+" with you.");
                 }
             } else {
-                System.out.println("You can't see such an item to drop. ");
+                printToLog("You can't see such an item to drop. ");
             }
         }
 
@@ -511,7 +512,7 @@ public class ParseInput {
 
         if(temp.length==1){
             wrongCommand++;
-            System.out.println("The syntax is EXAMINE x");
+            printToLog("The syntax is EXAMINE x");
             return false;
         }
         wrongCommand=0;
@@ -531,10 +532,10 @@ public class ParseInput {
 
         //there are more possibilities from the items fetched
         if (items.size() > 1){
-            System.out.println("Be more specific.");
+            printToLog("Be more specific.");
             return false;
         } else if (items.size() == 0){
-            System.out.println("You can't see such an item");
+            printToLog("You can't see such an item");
             return false;
         }
         player.examine(items.get(0).getEntity());
@@ -546,7 +547,7 @@ public class ParseInput {
 
         if(parsedInput.length==1){
             wrongCommand++;
-            System.out.println("The syntax is WIELD x");
+            printToLog("The syntax is WIELD x");
             return false;
         }
 
@@ -562,11 +563,11 @@ public class ParseInput {
             if(player.wield(item)){
                 return true;
             } else{
-                System.out.println("You don't seem to have a "+wieldItem);
+                printToLog("You don't seem to have a "+wieldItem);
                 return false;
             }
         } else {
-            System.out.println("Be more specific.");
+            printToLog("Be more specific.");
             return false;
         }
     }
@@ -575,28 +576,28 @@ public class ParseInput {
     //clears the screen by printing 20 new lines
     private static void clearScreen(){
         for (int i=0; i<30; i++){
-            System.out.println();
+            printToLog();
         }
     }
 
     public static void printWelcome(){
-        System.out.println("Welcome to my textual adventure game!");
-        System.out.println("I hope you enjoy your time playing");
-        System.out.println();
-        System.out.println("Please report any weird/unexpected behaviour to me");
+        printToLog("Welcome to my textual adventure game!");
+        printToLog("I hope you enjoy your time playing");
+        printToLog();
+        printToLog("Please report any weird/unexpected behaviour to me");
 
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println("Press ENTER to continue...");
-        try
-        {
-            System.in.read();
-            clearScreen();
-        }
-        catch(Exception e)
-        {}
+        printToLog();
+        printToLog();
+        printToLog();
+        printToLog();
+
+    }
+
+    public static void printHelp(){
+        printToLog("You can type \"north\" to go north, \"east\" to go east,... (shortcut: \"n\" for north, \"s\" for south,...)");
+        printToLog("Useful commands: \"examine a\", where a is an object you can see (shortcut: \"x a\")");
+        printToLog("\"use x on y\", \"use x\", \"talk to x\", \"attack x\", \"take x\", \"inventory\" (shortcut: \"i\")");
+        printToLog();
     }
 
 
@@ -604,7 +605,7 @@ public class ParseInput {
 
         if(parsedInput.length < 3){
             wrongCommand++;
-            System.out.println("The syntax is TALK ABOUT x WITH y or also TALK TO y");
+            printToLog("The syntax is TALK ABOUT x WITH y or also TALK TO y");
             return false;
         }
         wrongCommand=0;
@@ -624,7 +625,7 @@ public class ParseInput {
             character.printIntro();
             return true;
         } else if( b == -1 || !(parsedInput[1].equals("about")) ){
-            System.out.println("The syntax is: TALK ABOUT x WITH y");
+            printToLog("The syntax is: TALK ABOUT x WITH y");
             return false;
         } else {
             String subject = ParseInput.stitchFromTo(parsedInput, 2, b);
@@ -637,7 +638,7 @@ public class ParseInput {
             if( player.talkToNPC(npc, subject) ){
                 return true;
             } else{
-                System.out.println("\"Sorry, I don't know anything about it.\"");
+                printToLog("\"Sorry, I don't know anything about it.\"");
                 return true;
             }
         }
@@ -648,7 +649,7 @@ public class ParseInput {
         int c = ParseInput.checkForToken(parsedInput, "from");
         if( c == -1){
             wrongCommand++;
-            System.out.println("The syntax is: BUY x FROM y");
+            printToLog("The syntax is: BUY x FROM y");
             return false;
         } else {
             wrongCommand=0;
@@ -667,7 +668,7 @@ public class ParseInput {
                 shopkeeper.buy(player, item);
                 return true;
             } else{
-                System.out.println("\"Sorry, I don't have it.\"");
+                printToLog("\"Sorry, I don't have it.\"");
                 return false;
             }
         }
@@ -678,7 +679,7 @@ public class ParseInput {
         int d = ParseInput.checkForToken(parsedInput, "to");
         if( d == -1){
             wrongCommand++;
-            System.out.println("The syntax is: GIVE x TO y");
+            printToLog("The syntax is: GIVE x TO y");
             return false;
         } else {
             wrongCommand=0;
@@ -689,7 +690,7 @@ public class ParseInput {
             ArrayList<Pair> possibleItemFromInventory = getPotentialItem(item, player, 0);
 
             if (!(possibleItemFromInventory.size() == 1)) {
-                System.out.println("Be more specific.");
+                printToLog("Be more specific.");
                 return false;
             } else {
 
@@ -713,7 +714,7 @@ public class ParseInput {
     public static boolean handleAttack(String[] parsedInput, Player player){
         if(parsedInput.length==1){
             wrongCommand++;
-            System.out.println("The syntax is ATTACK x or KILL x");
+            printToLog("The syntax is ATTACK x or KILL x");
             return false;
         }
         wrongCommand=0;
@@ -726,10 +727,10 @@ public class ParseInput {
         Entity entity = player.getCurrentRoom().getEntity(npc);
 
         if ((character == null ) && entity == null) {
-            System.out.println("You can't see " + npc + " here.");
+            printToLog("You can't see " + npc + " here.");
             return false;
         } else if (entity != null && entity.getType() != 'n'){
-            System.out.println("You can't talk to it. ");
+            printToLog("You can't talk to it. ");
             return false;
         }
         return true;

@@ -6,6 +6,8 @@ import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 02/02/2017.
  */
@@ -23,35 +25,35 @@ public class LockedDoor extends Prop {
     @Override
     public boolean usedWith(Item item, Room currentRoom){
         if(item.hasProperty("key")){
-//            System.out.println(requiresItem);
+//            printToLog(requiresItem);
             if (item.getID().equals(requiresItem)){
-                System.out.println("The "+name+" is now open");
+                printToLog("The "+name+" is now open");
                 active=true;
                 return true;
             } else{
-                System.out.println("The key doesn't seem to fit.");
+                printToLog("The key doesn't seem to fit.");
                 return false;
             }
         } else if(( item.hasProperty("sharp") || item.hasProperty("blunt"))){
             Weapon temp = (Weapon) item;
             if (temp.getDamage() > 5){
-                System.out.println("You break the door open");
+                printToLog("You break the door open");
                 active = true;
                 return true;
             } else {
-                System.out.println("You try to break the door, but to no avail.");
+                printToLog("You try to break the door, but to no avail.");
                 return false;
             }
         }
         else{
-            System.out.println("The "+ item.getName()+" doesn't seem to fit in the keyhole.");
+            printToLog("The "+ item.getName()+" doesn't seem to fit in the keyhole.");
             return false;
         }
     }
 
     @Override
     public boolean used(Room currentRoom, Player player) {
-        System.out.println("The door is locked.");
+        printToLog("The door is locked.");
         return false;
     }
 }

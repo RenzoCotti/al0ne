@@ -6,6 +6,8 @@ import com.al0ne.Items.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * An NPC has:
  * - dialogue options
@@ -53,7 +55,7 @@ public class NPC extends Character{
     public boolean talkAbout(String subject){
         for (String s : subjects.keySet()){
             if (s.equals(subject)){
-                System.out.println("\""+subjects.get(s)+"\"");
+                printToLog("\""+subjects.get(s)+"\"");
                 return true;
             }
         }
@@ -64,8 +66,8 @@ public class NPC extends Character{
         for (String s : reactionItems.keySet()){
 
             if (item.getID().toLowerCase().equals(s)){
-                System.out.println("\"Thank you, i really needed a "+item.getName()+".\"");
-                System.out.println("\"Here's a "+reactionItems.get(s).getName()+" as a reward.\"");
+                printToLog("\"Thank you, i really needed a "+item.getName()+".\"");
+                printToLog("\"Here's a "+reactionItems.get(s).getName()+" as a reward.\"");
                 //removes *all* items of that type
                 player.getInventory().remove(item.getID());
                 if (!player.simpleAddItem(reactionItems.get(s), 1)){
@@ -74,16 +76,21 @@ public class NPC extends Character{
                 return true;
             }
         }
-        System.out.println("\"Sorry, I don't need it.\"");
+        printToLog("\"Sorry, I don't need it.\"");
         return false;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public void printIntro(){
-        System.out.println(intro);
+        printToLog(intro);
     }
 
     public void printLongDescription(){
-        System.out.println(longDescription);
+        printToLog(longDescription);
     }
 
 }

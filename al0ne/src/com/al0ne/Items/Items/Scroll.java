@@ -4,6 +4,8 @@ import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
 import com.al0ne.Room;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 15/03/2017.
  */
@@ -17,7 +19,7 @@ public class Scroll extends Item{
 
     @Override
     public boolean used(Room currentRoom, Player player){
-        System.out.println("\""+content+"\"");
+        printToLog("\""+content+"\"");
         return true;
     }
 

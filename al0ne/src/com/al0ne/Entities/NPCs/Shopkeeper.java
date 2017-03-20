@@ -8,6 +8,8 @@ import com.al0ne.Items.Pricepair;
 
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 14/03/2017.
  */
@@ -69,14 +71,14 @@ public class Shopkeeper extends NPC {
                         player.getCurrentRoom().addEntity(item.getItem(), 1);
                     }
                 }
-                System.out.println("\"There you go!\"");
-                System.out.println("You received 1 "+item.getItem().getName());
+                printToLog("\"There you go!\"");
+                printToLog("You received 1 "+item.getItem().getName());
 
             } else{
-                System.out.println("\"You don't have enough money\"");
+                printToLog("\"You don't have enough money\"");
             }
         } else{
-            System.out.println("\"I don't seem to have that item with me.\"");
+            printToLog("\"I don't seem to have that item with me.\"");
         }
     }
 }

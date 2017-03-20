@@ -6,6 +6,8 @@ import com.al0ne.Room;
 
 import java.util.ArrayList;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 13/03/2017.
  */
@@ -32,7 +34,7 @@ public class Enemy extends Character{
     }
 
     public void printHealth() {
-        System.out.println(currentHealth+"/"+maxHealth+" HP.");
+        printToLog(currentHealth+"/"+maxHealth+" HP.");
     }
 
 
@@ -43,18 +45,18 @@ public class Enemy extends Character{
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
-            System.out.println("The "+name+" seems mostly fine.");
+            printToLog("The "+name+" seems mostly fine.");
         } else if (percentage >= 60 && percentage < 80){
-            System.out.println("The "+name+" doesn't look its best");
+            printToLog("The "+name+" doesn't look its best");
         } else if (percentage >= 40 && percentage < 60){
-            System.out.println("The "+name+" is staggering.");
+            printToLog("The "+name+" is staggering.");
         } else if (percentage >= 20 && percentage < 40){
-            System.out.println("The "+name+" falls, then gets up again.");
+            printToLog("The "+name+" falls, then gets up again.");
         } else {
             if (this.currentHealth <= 0){
                 alive=false;
             } else {
-                System.out.println("The "+name+" seems almost dead.");
+                printToLog("The "+name+" seems almost dead.");
             }
         }
     }
@@ -92,12 +94,12 @@ public class Enemy extends Character{
 
     public boolean isAttacked(Player player, Room room){
         if(!alive){
-            System.out.println("You defeated the "+ name);
-            System.out.println("The "+name+" drops some items.");
+            printToLog("You defeated the "+ name);
+            printToLog("The "+name+" drops some items.");
             addLoot(room);
             return true;
         }
-        System.out.println("The "+name+" attacks and hits you.");
+        printToLog("The "+name+" attacks and hits you.");
         player.modifyHealthPrint(-damage);
         return false;
     }

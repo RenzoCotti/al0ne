@@ -11,6 +11,9 @@ import com.al0ne.Items.Prop;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.Main.printToSingleLine;
+
 /**
  * Created by BMW on 28/01/2017.
  *
@@ -99,7 +102,7 @@ public class Room extends Entity{
     public void printEnemy() {
         ArrayList<Enemy> enemies = getEnemyList();
         for (Enemy enemy : enemies){
-            System.out.println("You can see a "+enemy.getName()+" here.");
+            printToLog("You can see a "+enemy.getName()+" here.");
         }
     }
 
@@ -129,7 +132,7 @@ public class Room extends Entity{
     public void printNPCs() {
         ArrayList<NPC> npcs = getNPCList();
         for (NPC enemy : npcs){
-            System.out.println("You can see "+enemy.getName()+" here.");
+            printToLog("You can see "+enemy.getName()+" here.");
         }
     }
 
@@ -151,7 +154,7 @@ public class Room extends Entity{
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
             if (e.getType()=='i'){
-//                System.out.println(e.getID());
+//                printToLog(e.getID());
                 itemList.add(p);
             }
         }
@@ -167,10 +170,10 @@ public class Room extends Entity{
     private void printItems(){
         ArrayList<Pair> items = getItemList();
         if (items.size()!=0){
-            System.out.println("You can see:");
+            printToLog("You can see:");
             for (Pair p : items) {
                 Item currentItem = (Item) p.getEntity();
-                System.out.println("- " +p.getCount()+"x "+ currentItem.getName());
+                printToLog("- " +p.getCount()+"x "+ currentItem.getName());
             }
         }
     }
@@ -179,23 +182,23 @@ public class Room extends Entity{
     private void printProps(){
         ArrayList<Prop> items = getPropList();
         if (items.size()!=0){
-            System.out.print("There is ");
+            printToSingleLine("There is ");
             for (int i=0; i<items.size(); i++) {
-                System.out.print(items.get(i).getShortDescription());
+                printToSingleLine(items.get(i).getShortDescription());
                 if(i==items.size()-2){
-                    System.out.print(" and ");
+                    printToSingleLine(" and ");
                 } else if(i!=items.size()-1){
-                    System.out.print(", ");
+                    printToSingleLine(", ");
                 } else{
-                    System.out.print(" here.");
-                    System.out.println();
+                    printToSingleLine(" here.");
+                    printToLog();
                 }
             }
         }
     }
 
     public void printName(){
-        System.out.println(name);
+        printToLog(name);
     }
 
     public void addCustomDirection(String s){
@@ -211,14 +214,14 @@ public class Room extends Entity{
         for (String door : lockedDirections.keySet()){
             String currentDirection = lockedDirections.get(door);
             try{
-                System.out.println("The way "+currentDirection+" is blocked by "+entities.get(door).getEntity().getLongDescription().toLowerCase());
+                printToLog("The way "+currentDirection+" is blocked by "+entities.get(door).getEntity().getLongDescription().toLowerCase());
             } catch (NullPointerException ex){
-                System.out.println("Nothing more to see here >_>");
+                printToLog("Nothing more to see here >_>");
             }
         }
 
         if(customDirections != null){
-            System.out.println(customDirections);
+            printToLog(customDirections);
             return;
         }
 
@@ -231,7 +234,7 @@ public class Room extends Entity{
             }
 
             if(free){
-                System.out.print(toPrint);
+                printToSingleLine(toPrint);
                 if (first){
                     toPrint="You can go "+exit;
                     first=false;
@@ -240,7 +243,7 @@ public class Room extends Entity{
                 }
             }
         }
-        System.out.print(toPrint);
+        printToSingleLine(toPrint);
     }
 
     //this function prints every time a room is discovered
@@ -251,7 +254,7 @@ public class Room extends Entity{
         printNPCs();
         printEnemy();
         printDirections();
-        System.out.println();
+        printToLog();
     }
 
     public void addItem(Item item) {

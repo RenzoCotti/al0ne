@@ -6,6 +6,8 @@ import com.al0ne.Room;
 
 import java.util.ArrayList;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * A Prop has:
  * - id: used to reference to that prop code-wise
@@ -77,9 +79,9 @@ public class Prop extends Entity {
     @Override
     public void printLongDescription(){
         if(!active){
-            System.out.println(longDescription);
+            printToLog(longDescription);
         } else {
-            System.out.println(afterDescription);
+            printToLog(afterDescription);
         }
     }
 

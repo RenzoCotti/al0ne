@@ -4,6 +4,8 @@ import com.al0ne.Entities.Player;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 14/03/2017.
  */
@@ -14,7 +16,7 @@ public class HolyFountain extends Prop{
 
     @Override
     public boolean used(Room currentRoom, Player player) {
-        System.out.println("You are fully healed!");
+        printToLog("You are fully healed!");
         player.setHealth(player.getMaxHealth());
         return true;
     }

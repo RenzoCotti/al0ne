@@ -5,6 +5,8 @@ import com.al0ne.Entities.Player;
 import com.al0ne.Items.Items.Coin;
 import com.al0ne.Room;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 15/03/2017.
  */
@@ -20,14 +22,14 @@ public class Demon extends Enemy{
     @Override
     public boolean isAttacked(Player player, Room room) {
         if(!alive){
-            System.out.println("You defeated the "+ name);
-            System.out.println("The "+name+" drops some items.");
+            printToLog("You defeated the "+ name);
+            printToLog("The "+name+" drops some items.");
             addLoot(room);
             player.getCurrentRoom().unlockDirection("boss");
-            System.out.println("You feel the magical barrier waning.");
+            printToLog("You feel the magical barrier waning.");
             return true;
         }
-        System.out.println("The "+name+" attacks and hits you.");
+        printToLog("The "+name+" attacks and hits you.");
         player.modifyHealthPrint(-damage);
         return false;
     }

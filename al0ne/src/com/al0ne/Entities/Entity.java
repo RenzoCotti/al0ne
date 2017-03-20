@@ -4,6 +4,8 @@ import com.al0ne.Room;
 
 import java.util.ArrayList;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 02/02/2017.
  *
@@ -64,11 +66,11 @@ public abstract class Entity {
     }
 
     public void printLongDescription() {
-        System.out.println(longDescription);
+        printToLog(longDescription);
     }
 
     public void printShortDescription() {
-        System.out.println(shortDescription);
+        printToLog(shortDescription);
     }
 
 

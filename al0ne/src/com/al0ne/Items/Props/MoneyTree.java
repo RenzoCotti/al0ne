@@ -6,6 +6,8 @@ import com.al0ne.Items.Items.Coin;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 09/03/2017.
  */
@@ -26,7 +28,7 @@ public class MoneyTree extends Prop{
     public boolean usedWith(Item item, Room currentRoom) {
 
         if(item.hasProperty("sharp")){
-            System.out.println(usedMessage);
+            printToLog(usedMessage);
             currentRoom.addItem(new Coin(), 100);
             return true;
         }

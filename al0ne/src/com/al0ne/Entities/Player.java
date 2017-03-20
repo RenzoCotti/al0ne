@@ -8,6 +8,8 @@ import com.al0ne.Room;
 
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 28/01/2017.
  *
@@ -56,7 +58,7 @@ public class Player {
 
             if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
                 wieldedWeapon = (Weapon) weapon;
-                System.out.println("You now wield the "+weapon.getName());
+                printToLog("You now wield the "+weapon.getName());
                 return true;
             }
         }
@@ -65,11 +67,11 @@ public class Player {
 
     public void printWielded(){
         if(wieldedWeapon == null){
-            System.out.println("You're using your fists");
+            printToLog("You're using your fists");
             return;
         }
 
-        System.out.println("You're using your "+wieldedWeapon.getName());
+        printToLog("You're using your "+wieldedWeapon.getName());
     }
 
     public int getMaxHealth() {
@@ -77,7 +79,7 @@ public class Player {
     }
 
     public void printHealth() {
-        System.out.println("You have "+ currentHealth +"/"+maxHealth+" HP.");
+        printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
     }
 
     public void setHealth(int amount) {
@@ -109,20 +111,20 @@ public class Player {
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
-            System.out.println("You're mostly fine.");
+            printToLog("You're mostly fine.");
         } else if (percentage >= 60 && percentage < 80){
-            System.out.println("You're mostly fine.");
+            printToLog("You're mostly fine.");
         } else if (percentage >= 40 && percentage < 60){
-            System.out.println("You need to medicate.");
+            printToLog("You need to medicate.");
         } else if (percentage >= 20 && percentage < 40){
-            System.out.println("You're bleeding heavily");
+            printToLog("You're bleeding heavily");
         } else {
-            System.out.println("You're alive by a miracle");
+            printToLog("You're alive by a miracle");
         }
     }
 
     public void printWeight() {
-        System.out.println(currentWeight+"/"+maxWeight+" kg.");
+        printToLog(currentWeight+"/"+maxWeight+" kg.");
     }
 
     public boolean modifyWeight(double weight) {
@@ -152,14 +154,14 @@ public class Player {
     //prints the inventory
     public void printInventory(){
         if (inventory.size()==0){
-            System.out.println("You have no items.");
+            printToLog("You have no items.");
         } else {
-            System.out.println("You have these items:");
+            printToLog("You have these items:");
             for (Pair pair : inventory.values()) {
                 Item currentItem = (Item) pair.getEntity();
-                System.out.println("- "+pair.getCount()+"x " + currentItem.getName()+". "+currentItem.getWeight()*pair.getCount()+" kg.");
+                printToLog("- "+pair.getCount()+"x " + currentItem.getName()+". "+currentItem.getWeight()*pair.getCount()+" kg.");
             }
-            System.out.println();
+            printToLog();
             printWeight();
         }
     }
@@ -234,7 +236,7 @@ public class Player {
         if(hasItemInInventory(itemID)){
             return inventory.get(itemID);
         } else {
-            System.out.println("No such item in your inventory.");
+            printToLog("No such item in your inventory.");
             return null;
         }
     }
@@ -255,14 +257,14 @@ public class Player {
     public boolean moveToRoom(String direction, HashMap<String, Room> rooms){
 
         if(currentRoom.isLocked(direction)){
-            System.out.println("The way "+direction+" is blocked.");
+            printToLog("The way "+direction+" is blocked.");
             return false;
         }
         //iterate over all directions of currentRoom, eg. north
         for (String s : currentRoom.getExits().keySet()){
             //check them with the given direction
             if (s.equals(direction)){ //north == north
-                System.out.println("You move "+direction);
+                printToLog("You move "+direction);
 
                 //get the next room's ID
                 String nextRoomId = currentRoom.getExits().get(s);
@@ -273,7 +275,7 @@ public class Player {
                 return true;
             }
         }
-        System.out.println("You can't figure out how to go " + direction);
+        printToLog("You can't figure out how to go " + direction);
         return false;
     }
 
@@ -290,7 +292,7 @@ public class Player {
             Item item = (Item) pair.getEntity();
             if(item.used(currentRoom, this)){
                 if (item.hasProperty("consumable")){
-//                    System.out.println("used :"+pair.getCount());
+//                    printToLog("used :"+pair.getCount());
 
                     if(!getItemPair(item.getID()).modifyCount(-1)){
                         inventory.remove(item.getID());
@@ -341,7 +343,7 @@ public class Player {
 //
 //        if (prop != null && inventoryItem != null){
 //            prop.usedWith(inventoryItem.getItem(), currentRoom);
-////            System.out.println("You use the " + item + " on the "+ target);
+////            printToLog("You use the " + item + " on the "+ target);
 //
 //            if(prop instanceof LockedDoor){
 //                //// TODO: 08/03/2017 maybe fix this, somehow
@@ -350,7 +352,7 @@ public class Player {
 //
 //            return true;
 //        } else {
-////            System.out.println("You can't see it.");
+////            printToLog("You can't see it.");
 //            return false;
 //        }
     }
@@ -414,7 +416,7 @@ public class Player {
         Item toAdd = (Item) item.getEntity();
         if (all){
             if (!addItem(item, item.getCount())){
-                System.out.println("Too heavy to carry.");
+                printToLog("Too heavy to carry.");
                 return false;
             } else {
                 if (item.isEmpty()){
@@ -423,10 +425,10 @@ public class Player {
             }
         } else {
             if (!addItem(item)){
-                System.out.println("Too heavy to carry.");
+                printToLog("Too heavy to carry.");
                 return false;
             } else {
-//                System.out.println(item.getCount());
+//                printToLog(item.getCount());
                 if (item.isEmpty()){
                     currentRoom.getEntities().remove(toAdd.getID());
                 }
@@ -458,7 +460,7 @@ public class Player {
                 if (command.equals(action)){
                     if(item.used(currentRoom, this)){
                         if (item.hasProperty("consumable")){
-//                            System.out.println("used :"+pair.getCount());
+//                            printToLog("used :"+pair.getCount());
 
                             if(!inRoom && !getItemPair(entity.getID()).modifyCount(-1)){
                                 inventory.remove(entity.getID());
@@ -510,7 +512,7 @@ public class Player {
     public boolean attack(String name){
         Entity entity = currentRoom.getEntityPair(name).getEntity();
         if(entity.getType() == 'n'){
-            System.out.println("It's best not to attack "+name);
+            printToLog("It's best not to attack "+name);
             return false;
         } else if (entity.getType() == 'e'){
             Enemy enemy = (Enemy) entity;
@@ -525,14 +527,14 @@ public class Player {
             }else if(enemy.isWeakAgainst(type) ){
                 enemy.modifyHealth(-wieldedWeapon.getDamage());
             } else{
-                System.out.println("The "+name+" seem not to be affected");
+                printToLog("The "+name+" seem not to be affected");
             }
             if (enemy.isAttacked(this, currentRoom)) {
                 currentRoom.getEnemyList().remove(enemy.getID());
             }
             return true;
         } else {
-            System.out.println("You can't seem to see a fiend.");
+            printToLog("You can't seem to see a fiend.");
         }
         return false;
 
@@ -559,7 +561,7 @@ public class Player {
                 return false;
             }
         } else{
-            System.out.println("You don't have it.");
+            printToLog("You don't have it.");
             return true;
         }
     }
