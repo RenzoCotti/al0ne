@@ -314,58 +314,19 @@ public class Player {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
 
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
     public boolean interactOnWith(Entity target, Entity item){
 
-//        Prop entity = null;
-//        Item invItem = null;
-//
-//        if (currentRoom.hasEntity(target)){
-//            entity = (Prop) currentRoom.getEntityPair(target).getEntity();
-//        } else if( this.hasItemInInventory(target) ){
-//            invItem = (Item) getItemPair(target).getEntity();
-//        }
-//
-//        if (currentRoom.hasEntity(item)){
-//            entity = (Prop) currentRoom.getEntityPair(item).getEntity();
-//        } else if( this.hasItemInInventory(target) ){
-//            invItem = (Item) getItemPair(target).getEntity();
-//        }
-
-//        if (entity!= null && invItem!=null){
-//            return entity.usedWith(invItem, currentRoom);
-//        } else {
-//            return false;
-//        }
-
-
-
+        if (target.getType() != 'p' || item.getType() != 'i'){
+            return false;
+        }
         Prop prop = (Prop) target;
         return prop.usedWith((Item) item, currentRoom);
 
-
-
-//        Prop prop = getProp(target);
-//        Pair inventoryItem = getItemPair(item);
-//
-//        if (prop != null && inventoryItem != null){
-//            prop.usedWith(inventoryItem.getItem(), currentRoom);
-////            printToLog("You use the " + item + " on the "+ target);
-//
-//            if(prop instanceof LockedDoor){
-//                //// TODO: 08/03/2017 maybe fix this, somehow
-//                currentRoom.unlockDirection(prop.getID());
-//            }
-//
-//            return true;
-//        } else {
-////            printToLog("You can't see it.");
-//            return false;
-//        }
     }
 
     //this function prints the longDescription of target, be it a prop or an Item
@@ -520,8 +481,15 @@ public class Player {
         return false;
     }
 
-    public boolean attack(String name){
-        Entity entity = currentRoom.getEntityPair(name).getEntity();
+    public boolean attack(Entity name){
+        Pair p = currentRoom.getEntityPair(name.getID());
+        Entity entity;
+        if (p == null) {
+            printToLog("You can't see a "+name);
+            return false;
+        } else {
+            entity = p.getEntity();
+        }
         if(entity.getType() == 'n'){
             printToLog("It's best not to attack "+name);
             return false;

@@ -97,6 +97,7 @@ public class Enemy extends Character{
             printToLog("You defeated the "+ name);
             printToLog("The "+name+" drops some items.");
             addLoot(room);
+            room.getEntities().remove(ID);
             return true;
         }
         printToLog("The "+name+" attacks and hits you.");

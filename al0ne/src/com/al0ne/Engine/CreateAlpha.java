@@ -27,6 +27,8 @@ public class CreateAlpha {
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
 
+        startRoom.addEntity(new Apple());
+
         CreateAlpha.putRoom(startRoom);
 
         Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");

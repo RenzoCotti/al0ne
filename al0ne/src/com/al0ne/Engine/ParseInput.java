@@ -62,9 +62,9 @@ public class ParseInput {
                     return ParseInput.useItem(parsedInput, player, false, tokenOn);
                 }
                 //case complex use
-                else if (tokenOn > -1) {
+                else if (tokenWith > -1) {
                     return ParseInput.useItem(parsedInput, player, true, tokenWith);
-                } else if (tokenWith > -1){
+                } else if (tokenOn > -1){
                     return ParseInput.useItem(parsedInput, player, true, tokenOn);
                 }
 
@@ -128,7 +128,7 @@ public class ParseInput {
                 return false;
             case "g":
             case "again":
-                printToLog("Using last command:");
+                printToLog("("+lastCommand+")");
                 return parse(lastCommand, game, turns);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
@@ -318,8 +318,6 @@ public class ParseInput {
     * boolean complex: if true, assumes the action is like USE x WITH y, otherwise it's USE x*/
     private static boolean useItem(String[] temp, Player player, boolean complex, int tokenPosition) {
 
-
-
         String firstItem;
         String secondItem;
 
@@ -327,7 +325,7 @@ public class ParseInput {
         ArrayList<Pair> itemUse;
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
-            if(temp.length==1){
+            if(temp.length<2){
                 wrongCommand++;
                 printToLog("The syntax is USE x WITH y");
                 return false;
@@ -342,13 +340,20 @@ public class ParseInput {
             //prop from room
             itemUse = getPotentialItem(secondItem, player, 1);
 
-            if (!(inventoryUse.size() == 1) || !(itemUse.size() == 1)) {
+            if (inventoryUse.size() > 1 || itemUse.size() > 1) {
                 printToLog("Be more specific.");
                 return false;
             }
 
             if (inventoryUse.size() == 1 && itemUse.size() == 1) {
-                player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity());
+                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
+                    if (!player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity())){
+                        printToLog("You can't use it.");
+                    }
+                } else{
+                    printToLog("USE x WITH y: x must be from your inventory, y must be an object you can see");
+                }
+
             } else {
                 printToLog("You can't see such items");
             }
@@ -368,7 +373,13 @@ public class ParseInput {
             firstItem = ParseInput.stitchFromTo(temp, 1, temp.length);
 
             inventoryUse = getPotentialItem(firstItem, player, 0);
-            itemUse = getPotentialItem(firstItem, player, 2);
+            itemUse = getPotentialItem(firstItem, player, 1);
+
+            //there are more possibilities from the items fetched
+            if ((inventoryUse.size() + itemUse.size() == 0)) {
+                printToLog("You can't see that.");
+                return false;
+            }
 
             //there are more possibilities from the items fetched
             if (!(inventoryUse.size() + itemUse.size() == 1)) {
@@ -377,9 +388,13 @@ public class ParseInput {
             }
 
             if (inventoryUse.size() == 1) {
-                player.simpleUse(inventoryUse.get(0).getEntity());
+                if (!player.simpleUse(inventoryUse.get(0).getEntity())){
+                    printToLog("You can't use it.");
+                }
             } else if (itemUse.size() == 1) {
-                player.simpleUse(itemUse.get(0).getEntity());
+                if (!player.simpleUse(itemUse.get(0).getEntity())){
+                    printToLog("You can't use it.");
+                }
             } else {
                 printToLog("You can't use it.");
             }
@@ -566,8 +581,11 @@ public class ParseInput {
                 printToLog("You don't seem to have a "+wieldItem);
                 return false;
             }
-        } else {
+        } else if (possibleItems.size()>1){
             printToLog("Be more specific.");
+            return false;
+        } else{
+            printToLog("You don't seem to have a "+wieldItem);
             return false;
         }
     }
@@ -689,10 +707,13 @@ public class ParseInput {
 
             ArrayList<Pair> possibleItemFromInventory = getPotentialItem(item, player, 0);
 
-            if (!(possibleItemFromInventory.size() == 1)) {
+            if ((possibleItemFromInventory.size() > 1)) {
                 printToLog("Be more specific.");
                 return false;
-            } else {
+            } else if(possibleItemFromInventory.size() == 0){
+                printToLog("You don't have that item.");
+                return false;
+            }else {
 
                 NPC character = player.getCurrentRoom().getNPC(npc);
 
@@ -720,7 +741,16 @@ public class ParseInput {
         wrongCommand=0;
 
         String enemy = ParseInput.stitchFromTo(parsedInput, 1, parsedInput.length);
-        return player.attack(enemy);
+        ArrayList<Pair> entities = getPotentialItem(enemy, player, 1);
+        if (entities.size() == 1){
+            return player.attack(entities.get(0).getEntity());
+        } else if(entities.size()>1){
+            printToLog("Be more specific");
+            return false;
+        } else{
+            printToLog("You can't see a "+enemy);
+            return false;
+        }
     }
 
     public static boolean isNPC(NPC character, Player player, String npc){

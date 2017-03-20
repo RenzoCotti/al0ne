@@ -28,6 +28,7 @@ public class LockedDoor extends Prop {
 //            printToLog(requiresItem);
             if (item.getID().equals(requiresItem)){
                 printToLog("The "+name+" is now open");
+                currentRoom.unlockDirection(ID);
                 active=true;
                 return true;
             } else{
