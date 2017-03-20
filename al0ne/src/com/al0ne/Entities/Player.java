@@ -94,6 +94,10 @@ public class Player {
     public void modifyHealth(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
+
+            if (this.currentHealth<=0){
+                alive = false;
+            }
         }
     }
 
@@ -101,6 +105,10 @@ public class Player {
     public void modifyHealthPrint(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
+
+            if (this.currentHealth<=0){
+                alive = false;
+            }
         }
 
         printStatus();
@@ -111,7 +119,7 @@ public class Player {
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
-            printToLog("You're mostly fine.");
+            printToLog("You're as healthy as ever.");
         } else if (percentage >= 60 && percentage < 80){
             printToLog("You're mostly fine.");
         } else if (percentage >= 40 && percentage < 60){
@@ -119,6 +127,9 @@ public class Player {
         } else if (percentage >= 20 && percentage < 40){
             printToLog("You're bleeding heavily");
         } else {
+            if (this.currentHealth==0){
+                return;
+            }
             printToLog("You're alive by a miracle");
         }
     }

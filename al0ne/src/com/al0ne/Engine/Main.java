@@ -4,8 +4,6 @@ import com.al0ne.Entities.Player;
 import com.al0ne.Room;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.Parent;
@@ -58,7 +56,9 @@ public class Main extends Application{
                 printToLog("You have died...");
                 printToLog();
                 printToLog("Game over!");
-                System.exit(0);
+                input.setDisable(true);
+//                System.exit(0);
+                return;
             } else if(ParseInput.wrongCommand >= 3){
                 printToLog("Maybe you need some help? Type \"?\" to have an intro or \"help\" to see a list of all commands");
             }

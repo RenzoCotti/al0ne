@@ -574,7 +574,7 @@ public class ParseInput {
 
 
     //clears the screen by printing 20 new lines
-    private static void clearScreen(){
+    public static void clearScreen(){
         for (int i=0; i<30; i++){
             printToLog();
         }
