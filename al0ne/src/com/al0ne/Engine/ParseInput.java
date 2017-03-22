@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.Main.*;
 
 /*
 * This class handles parsing the input correctly
@@ -33,6 +33,21 @@ public class ParseInput {
 
 
         switch (parsedInput[0]) {
+
+            case "save":
+                if (parsedInput.length < 2){
+                    printToLog("The syntax is: SAVE name_of_the_save_file");
+                } else{
+                    save(parsedInput[1]);
+                }
+                return false;
+            case "load":
+                if (parsedInput.length < 2){
+                    printToLog("The syntax is: LOAD name_of_the_save_file");
+                } else{
+                    load(parsedInput[1]);
+                }
+                return false;
 
             case "drink":
                 return ParseInput.customAction(parsedInput, player, "drink");

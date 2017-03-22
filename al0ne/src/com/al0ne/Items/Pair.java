@@ -2,10 +2,12 @@ package com.al0ne.Items;
 
 import com.al0ne.Entities.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 09/03/2017.
  */
-public class Pair {
+public class Pair implements Serializable{
     private Entity entity;
     private int count;
 

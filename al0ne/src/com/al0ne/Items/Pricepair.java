@@ -1,9 +1,11 @@
 package com.al0ne.Items;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 09/03/2017.
  */
-public class Pricepair {
+public class Pricepair implements Serializable{
     private Item item;
     private int price;
 

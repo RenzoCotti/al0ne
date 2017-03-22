@@ -6,6 +6,7 @@ import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -21,7 +22,7 @@ import static com.al0ne.Engine.Main.printToLog;
  *
  * TODO probably add currentHealth, belly
  */
-public class Player {
+public class Player implements Serializable{
 
     //Maps ItemID, Item
     private HashMap<String, Pair> inventory;

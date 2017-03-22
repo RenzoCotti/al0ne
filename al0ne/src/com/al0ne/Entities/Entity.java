@@ -2,6 +2,7 @@ package com.al0ne.Entities;
 
 import com.al0ne.Room;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -11,7 +12,7 @@ import static com.al0ne.Engine.Main.printToLog;
  *
  * Item interface
  */
-public abstract class Entity {
+public abstract class Entity implements Serializable{
 
     protected String name;
     protected String ID;
@@ -81,5 +82,5 @@ public abstract class Entity {
     public void addCommand(String cmd){
         requiredCommand.add(cmd);
     }
-
+    
 }

@@ -12,6 +12,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.*;
 import java.util.HashMap;
 
 import static javafx.scene.input.KeyCode.ENTER;
@@ -23,13 +25,13 @@ public class Main extends Application{
 
     public static HashMap<String, Room> rooms = CreateAlpha.create();
 
-    public static Player grog = new Player(rooms.get("startroom"));
+    public static Player player = new Player(rooms.get("startroom"));
 
-    public static Game game = new Game(grog, rooms);
+    public static Game game = new Game(player, rooms, 0);
 
-    public static Room currentRoom = grog.getCurrentRoom();
+    public static Room currentRoom = player.getCurrentRoom();
 
-    public static int turnCounter=0;
+    public static int turnCounter = game.getTurnCount();
 
 
     public static String currentCommand = "";
@@ -50,9 +52,9 @@ public class Main extends Application{
     public static void hasNextLine(String s){
             currentCommand = s;
             if(ParseInput.parse(currentCommand, game, turnCounter)){
-                turnCounter++;
+                game.addTurn();
             }
-            if (!grog.isAlive()){
+            if (!player.isAlive()){
                 printToLog("You have died...");
                 printToLog();
                 printToLog("Game over!");
@@ -66,7 +68,7 @@ public class Main extends Application{
                 ParseInput.lastCommand = currentCommand;
             }
             printToLog();
-            grog.getCurrentRoom().printName();
+            player.getCurrentRoom().printName();
     }
 
     public static void printToLog(){
@@ -124,5 +126,109 @@ public class Main extends Application{
             }
         };
         service.restart();
+    }
+
+
+    public static void save(String s){
+        FileOutputStream fop = null;
+        ObjectOutputStream oos = null;
+        File file;
+
+        try {
+
+            file = new File("./"+s+".DAT");
+            fop = new FileOutputStream(file);
+            oos = new ObjectOutputStream(fop);
+
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                printToLog("File already exists. Specify a non existing file name.");
+                return;
+            } else {
+                file.createNewFile();
+            }
+
+            // get the content in bytes
+            oos.writeObject(game);
+
+            oos.flush();
+            oos.close();
+
+            printToLog("Saving successful");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fop != null) {
+                try {
+                    fop.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void load(String s){
+        Game loaded = deserializeGame(s);
+        if (loaded == null){
+            return;
+        }
+
+        game = loaded;
+        player = loaded.getPlayer();
+        rooms = loaded.getAllRooms();
+        turnCounter = loaded.getTurnCount();
+        currentRoom = loaded.getRoom();
+
+    }
+
+    public static Game deserializeGame(String filename) {
+
+        Game game = null;
+
+        FileInputStream fin = null;
+        ObjectInputStream ois = null;
+
+        try {
+
+            fin = new FileInputStream(filename);
+            ois = new ObjectInputStream(fin);
+            game = (Game) ois.readObject();
+
+        } catch (Exception ex) {
+            printToLog("File not found");
+            return null;
+//            ex.printStackTrace();
+        } finally {
+
+            if (fin != null) {
+                try {
+                    fin.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return game;
+
     }
 }
