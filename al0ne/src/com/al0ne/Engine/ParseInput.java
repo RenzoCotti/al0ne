@@ -86,6 +86,7 @@ public class ParseInput {
                 return ParseInput.customAction(parsedInput, player, "open");
             case "wear":
             case "wield":
+            case "equip":
                 return ParseInput.handleWear(parsedInput, player);
             case "l":
             case "look":
@@ -147,6 +148,10 @@ public class ParseInput {
                 return parse(lastCommand, game, turns);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
+            case "worn":
+                player.printArmor();
+                player.printWielded();
+                return false;
 
             case "qqq":
                 System.exit(0);
@@ -455,7 +460,7 @@ public class ParseInput {
             ArrayList<Pair> items = new ArrayList<>();
 
             for (Pair p : possibleItems){
-                if (p.getEntity().getType()=='i'){
+                if (p.getEntity().getType()=='i' || p.getEntity().getType()=='w'){
                     items.add(p);
                 }
             }

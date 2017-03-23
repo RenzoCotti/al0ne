@@ -10,6 +10,7 @@ import com.al0ne.Room;
 public class Armor extends Protective {
     public Armor(String id, String name, String description, String shortDescription, double weight, int armor) {
         super(id, name, description, shortDescription, weight, armor);
+        this.part = "armor";
     }
 
     @Override

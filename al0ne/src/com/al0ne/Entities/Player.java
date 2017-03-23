@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.Main.printToSingleLine;
 
 /**
  * Created by BMW on 28/01/2017.
@@ -78,19 +79,28 @@ public class Player implements Serializable{
         return wornItems.get("armor");
     }
 
+    public void unequipItem(Wearable item){
+        for (String part : wornItems.keySet()){
+            Wearable currentItem = wornItems.get(part);
 
-//    public boolean wield(Item weapon){
-//        for (Pair pair : inventory.values()){
-//            Item currentItem = (Item) pair.getEntity();
-//
-//            if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
-//                wornItems.put("main hand", (Weapon) currentItem);
-//                printToLog("You now wield the "+weapon.getName());
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+            if(currentItem != null && item.getID().equals(currentItem.getID())){
+                wornItems.put(part, null);
+            }
+        }
+    }
+
+    public boolean isWearingItem(String id){
+        for (String part : wornItems.keySet()){
+            Wearable currentItem = wornItems.get(part);
+            if(currentItem != null) {
+                if(id.equals(currentItem.getID())){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
 
     public boolean wear(Item wearable){
         for (Pair pair : inventory.values()){
@@ -104,7 +114,7 @@ public class Player implements Serializable{
                 } else if(part.equals("off hand")){
                     wornItems.put(part, (Shield) currentItem);
                     printToLog("You now wear the "+wearable.getName());
-                } else if(part.equals("helmet")){
+                } else if(part.equals("head")){
                     wornItems.put(part, (Helmet) currentItem);
                     printToLog("You now wear the "+wearable.getName());
                 } else if(part.equals("armor")){
@@ -126,16 +136,25 @@ public class Player implements Serializable{
     }
 
     public void printArmor(){
-        Armor armor = getArmor();
-        Helmet helmet = getHelmet();
-        Wearable offHand = getOffHand();
 
-        if (offHand instanceof Shield){
-            printToLog("You're wearing "+armor.getShortDescription()+", "+helmet.getShortDescription()+" and "+offHand.getShortDescription());
-            return;
+        boolean first=true;
+
+        for (Wearable w : wornItems.values()){
+            if (w != null && !(w instanceof Weapon)){
+                if(first){
+                    printToSingleLine("You're wearing "+w.getShortDescription());
+                    first = false;
+                }else {
+                    printToSingleLine(", "+w.getShortDescription());
+                }
+            }
         }
 
-        printToLog("You're wearing "+armor.getShortDescription()+" and "+helmet.getShortDescription());
+        if(first){
+            printToLog("You're not wearing anything.");
+        } else{
+            printToLog();
+        }
     }
 
     public int getArmorLevel(){
@@ -452,11 +471,17 @@ public class Player implements Serializable{
                 modifyWeight(-((Item) target.getEntity()).getWeight());
                 if (!target.subCount()){
                     inventory.remove(target.getEntity().getID());
+                    if (target.getEntity().getType()=='w' && isWearingItem(target.getEntity().getID())){
+                        unequipItem((Wearable) target.getEntity());
+                    }
                 }
                 //we dropped all
             } else{
                 modifyWeight(-(((Item) target.getEntity()).getWeight()*target.getCount()));
                 inventory.remove(target.getEntity().getID());
+                if (target.getEntity().getType()=='w' &&  isWearingItem(target.getEntity().getID())){
+                    unequipItem((Wearable) target.getEntity());
+                }
             }
 
             return true;
@@ -572,13 +597,13 @@ public class Player implements Serializable{
         Pair p = currentRoom.getEntityPair(name.getID());
         Entity entity;
         if (p == null) {
-            printToLog("You can't see a "+name);
+            printToLog("You can't see a "+name.getName());
             return false;
         } else {
             entity = p.getEntity();
         }
         if(entity.getType() == 'n'){
-            printToLog("It's best not to attack "+name);
+            printToLog("It's best not to attack "+ name.getName());
             return false;
         } else if (entity.getType() == 'e'){
             Enemy enemy = (Enemy) entity;
@@ -593,10 +618,10 @@ public class Player implements Serializable{
             }else if(enemy.isWeakAgainst(type) ){
                 enemy.modifyHealth(-getWeapon().getDamage());
             } else{
-                printToLog("The "+name+" seem not to be affected");
+                printToLog("The "+enemy.getName()+" seem not to be affected");
             }
             if (enemy.isAttacked(this, currentRoom)) {
-                currentRoom.getEnemyList().remove(enemy.getID());
+                currentRoom.getEntities().remove(enemy.getID());
             }
             return true;
         } else {

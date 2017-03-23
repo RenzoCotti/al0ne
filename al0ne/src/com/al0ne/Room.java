@@ -153,7 +153,7 @@ public class Room extends Entity{
         ArrayList<Pair> itemList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='i'){
+            if (e.getType()=='i' || e.getType()=='w'){
 //                printToLog(e.getID());
                 itemList.add(p);
             }

@@ -101,7 +101,12 @@ public class Enemy extends Character{
             return true;
         }
         printToLog("The "+name+" attacks and hits you.");
-        player.modifyHealthPrint(-damage);
+        int inflictedDamage = damage-player.getArmorLevel();
+        if (inflictedDamage>0){
+            player.modifyHealthPrint(-inflictedDamage);
+        } else{
+            printToLog("Your armor absorbs the damage.");
+        }
         return false;
     }
 
