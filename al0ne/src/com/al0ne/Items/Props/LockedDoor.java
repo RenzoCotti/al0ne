@@ -1,7 +1,7 @@
 package com.al0ne.Items.Props;
 
 import com.al0ne.Entities.Player;
-import com.al0ne.Items.Behaviours.Weapon;
+import com.al0ne.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
@@ -23,7 +23,7 @@ public class LockedDoor extends Prop {
     }
 
     @Override
-    public boolean usedWith(Item item, Room currentRoom){
+    public boolean usedWith(Item item, Room currentRoom, Player player){
         if(item.hasProperty("key")){
 //            printToLog(requiresItem);
             if (item.getID().equals(requiresItem)){

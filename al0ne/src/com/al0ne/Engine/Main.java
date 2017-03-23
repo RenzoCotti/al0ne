@@ -136,7 +136,7 @@ public class Main extends Application{
 
         try {
 
-            file = new File("./"+s+".DAT");
+            file = new File("./"+s+".save");
             fop = new FileOutputStream(file);
             oos = new ObjectOutputStream(fop);
 
@@ -188,6 +188,8 @@ public class Main extends Application{
         rooms = loaded.getAllRooms();
         turnCounter = loaded.getTurnCount();
         currentRoom = loaded.getRoom();
+
+        printToLog("Game loaded successfully.");
 
     }
 

@@ -1,7 +1,13 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Entities.Enemies.Demon;
-import com.al0ne.Items.Items.*;
+import com.al0ne.Items.ConcreteItems.*;
+import com.al0ne.Items.ConcreteItems.Armor.IronHelmet;
+import com.al0ne.Items.ConcreteItems.Armor.LeatherArmour;
+import com.al0ne.Items.ConcreteItems.Food.Apple;
+import com.al0ne.Items.ConcreteItems.Food.Mushroom;
+import com.al0ne.Items.ConcreteItems.Weapon.HolySword;
+import com.al0ne.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Items.Prop;
 import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Props.HolyFountain;
@@ -26,6 +32,9 @@ public class CreateAlpha {
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
+        startRoom.addEntity(new LeatherArmour());
+        startRoom.addEntity(new Knife());
+        startRoom.addEntity(new IronHelmet());
 
         startRoom.addEntity(new Apple());
 

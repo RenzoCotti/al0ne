@@ -18,7 +18,7 @@ public class Door extends Prop {
     }
 
     @Override
-    public boolean usedWith(Item item, Room currentRoom) {
+    public boolean usedWith(Item item, Room currentRoom, Player player) {
         return false;
     }
 

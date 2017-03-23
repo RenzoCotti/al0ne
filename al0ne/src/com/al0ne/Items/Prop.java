@@ -16,7 +16,7 @@ import static com.al0ne.Engine.Main.printToLog;
  * - afterDescription: longDescription of the prop *afterDescription* activation
  * - requiresItem: ItemID required for activation, e.g. cave1key, can be default
  * - active: true if the item has been activated
- * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp Items are required
+ * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp ConcreteItems are required
  * - requiredCommand: custom actions that can be applied to the item
  */
 public class Prop extends Entity {
@@ -51,7 +51,7 @@ public class Prop extends Entity {
     }
 
 
-    public boolean usedWith(Item item, Room currentRoom) {
+    public boolean usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
                 active=true;

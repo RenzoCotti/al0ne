@@ -10,7 +10,6 @@ import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import static com.al0ne.Engine.Main.*;
 
@@ -85,8 +84,9 @@ public class ParseInput {
 
             case "open":
                 return ParseInput.customAction(parsedInput, player, "open");
+            case "wear":
             case "wield":
-                return ParseInput.handleWield(parsedInput, player);
+                return ParseInput.handleWear(parsedInput, player);
             case "l":
             case "look":
                 game.getRoom().printRoom();
@@ -361,13 +361,14 @@ public class ParseInput {
             }
 
             if (inventoryUse.size() == 1 && itemUse.size() == 1) {
-                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
+//                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
                     if (!player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity())){
                         printToLog("You can't use it.");
                     }
-                } else{
-                    printToLog("USE x WITH y: x must be from your inventory, y must be an object you can see");
-                }
+//                }
+//                } else{
+//                    printToLog("USE x WITH y: x must be from your inventory, y must be an object you can see");
+//                }
 
             } else {
                 printToLog("You can't see such items");
@@ -573,7 +574,7 @@ public class ParseInput {
         return true;
     }
 
-    public static boolean handleWield(String[] parsedInput, Player player){
+    public static boolean handleWear(String[] parsedInput, Player player){
 
         if(parsedInput.length==1){
             wrongCommand++;
@@ -590,7 +591,7 @@ public class ParseInput {
         if(possibleItems.size() == 1){
             Item item = (Item) player.getItemPair(possibleItems.get(0).getEntity().getID()).getEntity();
 
-            if(player.wield(item)){
+            if(player.wear(item)){
                 return true;
             } else{
                 printToLog("You don't seem to have a "+wieldItem);
@@ -604,6 +605,7 @@ public class ParseInput {
             return false;
         }
     }
+
 
 
     //clears the screen by printing 20 new lines

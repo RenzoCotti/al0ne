@@ -2,7 +2,7 @@ package com.al0ne.Items.Props;
 
 import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
-import com.al0ne.Items.Items.Coin;
+import com.al0ne.Items.ConcreteItems.Coin;
 import com.al0ne.Items.Prop;
 import com.al0ne.Room;
 
@@ -25,7 +25,7 @@ public class MoneyTree extends Prop{
 
 
     @Override
-    public boolean usedWith(Item item, Room currentRoom) {
+    public boolean usedWith(Item item, Room currentRoom, Player player) {
 
         if(item.hasProperty("sharp")){
             printToLog(usedMessage);

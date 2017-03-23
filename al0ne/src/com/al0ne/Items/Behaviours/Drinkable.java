@@ -5,12 +5,12 @@ import com.al0ne.Items.Item;
 import com.al0ne.Room;
 
 /**
- * Created by BMW on 11/02/2017.
+ * Created by BMW on 23/03/2017.
  */
-public class Food extends Item {
-    public Food(String id, String name, String description, String shortDescription, double weight) {
+public class Drinkable extends Item{
+    public Drinkable(String id, String name, String description, String shortDescription, double weight) {
         super(id, name, description, shortDescription, weight);
-        addCommand("eat");
+        addCommand("drink");
         addProperty("food");
     }
 

@@ -1,4 +1,4 @@
-package com.al0ne.Items.Items;
+package com.al0ne.Items.ConcreteItems;
 
 import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;

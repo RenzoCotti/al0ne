@@ -1,6 +1,6 @@
-package com.al0ne.Items.Items;
+package com.al0ne.Items.ConcreteItems.Weapon;
 
-import com.al0ne.Items.Behaviours.Weapon;
+import com.al0ne.Items.Behaviours.Wearable.Weapon;
 
 /**
  * Created by BMW on 14/03/2017.

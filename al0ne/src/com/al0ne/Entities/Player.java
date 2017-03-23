@@ -1,6 +1,7 @@
 package com.al0ne.Entities;
 
-import com.al0ne.Items.Behaviours.Weapon;
+import com.al0ne.Items.Behaviours.Protective;
+import com.al0ne.Items.Behaviours.Wearable.*;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
@@ -15,7 +16,7 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 28/01/2017.
  *
  * a Player is:
- * an inventory, storing itemID and Items
+ * an inventory, storing itemID and ConcreteItems
  * a currentRoom, a Room
  * a maxWeight, double
  * a currentWeight, double
@@ -38,7 +39,8 @@ public class Player implements Serializable{
     private boolean alive = true;
 
 
-    private Weapon wieldedWeapon;
+//    private Weapon wieldedWeapon;
+    private HashMap<String, Wearable> wornItems;
     
     // TODO: 08/03/2017 add satiation, thirst level
     // add also money pouch?
@@ -49,17 +51,66 @@ public class Player implements Serializable{
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
         this.currentWeight=0;
-        this.wieldedWeapon = null;
+        this.wornItems = new HashMap<>();
+        initialiseWorn();
+    }
+
+    public void initialiseWorn(){
+        wornItems.put("main hand", null);
+        wornItems.put("off hand", null);
+        wornItems.put("armor", null);
+        wornItems.put("helmet", null);
+    }
+
+    public Weapon getWeapon(){
+        return (Weapon) wornItems.get("main hand");
+    }
+
+    public Armor getArmor(){
+        return (Armor) wornItems.get("armor");
+    }
+
+    public Helmet getHelmet(){
+        return (Helmet) wornItems.get("helmet");
+    }
+
+    public Wearable getOffHand(){
+        return wornItems.get("armor");
     }
 
 
-    public boolean wield(Item weapon){
+//    public boolean wield(Item weapon){
+//        for (Pair pair : inventory.values()){
+//            Item currentItem = (Item) pair.getEntity();
+//
+//            if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
+//                wornItems.put("main hand", (Weapon) currentItem);
+//                printToLog("You now wield the "+weapon.getName());
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    public boolean wear(Item wearable){
         for (Pair pair : inventory.values()){
             Item currentItem = (Item) pair.getEntity();
 
-            if (weapon.getID().equals(currentItem.getID()) && currentItem instanceof Weapon){
-                wieldedWeapon = (Weapon) weapon;
-                printToLog("You now wield the "+weapon.getName());
+            if (wearable.getID().equals(currentItem.getID()) && currentItem instanceof Wearable){
+                String part = ((Wearable) currentItem).getPart();
+                if (part.equals("main hand")){
+                    wornItems.put(part, (Weapon) currentItem);
+                    printToLog("You now wield the "+wearable.getName());
+                } else if(part.equals("off hand")){
+                    wornItems.put(part, (Shield) currentItem);
+                    printToLog("You now wear the "+wearable.getName());
+                } else if(part.equals("helmet")){
+                    wornItems.put(part, (Helmet) currentItem);
+                    printToLog("You now wear the "+wearable.getName());
+                } else if(part.equals("armor")){
+                    wornItems.put(part, (Armor) currentItem);
+                    printToLog("You now wear the "+wearable.getName());
+                }
                 return true;
             }
         }
@@ -67,12 +118,43 @@ public class Player implements Serializable{
     }
 
     public void printWielded(){
-        if(wieldedWeapon == null){
+        if(getWeapon() == null){
             printToLog("You're using your fists");
             return;
         }
+        printToLog("You're using your "+getWeapon().getName());
+    }
 
-        printToLog("You're using your "+wieldedWeapon.getName());
+    public void printArmor(){
+        Armor armor = getArmor();
+        Helmet helmet = getHelmet();
+        Wearable offHand = getOffHand();
+
+        if (offHand instanceof Shield){
+            printToLog("You're wearing "+armor.getShortDescription()+", "+helmet.getShortDescription()+" and "+offHand.getShortDescription());
+            return;
+        }
+
+        printToLog("You're wearing "+armor.getShortDescription()+" and "+helmet.getShortDescription());
+    }
+
+    public int getArmorLevel(){
+        Armor armor = getArmor();
+        Helmet helmet = getHelmet();
+        Wearable offHand = getOffHand();
+
+        int armorLevel=0;
+        if(armor != null){
+            armorLevel= armor.getArmor();
+        }
+        if(helmet != null){
+            armorLevel= helmet.getArmor();
+        }
+        if(offHand != null && offHand instanceof Shield){
+            armorLevel= ((Shield) offHand).getArmor();
+        }
+
+        return armorLevel;
     }
 
     public int getMaxHealth() {
@@ -322,12 +404,16 @@ public class Player implements Serializable{
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
     public boolean interactOnWith(Entity target, Entity item){
 
-        if (target.getType() != 'p' || item.getType() != 'i'){
+        if (target.getType() == 'n' || item.getType() != 'e'){
             return false;
         }
-        Prop prop = (Prop) target;
-        return prop.usedWith((Item) item, currentRoom);
+        if (target.getType() == 'p'){
+            return ((Prop) target).usedWith((Item) item, currentRoom, this);
+        } else if (target.getType() == 'i'){
+            return ((Item) target).usedWith((Item) item, currentRoom, this);
+        }
 
+        return false;
     }
 
     //this function prints the longDescription of target, be it a prop or an Item
@@ -497,15 +583,15 @@ public class Player implements Serializable{
         } else if (entity.getType() == 'e'){
             Enemy enemy = (Enemy) entity;
             String type;
-            if(wieldedWeapon==null){
+            if(getWeapon()==null){
                 type="fists";
             } else{
-                type=wieldedWeapon.getDamageType();
+                type=getWeapon().getDamageType();
             }
             if (enemy.isWeakAgainst(type) && type.equals("fists")) {
                 enemy.modifyHealth(-1);
             }else if(enemy.isWeakAgainst(type) ){
-                enemy.modifyHealth(-wieldedWeapon.getDamage());
+                enemy.modifyHealth(-getWeapon().getDamage());
             } else{
                 printToLog("The "+name+" seem not to be affected");
             }

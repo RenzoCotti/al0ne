@@ -2,7 +2,7 @@ package com.al0ne.Entities.Enemies;
 
 import com.al0ne.Entities.Enemy;
 import com.al0ne.Entities.Player;
-import com.al0ne.Items.Items.Coin;
+import com.al0ne.Items.ConcreteItems.Coin;
 import com.al0ne.Room;
 
 import static com.al0ne.Engine.Main.printToLog;

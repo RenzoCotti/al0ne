@@ -1,19 +1,19 @@
-package com.al0ne.Items.Behaviours;
+package com.al0ne.Items.Behaviours.Wearable;
 
 import com.al0ne.Entities.Player;
-import com.al0ne.Items.Item;
 import com.al0ne.Room;
 
 /**
  * Created by BMW on 02/02/2017.
  */
-public abstract class Weapon extends Item{
+public class Weapon extends Wearable {
     protected int damage;
     protected String damageType;
     public Weapon(String id, String name, String description, String shortDescription, String damageType, int damage, double weight) {
         super(id, name, description, shortDescription, weight);
         this.damageType=damageType;
         this.damage=damage;
+        this.part = "main hand";
     }
 
     public int getDamage() {

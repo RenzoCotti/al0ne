@@ -82,5 +82,5 @@ public abstract class Entity implements Serializable{
     public void addCommand(String cmd){
         requiredCommand.add(cmd);
     }
-    
+
 }

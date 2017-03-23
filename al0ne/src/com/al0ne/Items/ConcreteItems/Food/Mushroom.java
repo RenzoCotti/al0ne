@@ -1,4 +1,4 @@
-package com.al0ne.Items.Items;
+package com.al0ne.Items.ConcreteItems.Food;
 
 import com.al0ne.Items.Behaviours.Food;
 import com.al0ne.Entities.Player;
@@ -9,7 +9,6 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Mushroom extends Food {
     public Mushroom() {
         super("mushroom","Brown mushroom", "It has a very pungent smell", "brown mushroom", 0.2);
-        addProperty("food");
         addCommand("eat");
     }
 

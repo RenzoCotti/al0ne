@@ -1,8 +1,8 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Items.Items.Apple;
-import com.al0ne.Items.Items.Beer;
-import com.al0ne.Items.Items.Knife;
+import com.al0ne.Items.ConcreteItems.Food.Apple;
+import com.al0ne.Items.ConcreteItems.Food.Beer;
+import com.al0ne.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Entities.NPC;
 import com.al0ne.Items.Props.*;
 import com.al0ne.Room;
