@@ -13,10 +13,11 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Demon extends Enemy{
 
     public Demon() {
-        super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon", 20, 3);
+        super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon");
         addItemLoot(new Coin(), 100, 100);
         addResistance("fists");
         addResistance("sharp");
+        setStats(20, 3, 40, 3, 10);
     }
 
     @Override

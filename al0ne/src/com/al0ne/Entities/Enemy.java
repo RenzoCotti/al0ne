@@ -23,28 +23,53 @@ public abstract class Enemy extends Character{
     protected int armor;
     protected int dexterity;
 
+    protected boolean special;
+
     protected ArrayList<String> resistances;
     protected ArrayList<PairDrop> loot;
 
 
-    public Enemy(String id, String name, String description, String shortDescription, int maxHealth, int damage, int attack, int armor, int dexterity) {
+    public Enemy(String id, String name, String description, String shortDescription) {
         super(id, name, description, shortDescription);
-        this.maxHealth=maxHealth;
-        this.damage = damage;
-        this.currentHealth=maxHealth;
         this.resistances = new ArrayList<>();
         this.loot = new ArrayList<>();
         this.alive = true;
         this.type='e';
+        this.special=false;
+
+        this.attack = 0;
+        this.armor = 0;
+        this.dexterity = 0;
+        this.maxHealth=0;
+        this.currentHealth=0;
+        this.damage = 0;
+    }
+
+    public void setStats( int maxHealth, int damage, int attack, int armor, int dexterity){
         this.attack = attack;
         this.armor = armor;
         this.dexterity = dexterity;
+        this.maxHealth=maxHealth;
+        this.currentHealth=maxHealth;
+        this.damage = damage;
 
         initialisePrefix();
+    }
 
+    //testing purposes
+    @Override
+    public void printLongDescription() {
+        printToLog("HP: "+currentHealth+"/"+maxHealth+" DMG: "+damage+" ATK: "+attack+" DEX: "+dexterity+" ARM: "+armor);
     }
 
     private void initialisePrefix(){
+
+        int chance = (int)(Math.random() * (100 - 1) + 1);
+
+        if(chance < 80){
+            return;
+        }
+
 
         ArrayList<String> prefixes = new ArrayList<>();
 
@@ -55,8 +80,60 @@ public abstract class Enemy extends Character{
         prefixes.add("fast");
         prefixes.add("fierce");
 
+        int rolled = (int)(Math.random() * 6 );
 
+        this.name = prefixes.get(rolled).toLowerCase()+" "+name;
+
+        switch (rolled){
+            //case tough
+            case 0:
+                this.maxHealth=maxHealth+maxHealth/2;
+                this.currentHealth=maxHealth;
+                break;
+            //case fiery
+            case 1:
+                this.damage=damage+damage/2;
+                this.attack=attack+attack/3;
+                break;
+            //case strong
+            case 2:
+                this.damage=damage+damage;
+                this.attack=-10;
+                break;
+            //case resilient
+            case 3:
+                this.armor=armor+armor/2;
+                break;
+            //case fast
+            case 4:
+                this.dexterity=dexterity+dexterity/3;
+                break;
+            //case fierce
+            case 5:
+                this.attack=attack+attack/3;
+                break;
+        }
+
+        special=true;
     }
+
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getDexterity() {
+        return dexterity;
+    }
+
 
     public void printHealth() {
         printToLog(currentHealth+"/"+maxHealth+" HP.");
@@ -113,7 +190,7 @@ public abstract class Enemy extends Character{
         boolean dropped = false;
         for (PairDrop pair : loot){
             int rolled = (int)(Math.random() * (100 - 1) + 1);
-            if((100 - pair.getProbability()) - rolled <= 0){
+            if(((100 - pair.getProbability()) - rolled <= 0) || special){
                 Item currentLoot = (Item) pair.getEntity();
 
                 if(pair.getCount() > 5){
@@ -139,13 +216,21 @@ public abstract class Enemy extends Character{
             room.getEntities().remove(ID);
             return true;
         }
-        printToLog("The "+name+" attacks and hits you.");
-        int inflictedDamage = damage-player.getArmorLevel();
-        if (inflictedDamage>0){
-            player.modifyHealthPrint(-inflictedDamage);
+        int attackRoll = (int)(Math.random() * (100 - 1) + 1)+attack;
+        int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+player.getDexterity();
+        printToLog("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
+        if(attackRoll > dodgeRoll){
+            printToLog("The "+name+" attacks and hits you.");
+            int inflictedDamage = damage-player.getArmorLevel();
+            if (inflictedDamage>0){
+                player.modifyHealthPrint(-inflictedDamage);
+            } else{
+                printToLog("Your armor absorbs the damage.");
+            }
         } else{
-            printToLog("Your armor absorbs the damage.");
+            printToLog("The "+name+" attacks, but you manage to dodge.");
         }
+
         return false;
     }
 

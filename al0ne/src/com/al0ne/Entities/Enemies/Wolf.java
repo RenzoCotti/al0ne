@@ -9,9 +9,10 @@ import com.al0ne.Items.ConcreteItems.Coin;
  */
 public class Wolf extends Enemy {
     public Wolf() {
-        super("wolf", "wolf", "a fierce wolf", "This wolf looks really ferocious and battle hardened.", 10, 1);
+        super("wolf", "wolf", "a fierce wolf", "This wolf looks really ferocious and battle hardened.");
         addItemLoot(new Coin(), 20, 50);
         addItemLoot(new Apple(), 1, 100);
         addResistance("fists");
+        setStats(10, 2, 40, 1, 40);
     }
 }

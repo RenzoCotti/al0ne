@@ -37,6 +37,10 @@ public class Player implements Serializable{
 
     private int currentHealth =10;
     private static int maxHealth=10;
+
+    private int attack = 70;
+    private int dexterity = 30;
+
     private boolean alive = true;
 
 
@@ -174,6 +178,14 @@ public class Player implements Serializable{
         }
 
         return armorLevel;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDexterity() {
+        return dexterity;
     }
 
     public int getMaxHealth() {
@@ -613,22 +625,46 @@ public class Player implements Serializable{
             } else{
                 type=getWeapon().getDamageType();
             }
-            if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                enemy.modifyHealth(-1);
-            }else if(enemy.isWeakAgainst(type) ){
-                enemy.modifyHealth(-getWeapon().getDamage());
+
+
+            int attackRoll = (int)(Math.random() * (100 - 1) + 1)+attack;
+            int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+enemy.getDexterity();
+            printToLog("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
+            if(attackRoll > dodgeRoll){
+
+                if (enemy.isWeakAgainst(type) && type.equals("fists")) {
+                    printToLog("You punch and hit the "+enemy.getName()+".");
+                    enemy.modifyHealth(-1);
+                }else if(enemy.isWeakAgainst(type) ){
+
+                    int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
+
+                    if(inflictedDamage < 0){
+                        printToLog("The "+enemy.getName()+" seem not to be affected");
+                    } else{
+                        printToLog("You attack and hit the "+enemy.getName()+".");
+                        enemy.modifyHealth(-(inflictedDamage));
+                    }
+                } else{
+                    printToLog("The "+enemy.getName()+" seem not to be affected");
+                }
+
+                if (enemy.isAttacked(this, currentRoom)) {
+                    currentRoom.getEntities().remove(enemy.getID());
+                }
+                return true;
             } else{
-                printToLog("The "+enemy.getName()+" seem not to be affected");
+                printToLog("You attack, but the "+enemy.getName()+" dodges.");
+                if (enemy.isAttacked(this, currentRoom)) {
+                    currentRoom.getEntities().remove(enemy.getID());
+                }
+                return true;
             }
-            if (enemy.isAttacked(this, currentRoom)) {
-                currentRoom.getEntities().remove(enemy.getID());
-            }
-            return true;
+
         } else {
             printToLog("You can't seem to see a fiend.");
         }
         return false;
-
     }
 
 
