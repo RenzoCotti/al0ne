@@ -2,6 +2,7 @@ package com.al0ne.Entities;
 
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
+import com.al0ne.Items.PairDrop;
 import com.al0ne.Room;
 
 import java.util.ArrayList;
@@ -11,18 +12,22 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 13/03/2017.
  */
-public class Enemy extends Character{
+public abstract class Enemy extends Character{
 
     protected boolean alive;
 
     protected int maxHealth;
     protected int currentHealth;
     protected int damage;
+    protected int attack;
+    protected int armor;
+    protected int dexterity;
 
     protected ArrayList<String> resistances;
-    protected ArrayList<Pair> loot;
+    protected ArrayList<PairDrop> loot;
 
-    public Enemy(String id, String name, String description, String shortDescription, int maxHealth, int damage) {
+
+    public Enemy(String id, String name, String description, String shortDescription, int maxHealth, int damage, int attack, int armor, int dexterity) {
         super(id, name, description, shortDescription);
         this.maxHealth=maxHealth;
         this.damage = damage;
@@ -31,6 +36,26 @@ public class Enemy extends Character{
         this.loot = new ArrayList<>();
         this.alive = true;
         this.type='e';
+        this.attack = attack;
+        this.armor = armor;
+        this.dexterity = dexterity;
+
+        initialisePrefix();
+
+    }
+
+    private void initialisePrefix(){
+
+        ArrayList<String> prefixes = new ArrayList<>();
+
+        prefixes.add("tough");
+        prefixes.add("fiery");
+        prefixes.add("strong");
+        prefixes.add("resilient");
+        prefixes.add("fast");
+        prefixes.add("fierce");
+
+
     }
 
     public void printHealth() {
@@ -71,32 +96,46 @@ public class Enemy extends Character{
     }
 
 
-    public ArrayList<Pair> getLoot() {
+    public ArrayList<PairDrop> getLoot() {
         return loot;
     }
 
-    public void addItemLoot(Item item, Integer amount) {
-        this.loot.add(new Pair(item, amount));
+    public void addItemLoot(Item item, Integer amount, Integer probability) {
+        this.loot.add(new PairDrop(item, amount, probability));
     }
 
     public void addItemLoot(Item item) {
-        this.loot.add(new Pair(item, 1));
+        this.loot.add(new PairDrop(item, 1, 100));
     }
 
 
-    public void addLoot(Room room) {
-        for (Pair pair : loot){
-            Item currentLoot = (Item) pair.getEntity();
-            room.addItem(currentLoot, pair.getCount());
+    public boolean addLoot(Room room) {
+        boolean dropped = false;
+        for (PairDrop pair : loot){
+            int rolled = (int)(Math.random() * (100 - 1) + 1);
+            if((100 - pair.getProbability()) - rolled <= 0){
+                Item currentLoot = (Item) pair.getEntity();
+
+                if(pair.getCount() > 5){
+                    int randomAmount = (int)(Math.random() * (2*pair.getCount() - pair.getCount()/2) + pair.getCount()/2);
+                    room.addItem(currentLoot, randomAmount);
+                } else{
+                    room.addItem(currentLoot, pair.getCount());
+                }
+                dropped = true;
+            }
+            printToLog("rolled "+rolled+"; expected "+pair.getProbability());
         }
+        return dropped;
     }
 
 
     public boolean isAttacked(Player player, Room room){
         if(!alive){
             printToLog("You defeated the "+ name);
-            printToLog("The "+name+" drops some items.");
-            addLoot(room);
+            if(addLoot(room)){
+                printToLog("The "+name+" drops some items.");
+            }
             room.getEntities().remove(ID);
             return true;
         }

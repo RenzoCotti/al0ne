@@ -14,7 +14,7 @@ public class Demon extends Enemy{
 
     public Demon() {
         super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon", 20, 3);
-        addItemLoot(new Coin(), 100);
+        addItemLoot(new Coin(), 100, 100);
         addResistance("fists");
         addResistance("sharp");
     }
