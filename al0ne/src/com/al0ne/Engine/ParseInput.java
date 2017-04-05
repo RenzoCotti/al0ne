@@ -1,11 +1,11 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Entity;
+import com.al0ne.Entities.Behaviours.Entity;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
-import com.al0ne.Entities.NPC;
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.NPC;
+import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Entities.Behaviours.Room;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
@@ -38,6 +38,13 @@ public class ParseInput {
                     printToLog("The syntax is: SAVE name_of_the_save_file");
                 } else{
                     save(parsedInput[1], null);
+                }
+                return false;
+            case "warp":
+                if (parsedInput.length < 2){
+                    printToLog("The syntax is: WARP world_name");
+                } else{
+                    changeWorld(stitchFromTo(parsedInput, 1, parsedInput.length));
                 }
                 return false;
             case "load":
@@ -140,7 +147,7 @@ public class ParseInput {
                 return false;
             case "health":
                 player.printHealth();
-//                player.printStatus();
+//                player.printHealthStatus();
                 return false;
             case "g":
             case "again":
@@ -562,7 +569,7 @@ public class ParseInput {
         NPC npc = player.getCurrentRoom().getNPC(toExamine);
 
         if ( npc != null){
-            npc.printLongDescription();
+            npc.printLongDescription(null, null);
             return true;
         }
 

@@ -1,7 +1,7 @@
 package com.al0ne.Entities.NPCs;
 
-import com.al0ne.Entities.NPC;
-import com.al0ne.Entities.Player;
+import com.al0ne.Entities.Behaviours.NPC;
+import com.al0ne.Entities.Behaviours.Player;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Pricepair;

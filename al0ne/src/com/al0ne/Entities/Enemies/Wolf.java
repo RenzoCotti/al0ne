@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Enemies;
 
-import com.al0ne.Entities.Enemy;
+import com.al0ne.Entities.Behaviours.Enemy;
 import com.al0ne.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Items.ConcreteItems.Coin;
 

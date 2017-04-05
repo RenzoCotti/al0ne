@@ -1,16 +1,16 @@
 package com.al0ne.Entities.Enemies;
 
-import com.al0ne.Entities.Enemy;
-import com.al0ne.Entities.Player;
+import com.al0ne.Entities.Behaviours.Enemy;
+import com.al0ne.Entities.Behaviours.Player;
 import com.al0ne.Items.ConcreteItems.Coin;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * Created by BMW on 15/03/2017.
  */
-public class Demon extends Enemy{
+public class Demon extends Enemy {
 
     public Demon() {
         super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon");

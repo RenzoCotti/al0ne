@@ -1,8 +1,6 @@
 package com.al0ne.Items;
 
-import com.al0ne.Entities.Entity;
-
-import java.io.Serializable;
+import com.al0ne.Entities.Behaviours.Entity;
 
 /**
  * Created by BMW on 09/03/2017.

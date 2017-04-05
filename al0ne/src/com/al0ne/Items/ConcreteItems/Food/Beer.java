@@ -1,8 +1,8 @@
 package com.al0ne.Items.ConcreteItems.Food;
 
 import com.al0ne.Items.Behaviours.Drinkable;
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Entities.Behaviours.Room;
 
 
 public class Beer extends Drinkable {

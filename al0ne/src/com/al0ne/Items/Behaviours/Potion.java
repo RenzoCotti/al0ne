@@ -1,8 +1,6 @@
 package com.al0ne.Items.Behaviours;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
 
 /**
  * Created by BMW on 02/02/2017.

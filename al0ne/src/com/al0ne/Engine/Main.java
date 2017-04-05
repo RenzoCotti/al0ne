@@ -1,13 +1,15 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Entities.Behaviours.Status;
+import com.al0ne.Entities.Behaviours.World;
+import com.al0ne.Entities.Worlds.CreateAlpha;
+import com.al0ne.Entities.Worlds.CreateSmallCave;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,9 +21,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
-import java.util.HashMap;
 
 import static javafx.scene.input.KeyCode.ENTER;
 
@@ -30,11 +30,11 @@ public class Main extends Application{
     private static TextArea log;
     private static TextField input;
 
-    public static HashMap<String, Room> rooms = CreateAlpha.create();
+    public static World currentWorld = new CreateAlpha();
 
-    public static Player player = new Player(rooms.get("startroom"));
+    public static Player player = new Player(currentWorld.getStartingRoom());
 
-    public static Game game = new Game(player, rooms, 0);
+    public static Game game = new Game(player, currentWorld.getRooms(), 0);
 
     public static Room currentRoom = player.getCurrentRoom();
 
@@ -51,12 +51,12 @@ public class Main extends Application{
 
     }
 
-    public static void runGame(){
+    private static void runGame(){
         ParseInput.printWelcome();
         currentRoom.printRoom();
         currentRoom.printName();
     }
-    public static void hasNextLine(String s){
+    private static void hasNextLine(String s){
             currentCommand = s;
             if(ParseInput.parse(currentCommand, game, turnCounter)){
                 game.addTurn();
@@ -73,6 +73,14 @@ public class Main extends Application{
             }
             if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
                 ParseInput.lastCommand = currentCommand;
+            }
+
+            if(player.getStatus().size()>0){
+                for(Status st : player.getStatus()){
+                    if(st.resolveStatus()){
+                        player.getStatus().remove(st);
+                    }
+                }
             }
             printToLog();
             player.getCurrentRoom().printName();
@@ -98,7 +106,7 @@ public class Main extends Application{
 
 
         log = new TextArea();
-        log.setPrefHeight(500);
+        log.setPrefHeight(550);
         log.setEditable(false);
 
         input  = new TextField();
@@ -114,10 +122,36 @@ public class Main extends Application{
         MenuBar menuBar = new MenuBar();
 
         Menu fileMenu = new Menu("File");
-        Menu helpMenu = new Menu("Help");
+        Menu helpMenu = new Menu("?");
         Menu creditsMenu = new Menu("Credits");
 
 
+        MenuItem questionButton = new MenuItem("Help");
+
+        questionButton.setOnAction(t -> ParseInput.printHelp());
+
+        MenuItem commandsButton = new MenuItem("Commands");
+
+        commandsButton.setOnAction(t -> {
+            printToLog("Commands:");
+            for (Command command: Command.values()){
+                printToLog(command.toString());
+            }
+        });
+
+        helpMenu.getItems().addAll(questionButton, commandsButton);
+
+
+
+
+        MenuItem creditsButton = new MenuItem("Thanks");
+
+        creditsButton.setOnAction(t -> {
+            Stage s = creditsPopup(stage);
+            s.show();
+        });
+
+        creditsMenu.getItems().add(creditsButton);
 
 
 
@@ -153,7 +187,7 @@ public class Main extends Application{
 
         fileMenu.getItems().addAll(save, load, quit);
 
-        menuBar.getMenus().addAll(fileMenu, helpMenu, creditsMenu);
+        menuBar.getMenus().addAll(fileMenu, creditsMenu, helpMenu);
 
 
 
@@ -176,9 +210,7 @@ public class Main extends Application{
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        Platform.runLater(() ->{
-                            runGame();
-                        });
+                        Platform.runLater(Main::runGame);
                         return null;
                     }
                 };
@@ -187,7 +219,7 @@ public class Main extends Application{
         service.restart();
     }
 
-    public static Stage quitDialog(Stage stage){
+    private static Stage quitDialog(Stage stage){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         s.initOwner(stage);
@@ -214,6 +246,32 @@ public class Main extends Application{
     }
 
 
+    private static Stage creditsPopup(Stage stage){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        s.initOwner(stage);
+        VBox dialogVbox = new VBox(20);
+
+        HBox buttonBox = new HBox(20);
+
+        Button cancel = new Button("Close");
+        cancel.setOnAction(b -> s.close());
+
+        Text text = new Text("Thanks for trying out my game\nSpecial thanks to: Valerie Burgener, Lara Bruseghini, Dario Cotti for being my beta testers :D");
+
+        buttonBox.getChildren().addAll(cancel);
+        dialogVbox.getChildren().addAll(text, buttonBox);
+        dialogVbox.setPadding(new Insets(20));
+        dialogVbox.setMaxSize(200, 500);
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+
+        return s;
+    }
+
+
     public static void save(String s, String path){
         FileOutputStream fop = null;
         ObjectOutputStream oos = null;
@@ -232,9 +290,10 @@ public class Main extends Application{
             if (!file.exists()) {
                 printToLog("File already exists. Specify a non existing file name.");
                 return;
-            } else {
-                file.createNewFile();
             }
+//            else {
+//                file.createNewFile();
+//            }
 
             // get the content in bytes
             oos.writeObject(game);
@@ -268,20 +327,24 @@ public class Main extends Application{
     public static void load(String s, String path){
         Game loaded = deserializeGame(s, path);
         if (loaded == null){
+            printToLog("Failed to load the game.");
             return;
         }
 
         game = loaded;
         player = loaded.getPlayer();
-        rooms = loaded.getAllRooms();
         turnCounter = loaded.getTurnCount();
         currentRoom = loaded.getRoom();
 
         printToLog("Game loaded successfully.");
+        printToLog();
+        currentRoom.printRoom();
+        currentRoom.printName();
+
 
     }
 
-    public static Game deserializeGame(String filename, String path) {
+    private static Game deserializeGame(String filename, String path) {
 
         Game game = null;
 
@@ -323,5 +386,28 @@ public class Main extends Application{
 
         return game;
 
+    }
+
+    public static void changeWorld(String s){
+        switch (s){
+            case "alphaworld":
+                World a = new CreateAlpha();
+                currentWorld = a;
+                game.setAllRooms(a.getRooms());
+                player.setCurrentRoom(a.getStartingRoom());
+                currentRoom = player.getCurrentRoom();
+                printToLog("Warp successful!");
+                return;
+            case "caveworld":
+                World c = new CreateSmallCave();
+                currentWorld = c;
+                game.setAllRooms(c.getRooms());
+                player.setCurrentRoom(c.getStartingRoom());
+                currentRoom = player.getCurrentRoom();
+                printToLog("Warp successful!");
+                return;
+            default:
+                printToLog("404: world not found");
+        }
     }
 }

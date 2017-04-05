@@ -1,7 +1,7 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Entities.Behaviours.Room;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -53,5 +53,7 @@ public class Game implements Serializable{
                 .append(this.turnCounter).toString();
     }
 
-
+    public void setAllRooms(HashMap<String, Room> allRooms) {
+        this.allRooms = allRooms;
+    }
 }

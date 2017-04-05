@@ -1,6 +1,4 @@
-package com.al0ne.Entities;
-
-import com.al0ne.Room;
+package com.al0ne.Entities.Behaviours;
 
 /**
  * placeholder class for attackable npcs

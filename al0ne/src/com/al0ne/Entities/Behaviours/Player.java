@@ -1,15 +1,15 @@
-package com.al0ne.Entities;
+package com.al0ne.Entities.Behaviours;
 
-import com.al0ne.Items.Behaviours.Protective;
 import com.al0ne.Items.Behaviours.Wearable.*;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
-import com.al0ne.Room;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -41,6 +41,8 @@ public class Player implements Serializable{
     private int attack = 70;
     private int dexterity = 30;
 
+    protected ArrayList<Status> status;
+
     private boolean alive = true;
 
 
@@ -57,6 +59,7 @@ public class Player implements Serializable{
         this.inventory = new HashMap<>();
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
+        this.status = new ArrayList<>();
         initialiseWorn();
     }
 
@@ -225,11 +228,11 @@ public class Player implements Serializable{
             }
         }
 
-        printStatus();
+        printHealthStatus();
 
     }
 
-    public void printStatus(){
+    public void printHealthStatus(){
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
@@ -451,7 +454,7 @@ public class Player implements Serializable{
     public boolean examine(Entity target){
 
         if(target != null){
-            target.printLongDescription();
+            target.printLongDescription(this, currentRoom);
             return true;
         }
         return false;
@@ -694,5 +697,19 @@ public class Player implements Serializable{
     }
 
 
+    public ArrayList<Status> getStatus() {
+        return status;
+    }
 
+    public void putStatus(Status s) {
+        boolean contained = false;
+        for (Status st : status){
+            if(s.getName().equals(st.getName())){
+                contained = true;
+            }
+        }
+        if(!contained){
+            putStatus(s);
+        }
+    }
 }

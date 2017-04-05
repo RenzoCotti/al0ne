@@ -1,7 +1,6 @@
-package com.al0ne.Entities;
+package com.al0ne.Entities.Behaviours;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Items.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,7 +89,7 @@ public class NPC extends Character{
         printToLog(intro);
     }
 
-    public void printLongDescription(){
+    public void printLongDescription(Player player, Room room){
         printToLog(longDescription);
     }
 

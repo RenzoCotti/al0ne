@@ -1,8 +1,8 @@
 package com.al0ne.Items;
 
-import com.al0ne.Entities.Entity;
-import com.al0ne.Entities.Player;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Entity;
+import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Entities.Behaviours.Room;
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class Prop extends Entity {
     }
 
     @Override
-    public void printLongDescription(){
+    public void printLongDescription(Player player, Room room){
         if(!active){
             printToLog(longDescription);
         } else {

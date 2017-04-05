@@ -1,6 +1,4 @@
-package com.al0ne.Entities;
-
-import com.al0ne.Room;
+package com.al0ne.Entities.Behaviours;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,7 +64,7 @@ public abstract class Entity implements Serializable{
         return shortDescription;
     }
 
-    public void printLongDescription() {
+    public void printLongDescription(Player player, Room room) {
         printToLog(longDescription);
     }
 

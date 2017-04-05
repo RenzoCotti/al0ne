@@ -1,9 +1,5 @@
-package com.al0ne;
+package com.al0ne.Entities.Behaviours;
 
-import com.al0ne.Entities.Enemy;
-import com.al0ne.Entities.NPC;
-import com.al0ne.Entities.Entity;
-import com.al0ne.Entities.Player;
 import com.al0ne.Items.Item;
 import com.al0ne.Items.Pair;
 import com.al0ne.Items.Prop;
@@ -248,7 +244,7 @@ public class Room extends Entity{
 
     //this function prints every time a room is discovered
     public void printRoom(){
-        printLongDescription();
+        printLongDescription(null, null);
         printItems();
         printProps();
         printNPCs();

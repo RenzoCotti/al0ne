@@ -1,8 +1,8 @@
 package com.al0ne.Items.ConcreteItems;
 
-import com.al0ne.Entities.Player;
+import com.al0ne.Entities.Behaviours.Player;
 import com.al0ne.Items.Item;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
 

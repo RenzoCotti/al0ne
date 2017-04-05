@@ -1,20 +1,20 @@
-package com.al0ne.Engine;
+package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Items.ConcreteItems.Food.Beer;
 import com.al0ne.Items.ConcreteItems.Weapon.Knife;
-import com.al0ne.Entities.NPC;
+import com.al0ne.Entities.Behaviours.NPC;
 import com.al0ne.Items.Props.*;
-import com.al0ne.Room;
+import com.al0ne.Entities.Behaviours.Room;
 import com.al0ne.Entities.Enemies.Wolf;
+import com.al0ne.Entities.Behaviours.World;
 
-import java.util.HashMap;
+public class CreateSmallCave extends World{
 
-public class CreateSmallCave {
 
-    private static HashMap<String, Room> rooms = new HashMap<>();
+    public CreateSmallCave() {
 
-    public static HashMap<String, Room>  create() {
+        super("caveworld", "cave1");
 
 
 
@@ -29,7 +29,7 @@ public class CreateSmallCave {
 
         cave1.addEntity(new MoneyTree());
 
-        CreateSmallCave.putRoom(cave1);
+        putRoom(cave1);
 
 
         Room cave2 = new Room("cave2", "Cave 2", "The rocks are crumbly here.");
@@ -42,7 +42,7 @@ public class CreateSmallCave {
 
         cave2.addEntity(new CuttableRope());
 
-        CreateSmallCave.putRoom(cave2);
+        putRoom(cave2);
 
         Room cave3 = new Room("cave3", "Cave 3", "Nothing worth of notice here.");
         cave3.addExit("north", "cave2");
@@ -53,7 +53,7 @@ public class CreateSmallCave {
         cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");
 
-        CreateSmallCave.putRoom(cave3);
+        putRoom(cave3);
 
         Room cellar = new Room("cellar", "Cellar", "Very damp and filled to the brim with bottles of beer! :D");
         cellar.addExit("up", "cave3");
@@ -62,7 +62,7 @@ public class CreateSmallCave {
         cellar.addItem(new Beer());
         cellar.addItem(new Beer());
 
-        CreateSmallCave.putRoom(cellar);
+        putRoom(cellar);
 
         Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
         cave4.addExit("south", "cave2");
@@ -71,20 +71,13 @@ public class CreateSmallCave {
         emon.addSubject("beer", "I love beer!");
         cave4.addEntity(emon);
 
-        CreateSmallCave.putRoom(cave4);
+        putRoom(cave4);
 
         Room bossRoom = new Room("bossroom", "Boss Room", "Lots of bones cover the ground. You shiver.");
         bossRoom.addExit("west", "cave2");
         Wolf boss = new Wolf();
         bossRoom.addEntity(boss);
 
-        CreateSmallCave.putRoom(bossRoom);
-
-        return rooms;
-
-    }
-
-    public static void putRoom(Room room){
-        rooms.put(room.getID(), room);
+        putRoom(bossRoom);
     }
 }

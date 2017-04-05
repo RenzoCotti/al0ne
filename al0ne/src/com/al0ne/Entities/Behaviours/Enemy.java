@@ -1,9 +1,7 @@
-package com.al0ne.Entities;
+package com.al0ne.Entities.Behaviours;
 
 import com.al0ne.Items.Item;
-import com.al0ne.Items.Pair;
 import com.al0ne.Items.PairDrop;
-import com.al0ne.Room;
 
 import java.util.ArrayList;
 
@@ -12,7 +10,7 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 13/03/2017.
  */
-public abstract class Enemy extends Character{
+public abstract class Enemy extends Character {
 
     protected boolean alive;
 
@@ -58,7 +56,7 @@ public abstract class Enemy extends Character{
 
     //testing purposes
     @Override
-    public void printLongDescription() {
+    public void printLongDescription(Player player, Room room) {
         printToLog("HP: "+currentHealth+"/"+maxHealth+" DMG: "+damage+" ATK: "+attack+" DEX: "+dexterity+" ARM: "+armor);
     }
 
