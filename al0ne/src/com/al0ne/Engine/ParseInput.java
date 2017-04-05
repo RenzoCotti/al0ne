@@ -37,14 +37,14 @@ public class ParseInput {
                 if (parsedInput.length < 2){
                     printToLog("The syntax is: SAVE name_of_the_save_file");
                 } else{
-                    save(parsedInput[1]);
+                    save(parsedInput[1], null);
                 }
                 return false;
             case "load":
                 if (parsedInput.length < 2){
                     printToLog("The syntax is: LOAD name_of_the_save_file");
                 } else{
-                    load(parsedInput[1]);
+                    load(parsedInput[1], null);
                 }
                 return false;
 

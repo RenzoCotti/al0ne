@@ -6,13 +6,20 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.HashMap;
 
@@ -84,6 +91,12 @@ public class Main extends Application{
     }
 
     private Parent createContent(){
+
+        VBox root = new VBox(1);
+
+        Stage stage = new Stage();
+
+
         log = new TextArea();
         log.setPrefHeight(500);
         log.setEditable(false);
@@ -97,8 +110,54 @@ public class Main extends Application{
             }
         });
 
-        VBox root = new VBox(1, log, input);
 
+        MenuBar menuBar = new MenuBar();
+
+        Menu fileMenu = new Menu("File");
+        Menu helpMenu = new Menu("Help");
+        Menu creditsMenu = new Menu("Credits");
+
+
+
+
+
+        MenuItem save = new MenuItem("Save");
+        save.setOnAction(t -> {
+            FileChooser saveFile = new FileChooser();
+            saveFile.setTitle("Save File");
+            File file = saveFile.showSaveDialog(stage);
+            if (file != null) {
+                save(file.getName(), file.getPath());
+            }
+        });
+
+        MenuItem load = new MenuItem("Load");
+        load.setOnAction(t -> {
+            FileChooser loadFile = new FileChooser();
+            loadFile.setTitle("Open Load File");
+            loadFile.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Save files (*.save)", "*.save"));
+            File file = loadFile.showOpenDialog(stage);
+
+            if (file != null) {
+                load(file.getName(), file.getAbsolutePath());
+            }
+        });
+
+        MenuItem quit = new MenuItem("Quit");
+        quit.setOnAction(t -> {
+            Stage s = quitDialog(stage);
+            s.show();
+        });
+
+
+
+        fileMenu.getItems().addAll(save, load, quit);
+
+        menuBar.getMenus().addAll(fileMenu, helpMenu, creditsMenu);
+
+
+
+        root.getChildren().addAll(menuBar, log, input);
 
         root.setPrefSize(800,600);
         return root;
@@ -128,15 +187,44 @@ public class Main extends Application{
         service.restart();
     }
 
+    public static Stage quitDialog(Stage stage){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        s.initOwner(stage);
+        VBox dialogVbox = new VBox(20);
 
-    public static void save(String s){
+        HBox buttonBox = new HBox(20);
+
+        Button quitButton = new Button("Yes");
+        quitButton.setOnAction(a -> System.exit(0));
+
+        Button cancel = new Button("No");
+        cancel.setOnAction(b -> s.close());
+
+        Text text = new Text("Are you sure you want to quit?");
+
+        buttonBox.getChildren().addAll(quitButton, cancel);
+        dialogVbox.getChildren().addAll(text, buttonBox);
+        dialogVbox.setPadding(new Insets(20));
+
+        Scene dialogScene = new Scene(dialogVbox, 250, 100);
+        s.setScene(dialogScene);
+
+        return s;
+    }
+
+
+    public static void save(String s, String path){
         FileOutputStream fop = null;
         ObjectOutputStream oos = null;
         File file;
 
         try {
-
-            file = new File("./"+s+".save");
+            if (path != null){
+                file = new File(path+".save");
+            } else{
+                file = new File("./"+s+".save");
+            }
             fop = new FileOutputStream(file);
             oos = new ObjectOutputStream(fop);
 
@@ -177,8 +265,8 @@ public class Main extends Application{
         }
     }
 
-    public static void load(String s){
-        Game loaded = deserializeGame(s);
+    public static void load(String s, String path){
+        Game loaded = deserializeGame(s, path);
         if (loaded == null){
             return;
         }
@@ -193,7 +281,7 @@ public class Main extends Application{
 
     }
 
-    public static Game deserializeGame(String filename) {
+    public static Game deserializeGame(String filename, String path) {
 
         Game game = null;
 
@@ -201,8 +289,11 @@ public class Main extends Application{
         ObjectInputStream ois = null;
 
         try {
-
-            fin = new FileInputStream(filename);
+            if (path != null){
+                fin = new FileInputStream(path);
+            } else{
+                fin = new FileInputStream(filename);
+            }
             ois = new ObjectInputStream(fin);
             game = (Game) ois.readObject();
 
