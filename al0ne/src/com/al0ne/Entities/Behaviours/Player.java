@@ -632,7 +632,7 @@ public class Player implements Serializable{
 
             int attackRoll = (int)(Math.random() * (100 - 1) + 1)+attack;
             int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+enemy.getDexterity();
-            printToLog("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
+            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
@@ -702,14 +702,13 @@ public class Player implements Serializable{
     }
 
     public void putStatus(Status s) {
-        boolean contained = false;
         for (Status st : status){
             if(s.getName().equals(st.getName())){
-                contained = true;
+                //refresh on reapply of status
+                st.duration = s.duration;
+                return;
             }
         }
-        if(!contained){
-            putStatus(s);
-        }
+        status.add(s);
     }
 }

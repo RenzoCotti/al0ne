@@ -4,6 +4,7 @@ import com.al0ne.Items.Item;
 import com.al0ne.Items.PairDrop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -25,12 +26,15 @@ public abstract class Enemy extends Character {
 
     protected ArrayList<String> resistances;
     protected ArrayList<PairDrop> loot;
+    //maps status to percentage of applying
+    protected HashMap<Status, Integer> inflictStatuses;
 
 
     public Enemy(String id, String name, String description, String shortDescription) {
         super(id, name, description, shortDescription);
         this.resistances = new ArrayList<>();
         this.loot = new ArrayList<>();
+        this.inflictStatuses = new HashMap<>();
         this.alive = true;
         this.type='e';
         this.special=false;
@@ -52,6 +56,10 @@ public abstract class Enemy extends Character {
         this.damage = damage;
 
         initialisePrefix();
+    }
+
+    public void addInflictedStatus(Status status, Integer chanceToApply){
+        inflictStatuses.put(status, chanceToApply);
     }
 
     //testing purposes
@@ -199,7 +207,7 @@ public abstract class Enemy extends Character {
                 }
                 dropped = true;
             }
-            printToLog("rolled "+rolled+"; expected "+pair.getProbability());
+            System.out.println("Loot: rolled "+rolled+"; expected "+pair.getProbability());
         }
         return dropped;
     }
@@ -216,11 +224,20 @@ public abstract class Enemy extends Character {
         }
         int attackRoll = (int)(Math.random() * (100 - 1) + 1)+attack;
         int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+player.getDexterity();
-        printToLog("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
+        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
         if(attackRoll > dodgeRoll){
             printToLog("The "+name+" attacks and hits you.");
             int inflictedDamage = damage-player.getArmorLevel();
             if (inflictedDamage>0){
+                for (Status s : inflictStatuses.keySet()){
+                    //possibly resistance from player?
+                    int inflictProbability = 100-inflictStatuses.get(s);
+                    int inflictStatus = (int)(Math.random() * (100 - 1) + 1);
+                    if(inflictStatus > inflictProbability){
+                        player.putStatus(s);
+                        printToLog(s.getOnApply());
+                    }
+                }
                 player.modifyHealthPrint(-inflictedDamage);
             } else{
                 printToLog("Your armor absorbs the damage.");

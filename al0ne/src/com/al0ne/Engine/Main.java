@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Iterator;
 
 import static javafx.scene.input.KeyCode.ENTER;
 
@@ -30,7 +31,7 @@ public class Main extends Application{
     private static TextArea log;
     private static TextField input;
 
-    public static World currentWorld = new CreateAlpha();
+    public static World currentWorld = new CreateSmallCave();
 
     public static Player player = new Player(currentWorld.getStartingRoom());
 
@@ -76,11 +77,18 @@ public class Main extends Application{
             }
 
             if(player.getStatus().size()>0){
-                for(Status st : player.getStatus()){
-                    if(st.resolveStatus()){
-                        player.getStatus().remove(st);
+                Iterator<Status> it = player.getStatus().iterator();
+                while(it.hasNext()) {
+                    Status st = it.next();
+                    if(st.resolveStatus(player)){
+                        it.remove();
                     }
                 }
+//                for(Status st : player.getStatus()){
+//                    if(st.resolveStatus(player)){
+//                        player.getStatus().remove(st);
+//                    }
+//                }
             }
             printToLog();
             player.getCurrentRoom().printName();
