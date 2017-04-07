@@ -2,6 +2,7 @@ package com.al0ne.Engine;
 
 import com.al0ne.Entities.Behaviours.Player;
 import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Entities.Behaviours.World;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -16,12 +17,12 @@ import java.util.HashMap;
 public class Game implements Serializable{
 
     private Player player;
-    private HashMap<String, Room> allRooms;
+    private World world;
     private int turnCounter;
 
-    public Game(Player player, HashMap<String, Room> allRooms, int turnCounter) {
+    public Game(Player player, World world, int turnCounter) {
         this.player = player;
-        this.allRooms = allRooms;
+        this.world = world;
         this.turnCounter = turnCounter;
     }
 
@@ -33,8 +34,8 @@ public class Game implements Serializable{
         return player.getCurrentRoom();
     }
 
-    public HashMap<String, Room> getAllRooms(){
-        return allRooms;
+    public World getWorld(){
+        return world;
     }
 
     public void addTurn(){
@@ -48,12 +49,14 @@ public class Game implements Serializable{
     @Override
     public String toString() {
         return new StringBuffer(" Player : ")
-                .append(this.player).append(" allRooms : ")
-                .append(this.allRooms).append(" turnCounter : ")
+                .append(this.player).append(" world : ")
+                .append(this.world).append(" turnCounter : ")
                 .append(this.turnCounter).toString();
     }
 
-    public void setAllRooms(HashMap<String, Room> allRooms) {
-        this.allRooms = allRooms;
+    public void setWorld(World world) {
+        this.world = world;
     }
+
+
 }

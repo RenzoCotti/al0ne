@@ -11,7 +11,7 @@ import com.al0ne.Items.ConcreteItems.Food.SnakeSteak;
  */
 public class Snake extends Enemy{
     public Snake() {
-        super("snake", "snake", "a snake", "This snake hisses and looks at you menacingly.");
+        super("snake", "Snake","This snake hisses and looks at you menacingly.", "a snake");
         addItemLoot(new SnakeSteak(), 1, 80);
         setStats(5, 1, 40, 1, 40);
         addInflictedStatus(new Poisoned(3, 1), 80);

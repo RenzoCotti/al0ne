@@ -35,7 +35,7 @@ public class Main extends Application{
 
     public static Player player = new Player(currentWorld.getStartingRoom());
 
-    public static Game game = new Game(player, currentWorld.getRooms(), 0);
+    public static Game game = new Game(player, currentWorld, 0);
 
     public static Room currentRoom = player.getCurrentRoom();
 
@@ -59,15 +59,23 @@ public class Main extends Application{
     }
     private static void hasNextLine(String s){
             currentCommand = s;
-            if(ParseInput.parse(currentCommand, game, turnCounter)){
+            if(ParseInput.parse(currentCommand, game, turnCounter, false)){
                 game.addTurn();
+                if(player.getStatus().size()>0){
+                    Iterator<Status> it = player.getStatus().iterator();
+                    while(it.hasNext()) {
+                        Status st = it.next();
+                        if(st.resolveStatus(player)){
+                            it.remove();
+                        }
+                    }
+                }
             }
             if (!player.isAlive()){
                 printToLog("You have died...");
                 printToLog();
                 printToLog("Game over!");
                 input.setDisable(true);
-//                System.exit(0);
                 return;
             } else if(ParseInput.wrongCommand >= 3){
                 printToLog("Maybe you need some help? Type \"?\" to have an intro or \"help\" to see a list of all commands");
@@ -76,20 +84,7 @@ public class Main extends Application{
                 ParseInput.lastCommand = currentCommand;
             }
 
-            if(player.getStatus().size()>0){
-                Iterator<Status> it = player.getStatus().iterator();
-                while(it.hasNext()) {
-                    Status st = it.next();
-                    if(st.resolveStatus(player)){
-                        it.remove();
-                    }
-                }
-//                for(Status st : player.getStatus()){
-//                    if(st.resolveStatus(player)){
-//                        player.getStatus().remove(st);
-//                    }
-//                }
-            }
+
             printToLog();
             player.getCurrentRoom().printName();
     }
@@ -191,9 +186,15 @@ public class Main extends Application{
             s.show();
         });
 
+        MenuItem restart = new MenuItem("Restart");
+        restart.setOnAction(t -> {
+            Stage s = restartPopup(stage);
+            s.show();
+        });
 
 
-        fileMenu.getItems().addAll(save, load, quit);
+
+        fileMenu.getItems().addAll(save, load, restart, quit);
 
         menuBar.getMenus().addAll(fileMenu, creditsMenu, helpMenu);
 
@@ -265,9 +266,48 @@ public class Main extends Application{
         Button cancel = new Button("Close");
         cancel.setOnAction(b -> s.close());
 
-        Text text = new Text("Thanks for trying out my game\nSpecial thanks to: Valerie Burgener, Lara Bruseghini, Dario Cotti for being my beta testers :D");
+        Text text = new Text("Thanks for trying out my game\nSpecial thanks to: Valerie Burgener, " +
+                "Lara Bruseghini, Dario Cotti for being my beta testers :D");
 
         buttonBox.getChildren().addAll(cancel);
+        dialogVbox.getChildren().addAll(text, buttonBox);
+        dialogVbox.setPadding(new Insets(20));
+        dialogVbox.setMaxSize(200, 500);
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+
+        return s;
+    }
+
+    private static Stage restartPopup(Stage stage){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        s.initOwner(stage);
+        VBox dialogVbox = new VBox(20);
+
+        HBox buttonBox = new HBox(20);
+
+        Button restart = new Button("Restart");
+        //maybe set initial world somewhere
+        restart.setOnAction(b -> {
+            changeWorld(game.getWorld().getWorldName());
+            input.setDisable(false);
+            player = new Player(currentWorld.getStartingRoom());
+            game = new Game(player, currentWorld, 0);
+            ParseInput.clearScreen();
+            printToLog("Game restarted.");
+            s.close();
+
+        });
+
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction(b -> s.close());
+
+        Text text = new Text("Are you sure you want to restart?");
+
+        buttonBox.getChildren().addAll(restart, cancel);
         dialogVbox.getChildren().addAll(text, buttonBox);
         dialogVbox.setPadding(new Insets(20));
         dialogVbox.setMaxSize(200, 500);
@@ -299,9 +339,6 @@ public class Main extends Application{
                 printToLog("File already exists. Specify a non existing file name.");
                 return;
             }
-//            else {
-//                file.createNewFile();
-//            }
 
             // get the content in bytes
             oos.writeObject(game);
@@ -401,18 +438,16 @@ public class Main extends Application{
             case "alphaworld":
                 World a = new CreateAlpha();
                 currentWorld = a;
-                game.setAllRooms(a.getRooms());
+                game.setWorld(a);
                 player.setCurrentRoom(a.getStartingRoom());
                 currentRoom = player.getCurrentRoom();
-                printToLog("Warp successful!");
                 return;
             case "caveworld":
                 World c = new CreateSmallCave();
                 currentWorld = c;
-                game.setAllRooms(c.getRooms());
+                game.setWorld(c);
                 player.setCurrentRoom(c.getStartingRoom());
                 currentRoom = player.getCurrentRoom();
-                printToLog("Warp successful!");
                 return;
             default:
                 printToLog("404: world not found");

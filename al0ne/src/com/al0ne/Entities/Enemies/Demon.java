@@ -13,7 +13,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Demon extends Enemy {
 
     public Demon() {
-        super("boss", "Hellish demon", "A huge horned demon with snake skin.", "demon");
+        super("boss", "Hellish demon", "A huge horned demon with snake skin.", "a demon");
         addItemLoot(new Coin(), 100, 100);
         addResistance("fists");
         addResistance("sharp");

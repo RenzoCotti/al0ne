@@ -68,11 +68,6 @@ public abstract class Entity implements Serializable{
         printToLog(longDescription);
     }
 
-    public void printShortDescription() {
-        printToLog(shortDescription);
-    }
-
-
     public ArrayList<String> getRequiredCommand() {
         return requiredCommand;
     }

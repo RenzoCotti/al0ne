@@ -7,6 +7,8 @@ import java.util.HashMap;
  * Created by BMW on 05/04/2017.
  */
 public class World implements Serializable{
+
+
     protected String worldName;
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
@@ -35,5 +37,13 @@ public class World implements Serializable{
 
     public void putRoom(Room room){
         rooms.put(room.getID(), room);
+    }
+
+    public String getWorldName() {
+        return worldName;
+    }
+
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
     }
 }

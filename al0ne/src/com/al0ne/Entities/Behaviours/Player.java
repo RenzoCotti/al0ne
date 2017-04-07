@@ -636,20 +636,20 @@ public class Player implements Serializable{
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    printToLog("You punch and hit the "+enemy.getName()+".");
+                    printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
                     enemy.modifyHealth(-1);
                 }else if(enemy.isWeakAgainst(type) ){
 
                     int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
 
                     if(inflictedDamage < 0){
-                        printToLog("The "+enemy.getName()+" seem not to be affected");
+                        printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected");
                     } else{
-                        printToLog("You attack and hit the "+enemy.getName()+".");
+                        printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
                         enemy.modifyHealth(-(inflictedDamage));
                     }
                 } else{
-                    printToLog("The "+enemy.getName()+" seem not to be affected");
+                    printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected");
                 }
 
                 if (enemy.isAttacked(this, currentRoom)) {
@@ -657,7 +657,7 @@ public class Player implements Serializable{
                 }
                 return true;
             } else{
-                printToLog("You attack, but the "+enemy.getName()+" dodges.");
+                printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
                 if (enemy.isAttacked(this, currentRoom)) {
                     currentRoom.getEntities().remove(enemy.getID());
                 }
@@ -665,7 +665,7 @@ public class Player implements Serializable{
             }
 
         } else {
-            printToLog("You can't seem to see a fiend.");
+            printToLog("You can't seem to see an enemy.");
         }
         return false;
     }
@@ -701,14 +701,15 @@ public class Player implements Serializable{
         return status;
     }
 
-    public void putStatus(Status s) {
+    public boolean putStatus(Status s) {
         for (Status st : status){
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
                 st.duration = s.duration;
-                return;
+                return false;
             }
         }
         status.add(s);
+        return true;
     }
 }

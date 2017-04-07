@@ -19,17 +19,20 @@ import static com.al0ne.Engine.Main.*;
 public class ParseInput {
 //    static String last="help";
     public static int wrongCommand=0;
-    public static String lastCommand ="";
+    public static String lastCommand ="look";
 
-    public static boolean parse(String input, Game game, int turns) {
+    public static boolean parse(String input, Game game, int turns, boolean again) {
 
         Player player = game.getPlayer();
-        HashMap<String, Room> rooms = game.getAllRooms();
+        HashMap<String, Room> rooms = game.getWorld().getRooms();
 
         String lowerInput = input.toLowerCase();
 
         String[] parsedInput = lowerInput.split(" ");
 
+        if(!input.equals("g") && !input.equals("again") && !again){
+            printToLog("("+input+")");
+        }
 
         switch (parsedInput[0]) {
 
@@ -126,7 +129,7 @@ public class ParseInput {
             case "i":
             case "inventory":
                 player.printInventory();
-                return true;
+                return false;
             case "?":
                 printHelp();
                 wrongCommand=0;
@@ -152,7 +155,7 @@ public class ParseInput {
             case "g":
             case "again":
                 printToLog("("+lastCommand+")");
-                return parse(lastCommand, game, turns);
+                return parse(lastCommand, game, turns, true);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
             case "worn":
@@ -570,7 +573,7 @@ public class ParseInput {
 
         if ( npc != null){
             npc.printLongDescription(null, null);
-            return true;
+            return false;
         }
 
         //there are more possibilities from the items fetched
@@ -583,7 +586,7 @@ public class ParseInput {
         }
         player.examine(items.get(0).getEntity());
 
-        return true;
+        return false;
     }
 
     public static boolean handleWear(String[] parsedInput, Player player){

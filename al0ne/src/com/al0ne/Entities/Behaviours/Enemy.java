@@ -8,10 +8,16 @@ import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
+
 /**
  * Created by BMW on 13/03/2017.
  */
 public abstract class Enemy extends Character {
+
+    static final int CHANCE_OF_SPECIAL = 20;
+
+
+
 
     protected boolean alive;
 
@@ -65,14 +71,16 @@ public abstract class Enemy extends Character {
     //testing purposes
     @Override
     public void printLongDescription(Player player, Room room) {
-        printToLog("HP: "+currentHealth+"/"+maxHealth+" DMG: "+damage+" ATK: "+attack+" DEX: "+dexterity+" ARM: "+armor);
+        System.out.println("HP: "+currentHealth+"/"+maxHealth+" DMG: "+damage+" ATK: "+attack+" DEX: "+dexterity+" ARM: "+armor);
+        printToLog(longDescription);
+        printHealthDescription();
     }
 
     private void initialisePrefix(){
 
         int chance = (int)(Math.random() * (100 - 1) + 1);
 
-        if(chance < 80){
+        if(chance < 100 - CHANCE_OF_SPECIAL){
             return;
         }
 
@@ -88,13 +96,26 @@ public abstract class Enemy extends Character {
 
         int rolled = (int)(Math.random() * 6 );
 
-        this.name = prefixes.get(rolled).toLowerCase()+" "+name;
+        name = prefixes.get(rolled).toLowerCase()+" "+name.toLowerCase();
+        longDescription = longDescription+" It looks quite "+prefixes.get(rolled).toLowerCase()+".";
+
+
+        String[] temp = shortDescription.split(" ");
+        String newDescription = temp[0]+" "+prefixes.get(rolled);
+
+        for(int i=1; i<temp.length; i++){
+            newDescription+=" "+temp[i];
+        }
+        shortDescription=newDescription;
+
+
 
         switch (rolled){
             //case tough
             case 0:
                 this.maxHealth=maxHealth+maxHealth/2;
                 this.currentHealth=maxHealth;
+//                System.out.println("health");
                 break;
             //case fiery
             case 1:
@@ -105,18 +126,22 @@ public abstract class Enemy extends Character {
             case 2:
                 this.damage=damage+damage;
                 this.attack=-10;
+//                System.out.println("strong");
                 break;
             //case resilient
             case 3:
                 this.armor=armor+armor/2;
+//                System.out.println("resilient");
                 break;
             //case fast
             case 4:
                 this.dexterity=dexterity+dexterity/3;
+//                System.out.println("fast");
                 break;
             //case fierce
             case 5:
                 this.attack=attack+attack/3;
+//                System.out.println("fierce");
                 break;
         }
 
@@ -150,21 +175,25 @@ public abstract class Enemy extends Character {
         if (this.currentHealth+health <= maxHealth){
             this.currentHealth+=health;
         }
+
+    }
+
+    public void printHealthDescription(){
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
         if (percentage >= 80){
-            printToLog("The "+name+" seems mostly fine.");
+            printToLog("The "+name.toLowerCase()+" seems mostly fine.");
         } else if (percentage >= 60 && percentage < 80){
-            printToLog("The "+name+" doesn't look its best");
+            printToLog("The "+name.toLowerCase()+" doesn't look its best");
         } else if (percentage >= 40 && percentage < 60){
-            printToLog("The "+name+" is staggering.");
+            printToLog("The "+name.toLowerCase()+" is staggering.");
         } else if (percentage >= 20 && percentage < 40){
-            printToLog("The "+name+" falls, then gets up again.");
+            printToLog("The "+name.toLowerCase()+" falls, then gets up again.");
         } else {
             if (this.currentHealth <= 0){
                 alive=false;
             } else {
-                printToLog("The "+name+" seems almost dead.");
+                printToLog("The "+name.toLowerCase()+" seems almost dead.");
             }
         }
     }
@@ -215,9 +244,9 @@ public abstract class Enemy extends Character {
 
     public boolean isAttacked(Player player, Room room){
         if(!alive){
-            printToLog("You defeated the "+ name);
+            printToLog("You defeated the "+ name.toLowerCase());
             if(addLoot(room)){
-                printToLog("The "+name+" drops some items.");
+                printToLog("The "+name.toLowerCase()+" drops some items.");
             }
             room.getEntities().remove(ID);
             return true;
@@ -226,7 +255,7 @@ public abstract class Enemy extends Character {
         int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+player.getDexterity();
         System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
         if(attackRoll > dodgeRoll){
-            printToLog("The "+name+" attacks and hits you.");
+            printToLog("The "+name.toLowerCase()+" attacks and hits you.");
             int inflictedDamage = damage-player.getArmorLevel();
             if (inflictedDamage>0){
                 for (Status s : inflictStatuses.keySet()){
@@ -234,16 +263,18 @@ public abstract class Enemy extends Character {
                     int inflictProbability = 100-inflictStatuses.get(s);
                     int inflictStatus = (int)(Math.random() * (100 - 1) + 1);
                     if(inflictStatus > inflictProbability){
-                        player.putStatus(s);
-                        printToLog(s.getOnApply());
+                        if (player.putStatus(s)){
+                            printToLog(s.getOnApply());
+                        }
                     }
                 }
-                player.modifyHealthPrint(-inflictedDamage);
+                player.modifyHealth(-inflictedDamage);
+//                player.printHealth();
             } else{
                 printToLog("Your armor absorbs the damage.");
             }
         } else{
-            printToLog("The "+name+" attacks, but you manage to dodge.");
+            printToLog("The "+name.toLowerCase()+" attacks, but you manage to dodge.");
         }
 
         return false;

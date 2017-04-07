@@ -98,7 +98,7 @@ public class Room extends Entity{
     public void printEnemy() {
         ArrayList<Enemy> enemies = getEnemyList();
         for (Enemy enemy : enemies){
-            printToLog("You can see a "+enemy.getName()+" here.");
+            printToLog("You can see "+enemy.getShortDescription()+" here.");
         }
     }
 
