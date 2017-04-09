@@ -10,7 +10,7 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class BlackDeath extends Status{
     public BlackDeath() {
-        super("blackdeath", 0, "You feel sick. Give up all hope", "Your fever worsens.", "By a godly miracle, you recover from your fever.");
+        super("blackdeath", 0, "You feel sick. Give up all hope.", "Your fever worsens.", "By a godly miracle, you recover from your fever.");
     }
 
     @Override

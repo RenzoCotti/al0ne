@@ -634,7 +634,7 @@ public class ParseInput {
         printToLog("Welcome to my textual adventure game!");
         printToLog("I hope you enjoy your time playing");
         printToLog();
-        printToLog("Please report any weird/unexpected behaviour to me");
+        printToLog("Please report any weird/unexpected behaviour to me :D");
 
         printToLog();
         printToLog();

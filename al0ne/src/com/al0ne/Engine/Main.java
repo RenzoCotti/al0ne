@@ -111,6 +111,7 @@ public class Main extends Application{
         log = new TextArea();
         log.setPrefHeight(550);
         log.setEditable(false);
+        log.setWrapText(true);
 
         input  = new TextField();
         input.setOnKeyPressed(event -> {
@@ -298,6 +299,9 @@ public class Main extends Application{
             game = new Game(player, currentWorld, 0);
             ParseInput.clearScreen();
             printToLog("Game restarted.");
+            printToLog();
+            player.getCurrentRoom().printName();
+            player.getCurrentRoom().printRoom();
             s.close();
 
         });
