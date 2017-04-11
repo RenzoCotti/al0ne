@@ -1,8 +1,8 @@
 package com.al0ne.Entities.Enemies;
 
 import com.al0ne.Entities.Behaviours.Enemy;
-import com.al0ne.Items.ConcreteItems.Food.Apple;
-import com.al0ne.Items.ConcreteItems.Coin;
+import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
+import com.al0ne.Entities.Items.ConcreteItems.Coin;
 
 /**
  * Created by BMW on 13/03/2017.

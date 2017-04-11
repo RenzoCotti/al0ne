@@ -2,9 +2,9 @@ package com.al0ne.Entities.NPCs;
 
 import com.al0ne.Entities.Behaviours.NPC;
 import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Items.Item;
-import com.al0ne.Items.Pair;
-import com.al0ne.Items.Pricepair;
+import com.al0ne.Entities.Items.Item;
+import com.al0ne.Entities.Items.Pair;
+import com.al0ne.Entities.Items.Pricepair;
 
 import java.util.HashMap;
 

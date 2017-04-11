@@ -1,17 +1,17 @@
 package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Entities.Enemies.Demon;
-import com.al0ne.Items.ConcreteItems.*;
-import com.al0ne.Items.ConcreteItems.Armor.IronHelmet;
-import com.al0ne.Items.ConcreteItems.Armor.LeatherArmour;
-import com.al0ne.Items.ConcreteItems.Food.Apple;
-import com.al0ne.Items.ConcreteItems.Food.Mushroom;
-import com.al0ne.Items.ConcreteItems.Weapon.HolySword;
-import com.al0ne.Items.ConcreteItems.Weapon.Knife;
-import com.al0ne.Items.Prop;
+import com.al0ne.Entities.Items.ConcreteItems.*;
+import com.al0ne.Entities.Items.ConcreteItems.Armor.IronHelmet;
+import com.al0ne.Entities.Items.ConcreteItems.Armor.LeatherArmour;
+import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
+import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
+import com.al0ne.Entities.Items.Prop;
 import com.al0ne.Entities.Behaviours.NPC;
-import com.al0ne.Items.Props.HolyFountain;
-import com.al0ne.Items.Props.LockedDoor;
+import com.al0ne.Entities.Items.Props.HolyFountain;
+import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.Behaviours.Room;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;

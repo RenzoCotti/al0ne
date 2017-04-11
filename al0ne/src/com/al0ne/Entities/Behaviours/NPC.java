@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Behaviours;
 
-import com.al0ne.Items.Item;
+import com.al0ne.Entities.Items.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;

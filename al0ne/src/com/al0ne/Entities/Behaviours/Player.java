@@ -1,15 +1,14 @@
 package com.al0ne.Entities.Behaviours;
 
-import com.al0ne.Items.Behaviours.Wearable.*;
-import com.al0ne.Items.Item;
-import com.al0ne.Items.Pair;
-import com.al0ne.Items.Prop;
+import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.Item;
+import com.al0ne.Entities.Items.Pair;
+import com.al0ne.Entities.Items.Prop;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
