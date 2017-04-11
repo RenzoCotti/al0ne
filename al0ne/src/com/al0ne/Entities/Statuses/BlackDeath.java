@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Statuses;
 
-import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Entities.Behaviours.Status;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Status;
 
 import static com.al0ne.Engine.Main.printToLog;
 

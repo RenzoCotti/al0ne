@@ -9,13 +9,13 @@ import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Entities.Items.Prop;
-import com.al0ne.Entities.Behaviours.NPC;
+import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.HolyFountain;
 import com.al0ne.Entities.Items.Props.LockedDoor;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;
-import com.al0ne.Entities.Behaviours.World;
+import com.al0ne.Behaviours.World;
 
 /**
  * Created by BMW on 14/03/2017.

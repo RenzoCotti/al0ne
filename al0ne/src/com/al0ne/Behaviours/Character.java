@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Behaviours;
+package com.al0ne.Behaviours;
 
 /**
  * placeholder class for attackable npcs

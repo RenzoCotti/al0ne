@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.Behaviours.Wearable;
 
-import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
 
 /**
  * Created by BMW on 02/02/2017.

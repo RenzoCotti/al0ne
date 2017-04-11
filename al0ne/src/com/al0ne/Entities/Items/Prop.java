@@ -1,8 +1,8 @@
 package com.al0ne.Entities.Items;
 
-import com.al0ne.Entities.Behaviours.Entity;
-import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
 
 import java.util.ArrayList;
 

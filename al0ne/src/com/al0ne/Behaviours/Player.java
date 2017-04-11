@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Behaviours;
+package com.al0ne.Behaviours;
 
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.Item;

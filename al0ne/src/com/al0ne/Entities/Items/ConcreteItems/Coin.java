@@ -1,8 +1,8 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
-import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Room;
 
 /**
  * Created by BMW on 09/03/2017.

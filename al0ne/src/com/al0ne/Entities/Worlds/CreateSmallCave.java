@@ -4,11 +4,11 @@ import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
-import com.al0ne.Entities.Behaviours.NPC;
+import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.*;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Enemies.Wolf;
-import com.al0ne.Entities.Behaviours.World;
+import com.al0ne.Behaviours.World;
 
 public class CreateSmallCave extends World{
 

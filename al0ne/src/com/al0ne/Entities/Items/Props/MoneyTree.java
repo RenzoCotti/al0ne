@@ -1,10 +1,10 @@
 package com.al0ne.Entities.Items.Props;
 
-import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Item;
 import com.al0ne.Entities.Items.ConcreteItems.Coin;
 import com.al0ne.Entities.Items.Prop;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
 

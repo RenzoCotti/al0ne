@@ -1,9 +1,9 @@
 package com.al0ne.Entities.Items.Props;
 
-import com.al0ne.Entities.Behaviours.Player;
+import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Pair;
 import com.al0ne.Entities.Items.Prop;
-import com.al0ne.Entities.Behaviours.Room;
+import com.al0ne.Behaviours.Room;
 
 /**
  * Created by BMW on 18/02/2017.

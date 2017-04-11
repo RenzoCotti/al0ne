@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Items;
 
-import com.al0ne.Entities.Behaviours.Entity;
+import com.al0ne.Behaviours.Entity;
 
 /**
  * Created by BMW on 09/03/2017.

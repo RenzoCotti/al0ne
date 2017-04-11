@@ -1,11 +1,10 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Entities.Behaviours.Room;
-import com.al0ne.Entities.Behaviours.World;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
+import com.al0ne.Behaviours.World;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by BMW on 28/01/2017.

@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Behaviours;
+package com.al0ne.Behaviours;
 
 import java.io.Serializable;
 import java.util.HashMap;

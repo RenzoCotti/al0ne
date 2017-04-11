@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Behaviours;
+package com.al0ne.Behaviours;
 
 /**
  * Created by BMW on 05/04/2017.

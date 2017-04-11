@@ -1,9 +1,9 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Behaviours.Player;
-import com.al0ne.Entities.Behaviours.Room;
-import com.al0ne.Entities.Behaviours.Status;
-import com.al0ne.Entities.Behaviours.World;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
+import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.World;
 import com.al0ne.Entities.Worlds.CreateAlpha;
 import com.al0ne.Entities.Worlds.CreateSmallCave;
 import javafx.application.Application;
