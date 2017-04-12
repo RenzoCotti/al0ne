@@ -1,8 +1,8 @@
 package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Entities.Items.Pair;
-import com.al0ne.Entities.Items.Prop;
+import com.al0ne.Behaviours.Pair;
+import com.al0ne.Behaviours.Pairs.Prop;
 import com.al0ne.Behaviours.Room;
 
 /**

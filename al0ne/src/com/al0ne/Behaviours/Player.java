@@ -1,9 +1,8 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Items.Pair;
-import com.al0ne.Entities.Items.Prop;
+import com.al0ne.Behaviours.Pairs.Prop;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -529,6 +528,38 @@ public class Player implements Serializable{
 //                printToLog(item.getCount());
                 if (item.isEmpty()){
                     currentRoom.getEntities().remove(toAdd.getID());
+                }
+            }
+        }
+        return true;
+    }
+
+    //this function tries to pick up an item in the currentRoom:
+    //it also checks if the player can carry the current item
+    //if it didn't succeed, print an error message
+    public boolean takeFrom(Pair item, Container container, boolean all){
+
+        Item toAdd = (Item) item.getEntity();
+        if (all){
+            int currentCounter = item.getCount();
+            if (!addItem(item, item.getCount())){
+                printToLog("Too heavy to carry.");
+                return false;
+            } else {
+                currentCounter-=item.getCount();
+                container.modifySize(-currentCounter*toAdd.getSize());
+                if (item.isEmpty()){
+                    container.removeItem(item);
+                }
+            }
+        } else {
+            if (!addItem(item)){
+                printToLog("Too heavy to carry.");
+                return false;
+            } else {
+                container.modifySize(-toAdd.getSize());
+                if (item.isEmpty()){
+                    container.removeItem(item);
                 }
             }
         }

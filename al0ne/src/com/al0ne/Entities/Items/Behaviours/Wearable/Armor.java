@@ -1,6 +1,7 @@
 package com.al0ne.Entities.Items.Behaviours.Wearable;
 
 import com.al0ne.Behaviours.Player;
+import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Behaviours.Room;
 
@@ -9,7 +10,7 @@ import com.al0ne.Behaviours.Room;
  */
 public class Armor extends Protective {
     public Armor(String id, String name, String description, String shortDescription, double weight, int armor) {
-        super(id, name, description, shortDescription, weight, armor);
+        super(id, name, description, shortDescription, weight, armor, Size.LARGE);
         this.part = "armor";
     }
 

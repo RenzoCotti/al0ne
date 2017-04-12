@@ -1,8 +1,6 @@
-package com.al0ne.Entities.Items;
+package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Entity;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.Engine.Size;
 
 import java.util.ArrayList;
 
@@ -14,18 +12,20 @@ import java.util.ArrayList;
 public abstract class Item extends Entity {
 
     protected double weight;
+    protected int size;
     protected ArrayList<String> properties;
     protected ArrayList<String> requiredType;
 
 
 
-    public Item(String id, String name, String description, String shortDescription, double weight) {
+    public Item(String id, String name, String description, String shortDescription, double weight, Size size) {
         super(id, name, description, shortDescription);
         this.weight = weight;
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
         addCommand("take");
         this.type='i';
+        this.size=Size.toInt(size);
     }
 
     public double getWeight() {
@@ -60,4 +60,7 @@ public abstract class Item extends Entity {
         return false;
     }
 
+    public int getSize() {
+        return size;
+    }
 }

@@ -1,4 +1,6 @@
-package com.al0ne.Entities.Items;
+package com.al0ne.Behaviours.Pairs;
+
+import com.al0ne.Behaviours.Item;
 
 import java.io.Serializable;
 

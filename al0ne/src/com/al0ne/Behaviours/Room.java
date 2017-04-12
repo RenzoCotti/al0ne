@@ -1,8 +1,7 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Items.Pair;
-import com.al0ne.Entities.Items.Prop;
+import com.al0ne.Behaviours.Pairs.Prop;
+import com.al0ne.Entities.Items.Behaviours.Container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +59,18 @@ public class Room extends Entity{
             }
         }
         return enemyList;
+    }
+
+    public ArrayList<Container> getContainers() {
+        ArrayList<Container> containers = new ArrayList<>();
+        for (Pair p : entities.values()){
+            Entity c = p.getEntity();
+            if (c.getType()=='C'){
+                Container container = (Container) c;
+                containers.add(container);
+            }
+        }
+        return containers;
     }
 
     public HashMap<String, Pair> getEntities() {
@@ -127,8 +138,27 @@ public class Room extends Entity{
 
     public void printNPCs() {
         ArrayList<NPC> npcs = getNPCList();
-        for (NPC enemy : npcs){
-            printToLog("You can see "+enemy.getName()+" here.");
+        for (NPC npc : npcs){
+            printToLog("You can see "+npc.getName()+" here.");
+        }
+    }
+
+    //prints containers in the room
+    private void printContainers(){
+        ArrayList<Container> containers = getContainers();
+        if (containers.size()!=0){
+            printToSingleLine("You see ");
+            for (int i=0; i<containers.size(); i++) {
+                printToSingleLine(containers.get(i).getShortDescription());
+                if(i==containers.size()-2){
+                    printToSingleLine(" and ");
+                } else if(i!=containers.size()-1){
+                    printToSingleLine(", ");
+                } else{
+                    printToSingleLine(" here.");
+                    printToLog();
+                }
+            }
         }
     }
 
@@ -247,6 +277,7 @@ public class Room extends Entity{
         printLongDescription(null, null);
         printItems();
         printProps();
+        printContainers();
         printNPCs();
         printEnemy();
         printDirections();

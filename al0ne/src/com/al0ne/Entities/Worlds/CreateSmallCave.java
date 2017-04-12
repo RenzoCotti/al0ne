@@ -1,6 +1,7 @@
 package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Entities.Enemies.GiantRat;
+import com.al0ne.Entities.Items.Behaviours.Chest;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
@@ -27,6 +28,7 @@ public class CreateSmallCave extends World{
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
         cave1.addEntity(new Door("cave1door", "Generic Door"));
         cave1.addEntity(new GiantRat());
+        cave1.addEntity(new Chest());
         cave1.lockDirection("east", "cave1door");
 
         cave1.addEntity(new MoneyTree());

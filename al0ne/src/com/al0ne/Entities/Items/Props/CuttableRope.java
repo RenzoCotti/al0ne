@@ -1,8 +1,8 @@
 package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Items.Prop;
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pairs.Prop;
 import com.al0ne.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;

@@ -1,11 +1,12 @@
-package com.al0ne.Entities.Items;
+package com.al0ne.Behaviours.Pairs;
 
 import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.Pair;
 
 /**
  * Created by BMW on 09/03/2017.
  */
-public class PairDrop extends Pair{
+public class PairDrop extends Pair {
     private Entity entity;
     private int count;
     private int probability;

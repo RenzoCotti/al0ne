@@ -1,7 +1,6 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Items.PairDrop;
+import com.al0ne.Behaviours.Pairs.PairDrop;
 
 import java.util.ArrayList;
 import java.util.HashMap;

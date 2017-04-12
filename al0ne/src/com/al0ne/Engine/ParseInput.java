@@ -1,11 +1,12 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Entity;
-import com.al0ne.Entities.Items.Item;
-import com.al0ne.Entities.Items.Pair;
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pair;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class ParseInput {
 
             case "save":
                 if (parsedInput.length < 2){
-                    printToLog("The syntax is: SAVE name_of_the_save_file");
+                    printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else{
                     save(parsedInput[1], null);
                 }
@@ -52,7 +53,7 @@ public class ParseInput {
                 return false;
             case "load":
                 if (parsedInput.length < 2){
-                    printToLog("The syntax is: LOAD name_of_the_save_file");
+                    printToLog("The syntax is: LOAD path_of_the_save_file");
                 } else{
                     load(parsedInput[1], null);
                 }
@@ -122,7 +123,25 @@ public class ParseInput {
             case "up":
                 return ParseInput.move(player, rooms, "up", parsedInput);
             case "take":
-                return ParseInput.takeOrDrop(parsedInput, player, false);
+
+                int tokenFrom = ParseInput.checkForToken(parsedInput, "from");
+                int tokenAll = ParseInput.checkForToken(parsedInput, "all");
+
+                //case simple take
+                if (tokenFrom == -1  && tokenAll == -1) {
+                    return ParseInput.takeOrDrop(parsedInput, player, false);
+                }
+                //case take from container:
+                //take normally and all
+                else if (tokenFrom == -1 && tokenAll > -1){
+                    return ParseInput.takeOrDrop(parsedInput, player, false);
+                    //take from container normally
+                } else if (tokenFrom > -1 && tokenAll == -1){
+                    return ParseInput.takeFromContainer(parsedInput, player, tokenFrom, false);
+                    //take from container, all
+                } else if (tokenFrom > -1 && tokenAll > -1){
+                    return ParseInput.takeFromContainer(parsedInput, player, tokenFrom, true);
+                }
             case "x":
             case "examine":
                 return ParseInput.handleExamine(parsedInput, player);
@@ -278,6 +297,7 @@ public class ParseInput {
     //this attempts to get items from a token;
     //number = 0: tries to get from the inventory
     //number = 1: tries to get from Entities
+    //number = 2: tries to get from containers
     private static ArrayList<Pair> getPotentialItem(String s, Player player, int number) {
 
         ArrayList<Pair> potentialItems = new ArrayList<>();
@@ -335,6 +355,44 @@ public class ParseInput {
                         if (b.toLowerCase().equals(token)) {
                             if (!potentialItems.contains(a)) {
                                 potentialItems.add(pair);
+                            }
+                        }
+                    }
+                }
+            }
+            //case it's a container
+        } else if (number == 2) {
+            ArrayList<Container> containers = player.getCurrentRoom().getContainers();
+            //check if there is an exact match
+            for (Container container : containers) {
+                ArrayList<Pair> b = container.getItems();
+                for(Pair p : b){
+                    Item i = (Item) p.getEntity();
+                    if (i.getName().equals(s)) {
+                        potentialItems.add(p);
+                        return potentialItems;
+                    }
+                }
+
+            }
+
+            //otherwise, parse and check for partial matches
+            String[] temp = s.split(" ");
+            //we check the given string token by token
+
+
+
+            for (String token : temp) {
+                //and we check with each pair in inventory if it contains the token
+                for (Container container : containers) {
+                    ArrayList<Pair> b = container.getItems();
+                    for(Pair p : b){
+                        Item i = (Item) p.getEntity();
+                        String itemName [] = i.getName().toLowerCase().split(" ");
+                        for (String string : itemName){
+                            if (string.equals(token)) {
+                                potentialItems.add(p);
+                                return potentialItems;
                             }
                         }
                     }
@@ -433,6 +491,35 @@ public class ParseInput {
             return true;
         }
 
+    }
+
+
+    private static boolean takeFromContainer(String [] temp, Player player, int fromToken, boolean all){
+        String item = ParseInput.stitchFromTo(temp, 1, fromToken);
+        String container = ParseInput.stitchFromTo(temp, fromToken+1, temp.length);
+
+        ArrayList<Pair> possibleItems = ParseInput.getPotentialItem(item, player, 2);
+        ArrayList<Pair> possibleContainers = ParseInput.getPotentialItem(container, player, 1);
+
+
+        if ((possibleItems.size() == 0 ||  possibleContainers.size() == 0)) {
+            printToLog(possibleItems.size()+"You can't see that."+possibleContainers.size());
+            return false;
+        }
+
+        if ((possibleItems.size() > 1 ||  possibleContainers.size() > 1)) {
+            printToLog("Be more specific.");
+            return false;
+        }
+
+        if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
+            if (player.takeFrom(possibleItems.get(0), (Container) possibleContainers.get(0).getEntity(), all)){
+                printToLog(possibleItems.get(0).getEntity().getName()+" added to your inventory.");
+            }
+        } else {
+            printToLog("You can't take it.");
+        }
+        return true;
     }
 
     //this function handles both dropping and taking items:
