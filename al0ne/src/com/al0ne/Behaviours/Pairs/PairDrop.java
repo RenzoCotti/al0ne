@@ -1,7 +1,6 @@
 package com.al0ne.Behaviours.Pairs;
 
 import com.al0ne.Behaviours.Entity;
-import com.al0ne.Behaviours.Pair;
 
 /**
  * Created by BMW on 09/03/2017.

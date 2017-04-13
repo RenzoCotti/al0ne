@@ -4,7 +4,7 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pair;
+import com.al0ne.Behaviours.Pairs.Pair;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 11/04/2017.
  */
-public class Container extends Item{
+public abstract class Container extends Item{
 
     protected ArrayList<Pair> items;
     protected boolean canAdd;
@@ -27,11 +27,6 @@ public class Container extends Item{
         this.currentSize = 0;
         this.type='C';
         this.items = new ArrayList<>();
-    }
-
-    @Override
-    public boolean used(Room currentRoom, Player player) {
-        return false;
     }
 
     public boolean hasItem(Item item){

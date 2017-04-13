@@ -2,7 +2,7 @@ package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Entity;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pair;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
@@ -48,7 +48,11 @@ public class ParseInput {
                 if (parsedInput.length < 2){
                     printToLog("The syntax is: WARP world_name");
                 } else{
-                    changeWorld(stitchFromTo(parsedInput, 1, parsedInput.length));
+                    if(changeWorld(stitchFromTo(parsedInput, 1, parsedInput.length))){
+                        printToLog();
+                        currentRoom.printRoom();
+                    }
+
                 }
                 return false;
             case "load":
@@ -250,7 +254,12 @@ public class ParseInput {
             wrongCommand=0;
             if (player.moveToRoom(direction, rooms)){
                 ParseInput.clearScreen();
-                player.getCurrentRoom().printRoom();
+                if(player.getCurrentRoom().isFirstVisit()){
+                    player.getCurrentRoom().printRoom();
+                    player.getCurrentRoom().visit();
+                } else{
+                    player.getCurrentRoom().printName();
+                }
                 return true;
             }
 

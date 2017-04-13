@@ -19,6 +19,19 @@ public abstract class Status {
         this.onTick=tick;
     }
 
+    public Status(String name, Integer duration, String onApply, String resolve){
+        this.name = name;
+        this.duration = duration;
+        this.onApply=onApply;
+        this.onResolve=resolve;
+    }
+
+    public Status(String name, Integer duration, String onApply){
+        this.name = name;
+        this.duration = duration;
+        this.onApply=onApply;
+    }
+
     public abstract boolean resolveStatus(Player player);
 
     public String getName(){
@@ -33,4 +46,7 @@ public abstract class Status {
         return onApply;
     }
 
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 }

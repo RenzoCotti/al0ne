@@ -1,4 +1,4 @@
-package com.al0ne.Behaviours;
+package com.al0ne.Behaviours.Pairs;
 
 import com.al0ne.Behaviours.Entity;
 

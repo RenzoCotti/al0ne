@@ -3,7 +3,7 @@ package com.al0ne.Entities.NPCs;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pair;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Pricepair;
 
 import java.util.HashMap;

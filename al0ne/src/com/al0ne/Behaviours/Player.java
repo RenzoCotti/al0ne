@@ -1,12 +1,14 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Behaviours.Pairs.Prop;
+import com.al0ne.Entities.Statuses.Thirsty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
@@ -39,7 +41,8 @@ public class Player implements Serializable{
     private int attack = 70;
     private int dexterity = 30;
 
-    protected ArrayList<Status> status;
+    protected HashMap<String, Status> status;
+    protected ArrayList<Status> toApply;
 
     private boolean alive = true;
 
@@ -57,8 +60,10 @@ public class Player implements Serializable{
         this.inventory = new HashMap<>();
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
-        this.status = new ArrayList<>();
+        this.status = new HashMap<>();
+        this.toApply = new ArrayList<>();
         initialiseWorn();
+        putStatus(new Thirsty());
     }
 
     public void initialiseWorn(){
@@ -436,9 +441,10 @@ public class Player implements Serializable{
     //this function makes the player use item on target, item is an inventory Item, target is a Prop
     public boolean interactOnWith(Entity target, Entity item){
 
-        if (target.getType() == 'n' || item.getType() != 'e'){
+        if (target.getType() == 'n' || item.getType() == 'e'){
             return false;
         }
+
         if (target.getType() == 'p'){
             return ((Prop) target).usedWith((Item) item, currentRoom, this);
         } else if (target.getType() == 'i'){
@@ -628,8 +634,9 @@ public class Player implements Serializable{
                             }
 
                         }
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
             }
 
@@ -755,19 +762,39 @@ public class Player implements Serializable{
     }
 
 
-    public ArrayList<Status> getStatus() {
+    public HashMap<String, Status> getStatus() {
         return status;
     }
 
     public boolean putStatus(Status s) {
-        for (Status st : status){
+        for (Status st : status.values()){
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
                 st.duration = s.duration;
                 return false;
             }
         }
-        status.add(s);
+        status.put(s.getName(), s);
         return true;
+    }
+
+    public boolean removeStatus(String statusName) {
+
+        if (status.get(statusName) != null){
+            status.remove(statusName);
+        }
+        return true;
+    }
+
+    public boolean hasStatus(String s) {
+        return status.get(s) != null;
+    }
+
+    public ArrayList<Status> getToApply() {
+        return toApply;
+    }
+
+    public void queueStatus(Status st) {
+        this.toApply.add(st);
     }
 }

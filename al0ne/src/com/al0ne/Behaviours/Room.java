@@ -1,6 +1,6 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Pairs.Prop;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Entities.Items.Behaviours.Container;
 
 import java.util.ArrayList;
@@ -34,6 +34,8 @@ public class Room extends Entity{
 
     private String customDirections;
 
+    private boolean firstVisit;
+
 
 
     public Room(String id, String name, String description) {
@@ -42,12 +44,22 @@ public class Room extends Entity{
         this.lockedDirections =new HashMap<>();
         customDirections = null;
         entities = new HashMap<>();
+        firstVisit = true;
     }
 
     @Override
     public boolean used(Room currentRoom, Player player) {
         return false;
     }
+
+    public boolean isFirstVisit(){
+        return firstVisit;
+    }
+
+    public void visit(){
+        firstVisit = false;
+    }
+
 
     public ArrayList<Enemy> getEnemyList() {
         ArrayList<Enemy> enemyList = new ArrayList<>();

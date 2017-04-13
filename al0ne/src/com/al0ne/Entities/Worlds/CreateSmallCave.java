@@ -1,7 +1,9 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Prop;
 import com.al0ne.Entities.Enemies.GiantRat;
-import com.al0ne.Entities.Items.Behaviours.Chest;
+import com.al0ne.Entities.Items.ConcreteItems.Canteen;
+import com.al0ne.Entities.Items.ConcreteItems.Chest;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
@@ -29,7 +31,12 @@ public class CreateSmallCave extends World{
         cave1.addEntity(new Door("cave1door", "Generic Door"));
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
+        Prop river = new Prop("river", "River", "a watery river", "a river");
+        river.addProperty("water");
+        cave1.addEntity(river);
+        cave1.addEntity(new Canteen());
         cave1.lockDirection("east", "cave1door");
+        cave1.visit();
 
         cave1.addEntity(new MoneyTree());
 

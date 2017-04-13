@@ -8,7 +8,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
-import com.al0ne.Behaviours.Pairs.Prop;
+import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.HolyFountain;
 import com.al0ne.Entities.Items.Props.LockedDoor;
@@ -32,6 +32,7 @@ public class CreateAlpha extends World{
         startRoom.addEntity(new LeatherArmour());
         startRoom.addEntity(new Knife());
         startRoom.addEntity(new IronHelmet());
+        startRoom.visit();
 
         startRoom.addEntity(new Apple());
 

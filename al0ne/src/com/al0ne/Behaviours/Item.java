@@ -29,7 +29,7 @@ public abstract class Item extends Entity {
         this.type='i';
         this.size=Size.toInt(size);
         String s = Size.toString(this.size);
-        this.longDescription+=". It's "+ s+".";
+        this.longDescription+=" It's "+ s+".";
 
     }
 
@@ -47,8 +47,6 @@ public abstract class Item extends Entity {
         }
         return false;
     }
-
-
 
 
 

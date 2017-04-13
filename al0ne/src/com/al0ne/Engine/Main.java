@@ -22,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static javafx.scene.input.KeyCode.ENTER;
@@ -62,13 +63,21 @@ public class Main extends Application{
             if(ParseInput.parse(currentCommand, game, turnCounter, false)){
                 game.addTurn();
                 if(player.getStatus().size()>0){
-                    Iterator<Status> it = player.getStatus().iterator();
-                    while(it.hasNext()) {
-                        Status st = it.next();
-                        if(st.resolveStatus(player)){
-                            it.remove();
+                    ArrayList<Status> toResolve = new ArrayList<>();
+                    for (Status status: player.getStatus().values()){
+                        if(status.resolveStatus(player)){
+                            toResolve.add(status);
                         }
                     }
+                    for (Status st : toResolve){
+                        player.getStatus().remove(st.getName());
+                    }
+
+                    for (Status toApply : player.getToApply()){
+                        player.getStatus().put(toApply.getName(), toApply);
+                    }
+
+                    player.getToApply().clear();
                 }
             }
             if (!player.isAlive()){
@@ -437,7 +446,7 @@ public class Main extends Application{
 
     }
 
-    public static void changeWorld(String s){
+    public static boolean changeWorld(String s){
         switch (s){
             case "alphaworld":
                 World a = new CreateAlpha();
@@ -445,16 +454,19 @@ public class Main extends Application{
                 game.setWorld(a);
                 player.setCurrentRoom(a.getStartingRoom());
                 currentRoom = player.getCurrentRoom();
-                return;
+                ParseInput.clearScreen();
+                return true;
             case "caveworld":
                 World c = new CreateSmallCave();
                 currentWorld = c;
                 game.setWorld(c);
                 player.setCurrentRoom(c.getStartingRoom());
                 currentRoom = player.getCurrentRoom();
-                return;
+                ParseInput.clearScreen();
+                return true;
             default:
                 printToLog("404: world not found");
+                return false;
         }
     }
 }

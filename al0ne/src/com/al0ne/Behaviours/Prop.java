@@ -1,9 +1,11 @@
-package com.al0ne.Behaviours.Pairs;
+package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Entity;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Entities.Items.Behaviours.ChargeItem;
+import com.al0ne.Entities.Items.Behaviours.Container;
 
 import java.util.ArrayList;
 
@@ -22,15 +24,17 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Prop extends Entity {
 
-    private String afterDescription;
+    protected String afterDescription;
     protected String requiresItem;
     protected boolean active;
-    private ArrayList<String> requiredType;
+    protected ArrayList<String> requiredType;
+    protected ArrayList<String> properties;
 
 
     public Prop(String id, String name, String description, String shortDescription) {
         super(id, name, description, shortDescription);
         this.requiredType = new ArrayList<>();
+        this.properties = new ArrayList<>();
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
@@ -40,6 +44,7 @@ public class Prop extends Entity {
     public Prop(String id, String name, String description, String shortDescription, String after) {
         super(id, name, description, shortDescription);
         this.requiredType = new ArrayList<>();
+        this.properties = new ArrayList<>();
         this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
@@ -51,6 +56,13 @@ public class Prop extends Entity {
         requiredType.add(type);
     }
 
+    public void addProperty(String property){
+        properties.add(property);
+    }
+
+    public boolean hasProperty(String property){
+        return properties.contains(property);
+    }
 
     public boolean usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){
@@ -62,6 +74,11 @@ public class Prop extends Entity {
         if (requiresItem.equals(item.getID())){
             active=true;
             return true;
+        }
+
+        if(item instanceof ChargeItem){
+            ChargeItem charge = (ChargeItem) item;
+            return charge.refill(this);
         }
         return false;
     }
