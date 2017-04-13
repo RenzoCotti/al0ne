@@ -566,6 +566,34 @@ public class Player implements Serializable{
         return true;
     }
 
+    public boolean putIn(Pair item, Container container, boolean all){
+
+        if (all){
+            int count = item.getCount();
+            if (!container.putIn(item, count)){
+                printToLog("Not enough space in it.");
+                return false;
+            } else {
+                printToLog("count : "+count);
+                currentWeight-=count*((Item)item.getEntity()).getWeight();
+                if (item.isEmpty()){
+                    inventory.remove(item.getEntity().getID());
+                }
+            }
+        } else {
+            if (!container.putIn(item)){
+                printToLog("Not enough space in it.");
+                return false;
+            } else {
+                currentWeight-=((Item)item.getEntity()).getWeight();
+                if (item.isEmpty()){
+                    inventory.remove(item.getEntity().getID());
+                }
+            }
+        }
+        return true;
+    }
+
 
     public boolean customAction(String action, Entity entity){
 

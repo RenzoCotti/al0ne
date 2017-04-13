@@ -4,6 +4,8 @@ import com.al0ne.Engine.Size;
 
 import java.util.ArrayList;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 02/02/2017.
  *
@@ -26,6 +28,9 @@ public abstract class Item extends Entity {
         addCommand("take");
         this.type='i';
         this.size=Size.toInt(size);
+        String s = Size.toString(this.size);
+        this.longDescription+=". It's "+ s+".";
+
     }
 
     public double getWeight() {

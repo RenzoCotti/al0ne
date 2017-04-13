@@ -44,6 +44,11 @@ public class Container extends Item{
         return false;
     }
 
+    @Override
+    public double getWeight() {
+        return weight+currentWeight;
+    }
+
     public Pair getPair(Item item){
         for (Pair p : items){
             Item currentItem = (Item) p.getEntity();
@@ -54,7 +59,8 @@ public class Container extends Item{
         return null;
     }
 
-    public boolean putIn(Player player, Item item){
+    public boolean putIn(Pair pair){
+        Item item = (Item) pair.getEntity();
         if (canAdd && item.getSize()+currentSize < size){
             if(hasItem(item)){
                 getPair(item).addCount();
@@ -69,14 +75,20 @@ public class Container extends Item{
         }
     }
 
-    public boolean putIn(Player player, Item item, Integer amount){
+    //return true/false if successful
+    public boolean putIn(Pair pair, Integer amount){
+        Item item = (Item) pair.getEntity();
         if (canAdd && (item.getSize())*amount+currentSize < size){
             if(hasItem(item)){
                 getPair(item).modifyCount(amount);
+                pair.modifyCount(-amount);
                 currentSize+=item.getSize()*amount;
+                currentWeight+=item.getWeight()*amount;
             } else{
                 items.add(new Pair(item, amount));
+                pair.modifyCount(-amount);
                 currentSize+=item.getSize()*amount;
+                currentWeight+=item.getWeight();
             }
             return true;
         } else{
@@ -87,6 +99,7 @@ public class Container extends Item{
     public void removeItem(Pair pair){
         Item item = (Item) pair.getEntity();
         weight-=item.getWeight();
+        if(weight<= 0) weight=0;
         currentSize-=item.getSize();
         items.remove(pair);
     }
@@ -122,6 +135,10 @@ public class Container extends Item{
 
     @Override
     public void printLongDescription(Player player, Room room) {
+        if (items.size() == 0) {
+            printToLog(longDescription);
+            return;
+        }
         printToLog(longDescription+". It contains: ");
         for (Pair pair: items){
             Item item = (Item) pair.getEntity();

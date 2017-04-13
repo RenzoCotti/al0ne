@@ -11,9 +11,6 @@ import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
 public class Chest extends Container{
     public Chest() {
         super("chest", "wooden chest", "A fairly large wooden chest", "a wooden chest", 10, Size.VLARGE, true);
-
-        this.addItem(new Coin(), 100);
-        this.addItem(new Knife(), 20);
     }
 
 

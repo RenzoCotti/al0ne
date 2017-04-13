@@ -143,25 +143,6 @@ public class Room extends Entity{
         }
     }
 
-    //prints containers in the room
-    private void printContainers(){
-        ArrayList<Container> containers = getContainers();
-        if (containers.size()!=0){
-            printToSingleLine("You see ");
-            for (int i=0; i<containers.size(); i++) {
-                printToSingleLine(containers.get(i).getShortDescription());
-                if(i==containers.size()-2){
-                    printToSingleLine(" and ");
-                } else if(i!=containers.size()-1){
-                    printToSingleLine(", ");
-                } else{
-                    printToSingleLine(" here.");
-                    printToLog();
-                }
-            }
-        }
-    }
-
 
     public ArrayList<Prop> getPropList() {
         ArrayList<Prop> propList = new ArrayList<>();
@@ -179,7 +160,7 @@ public class Room extends Entity{
         ArrayList<Pair> itemList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='i' || e.getType()=='w'){
+            if (e.getType()=='i' || e.getType()=='w' || e.getType()=='C'){
 //                printToLog(e.getID());
                 itemList.add(p);
             }
@@ -277,7 +258,6 @@ public class Room extends Entity{
         printLongDescription(null, null);
         printItems();
         printProps();
-        printContainers();
         printNPCs();
         printEnemy();
         printDirections();

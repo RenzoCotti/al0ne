@@ -137,10 +137,22 @@ public class ParseInput {
                     return ParseInput.takeOrDrop(parsedInput, player, false);
                     //take from container normally
                 } else if (tokenFrom > -1 && tokenAll == -1){
-                    return ParseInput.takeFromContainer(parsedInput, player, tokenFrom, false);
+                    return ParseInput.takePutContainer(parsedInput, player, tokenFrom, false, true);
                     //take from container, all
                 } else if (tokenFrom > -1 && tokenAll > -1){
-                    return ParseInput.takeFromContainer(parsedInput, player, tokenFrom, true);
+                    return ParseInput.takePutContainer(parsedInput, player, tokenFrom, true, true);
+                }
+            case "put":
+                int tokenIn = ParseInput.checkForToken(parsedInput, "in");
+                tokenAll = ParseInput.checkForToken(parsedInput, "all");
+
+                if (tokenIn > -1 && tokenAll == -1){
+                    return ParseInput.takePutContainer(parsedInput, player, tokenIn, false, false);
+                    //put in container
+                } else if (tokenIn > -1 && tokenAll > -1){
+                    return ParseInput.takePutContainer(parsedInput, player, tokenIn, true, false);
+                } else if(tokenIn == -1){
+                    printToLog("The syntax is PUT x IN container.");
                 }
             case "x":
             case "examine":
@@ -494,16 +506,29 @@ public class ParseInput {
     }
 
 
-    private static boolean takeFromContainer(String [] temp, Player player, int fromToken, boolean all){
-        String item = ParseInput.stitchFromTo(temp, 1, fromToken);
+    private static boolean takePutContainer(String[] temp, Player player, int fromToken, boolean all, boolean take){
+        String item;
+        if(all && !take){
+            item = ParseInput.stitchFromTo(temp, 2, fromToken);
+        } else{
+            item = ParseInput.stitchFromTo(temp, 1, fromToken);
+        }
         String container = ParseInput.stitchFromTo(temp, fromToken+1, temp.length);
 
-        ArrayList<Pair> possibleItems = ParseInput.getPotentialItem(item, player, 2);
+
+        ArrayList<Pair> possibleItems;
+        if(take){
+            possibleItems = ParseInput.getPotentialItem(item, player, 2);
+        } else{
+            possibleItems = ParseInput.getPotentialItem(item, player, 0);
+        }
         ArrayList<Pair> possibleContainers = ParseInput.getPotentialItem(container, player, 1);
 
 
         if ((possibleItems.size() == 0 ||  possibleContainers.size() == 0)) {
-            printToLog(possibleItems.size()+"You can't see that."+possibleContainers.size());
+            printToLog("You can't see that.");
+            printToLog(item);
+            printToLog(container);
             return false;
         }
 
@@ -512,15 +537,30 @@ public class ParseInput {
             return false;
         }
 
-        if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
+        if (take && possibleItems.size() == 1 && possibleContainers.size() == 1) {
+            int count = possibleItems.get(0).getCount();
             if (player.takeFrom(possibleItems.get(0), (Container) possibleContainers.get(0).getEntity(), all)){
-                printToLog(possibleItems.get(0).getEntity().getName()+" added to your inventory.");
+                if(all){
+                    printToLog(count +" x "+possibleItems.get(0).getEntity().getName()+" added to your inventory.");
+                } else{
+                    printToLog(possibleItems.get(0).getEntity().getName()+" added to your inventory.");
+                }
+            }
+        } else if(possibleItems.size() == 1 && possibleContainers.size() == 1){
+            int count = possibleItems.get(0).getCount();
+            if (player.putIn(possibleItems.get(0), (Container) possibleContainers.get(0).getEntity(), all)){
+                if(all){
+                    printToLog(count + " x "+possibleItems.get(0).getEntity().getName()+" put in "+possibleContainers.get(0).getEntity().getName());
+                }else{
+                    printToLog(possibleItems.get(0).getEntity().getName()+" put in "+possibleContainers.get(0).getEntity().getName());
+                }
             }
         } else {
             printToLog("You can't take it.");
         }
         return true;
     }
+
 
     //this function handles both dropping and taking items:
     //drop: false-> it's a TAKE action, true-> it's a DROP action
@@ -557,7 +597,7 @@ public class ParseInput {
             ArrayList<Pair> items = new ArrayList<>();
 
             for (Pair p : possibleItems){
-                if (p.getEntity().getType()=='i' || p.getEntity().getType()=='w'){
+                if (p.getEntity().getType()=='i' || p.getEntity().getType()=='w' || p.getEntity().getType()=='C'){
                     items.add(p);
                 }
             }
