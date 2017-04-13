@@ -10,13 +10,7 @@ import com.al0ne.Entities.Items.Behaviours.Food;
  */
 public class SnakeSteak extends Food{
     public SnakeSteak() {
-        super("snakesteak","Snake Steak", "Some meat from a snake. Doesn't look too inviting", "snake steak", 0.3, Size.NORMAL);
+        super("snakesteak","Snake Steak", "Some meat from a snake. Doesn't look too inviting", "snake steak", 0.3, Size.NORMAL, 10);
         addCommand("eat");
-    }
-
-    @Override
-    public boolean used(Room currentRoom, Player player){
-        player.modifyHealth(+1);
-        return true;
     }
 }

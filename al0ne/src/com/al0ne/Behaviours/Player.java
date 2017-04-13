@@ -3,12 +3,12 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Entities.Statuses.Thirsty;
+import com.al0ne.Entities.Statuses.Hunger;
+import com.al0ne.Entities.Statuses.Thirst;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
@@ -46,6 +46,8 @@ public class Player implements Serializable{
 
     private boolean alive = true;
 
+    private boolean hasNeeds;
+
 
 //    private Weapon wieldedWeapon;
     private HashMap<String, Wearable> wornItems;
@@ -53,9 +55,11 @@ public class Player implements Serializable{
     // TODO: 08/03/2017 add satiation, thirst level
     // add also money pouch?
 
+
+
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
-    public Player(Room currentRoom) {
+    public Player(Room currentRoom, boolean needs) {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
         this.currentWeight=0;
@@ -63,7 +67,12 @@ public class Player implements Serializable{
         this.status = new HashMap<>();
         this.toApply = new ArrayList<>();
         initialiseWorn();
-        putStatus(new Thirsty());
+        if(needs){
+//            putStatus(new Thirst());
+            putStatus(new Hunger());
+        }
+        this.hasNeeds = needs;
+
     }
 
     public void initialiseWorn(){
@@ -71,6 +80,10 @@ public class Player implements Serializable{
         wornItems.put("off hand", null);
         wornItems.put("armor", null);
         wornItems.put("helmet", null);
+    }
+
+    public boolean hasNeeds() {
+        return hasNeeds;
     }
 
     public Weapon getWeapon(){

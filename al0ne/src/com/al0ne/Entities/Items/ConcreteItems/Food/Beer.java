@@ -12,10 +12,4 @@ public class Beer extends Drinkable {
         addProperty("consumable");
         addCommand("drink");
     }
-
-    @Override
-    public boolean used(Room currentRoom, Player player){
-        player.modifyHealth(+1);
-        return true;
-    }
 }

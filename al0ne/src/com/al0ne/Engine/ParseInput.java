@@ -41,7 +41,7 @@ public class ParseInput {
                 if (parsedInput.length < 2){
                     printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else{
-                    save(parsedInput[1], null);
+                    SaveLoad.save(parsedInput[1], null);
                 }
                 return false;
             case "warp":
@@ -59,7 +59,7 @@ public class ParseInput {
                 if (parsedInput.length < 2){
                     printToLog("The syntax is: LOAD path_of_the_save_file");
                 } else{
-                    load(parsedInput[1], null);
+                    SaveLoad.load(parsedInput[1], null);
                 }
                 return false;
 
@@ -257,8 +257,6 @@ public class ParseInput {
                 if(player.getCurrentRoom().isFirstVisit()){
                     player.getCurrentRoom().printRoom();
                     player.getCurrentRoom().visit();
-                } else{
-                    player.getCurrentRoom().printName();
                 }
                 return true;
             }

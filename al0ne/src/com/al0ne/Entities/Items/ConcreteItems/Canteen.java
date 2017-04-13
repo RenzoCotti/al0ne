@@ -2,12 +2,9 @@ package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.Status;
 import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
-import com.al0ne.Entities.Statuses.Thirsty;
-
-import java.util.Iterator;
+import com.al0ne.Entities.Statuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -31,8 +28,8 @@ public class Canteen extends ChargeItem{
             player.removeStatus("dehydrated");
             printToLog("Finally some fresh water!");
         } else{
-            Thirsty thirsty = (Thirsty) player.getStatus().get("thirsty");
-            thirsty.setDuration(thirsty.THIRST_CLOCK);
+            Thirst thirst = (Thirst) player.getStatus().get("thirst");
+            thirst.setDuration(Thirst.THIRST_CLOCK);
         }
         currentCharges--;
         return true;
