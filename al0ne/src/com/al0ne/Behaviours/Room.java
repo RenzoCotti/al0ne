@@ -111,6 +111,7 @@ public class Room extends Entity{
     public Entity getEntity(String name) {
         for (Pair p : entities.values()){
             Entity currentEntity = p.getEntity();
+            //TODO, FIX THIS ITH PROPER SEEKING
             if (currentEntity.getName().toLowerCase().contains(name)){
                 return currentEntity;
             }

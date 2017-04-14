@@ -365,9 +365,9 @@ public class Player implements Serializable{
 
     //this function checks if the player has an item in the inventory
     //if there is no item, it returns false
-    private boolean hasItemInInventory(String item){
-        for (Pair p : inventory.values()){
-            if (p.getEntity().getID().equals(item)){
+    public boolean hasItemInInventory(String item){
+        for (String s : inventory.keySet()){
+            if (s.equals(item)){
                 return true;
             }
         }
@@ -528,6 +528,16 @@ public class Player implements Serializable{
     //it also checks if the player can carry the current item
     //if it didn't succeed, print an error message
     public boolean pickUpItem(Pair item, boolean all){
+
+        if(hasItemInInventory(item.getEntity().getID()) && ((Item)item.getEntity()).isUnique()){
+            printToLog("You can have just one with you.");
+            //bypassed by taking chest with that in it
+            return false;
+        } else if(all && ((Item)item.getEntity()).isUnique() && item.getCount()>1){
+            printToLog("You can have just one with you.");
+            //bypassed by taking chest with that in it
+            return false;
+        }
 
         Item toAdd = (Item) item.getEntity();
         if (all){

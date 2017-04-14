@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Spells.Fireball;
 import com.al0ne.Entities.Enemies.Demon;
 import com.al0ne.Entities.Items.ConcreteItems.*;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.IronHelmet;
@@ -32,6 +33,9 @@ public class CreateAlpha extends World{
         startRoom.addEntity(new LeatherArmour());
         startRoom.addEntity(new Knife());
         startRoom.addEntity(new IronHelmet());
+        Spellbook sb = new Spellbook();
+        sb.addSpell(new Fireball(), 5);
+        startRoom.addEntity(sb, 2);
         startRoom.visit();
 
         startRoom.addEntity(new Apple());

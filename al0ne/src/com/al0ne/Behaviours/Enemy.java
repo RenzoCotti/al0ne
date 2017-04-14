@@ -174,6 +174,9 @@ public abstract class Enemy extends Character {
         if (this.currentHealth+health <= maxHealth){
             this.currentHealth+=health;
         }
+        if(this.currentHealth <= 0){
+            this.alive = false;
+        }
 
     }
 

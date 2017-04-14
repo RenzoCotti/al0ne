@@ -17,6 +17,7 @@ public abstract class Item extends Entity {
     protected int size;
     protected ArrayList<String> properties;
     protected ArrayList<String> requiredType;
+    protected boolean unique;
 
 
 
@@ -30,7 +31,7 @@ public abstract class Item extends Entity {
         this.size=Size.toInt(size);
         String s = Size.toString(this.size);
         this.longDescription+=" It's "+ s+".";
-
+        this.unique = false;
     }
 
     public double getWeight() {
@@ -46,6 +47,14 @@ public abstract class Item extends Entity {
             }
         }
         return false;
+    }
+
+    public void setUnique(){
+        this.unique=true;
+    }
+
+    public boolean isUnique(){
+        return unique;
     }
 
 
