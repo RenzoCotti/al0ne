@@ -84,7 +84,7 @@ public class ParseInput {
                 return ParseInput.handleGive(parsedInput, player);
 
             case "cast":
-
+                return handleCast(parsedInput, player, currentRoom);
                 //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
@@ -969,6 +969,44 @@ public class ParseInput {
         return potentialEnemies;
     }
 
+
+    private static ArrayList<Spell> getPotentialSpell(String s, Spellbook sb) {
+
+        ArrayList<Spell> potentialSpells = new ArrayList<>();
+
+
+        //check if there is an exact match
+        for (SpellPair pair : sb.getSpells().values()) {
+            Spell spell = pair.getSpell();
+
+            if (spell.getName().equals(s)) {
+                potentialSpells.add(spell);
+                return potentialSpells;
+            }
+        }
+
+        //otherwise, parse and check for partial matches
+        String[] temp = s.split(" ");
+        //we check the given string token by token
+        for (String token : temp) {
+
+            for (SpellPair pair : sb.getSpells().values()) {
+                Spell spell = pair.getSpell();
+
+                String[] currentSpellName = spell.getName().split(" ");
+                for (String b : currentSpellName) {
+                    if (b.toLowerCase().equals(token)) {
+                        if (!potentialSpells.contains(spell)) {
+                            potentialSpells.add(spell);
+                        }
+                    }
+                }
+            }
+        }
+
+        return potentialSpells;
+    }
+
     public static boolean handleCast(String[] parsedInput, Player player, Room currentRoom){
         if(parsedInput.length == 1){
             printToLog("The syntax is CAST spell (AT target)");
@@ -981,10 +1019,19 @@ public class ParseInput {
 
             if (player.hasItemInInventory("spellbook")) {
                 Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-                //TODO: NEED TO MAKE A STRING -> POSSIBLESPELLS CONVERTER
 
-                if (spellbook.hasSpell(spellName)) {
-                    SpellPair spell = spellbook.getSpell(spellName);
+                ArrayList<Spell> potentialSpells = getPotentialSpell(spellName, spellbook);
+
+                if(potentialSpells.size() > 1){
+                    printToLog("Be more specific.");
+                    return false;
+                }else if (potentialSpells.size() == 0){
+                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
+                    return false;
+                }
+
+                if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
+                    SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
 
 
                     if(spell.getCount() <= 0){
@@ -1009,10 +1056,7 @@ public class ParseInput {
                                 return true;
                             }
                             return false;
-
                     }
-                } else{
-                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
                 }
             } else{
                 printToLog("You need a spellbook to cast spells.");
@@ -1027,7 +1071,18 @@ public class ParseInput {
             String target = stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
             if (player.hasItemInInventory("spellbook")) {
                 Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-                //TODO: NEED TO MAKE A STRING -> POSSIBLESPELLS CONVERTER
+
+
+                ArrayList<Spell> potentialSpells = getPotentialSpell(spellName, spellbook);
+
+                if(potentialSpells.size() > 1){
+                    printToLog("Be more specific.");
+                    return false;
+                }else if (potentialSpells.size() == 0){
+                    printToLog("Your spellbook doesn't seem to have such a spell.");
+                    return false;
+                }
+
                 if (spellbook.hasSpell(spellName)) {
                     SpellPair spell = spellbook.getSpell(spellName);
 
@@ -1062,15 +1117,13 @@ public class ParseInput {
                     }
                     return false;
 
-                } else{
-                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
-                    return false;
                 }
             } else{
                 printToLog("You need a spellbook to cast spells.");
                 return false;
             }
         }
+        return false;
     }
 
 }
