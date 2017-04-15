@@ -34,6 +34,7 @@ public class ParseInput {
         String[] parsedInput = lowerInput.split(" ");
 
         if (!input.equals("g") && !input.equals("again") && !again) {
+            printToLog();
             printToLog("(" + input + ")");
         }
 

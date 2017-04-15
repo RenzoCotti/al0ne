@@ -704,13 +704,13 @@ public class Player implements Serializable{
         Pair p = currentRoom.getEntityPair(name.getID());
         Entity entity;
         if (p == null) {
-            printToLog("You can't see a "+name.getName());
+            printToLog("You can't see "+name.getName()+".");
             return false;
         } else {
             entity = p.getEntity();
         }
         if(entity.getType() == 'n'){
-            printToLog("It's best not to attack "+ name.getName());
+            printToLog("It's best not to attack "+ name.getName()+".");
             return false;
         } else if (entity.getType() == 'e'){
             Enemy enemy = (Enemy) entity;
@@ -735,13 +735,13 @@ public class Player implements Serializable{
                     int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
 
                     if(inflictedDamage < 0){
-                        printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected");
+                        printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
                     } else{
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
                         enemy.modifyHealth(-(inflictedDamage));
                     }
                 } else{
-                    printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected");
+                    printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
                 }
 
                 if (enemy.isAttacked(this, currentRoom)) {
@@ -757,7 +757,7 @@ public class Player implements Serializable{
             }
 
         } else {
-            printToLog("You can't seem to see an enemy.");
+            printToLog("The "+p.getEntity().getName().toLowerCase() +" isn't threatening.");
         }
         return false;
     }
