@@ -32,6 +32,8 @@ public class Main extends Application{
     public static TextArea log;
     public static TextField input;
 
+    public static TextArea notes;
+
     public static World currentWorld = new CreateAlpha();
 
     public static Player player = new Player(currentWorld.getStartingRoom(), true);

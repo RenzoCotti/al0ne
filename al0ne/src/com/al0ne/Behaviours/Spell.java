@@ -1,9 +1,11 @@
 package com.al0ne.Behaviours;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 14/04/2017.
  */
-public abstract class Spell {
+public abstract class Spell implements Serializable{
 
     protected char target;
     protected String id;

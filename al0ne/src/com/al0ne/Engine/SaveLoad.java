@@ -14,6 +14,8 @@ public class SaveLoad {
         ObjectOutputStream oos = null;
         File file;
 
+        Main.game.setNotes(Main.notes.getText());
+
         try {
             if (path != null){
                 file = new File(path+".save");
@@ -69,6 +71,7 @@ public class SaveLoad {
         Main.player = loaded.getPlayer();
         Main.turnCounter = loaded.getTurnCount();
         Main.currentRoom = loaded.getRoom();
+        Main.notes.setText(loaded.getNotes());
 
         printToLog("Game loaded successfully.");
         printToLog();

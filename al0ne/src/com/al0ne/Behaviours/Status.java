@@ -1,9 +1,11 @@
 package com.al0ne.Behaviours;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 05/04/2017.
  */
-public abstract class Status {
+public abstract class Status implements Serializable{
 
     protected String name;
     protected Integer duration;

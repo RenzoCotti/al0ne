@@ -1,8 +1,8 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Spells.Fireball;
-import com.al0ne.Behaviours.Spells.LightHeal;
+import com.al0ne.Behaviours.Spells.ConcreteSpells.Fireball;
+import com.al0ne.Behaviours.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Spellbook;

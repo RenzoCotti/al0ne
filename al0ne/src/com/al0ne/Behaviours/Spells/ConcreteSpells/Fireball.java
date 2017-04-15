@@ -1,15 +1,16 @@
-package com.al0ne.Behaviours.Spells;
+package com.al0ne.Behaviours.Spells.ConcreteSpells;
 
 import com.al0ne.Behaviours.Enemy;
 import com.al0ne.Behaviours.Entity;
 import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Spells.DamagingSpell;
 
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * Created by BMW on 14/04/2017.
  */
-public class Fireball extends DamagingSpell{
+public class Fireball extends DamagingSpell {
     public Fireball() {
         super("fireball", "Fireball", "The ability to summon fire and throw it at your enemies", 6, 'e', "fire");
     }

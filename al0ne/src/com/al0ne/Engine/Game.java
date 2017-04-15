@@ -19,6 +19,8 @@ public class Game implements Serializable{
     private World world;
     private int turnCounter;
 
+    private String notes;
+
     public Game(Player player, World world, int turnCounter) {
         this.player = player;
         this.world = world;
@@ -50,12 +52,19 @@ public class Game implements Serializable{
         return new StringBuffer(" Player : ")
                 .append(this.player).append(" world : ")
                 .append(this.world).append(" turnCounter : ")
-                .append(this.turnCounter).toString();
+                .append(this.turnCounter).append(" notes: ")
+                .append(this.notes).toString();
     }
 
     public void setWorld(World world) {
         this.world = world;
     }
 
+    public void setNotes(String s){
+        this.notes = s;
+    }
 
+    public String getNotes() {
+        return notes;
+    }
 }

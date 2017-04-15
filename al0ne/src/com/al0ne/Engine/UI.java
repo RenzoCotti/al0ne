@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -58,8 +59,11 @@ public class UI {
         Button cancel = new Button("Close");
         cancel.setOnAction(b -> s.close());
 
-        Text text = new Text("Thanks for trying out my game\nSpecial thanks to: Valerie Burgener, " +
-                "Lara Bruseghini, Dario Cotti for being my beta testers :D");
+        Text text = new Text("Thanks for trying out my game!\nSpecial thanks to: Valerie Burgener, " +
+                "Lara Bruseghini, Dario Cotti, Giovanni Campana, Luca Hofer for being my beta testers :D");
+
+        text.maxWidth(400);
+        text.setWrappingWidth(400);
 
         buttonBox.getChildren().addAll(cancel);
         dialogVbox.getChildren().addAll(text, buttonBox);
@@ -82,6 +86,7 @@ public class UI {
 
         Main.log = new TextArea();
         Main.log.setPrefHeight(550);
+        Main.log.setPrefWidth(800);
         Main.log.setEditable(false);
         Main.log.setWrapText(true);
 
@@ -93,6 +98,26 @@ public class UI {
                 Main.input.clear();
             }
         });
+
+        Main.input.setPromptText("Type your commands here");
+
+        Main.notes = new TextArea();
+        Main.notes.setMinWidth(150);
+
+        Label noteTitle = new Label("Notes:");
+        noteTitle.setStyle("-fx-font-weight: bold");
+        noteTitle.setMaxHeight(20);
+        noteTitle.setPadding(new Insets(5, 0, 0, 20));
+
+        VBox notes = new VBox();
+        notes.getChildren().addAll(noteTitle, Main.notes);
+        VBox.setVgrow(Main.notes, Priority.ALWAYS);
+
+
+
+
+        HBox container = new HBox();
+        container.getChildren().addAll(Main.log, notes);
 
 
         MenuBar menuBar = new MenuBar();
@@ -173,7 +198,7 @@ public class UI {
 
 
 
-        root.getChildren().addAll(menuBar, Main.log, Main.input);
+        root.getChildren().addAll(menuBar, container, Main.input);
 
         root.setPrefSize(800,600);
         return root;
