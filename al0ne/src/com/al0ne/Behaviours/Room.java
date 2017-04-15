@@ -48,8 +48,8 @@ public class Room extends Entity{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
-        return false;
+    public int used(Room currentRoom, Player player) {
+        return 0;
     }
 
     public boolean isFirstVisit(){
@@ -226,7 +226,7 @@ public class Room extends Entity{
     }
 
     //prints available travel directions that are not locked
-    private void printDirections(){
+    public void printDirections(){
 
         boolean first=true;
         String toPrint="";

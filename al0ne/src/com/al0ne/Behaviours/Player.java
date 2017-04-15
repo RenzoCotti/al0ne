@@ -1,10 +1,12 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Spells.Fireball;
+import com.al0ne.Behaviours.Spells.LightHeal;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
 import com.al0ne.Entities.Statuses.Hunger;
-import com.al0ne.Entities.Statuses.Thirst;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,6 +74,11 @@ public class Player implements Serializable{
             putStatus(new Hunger());
         }
         this.hasNeeds = needs;
+
+        Spellbook sb = new Spellbook();
+        sb.addSpell(new Fireball(), 5);
+        sb.addSpell(new LightHeal(), 3);
+        addItem(new Pair(sb, 1));
 
     }
 
@@ -425,7 +432,7 @@ public class Player implements Serializable{
 
 
     //this makes the player use an item
-    public boolean simpleUse(Entity target){
+    public int simpleUse(Entity target){
 
         if (target.getType() == 'p'){
             Prop prop = (Prop) target;
@@ -434,7 +441,7 @@ public class Player implements Serializable{
         } else if (target.getType() == 'i'){
             Pair pair = inventory.get(target.getID());
             Item item = (Item) pair.getEntity();
-            if(item.used(currentRoom, this)){
+            if(item.used(currentRoom, this) == 1){
                 if (item.hasProperty("consumable")){
 //                    printToLog("used :"+pair.getCount());
 
@@ -444,10 +451,21 @@ public class Player implements Serializable{
 
                 }
 
-                return true;
+                return 1;
+            } else if(item.used(currentRoom, this) == 2){
+                if (item.hasProperty("consumable")){
+//                    printToLog("used :"+pair.getCount());
+
+                    if(!getItemPair(item.getID()).modifyCount(-1)){
+                        inventory.remove(item.getID());
+                    }
+
+                }
+
+                return 2;
             }
         }
-        return false;
+        return 0;
     }
 
 
@@ -624,7 +642,7 @@ public class Player implements Serializable{
     }
 
 
-    public boolean customAction(String action, Entity entity){
+    public int customAction(String action, Entity entity){
 
         if(entity.getType()=='i'){
             boolean inRoom = false;
@@ -634,19 +652,19 @@ public class Player implements Serializable{
                 pair = currentRoom.getEntityPair(entity.getID());
             }
             if (pair == null){
-                return false;
+                return 0;
             }
             Item item = (Item) pair.getEntity();
 
             if (item == null){
-                return false;
+                return 0;
             }
 
             for (String command : entity.getRequiredCommand()){
                 if (command.equals(action)){
-                    if(item.used(currentRoom, this)){
+                    int result = item.used(currentRoom, this);
+                    if(result == 1 || result == 2){
                         if (item.hasProperty("consumable")){
-//                            printToLog("used :"+pair.getCount());
 
                             if(!inRoom && !getItemPair(entity.getID()).modifyCount(-1)){
                                 inventory.remove(entity.getID());
@@ -655,36 +673,22 @@ public class Player implements Serializable{
                                     currentRoom.getEntities().remove(item.getID());
                                 }
                             }
-
                         }
-                        return true;
+                        return result;
                     }
-                    return false;
+                    return 0;
                 }
             }
-
-
-
 
         } else if (entity.getType() == 'p'){
             Prop prop = (Prop) entity;
             for (String command : prop.getRequiredCommand()){
 
                     prop.used(currentRoom, this);
-                    return true;
+                    return 1;
                 }
             }
-
-//        else if (item.getType() == 'n'){
-//            NPC npc = (NPC) item;
-//            for (String command : npc.getRequiredCommand()){
-//                if (command.equals(action)){
-//                    npc.used(currentRoom, this);
-//                    return true;
-//                }
-//            }
-//        }
-        return false;
+        return 0;
     }
 
 

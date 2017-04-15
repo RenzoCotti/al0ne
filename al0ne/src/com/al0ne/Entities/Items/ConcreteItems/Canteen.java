@@ -18,11 +18,11 @@ public class Canteen extends ChargeItem{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
+    public int used(Room currentRoom, Player player) {
 
         if(currentCharges <= 0){
             printToLog("It's empty.");
-            return false;
+            return 0;
         }
         if (player.hasStatus("dehydrated")){
             player.removeStatus("dehydrated");
@@ -32,7 +32,7 @@ public class Canteen extends ChargeItem{
             thirst.setDuration(Thirst.THIRST_CLOCK);
         }
         currentCharges--;
-        return true;
+        return 1;
     }
 
     @Override

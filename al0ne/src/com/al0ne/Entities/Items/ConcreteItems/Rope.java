@@ -5,8 +5,6 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
 
-import com.al0ne.Engine.Size;
-
 /**
  * Created by BMW on 02/02/2017.
  */
@@ -18,7 +16,7 @@ public class Rope extends Item{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
-        return false;
+    public int used(Room currentRoom, Player player) {
+        return 0;
     }
 }

@@ -41,7 +41,10 @@ public abstract class Entity implements Serializable{
     }
 
 
-    public abstract boolean used(Room currentRoom, Player player);
+    //returns 0 if false
+    //1 if true
+    //2 if doesn't require a print afterwards
+    public abstract int used(Room currentRoom, Player player);
 
 
 

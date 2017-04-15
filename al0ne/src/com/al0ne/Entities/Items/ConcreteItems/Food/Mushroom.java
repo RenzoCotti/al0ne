@@ -14,9 +14,9 @@ public class Mushroom extends Food {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player){
+    public int used(Room currentRoom, Player player){
         printToLog("The mushroom is poisonous!");
         player.modifyHealth(-2);
-        return true;
+        return 2;
     }
 }

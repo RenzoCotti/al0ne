@@ -19,9 +19,9 @@ public class Drinkable extends Item{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
+    public int used(Room currentRoom, Player player) {
 
-        if(player.hasNeeds()) return true;
+        if(player.hasNeeds()) return 0;
 
         if (player.hasStatus("dehydrated")){
             player.removeStatus("dehydrated");
@@ -30,6 +30,6 @@ public class Drinkable extends Item{
             Thirst thirst = (Thirst) player.getStatus().get("thirst");
             thirst.setDuration(Thirst.THIRST_CLOCK);
         }
-        return true;
+        return 1;
     }
 }

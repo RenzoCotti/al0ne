@@ -1,11 +1,6 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Entity;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
-import com.al0ne.Entities.Items.Behaviours.Container;
 
 import java.util.ArrayList;
 
@@ -85,12 +80,12 @@ public class Prop extends Entity {
 
 
     @Override
-    public boolean used(Room currentRoom, Player player){
+    public int used(Room currentRoom, Player player){
         if (requiresItem.equals("none")){
             active=true;
-            return true;
+            return 1;
         } else{
-            return false;
+            return 0;
         }
     }
 

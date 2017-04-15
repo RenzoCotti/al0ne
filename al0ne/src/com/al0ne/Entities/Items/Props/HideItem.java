@@ -24,9 +24,9 @@ public class HideItem extends Prop{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player){
+    public int used(Room currentRoom, Player player){
         currentRoom.getEntities().remove(name);
         currentRoom.getEntities().put(hidden.getID(), new Pair(hidden, 1));
-        return true;
+        return 1;
     }
 }

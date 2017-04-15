@@ -5,7 +5,6 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Statuses.Hunger;
-import com.al0ne.Entities.Statuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -23,9 +22,9 @@ public abstract class Food extends Item {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
+    public int used(Room currentRoom, Player player) {
         if(!player.hasNeeds()){
-            return true;
+            return 1;
         }
         if (player.hasStatus("starving")){
             player.removeStatus("starving");
@@ -34,6 +33,6 @@ public abstract class Food extends Item {
             Hunger hunger = (Hunger) player.getStatus().get("hunger");
             hunger.modifyDuration(+foodValue*20);
         }
-        return true;
+        return 0;
     }
 }

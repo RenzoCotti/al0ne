@@ -19,9 +19,9 @@ public abstract class Readable extends Item {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player){
+    public int used(Room currentRoom, Player player){
         printToLog("\""+content+"\"");
-        return true;
+        return 2;
     }
 
 

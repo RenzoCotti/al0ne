@@ -1,11 +1,15 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Pairs.SpellPair;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Spell;
 import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.Readable;
 
 import java.util.HashMap;
+
+import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * Created by BMW on 14/04/2017.
@@ -29,7 +33,7 @@ public class Spellbook extends Readable{
 
     public boolean hasSpell(String id){
         for(String spellID : spells.keySet()){
-            if(spellID.equals(id) && spells.get(id).getCount() > 0){
+            if(spellID.equals(id)){
                 return true;
             }
         }
@@ -38,10 +42,24 @@ public class Spellbook extends Readable{
 
     public SpellPair getSpell(String id){
         for(String spellID : spells.keySet()){
-            if(spellID.equals(id) && spells.get(id).getCount() > 0){
+            if(spellID.equals(id)){
                 return spells.get(spellID);
             }
         }
         return null;
+    }
+
+    @Override
+    public int used(Room currentRoom, Player player) {
+        printToLog("Your spellbook contains these spells:");
+        for(SpellPair sp : spells.values()){
+            Spell s = sp.getSpell();
+            printToLog("- "+s.getID()+": "+sp.getCount()+" castings.");
+        }
+        return 2;
+    }
+
+    public HashMap<String, SpellPair> getSpells() {
+        return spells;
     }
 }

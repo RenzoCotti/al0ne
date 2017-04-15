@@ -23,10 +23,10 @@ public class Door extends Prop {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player){
+    public int used(Room currentRoom, Player player){
         currentRoom.unlockDirection(ID);
 
         active=true;
-        return true;
+        return 1;
     }
 }

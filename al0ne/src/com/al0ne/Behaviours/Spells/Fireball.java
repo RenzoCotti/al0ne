@@ -11,7 +11,7 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Fireball extends DamagingSpell{
     public Fireball() {
-        super("fireball", "Fireball", "The ability to summon fire and throw it at your enemies", 6, 'e', "You hit a fireball at the ", "fire");
+        super("fireball", "Fireball", "The ability to summon fire and throw it at your enemies", 6, 'e', "fire");
     }
 
 

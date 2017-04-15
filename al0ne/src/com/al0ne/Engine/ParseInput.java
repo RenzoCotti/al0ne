@@ -84,55 +84,7 @@ public class ParseInput {
                 return ParseInput.handleGive(parsedInput, player);
 
             case "cast":
-                int tokenAt = ParseInput.checkForToken(parsedInput, "at");
-                if (tokenAt == -1) {
-                    printToLog("The syntax is: CAST spell AT target");
-                    return false;
-                } else {
-                    String spellName = stitchFromTo(parsedInput, 1, tokenAt);
-                    String target = stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
-                    if (player.hasItemInInventory("spellbook")) {
-                        Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-                        //TODO: NEED TO MAKE A STRING -> POSSIBLESPELLS CONVERTER
-                        if (spellbook.hasSpell(spellName)) {
-                            SpellPair spell = spellbook.getSpell(spellName);
-                            Spell s = spell.getSpell();
-                            char castOn = s.getTarget();
 
-                            switch (castOn) {
-                                case 'w':
-                                    WorldSpell ws = (WorldSpell) s;
-                                    return ws.isCasted(player, currentRoom);
-                                case 'i':
-                                    System.out.println("not implemented yet.");
-                                    return false;
-                                case 'e':
-                                    DamagingSpell ds = (DamagingSpell) s;
-                                    //TODO: NEED TO MAKE A STRING -> POSSIBLEENEMIES CONVERTER
-                                    ArrayList<Enemy> enemies = getPotentialEnemy(target, player);
-                                    if(enemies.size() == 0){
-                                        printToLog("You can't see that enemy");
-                                        return false;
-                                    } else if(enemies.size()>1){
-                                        printToLog("Be more specific");
-                                        return false;
-                                    } else{
-                                        return ds.isCasted(player, enemies.get(0));
-                                    }
-                                case 's':
-                                    SelfSpell ss = (SelfSpell) s;
-                                    return ss.isCasted(player);
-                            }
-
-
-                        }
-                    } else{
-                        printToLog("You need a spellbook to cast spells.");
-                        return false;
-                    }
-                    //check if spell is in spell book
-                    //player.castSpell
-                }
                 //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case "use":
 
@@ -310,6 +262,8 @@ public class ParseInput {
                 if (player.getCurrentRoom().isFirstVisit()) {
                     player.getCurrentRoom().printRoom();
                     player.getCurrentRoom().visit();
+                } else{
+                    player.getCurrentRoom().printDirections();
                 }
                 return true;
             }
@@ -336,11 +290,17 @@ public class ParseInput {
 //            return false;
 //        }
 
-        if (possibleItems.size() == 1 && player.customAction(action, possibleItems.get(0).getEntity())) {
-            printToLog("You " + action + " the " + item);
+        if (possibleItems.size() == 1) {
+            int result = player.customAction(action, possibleItems.get(0).getEntity());
+            if(result == 1){
+                printToLog("You " + action + " the " + item);
+            }
             return true;
-        } else if (possibleEntities.size() == 1 && player.customAction(action, possibleEntities.get(0).getEntity())) {
-            printToLog("You " + action + " the " + item);
+        } else if (possibleEntities.size() == 1) {
+            int result = player.customAction(action, possibleEntities.get(0).getEntity());
+            if(result == 1){
+                printToLog("You " + action + " the " + item);
+            }
             return true;
         } else if (possibleEntities.size() == 0 && possibleItems.size() == 0) {
             printToLog("You can't see it.");
@@ -349,15 +309,6 @@ public class ParseInput {
             printToLog("You can't " + action + " it.");
             return true;
         }
-//            else {
-//                if (player.customAction(action, possibleItems.get(0).getEntity())) {
-//                    printToLog("You " + action + " the " + prop + ".");
-//                    return true;
-//                } else {
-//                    printToLog("You can't " + action + " it.");
-//                    return false;
-//                }
-//            }
     }
 
     private static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
@@ -548,11 +499,13 @@ public class ParseInput {
             }
 
             if (inventoryUse.size() == 1) {
-                if (!player.simpleUse(inventoryUse.get(0).getEntity())) {
+                int result = player.simpleUse(inventoryUse.get(0).getEntity());
+                if (result == 0) {
                     printToLog("You can't use it.");
                 }
             } else if (itemUse.size() == 1) {
-                if (!player.simpleUse(itemUse.get(0).getEntity())) {
+                int result = player.simpleUse(itemUse.get(0).getEntity());
+                if (result == 0) {
                     printToLog("You can't use it.");
                 }
             } else {
@@ -1014,6 +967,110 @@ public class ParseInput {
         }
 
         return potentialEnemies;
+    }
+
+    public static boolean handleCast(String[] parsedInput, Player player, Room currentRoom){
+        if(parsedInput.length == 1){
+            printToLog("The syntax is CAST spell (AT target)");
+            return false;
+        }
+        int tokenAt = ParseInput.checkForToken(parsedInput, "at");
+        if (tokenAt == -1) {
+
+            String spellName = stitchFromTo(parsedInput, 1, parsedInput.length);
+
+            if (player.hasItemInInventory("spellbook")) {
+                Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
+                //TODO: NEED TO MAKE A STRING -> POSSIBLESPELLS CONVERTER
+
+                if (spellbook.hasSpell(spellName)) {
+                    SpellPair spell = spellbook.getSpell(spellName);
+
+
+                    if(spell.getCount() <= 0){
+                        printToLog("You don't have any castings left.");
+                        return false;
+                    }
+                    Spell s = spell.getSpell();
+                    char castOn = s.getTarget();
+
+                    switch (castOn) {
+                        case 's':
+                            SelfSpell ss = (SelfSpell) s;
+                            if(ss.isCasted(player)){
+                                spell.modifyCount(-1);
+                                return true;
+                            }
+                            return false;
+                        case 'w':
+                            WorldSpell ws = (WorldSpell) s;
+                            if(ws.isCasted(player, currentRoom)){
+                                spell.modifyCount(-1);
+                                return true;
+                            }
+                            return false;
+
+                    }
+                } else{
+                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
+                }
+            } else{
+                printToLog("You need a spellbook to cast spells.");
+                return false;
+            }
+
+
+
+            return false;
+        } else {
+            String spellName = stitchFromTo(parsedInput, 1, tokenAt);
+            String target = stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
+            if (player.hasItemInInventory("spellbook")) {
+                Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
+                //TODO: NEED TO MAKE A STRING -> POSSIBLESPELLS CONVERTER
+                if (spellbook.hasSpell(spellName)) {
+                    SpellPair spell = spellbook.getSpell(spellName);
+
+                    if(spell.getCount() <= 0){
+                        printToLog("You don't have any castings left.");
+                        return false;
+                    }
+                    Spell s = spell.getSpell();
+                    char castOn = s.getTarget();
+
+                    switch (castOn) {
+                        case 'i':
+                            System.out.println("not implemented yet.");
+                            return false;
+                        case 'e':
+                            DamagingSpell ds = (DamagingSpell) s;
+                            //TODO: NEED TO MAKE A STRING -> POSSIBLEENEMIES CONVERTER
+                            ArrayList<Enemy> enemies = getPotentialEnemy(target, player);
+                            if(enemies.size() == 0){
+                                printToLog("You can't see that enemy");
+                                return false;
+                            } else if(enemies.size()>1){
+                                printToLog("Be more specific");
+                                return false;
+                            } else {
+                                if (ds.isCasted(player, enemies.get(0))) {
+                                    spell.modifyCount(-1);
+                                    return true;
+                                }
+                                return false;
+                            }
+                    }
+                    return false;
+
+                } else{
+                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
+                    return false;
+                }
+            } else{
+                printToLog("You need a spellbook to cast spells.");
+                return false;
+            }
+        }
     }
 
 }

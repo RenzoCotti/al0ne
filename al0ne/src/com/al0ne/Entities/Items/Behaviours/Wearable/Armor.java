@@ -15,7 +15,7 @@ public class Armor extends Protective {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
-        return false;
+    public int used(Room currentRoom, Player player) {
+        return 0;
     }
 }

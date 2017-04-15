@@ -34,7 +34,7 @@ public class Weapon extends Wearable {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
-        return false;
+    public int used(Room currentRoom, Player player) {
+        return 0;
     }
 }

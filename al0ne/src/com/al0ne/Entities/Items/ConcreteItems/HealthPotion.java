@@ -14,9 +14,9 @@ public class HealthPotion extends Potion {
         }
 
         @Override
-        public boolean used(Room currentRoom, Player player){
+        public int used(Room currentRoom, Player player){
             player.modifyHealth(+20);
-            return true;
+            return 1;
         }
 
 }

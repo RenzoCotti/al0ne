@@ -53,8 +53,8 @@ public class LockedDoor extends Prop {
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
+    public int used(Room currentRoom, Player player) {
         printToLog("The door is locked.");
-        return false;
+        return 0;
     }
 }

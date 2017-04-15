@@ -15,9 +15,9 @@ public class HolyFountain extends Prop{
     }
 
     @Override
-    public boolean used(Room currentRoom, Player player) {
+    public int used(Room currentRoom, Player player) {
         printToLog("You are fully healed!");
         player.setHealth(player.getMaxHealth());
-        return true;
+        return 1;
     }
 }
