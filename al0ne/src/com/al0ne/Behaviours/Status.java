@@ -28,12 +28,14 @@ public abstract class Status implements Serializable{
         this.duration = duration;
         this.onApply=onApply;
         this.onResolve=resolve;
+        this.maxDuration = duration;
     }
 
     public Status(String name, Integer duration, String onApply){
         this.name = name;
         this.duration = duration;
         this.onApply=onApply;
+        this.maxDuration = duration;
     }
 
     public abstract boolean resolveStatus(Player player);

@@ -1,7 +1,7 @@
-package com.al0ne.Behaviours.Spells.ConcreteSpells;
+package com.al0ne.Entities.Spells.ConcreteSpells;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Spells.HealingSpell;
+import com.al0ne.Entities.Spells.HealingSpell;
 
 import static com.al0ne.Engine.Main.printToLog;
 

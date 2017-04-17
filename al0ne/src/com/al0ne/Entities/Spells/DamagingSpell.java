@@ -1,6 +1,4 @@
-package com.al0ne.Behaviours.Spells;
-
-import com.al0ne.Behaviours.Spell;
+package com.al0ne.Entities.Spells;
 
 /**
  * Created by BMW on 14/04/2017.

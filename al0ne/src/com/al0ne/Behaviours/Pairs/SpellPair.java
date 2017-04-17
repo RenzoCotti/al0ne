@@ -1,7 +1,6 @@
 package com.al0ne.Behaviours.Pairs;
 
-import com.al0ne.Behaviours.Entity;
-import com.al0ne.Behaviours.Spell;
+import com.al0ne.Entities.Spells.Spell;
 
 import java.io.Serializable;
 

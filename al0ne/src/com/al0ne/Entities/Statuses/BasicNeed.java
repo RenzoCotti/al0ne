@@ -2,6 +2,8 @@ package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Dehydrated;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Starving;
 
 import static com.al0ne.Engine.Main.printToLog;
 

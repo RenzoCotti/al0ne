@@ -3,14 +3,14 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.SpellPair;
-import com.al0ne.Behaviours.Spells.DamagingSpell;
-import com.al0ne.Behaviours.Spells.SelfSpell;
-import com.al0ne.Behaviours.Spells.WorldSpell;
+import com.al0ne.Entities.Spells.DamagingSpell;
+import com.al0ne.Entities.Spells.SelfSpell;
+import com.al0ne.Entities.Spells.Spell;
+import com.al0ne.Entities.Spells.WorldSpell;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +27,8 @@ public class ParseInput {
     public static boolean parse(String input, Game game, int turns, boolean again) {
 
         Player player = game.getPlayer();
-        HashMap<String, Room> rooms = game.getWorld().getRooms();
+
+        HashMap<String, Room> rooms = game.getRooms();
 
         String lowerInput = input.toLowerCase();
 
@@ -202,6 +203,11 @@ public class ParseInput {
             case "worn":
                 player.printArmor();
                 player.printWielded();
+                return false;
+            case "status":
+                for(Status s: player.getStatus().values()){
+                    printToLog(s.getName()+" : "+s.getDuration());
+                }
                 return false;
 
             case "qqq":

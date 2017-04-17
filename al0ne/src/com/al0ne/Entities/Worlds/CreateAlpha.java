@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Worlds;
 
-import com.al0ne.Behaviours.Spells.ConcreteSpells.Fireball;
-import com.al0ne.Behaviours.Spells.ConcreteSpells.LightHeal;
+import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
+import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
 import com.al0ne.Entities.Items.ConcreteItems.*;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.IronHelmet;

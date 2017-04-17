@@ -73,7 +73,7 @@ public class Prop extends Entity {
 
         if(item instanceof ChargeItem){
             ChargeItem charge = (ChargeItem) item;
-            return charge.refill(this);
+            return charge.refill(player, this);
         }
         return false;
     }

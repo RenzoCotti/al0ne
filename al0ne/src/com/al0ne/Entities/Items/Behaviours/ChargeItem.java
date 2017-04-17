@@ -34,7 +34,7 @@ public abstract class ChargeItem extends Item{
         this.onRefill = onRefill;
     }
 
-    public boolean refill(Entity entity){
+    public boolean refill(Player player, Entity entity){
         if(canRecharge && !requiresProperty){
             printToLog(onRefill);
             currentCharges = maxCharges;

@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Statuses;
+package com.al0ne.Entities.Statuses.ConcreteStatuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;

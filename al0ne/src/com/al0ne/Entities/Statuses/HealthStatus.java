@@ -16,7 +16,6 @@ public class HealthStatus extends Status{
     public HealthStatus(String name, Integer duration, Integer healthModifier, String onApply, String tick, String resolve) {
         super(name, duration, onApply, tick, resolve);
         this.modifier=healthModifier;
-
     }
 
     @Override

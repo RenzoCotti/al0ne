@@ -1,9 +1,9 @@
-package com.al0ne.Behaviours.Spells.ConcreteSpells;
+package com.al0ne.Entities.Spells.ConcreteSpells;
 
 import com.al0ne.Behaviours.Enemy;
 import com.al0ne.Behaviours.Entity;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Spells.DamagingSpell;
+import com.al0ne.Entities.Spells.DamagingSpell;
 
 import static com.al0ne.Engine.Main.printToLog;
 

@@ -1,4 +1,4 @@
-package com.al0ne.Behaviours;
+package com.al0ne.Entities.Spells;
 
 import java.io.Serializable;
 

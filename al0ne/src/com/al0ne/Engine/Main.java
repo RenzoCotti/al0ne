@@ -1,9 +1,8 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.Status;
-import com.al0ne.Behaviours.World;
+import com.al0ne.Behaviours.*;
+import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Entities.Worlds.CreateAlpha;
 import com.al0ne.Entities.Worlds.CreateSmallCave;
 import javafx.application.Application;
@@ -34,11 +33,9 @@ public class Main extends Application{
 
     public static TextArea notes;
 
-    public static World currentWorld = new CreateAlpha();
+    public static Game game = new Game(0, true);
 
-    public static Player player = new Player(currentWorld.getStartingRoom(), true);
-
-    public static Game game = new Game(player, currentWorld, 0);
+    public static Player player = game.getPlayer();
 
     public static Room currentRoom = player.getCurrentRoom();
 
@@ -137,20 +134,24 @@ public class Main extends Application{
 
 
     public static boolean changeWorld(String s){
+        //save old state
+        PairWorld oldWorld = game.getWorld(game.getCurrentWorld());
+        oldWorld.setPlayer(player);
+
         switch (s){
             case "alphaworld":
-                World a = new CreateAlpha();
-                currentWorld = a;
-                game.setWorld(a);
-                player.setCurrentRoom(a.getStartingRoom());
+                PairWorld alpha = game.getWorld(s);
+                game.setCurrentWorld(s);
+                player = game.getPlayer();
+//                player.setCurrentRoom(alpha.get);
                 currentRoom = player.getCurrentRoom();
                 ParseInput.clearScreen();
                 return true;
             case "caveworld":
-                World c = new CreateSmallCave();
-                currentWorld = c;
-                game.setWorld(c);
-                player.setCurrentRoom(c.getStartingRoom());
+                PairWorld cave = game.getWorld(s);
+                game.setCurrentWorld(s);
+                player = game.getPlayer();
+//                player.setCurrentRoom(alpha.get);
                 currentRoom = player.getCurrentRoom();
                 ParseInput.clearScreen();
                 return true;

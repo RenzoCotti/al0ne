@@ -1,12 +1,16 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Spells.ConcreteSpells.Fireball;
-import com.al0ne.Behaviours.Spells.ConcreteSpells.LightHeal;
+import com.al0ne.Entities.Items.ConcreteItems.Canteen;
+import com.al0ne.Entities.Items.ConcreteItems.Food.Ration;
+import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
+import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
-import com.al0ne.Entities.Statuses.Hunger;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.NaturalHealing;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +41,7 @@ public class Player implements Serializable{
     //Current carry weight of the player
     private double currentWeight;
 
-    private int currentHealth =10;
+    private int currentHealth =5;
     private static int maxHealth=10;
 
     private int attack = 70;
@@ -70,15 +74,14 @@ public class Player implements Serializable{
         this.toApply = new ArrayList<>();
         initialiseWorn();
         if(needs){
-//            putStatus(new Thirst());
+            putStatus(new Thirst());
             putStatus(new Hunger());
         }
         this.hasNeeds = needs;
+        putStatus(new NaturalHealing());
 
-        Spellbook sb = new Spellbook();
-        sb.addSpell(new Fireball(), 5);
-        sb.addSpell(new LightHeal(), 3);
-        addItem(new Pair(sb, 1));
+        addItem(new Pair(new Canteen(), 1));
+        addItem(new Pair(new Ration(), 2));
 
     }
 
@@ -130,6 +133,10 @@ public class Player implements Serializable{
 
         }
         return false;
+    }
+
+    public void setCurrentWeight(double currentWeight) {
+        this.currentWeight = currentWeight;
     }
 
     public boolean wear(Item wearable){
@@ -231,13 +238,15 @@ public class Player implements Serializable{
         }
     }
 
-    public void modifyHealth(int health) {
+    public boolean modifyHealth(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
-
             if (this.currentHealth<=0){
                 alive = false;
             }
+            return true;
+        } else{
+            return false;
         }
     }
 
@@ -668,6 +677,7 @@ public class Player implements Serializable{
 
                             if(!inRoom && !getItemPair(entity.getID()).modifyCount(-1)){
                                 inventory.remove(entity.getID());
+                                this.recalculateWeight();
                             } else {
                                 if(!pair.modifyCount(-1)){
                                     currentRoom.getEntities().remove(item.getID());
@@ -823,5 +833,14 @@ public class Player implements Serializable{
 
     public void queueStatus(Status st) {
         this.toApply.add(st);
+    }
+
+
+    public void recalculateWeight(){
+        double amt = 0;
+        for(Pair p : inventory.values()){
+            amt+=((Item)p.getEntity()).getWeight();
+        }
+        currentWeight = amt;
     }
 }

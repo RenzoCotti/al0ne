@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static javafx.scene.input.KeyCode.ENTER;
 
@@ -217,10 +218,9 @@ public class UI {
         Button restart = new Button("Restart");
         //maybe set initial world somewhere
         restart.setOnAction(b -> {
-            Main.changeWorld(Main.game.getWorld().getWorldName());
+            Main.changeWorld(Main.game.getStartingWorld());
             Main.input.setDisable(false);
-            Main.player = new Player(Main.currentWorld.getStartingRoom(), Main.player.hasNeeds());
-            Main.game = new Game(Main.player, Main.currentWorld, 0);
+            Main.game = new Game(0, player.hasNeeds());
             ParseInput.clearScreen();
             printToLog("Game restarted.");
             printToLog();

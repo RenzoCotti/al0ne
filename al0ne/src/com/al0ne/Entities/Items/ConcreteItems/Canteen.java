@@ -1,10 +1,11 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
+import com.al0ne.Behaviours.Entity;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
-import com.al0ne.Entities.Statuses.Thirst;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -13,8 +14,9 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Canteen extends ChargeItem{
     public Canteen() {
-        super("canteen", "Canteen", "A canteeen made with the bladder of an animal. Holds about 5 sips.", "a leather canteen", 0.4, Size.SMALL, 5, "water", "You refill your canteen.");
+        super("canteen", "Canteen", "A canteeen made with the bladder of an animal.", "a leather canteen", 0.6, Size.SMALL, 5, "water", "You refill your canteen.");
         this.addCommand("drink");
+        setUnique();
     }
 
     @Override
@@ -32,6 +34,8 @@ public class Canteen extends ChargeItem{
             thirst.setDuration(Thirst.THIRST_CLOCK);
         }
         currentCharges--;
+        modifyWeight(-0.1);
+        player.recalculateWeight();
         return 1;
     }
 
@@ -53,5 +57,16 @@ public class Canteen extends ChargeItem{
         } else{
             return "It's empty";
         }
+    }
+
+    @Override
+    public boolean refill(Player player, Entity entity) {
+        if(super.refill(player, entity)){
+            //bug, can overfill if already full for weight
+            weight=0.6;
+            player.recalculateWeight();
+            return true;
+        }
+        return false;
     }
 }

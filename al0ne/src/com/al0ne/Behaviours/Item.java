@@ -38,6 +38,11 @@ public abstract class Item extends Entity {
         return weight;
     }
 
+    public void modifyWeight(double amt) {
+        double temp = Math.round((weight+=amt)*100);
+        weight = temp/100;
+    }
+
 
     public boolean usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){

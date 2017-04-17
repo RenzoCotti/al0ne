@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Enemies;
 
 import com.al0ne.Behaviours.Enemy;
-import com.al0ne.Entities.Statuses.BlackDeath;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.BlackDeath;
 
 /**
  * Created by BMW on 07/04/2017.
