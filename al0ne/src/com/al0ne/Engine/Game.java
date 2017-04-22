@@ -31,12 +31,13 @@ public class Game implements Serializable {
         this.turnCounter = turnCounter;
 
         World startingWorld = new CreateAlpha();
+        World caveWorld = new CreateSmallCave();
         if (needs) {
-            addWorld(startingWorld, true);
-            addWorld(new CreateSmallCave(), true);
+            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true, "You are a knight."));
+            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
         } else{
-            addWorld(startingWorld);
-            addWorld(new CreateSmallCave());
+            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), false, "You are a knight."));
+            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
         }
 
         this.currentWorld = startingWorld.getWorldName();
@@ -72,14 +73,8 @@ public class Game implements Serializable {
                 .append(this.notes).toString();
     }
 
-    public void addWorld(World world, boolean needs) {
-        Player player = new Player(world.getStartingRoom(), needs);
-        this.worlds.put(world.getWorldName(), new PairWorld(player, world, player.hasNeeds()));
-    }
-
-    public void addWorld(World world) {
-        Player player = new Player(world.getStartingRoom(), false);
-        this.worlds.put(world.getWorldName(), new PairWorld(player, world, player.hasNeeds()));
+    public void addWorld(World world, Player player) {
+        this.worlds.put(world.getWorldName(), new PairWorld(player, world));
     }
 
     public void setNotes(String s) {

@@ -1,6 +1,5 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Behaviours.Player;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -163,7 +162,7 @@ public class UI {
             saveFile.setTitle("Save File");
             File file = saveFile.showSaveDialog(stage);
             if (file != null) {
-                SaveLoad.save(file.getName(), file.getPath());
+                GameChanges.save(file.getName(), file.getPath());
             }
         });
 
@@ -175,7 +174,7 @@ public class UI {
             File file = loadFile.showOpenDialog(stage);
 
             if (file != null) {
-                SaveLoad.load(file.getName(), file.getAbsolutePath());
+                GameChanges.load(file.getName(), file.getAbsolutePath());
             }
         });
 
@@ -202,6 +201,7 @@ public class UI {
         root.getChildren().addAll(menuBar, container, Main.input);
 
         root.setPrefSize(800,600);
+
         return root;
     }
 
@@ -218,7 +218,7 @@ public class UI {
         Button restart = new Button("Restart");
         //maybe set initial world somewhere
         restart.setOnAction(b -> {
-            Main.changeWorld(Main.game.getStartingWorld());
+            GameChanges.changeWorld(Main.game.getStartingWorld());
             Main.input.setDisable(false);
             Main.game = new Game(0, player.hasNeeds());
             ParseInput.clearScreen();

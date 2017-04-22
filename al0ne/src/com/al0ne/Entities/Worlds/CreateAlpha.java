@@ -18,6 +18,7 @@ import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Behaviours.World;
+import com.al0ne.Entities.Spells.MidasSpell;
 
 /**
  * Created by BMW on 14/03/2017.
@@ -37,6 +38,7 @@ public class CreateAlpha extends World{
         Spellbook sb = new Spellbook();
         sb.addSpell(new Fireball(), 5);
         sb.addSpell(new LightHeal(), 3);
+        sb.addSpell(new MidasSpell(), 5);
         startRoom.addEntity(sb, 2);
         startRoom.visit();
 

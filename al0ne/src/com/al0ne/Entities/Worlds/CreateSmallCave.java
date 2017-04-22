@@ -24,9 +24,9 @@ public class CreateSmallCave extends World{
 
         Room cave1 = new Room("cave1", "Cave 1", "You are in a pretty generic-looking cave. It feels pretty damp. You can see passageway east.");
         cave1.addExit("east","cave2");
-//        cave1.addItem(new Potion());
-//        cave1.addItem(new Key("cave1key","Ordinary Key"));
-//        cave1.addItem(new Key("cave2key","Next Room Key"));
+//        cave1.addOneItem(new Potion());
+//        cave1.addOneItem(new Key("cave1key","Ordinary Key"));
+//        cave1.addOneItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
         cave1.addEntity(new Door("cave1door", "Generic Door"));
         cave1.addEntity(new GiantRat());

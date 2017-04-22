@@ -18,6 +18,7 @@ public abstract class Item extends Entity {
     protected ArrayList<String> properties;
     protected ArrayList<String> requiredType;
     protected boolean unique;
+    protected boolean canDrop;
 
 
 
@@ -32,10 +33,19 @@ public abstract class Item extends Entity {
         String s = Size.toString(this.size);
         this.longDescription+=" It's "+ s+".";
         this.unique = false;
+        this.canDrop = true;
     }
 
     public double getWeight() {
         return weight;
+    }
+
+    public void noDrop() {
+        this.canDrop = false;
+    }
+
+    public boolean canDrop(){
+        return canDrop;
     }
 
     public void modifyWeight(double amt) {

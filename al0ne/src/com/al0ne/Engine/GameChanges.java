@@ -1,5 +1,7 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Behaviours.Pairs.PairWorld;
+
 import java.io.*;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -7,7 +9,7 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 13/04/2017.
  */
-public class SaveLoad {
+public class GameChanges {
 
     public static void save(String s, String path){
         FileOutputStream fop = null;
@@ -123,6 +125,34 @@ public class SaveLoad {
 
         return game;
 
+    }
+
+    public static boolean changeWorld(String s){
+        //save old state
+        PairWorld oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
+        oldWorld.setPlayer(Main.player);
+
+        switch (s){
+            case "alphaworld":
+                PairWorld alpha = Main.game.getWorld(s);
+                Main.game.setCurrentWorld(s);
+                Main.player = Main.game.getPlayer();
+//                player.setCurrentRoom(alpha.get);
+                Main.currentRoom = Main.player.getCurrentRoom();
+                ParseInput.clearScreen();
+                return true;
+            case "caveworld":
+                PairWorld cave = Main.game.getWorld(s);
+                Main.game.setCurrentWorld(s);
+                Main.player = Main.game.getPlayer();
+//                player.setCurrentRoom(alpha.get);
+                Main.currentRoom = Main.player.getCurrentRoom();
+                ParseInput.clearScreen();
+                return true;
+            default:
+                printToLog("404: world not found");
+                return false;
+        }
     }
 
 }

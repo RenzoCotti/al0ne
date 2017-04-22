@@ -12,8 +12,8 @@ public class PairWorld implements Serializable {
     private Player player;
     private World world;
 
-    public PairWorld(Player player, World world, boolean needs) {
-        this.player = new Player(world.getStartingRoom(), needs);
+    public PairWorld(Player player, World world) {
+        this.player = player;
         this.world = world;
     }
 

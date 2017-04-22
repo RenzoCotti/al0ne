@@ -115,6 +115,8 @@ public class Main extends Application{
         primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
 
+        input.requestFocus();
+
         Service<Void> service = new Service<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -130,34 +132,4 @@ public class Main extends Application{
         service.restart();
     }
 
-
-
-
-    public static boolean changeWorld(String s){
-        //save old state
-        PairWorld oldWorld = game.getWorld(game.getCurrentWorld());
-        oldWorld.setPlayer(player);
-
-        switch (s){
-            case "alphaworld":
-                PairWorld alpha = game.getWorld(s);
-                game.setCurrentWorld(s);
-                player = game.getPlayer();
-//                player.setCurrentRoom(alpha.get);
-                currentRoom = player.getCurrentRoom();
-                ParseInput.clearScreen();
-                return true;
-            case "caveworld":
-                PairWorld cave = game.getWorld(s);
-                game.setCurrentWorld(s);
-                player = game.getPlayer();
-//                player.setCurrentRoom(alpha.get);
-                currentRoom = player.getCurrentRoom();
-                ParseInput.clearScreen();
-                return true;
-            default:
-                printToLog("404: world not found");
-                return false;
-        }
-    }
 }

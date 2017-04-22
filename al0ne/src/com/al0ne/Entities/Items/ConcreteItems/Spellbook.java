@@ -54,7 +54,7 @@ public class Spellbook extends Readable{
         printToLog("Your spellbook contains these spells:");
         for(SpellPair sp : spells.values()){
             Spell s = sp.getSpell();
-            printToLog("- "+s.getID()+": "+sp.getCount()+" castings.");
+            printToLog("- "+s.getName()+": "+sp.getCount()+" castings.");
         }
         return 2;
     }

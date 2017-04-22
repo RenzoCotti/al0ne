@@ -3,10 +3,7 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.SpellPair;
-import com.al0ne.Entities.Spells.DamagingSpell;
-import com.al0ne.Entities.Spells.SelfSpell;
-import com.al0ne.Entities.Spells.Spell;
-import com.al0ne.Entities.Spells.WorldSpell;
+import com.al0ne.Entities.Spells.*;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
@@ -45,14 +42,14 @@ public class ParseInput {
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else {
-                    SaveLoad.save(parsedInput[1], null);
+                    GameChanges.save(parsedInput[1], null);
                 }
                 return false;
             case "warp":
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: WARP world_name");
                 } else {
-                    if (changeWorld(stitchFromTo(parsedInput, 1, parsedInput.length))) {
+                    if (GameChanges.changeWorld(stitchFromTo(parsedInput, 1, parsedInput.length))) {
                         printToLog();
                         currentRoom.printRoom();
                     }
@@ -63,7 +60,7 @@ public class ParseInput {
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: LOAD path_of_the_save_file");
                 } else {
-                    SaveLoad.load(parsedInput[1], null);
+                    GameChanges.load(parsedInput[1], null);
                 }
                 return false;
 
@@ -121,6 +118,13 @@ public class ParseInput {
             case "s":
             case "south":
                 return ParseInput.move(player, rooms, "south", parsedInput);
+            case "story":
+                if(parsedInput.length == 1){
+                    printToLog(player.getStory());
+                } else{
+                    printToLog("The syntax is: STORY");
+                }
+                return false;
             case "e":
             case "east":
                 return ParseInput.move(player, rooms, "east", parsedInput);
@@ -673,15 +677,17 @@ public class ParseInput {
 
 
             if (all && possibleItems.size() == 1) {
-                if (player.drop(possibleItems.get(0), true)) {
+                int result = player.drop(possibleItems.get(0), true);
+                if (result == 1) {
                     printToLog("You drop all the " + possibleItems.get(0).getEntity().getName());
-                } else {
+                } else if(result == 0){
                     printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
                 }
             } else if (possibleItems.size() == 1) {
-                if (player.drop(possibleItems.get(0), false)) {
+                int result = player.drop(possibleItems.get(0), false);
+                if (result == 1) {
                     printToLog("You drop the " + possibleItems.get(0).getEntity().getName());
-                } else {
+                } else if (result == 0){
                     printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
                 }
             } else {
@@ -1016,11 +1022,15 @@ public class ParseInput {
 
     public static boolean handleCast(String[] parsedInput, Player player, Room currentRoom){
         if(parsedInput.length == 1){
-            printToLog("The syntax is CAST spell (AT target)");
+            printToLog("The syntax is CAST spell (AT/ON target)");
             return false;
         }
+
         int tokenAt = ParseInput.checkForToken(parsedInput, "at");
+        int tokenOn = ParseInput.checkForToken(parsedInput, "on");
+        tokenAt = Math.max(tokenAt, tokenOn);
         if (tokenAt == -1) {
+
 
             String spellName = stitchFromTo(parsedInput, 1, parsedInput.length);
 
@@ -1074,9 +1084,12 @@ public class ParseInput {
 
             return false;
         } else {
+
+
             String spellName = stitchFromTo(parsedInput, 1, tokenAt);
             String target = stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
             if (player.hasItemInInventory("spellbook")) {
+
                 Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
 
 
@@ -1085,13 +1098,15 @@ public class ParseInput {
                 if(potentialSpells.size() > 1){
                     printToLog("Be more specific.");
                     return false;
-                }else if (potentialSpells.size() == 0){
+                } else if (potentialSpells.size() == 0){
                     printToLog("Your spellbook doesn't seem to have such a spell.");
                     return false;
                 }
 
-                if (spellbook.hasSpell(spellName)) {
-                    SpellPair spell = spellbook.getSpell(spellName);
+
+                if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
+
+                    SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
 
                     if(spell.getCount() <= 0){
                         printToLog("You don't have any castings left.");
@@ -1101,12 +1116,33 @@ public class ParseInput {
                     char castOn = s.getTarget();
 
                     switch (castOn) {
+                        case 'w':
                         case 'i':
-                            System.out.println("not implemented yet.");
+                            ArrayList<Pair> possibleItemsFromInventory = getPotentialItem(target, player, 0);
+                            ArrayList<Pair> possibleItems = getPotentialItem(target, player, 1);
+
+                            if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
+                                printToLog("Be more specific.");
+                                return false;
+                            } else if(possibleItems.size() != 0){
+                                printToLog("You need to be holding that item.");
+                                return false;
+                            } else if (possibleItemsFromInventory.size() == 0){
+                                printToLog("You can't see a "+target);
+                                return false;
+                            }
+
+                            TargetSpell ts = (TargetSpell) s;
+
+                            if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
+                                spell.modifyCount(-1);
+                                return true;
+                            }
                             return false;
+
+
                         case 'e':
                             DamagingSpell ds = (DamagingSpell) s;
-                            //TODO: NEED TO MAKE A STRING -> POSSIBLEENEMIES CONVERTER
                             ArrayList<Enemy> enemies = getPotentialEnemy(target, player);
                             if(enemies.size() == 0){
                                 printToLog("You can't see that enemy");

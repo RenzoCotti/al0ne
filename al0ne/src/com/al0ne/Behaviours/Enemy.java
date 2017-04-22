@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.PairDrop;
+import com.al0ne.Engine.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public abstract class Enemy extends Character {
 
     private void initialisePrefix(){
 
-        int chance = (int)(Math.random() * (100 - 1) + 1);
+        int chance = Utility.randomNumber(100);
 
         if(chance < 100 - CHANCE_OF_SPECIAL){
             return;
@@ -226,7 +227,7 @@ public abstract class Enemy extends Character {
     public boolean addLoot(Room room) {
         boolean dropped = false;
         for (PairDrop pair : loot){
-            int rolled = (int)(Math.random() * (100 - 1) + 1);
+            int rolled = Utility.randomNumber(100);
             if(((100 - pair.getProbability()) - rolled <= 0) || special){
                 Item currentLoot = (Item) pair.getEntity();
 
@@ -253,8 +254,8 @@ public abstract class Enemy extends Character {
             room.getEntities().remove(ID);
             return true;
         }
-        int attackRoll = (int)(Math.random() * (100 - 1) + 1)+attack;
-        int dodgeRoll = (int)(Math.random() * (100 - 1) + 1)+player.getDexterity();
+        int attackRoll = Utility.randomNumber(100)+attack;
+        int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
         System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
         if(attackRoll > dodgeRoll){
             printToLog("The "+name.toLowerCase()+" attacks and hits you.");
@@ -263,7 +264,7 @@ public abstract class Enemy extends Character {
                 for (Status s : inflictStatuses.keySet()){
                     //possibly resistance from player?
                     int inflictProbability = 100-inflictStatuses.get(s);
-                    int inflictStatus = (int)(Math.random() * (100 - 1) + 1);
+                    int inflictStatus = Utility.randomNumber(100);
                     if(inflictStatus > inflictProbability){
                         if (player.putStatus(s)){
                             printToLog(s.getOnApply());
