@@ -30,6 +30,9 @@ public class MidasSpell extends TargetSpell{
                 return false;
             } else{
                 if(player.hasItemInInventory(entity.getID())){
+                    if (player.isWearingItem(entity.getID())){
+                        player.unequipItem(entity.getID());
+                    }
                     if(!player.getInventory().get(item.getID()).subCount()){
                         player.getInventory().remove(item.getID());
                     }

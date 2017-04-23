@@ -1,6 +1,10 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairWorld;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.*;
 
@@ -153,6 +157,21 @@ public class GameChanges {
                 printToLog("404: world not found");
                 return false;
         }
+    }
+
+    public static ObservableList<SimpleItem> getInventoryData(){
+
+        ObservableList<SimpleItem> data = FXCollections.observableArrayList();
+
+        if (Main.player.getInventory().size()==0){}
+        else {
+            for (Pair pair : Main.player.getInventory().values()) {
+                Item currentItem = (Item) pair.getEntity();
+                SimpleItem s = new SimpleItem(currentItem.getName(), pair.getCount(), currentItem.getWeight()*pair.getCount());
+                data.add(s);
+            }
+        }
+        return data;
     }
 
 }

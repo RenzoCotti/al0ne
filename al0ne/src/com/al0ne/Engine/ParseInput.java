@@ -204,6 +204,7 @@ public class ParseInput {
                 return parse(lastCommand, game, turns, true);
             case "drop":
                 return takeOrDrop(parsedInput, player, true);
+            case "equipment":
             case "worn":
                 player.printArmor();
                 player.printWielded();

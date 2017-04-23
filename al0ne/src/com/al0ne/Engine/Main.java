@@ -54,7 +54,7 @@ public class Main extends Application{
         currentRoom.printRoom();
         currentRoom.printName();
     }
-    public static void hasNextLine(String s){
+    public static void hasNextLine(String s, Scene scene){
             currentCommand = s;
             if(ParseInput.parse(currentCommand, game, turnCounter, false)){
                 game.addTurn();
@@ -89,6 +89,7 @@ public class Main extends Application{
                 ParseInput.lastCommand = currentCommand;
             }
 
+            UI.updateUI(scene);
 
             printToLog();
             player.getCurrentRoom().printName();
@@ -111,7 +112,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Al0ne Alpha v. 0.4");
-        primaryStage.setScene(new Scene(UI.createContent()));
+        primaryStage.setScene(UI.createContent());
         primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
 

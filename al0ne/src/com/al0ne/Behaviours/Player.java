@@ -45,8 +45,8 @@ public class Player implements Serializable{
     private int attack = 70;
     private int dexterity = 30;
 
-    protected HashMap<String, Status> status;
-    protected ArrayList<Status> toApply;
+    private HashMap<String, Status> status;
+    private ArrayList<Status> toApply;
 
     private boolean alive = true;
 
@@ -129,6 +129,19 @@ public class Player implements Serializable{
             if(currentItem != null) {
                 if(id.equals(currentItem.getID())){
                     return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public boolean unequipItem(String id){
+        for (String part : wornItems.keySet()){
+            Wearable currentItem = wornItems.get(part);
+            if(currentItem != null) {
+                if(id.equals(currentItem.getID())){
+                    wornItems.put(part, null);
                 }
             }
 
@@ -879,5 +892,33 @@ public class Player implements Serializable{
 
     public double getCurrentWeight() {
         return currentWeight;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public String getHelmetString(){
+        Helmet h = getHelmet();
+        if(h == null) return "None.";
+        return h.getName();
+    }
+
+    public String getArmorString(){
+        Armor a = getArmor();
+        if(a == null) return "None.";
+        return a.getName();
+    }
+
+    public String getWeaponString(){
+        Weapon w = getWeapon();
+        if(w == null) return "None.";
+        return w.getName();
+    }
+
+    public String getOffHandString(){
+        Wearable s = getOffHand();
+        if(s == null) return "None.";
+        return s.getName();
     }
 }
