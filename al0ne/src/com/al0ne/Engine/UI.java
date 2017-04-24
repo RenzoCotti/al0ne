@@ -121,15 +121,19 @@ public class UI {
 
 
         TableView<SimpleItem> inv = new TableView<>();
+        inv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         inv.setId("inv");
         TableColumn itemColumn = new TableColumn("Item");
+        itemColumn.setMinWidth(120);
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn amount = new TableColumn("Amount");
+        TableColumn amount = new TableColumn("Amt");
+        amount.setMinWidth(20);
         amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        TableColumn weightColumn = new TableColumn("Weight");
+        TableColumn weightColumn = new TableColumn("Kg");
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
+        weightColumn.setMinWidth(30);
 
-        inv.getColumns().addAll(itemColumn, amount, weightColumn);
+        inv.getColumns().addAll(amount, itemColumn, weightColumn);
 
         inv.setItems(GameChanges.getInventoryData());
 
@@ -148,6 +152,8 @@ public class UI {
         weight.setId("weightLabel");
         Label health = new Label("Health: "+Main.player.getCurrentHealth()+" / "+ Main.player.getMaxHealth());
         health.setId("healthLabel");
+        Label totalArmor = new Label("Armor: "+Main.player.getArmorLevel());
+        totalArmor.setId("totalArmor");
 
 
         Label equippedItems = new Label("Equipped items:");
@@ -172,7 +178,7 @@ public class UI {
 
         VBox listStats = new VBox();
         listStats.setPadding(new Insets(10, 10, 10, 10));
-        listStats.getChildren().addAll(playerStats, health, weight, equippedItems, head, armor, weapon, offHand);
+        listStats.getChildren().addAll(playerStats, health, totalArmor, weight, equippedItems, head, armor, weapon, offHand);
 
         stats.setContent(listStats);
 
@@ -337,6 +343,8 @@ public class UI {
         healthLabel.setText("Health: "+Main.player.getCurrentHealth()+" / "+ Main.player.getMaxHealth());
         Label weightLabel = (Label) s.lookup("#weightLabel");
         weightLabel.setText("Weight: "+Main.player.getCurrentWeight()+" / "+ Main.player.getMaxWeight()+" kg");
+        Label totalArmor = (Label) s.lookup("#totalArmor");
+        totalArmor.setText("Total Armor: "+Main.player.getArmorLevel());
 
 
         Label head = (Label) s.lookup("#headLabel");
@@ -347,6 +355,7 @@ public class UI {
         weapon.setText("Weapon: "+Main.player.getWeaponString());
         Label offHand = (Label) s.lookup("#offHandLabel");
         offHand.setText("Off-Hand: "+Main.player.getOffHandString());
+
     }
 
 

@@ -112,7 +112,7 @@ public class Player implements Serializable{
     }
 
     public Wearable getOffHand(){
-        return wornItems.get("armor");
+        return wornItems.get("off hand");
     }
 
     public void unequipItem(Wearable item){
@@ -165,7 +165,7 @@ public class Player implements Serializable{
                     wornItems.put(part, (Weapon) currentItem);
                     printToLog("You now wield the "+wearable.getName());
                 } else if(part.equals("off hand")){
-                    wornItems.put(part, (Shield) currentItem);
+                    wornItems.put(part, (Wearable) currentItem);
                     printToLog("You now wear the "+wearable.getName());
                 } else if(part.equals("head")){
                     wornItems.put(part, (Helmet) currentItem);
