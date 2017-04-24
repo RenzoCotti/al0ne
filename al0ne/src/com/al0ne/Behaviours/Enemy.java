@@ -29,6 +29,8 @@ public abstract class Enemy extends Character {
     protected int dexterity;
 
     protected boolean special;
+    protected boolean aggro;
+    protected boolean snooze;
 
     protected ArrayList<String> resistances;
     protected ArrayList<PairDrop> loot;
@@ -44,6 +46,8 @@ public abstract class Enemy extends Character {
         this.alive = true;
         this.type='e';
         this.special=false;
+        this.aggro = false;
+        this.snooze = false;
 
         this.attack = 0;
         this.armor = 0;
@@ -171,13 +175,15 @@ public abstract class Enemy extends Character {
     }
 
 
-    public void modifyHealth(int health) {
+    public boolean modifyHealth(int health) {
         if (this.currentHealth+health <= maxHealth){
             this.currentHealth+=health;
         }
         if(this.currentHealth <= 0){
             this.alive = false;
+            return false;
         }
+        return true;
 
     }
 
@@ -246,14 +252,9 @@ public abstract class Enemy extends Character {
 
 
     public boolean isAttacked(Player player, Room room){
-        if(!alive){
-            printToLog("You defeated the "+ name.toLowerCase());
-            if(addLoot(room)){
-                printToLog("The "+name.toLowerCase()+" drops some items.");
-            }
-            room.getEntities().remove(ID);
-            return true;
-        }
+
+        aggro = true;
+
         int attackRoll = Utility.randomNumber(100)+attack;
         int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
         System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
@@ -290,5 +291,33 @@ public abstract class Enemy extends Character {
             }
         }
         return true;
+    }
+
+    public boolean isAggro() {
+        return aggro;
+    }
+
+    public void setAggro(boolean aggro) {
+        this.aggro = aggro;
+    }
+
+    public boolean isSnooze() {
+        return snooze;
+    }
+
+    public void setSnooze(boolean snooze) {
+        this.snooze = snooze;
+    }
+
+    public boolean handleLoot(Room room){
+        if(!alive){
+            printToLog("You defeated the "+ name.toLowerCase());
+            if(addLoot(room)){
+                printToLog("The "+name.toLowerCase()+" drops some items.");
+            }
+            room.getEntities().remove(ID);
+            return true;
+        }
+        return false;
     }
 }

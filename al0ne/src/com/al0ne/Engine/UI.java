@@ -164,6 +164,7 @@ public class UI {
         offHand.setId("offHandLabel");
 
 
+        //do i want the player to see them?
 //        Label status = new Label("Status:");
 //        status.setPadding(new Insets(20, 0, 0, 0));
 //        status.setStyle("-fx-font-weight: bold");

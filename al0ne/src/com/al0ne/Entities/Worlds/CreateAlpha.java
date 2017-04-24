@@ -1,5 +1,7 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Entities.Enemies.Snake;
+import com.al0ne.Entities.Items.ConcreteItems.Food.SnakeSteak;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
@@ -39,7 +41,7 @@ public class CreateAlpha extends World{
         sb.addSpell(new Fireball(), 5);
         sb.addSpell(new LightHeal(), 3);
         sb.addSpell(new MidasSpell(), 5);
-        startRoom.addEntity(sb, 2);
+        startRoom.addEntity(sb, 1);
         startRoom.visit();
 
         startRoom.addEntity(new Apple());
@@ -77,6 +79,8 @@ public class CreateAlpha extends World{
         Room wolfRoom = new Room("wolfroom", "Wolf Room", "You see some bones scattered on the ground.");
         wolfRoom.addEntity(new Prop("bones", "bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's.", "a massive pile of bones"));
         wolfRoom.addEntity(new Wolf());
+        wolfRoom.addEntity(new Snake());
+        wolfRoom.addEntity(new Apple());
         wolfRoom.addExit("west", "daggerroom");
         wolfRoom.addExit("north", "shoproom");
         wolfRoom.addExit("down", "sanctuary");

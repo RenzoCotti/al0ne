@@ -349,4 +349,8 @@ public class Room extends Entity{
         return false;
     }
 
+    public boolean hasEnemies(){
+        return getEnemyList().size() > 0;
+    }
+
 }

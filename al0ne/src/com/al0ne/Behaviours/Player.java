@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.ConcreteItems.Canteen;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Ration;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -441,6 +443,7 @@ public class Player implements Serializable{
     //setter for currentRoom
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
+        Main.currentRoom = currentRoom;
     }
 
 
@@ -777,7 +780,9 @@ public class Player implements Serializable{
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
                     printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
-                    enemy.modifyHealth(-1);
+                    if(!enemy.modifyHealth(-1)){
+                        enemy.handleLoot(currentRoom);
+                    }
                 }else if(enemy.isWeakAgainst(type) ){
 
                     int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
@@ -786,7 +791,9 @@ public class Player implements Serializable{
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
                     } else{
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
-                        enemy.modifyHealth(-(inflictedDamage));
+                        if(enemy.modifyHealth(-(inflictedDamage))){
+                            enemy.handleLoot(currentRoom);
+                        }
                     }
                 } else{
                     printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
@@ -795,6 +802,7 @@ public class Player implements Serializable{
                 if (enemy.isAttacked(this, currentRoom)) {
                     currentRoom.getEntities().remove(enemy.getID());
                 }
+                enemy.setSnooze(true);
                 return true;
             } else{
                 printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");

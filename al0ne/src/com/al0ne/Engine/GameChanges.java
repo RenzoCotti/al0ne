@@ -1,12 +1,13 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairWorld;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -172,6 +173,42 @@ public class GameChanges {
             }
         }
         return data;
+    }
+
+    public static void attackIfAggro(Player player, Room currentRoom){
+        if(currentRoom.hasEnemies()){
+            System.out.println("enemies attacking:");
+            for (Enemy e : currentRoom.getEnemyList()){
+                if(e.isAggro() && !e.isSnooze()){
+                    System.out.println(e.getName()+" attacking");
+                    e.isAttacked(player, currentRoom);
+                } else{
+                    if (e.isSnooze()){
+                        e.setSnooze(false);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void handleStatus(Player player){
+        if(player.getStatus().size()>0){
+            ArrayList<Status> toResolve = new ArrayList<>();
+            for (Status status: player.getStatus().values()){
+                if(status.resolveStatus(player)){
+                    toResolve.add(status);
+                }
+            }
+            for (Status st : toResolve){
+                player.getStatus().remove(st.getName());
+            }
+
+            for (Status toApply : player.getToApply()){
+                player.getStatus().put(toApply.getName(), toApply);
+            }
+
+            player.getToApply().clear();
+        }
     }
 
 }

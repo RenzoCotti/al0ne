@@ -55,44 +55,43 @@ public class Main extends Application{
         currentRoom.printName();
     }
     public static void hasNextLine(String s, Scene scene){
-            currentCommand = s;
-            if(ParseInput.parse(currentCommand, game, turnCounter, false)){
-                game.addTurn();
-                if(player.getStatus().size()>0){
-                    ArrayList<Status> toResolve = new ArrayList<>();
-                    for (Status status: player.getStatus().values()){
-                        if(status.resolveStatus(player)){
-                            toResolve.add(status);
-                        }
-                    }
-                    for (Status st : toResolve){
-                        player.getStatus().remove(st.getName());
-                    }
+        currentCommand = s;
+        if(ParseInput.parse(currentCommand, game, turnCounter, false)){
+            //we add a turn
+            game.addTurn();
 
-                    for (Status toApply : player.getToApply()){
-                        player.getStatus().put(toApply.getName(), toApply);
-                    }
+            //we make every aggro enemy attack
+            GameChanges.attackIfAggro(player, currentRoom);
 
-                    player.getToApply().clear();
-                }
-            }
-            if (!player.isAlive()){
-                printToLog("You have died...");
-                printToLog();
-                printToLog("Game over!");
-                input.setDisable(true);
-                return;
-            } else if(ParseInput.wrongCommand >= 3){
-                printToLog("Maybe you need some help? Type \"?\" to have an intro or \"help\" to see a list of all commands");
-            }
-            if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
-                ParseInput.lastCommand = currentCommand;
-            }
+            //we make the statuses tick
+            GameChanges.handleStatus(player);
+        }
 
-            UI.updateUI(scene);
 
+        if(ParseInput.wrongCommand >= 3){
+            printToLog("Maybe you need some help? Type \"?\" to have an intro or \"help\" to see a list of all commands");
+        }
+        if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
+            ParseInput.lastCommand = currentCommand;
+        }
+
+
+
+        if (!player.isAlive()){
+            printToLog("You have died...");
             printToLog();
-            player.getCurrentRoom().printName();
+            printToLog("Game over!");
+            input.setDisable(true);
+            return;
+        }
+
+        //we finally update the UI
+        UI.updateUI(scene);
+
+
+
+        printToLog();
+        player.getCurrentRoom().printName();
     }
 
     public static void printToLog(){
