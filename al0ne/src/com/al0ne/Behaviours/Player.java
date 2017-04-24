@@ -489,7 +489,8 @@ public class Player implements Serializable{
         } else if (target.getType() == 'i'){
             Pair pair = inventory.get(target.getID());
             Item item = (Item) pair.getEntity();
-            if(item.used(currentRoom, this) == 1){
+            int result = item.used(currentRoom, this);
+            if(result == 1){
                 if (item.hasProperty("consumable")){
 //                    printToLog("used :"+pair.getCount());
 
@@ -500,7 +501,7 @@ public class Player implements Serializable{
                 }
 
                 return 1;
-            } else if(item.used(currentRoom, this) == 2){
+            } else if(result == 2){
                 if (item.hasProperty("consumable")){
 //                    printToLog("used :"+pair.getCount());
 

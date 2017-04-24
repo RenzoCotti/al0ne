@@ -34,18 +34,8 @@ public class CreateAlpha extends World{
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
-        startRoom.addEntity(new LeatherArmour());
-        startRoom.addEntity(new Knife());
-        startRoom.addEntity(new IronHelmet());
-        Spellbook sb = new Spellbook();
-        sb.addSpell(new Fireball(), 5);
-        sb.addSpell(new LightHeal(), 3);
-        sb.addSpell(new MidasSpell(), 5);
-        startRoom.addEntity(sb, 1);
+        startRoom.addEntity(new WarpStone());
         startRoom.visit();
-
-        startRoom.addEntity(new Apple());
-
         putRoom(startRoom);
 
         Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");
@@ -59,6 +49,7 @@ public class CreateAlpha extends World{
         daggerRoom.addEntity(new Knife());
         daggerRoom.addExit("south", "startroom");
         daggerRoom.addExit("east", "wolfroom");
+        daggerRoom.addEntity(new IronHelmet());
         putRoom(daggerRoom);
 
         Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
@@ -163,6 +154,11 @@ public class CreateAlpha extends World{
         Room miniBossRoom = new Room("minibossroom", "Skeleton Room", "Everything in this room is of a very white colour. Upon further examination, you realise it's because everything is made of bones. Human ones.");
         //add miniboss
         miniBossRoom.addExit("south", "cavernroom");
+        Spellbook sb = new Spellbook();
+        sb.addSpell(new Fireball(), 5);
+        sb.addSpell(new LightHeal(), 3);
+        sb.addSpell(new MidasSpell(), 5);
+        miniBossRoom.addEntity(sb, 1);
         putRoom(miniBossRoom);
 
         Room brokenKeyRoom = new Room("brokenkeyroom", "Hearth room", "This room is quite warm.");
@@ -184,6 +180,7 @@ public class CreateAlpha extends World{
         bossRoom.addCustomDirection("You sense a magical barrier east.");
         bossRoom.addExit("west", "gateroom");
         bossRoom.addExit("east", "princessroom");
+        bossRoom.addEntity(new LeatherArmour());
         bossRoom.lockDirection("east", "boss");
         bossRoom.addEntity(new Demon());
         putRoom(bossRoom);

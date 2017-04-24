@@ -40,7 +40,7 @@ public abstract class Item extends Entity {
         return weight;
     }
 
-    public void noDrop() {
+    public void setUndroppable() {
         this.canDrop = false;
     }
 

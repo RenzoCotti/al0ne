@@ -23,21 +23,25 @@ public class Game implements Serializable {
     private String currentWorld;
     private HashMap<String, PairWorld> worlds;
     private int turnCounter;
+    private int worldCount;
+    private boolean warpstone;
 
     private String notes;
 
-    public Game(int turnCounter, boolean needs) {
+    public Game(boolean needs) {
         this.worlds = new HashMap<>();
-        this.turnCounter = turnCounter;
+        this.turnCounter = 0;
+        this.worldCount = 0;
+        this.warpstone = false;
 
         World startingWorld = new CreateAlpha();
         World caveWorld = new CreateSmallCave();
         if (needs) {
             addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true, "You are a knight."));
-//            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
+            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
         } else{
             addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), false, "You are a knight."));
-//            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
+            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
         }
 
         this.currentWorld = startingWorld.getWorldName();
@@ -74,6 +78,7 @@ public class Game implements Serializable {
     }
 
     public void addWorld(World world, Player player) {
+        this.worldCount++;
         this.worlds.put(world.getWorldName(), new PairWorld(player, world));
     }
 
@@ -106,7 +111,7 @@ public class Game implements Serializable {
     }
 
     public Game copyWorld(Game game){
-        Game g = new Game(game.turnCounter, game.getPlayer().hasNeeds());
+        Game g = new Game(game.getPlayer().hasNeeds());
         for (PairWorld pw : game.getWorlds().values()){
             World curr = pw.getWorld();
             g.addWorld(curr, pw.getPlayer());
@@ -114,4 +119,15 @@ public class Game implements Serializable {
         return g;
     }
 
+    public int getWorldCount() {
+        return worldCount;
+    }
+
+    public boolean hasWarpstone() {
+        return warpstone;
+    }
+
+    public void setWarpstone() {
+        this.warpstone = true;
+    }
 }

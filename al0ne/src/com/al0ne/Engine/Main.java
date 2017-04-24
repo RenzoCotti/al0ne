@@ -18,7 +18,7 @@ public class Main extends Application{
 
     public static TextArea notes;
 
-    public static Game game = new Game(0, true);
+    public static Game game = new Game(true);
 
     public static Player player = game.getPlayer();
 

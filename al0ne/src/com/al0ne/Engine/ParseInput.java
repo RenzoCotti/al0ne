@@ -489,6 +489,7 @@ public class ParseInput {
             //case simple use: check we have just one item, then we make the player use it.
         } else {
 
+
             if (temp.length == 1) {
                 wrongCommand++;
                 printToLog("The syntax is USE x");
@@ -515,7 +516,9 @@ public class ParseInput {
             }
 
             if (inventoryUse.size() == 1) {
+
                 int result = player.simpleUse(inventoryUse.get(0).getEntity());
+
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }

@@ -3,6 +3,7 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairWorld;
+import com.al0ne.Entities.Items.ConcreteItems.WarpStone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -138,20 +139,28 @@ public class GameChanges {
         PairWorld oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
         oldWorld.setPlayer(Main.player);
 
+        if (!Main.game.hasWarpstone()){
+            Main.game.setWarpstone();
+
+            for (PairWorld pw : Main.game.getWorlds().values()){
+                Player p = pw.getPlayer();
+
+                if(!p.hasItemInInventory("warpstone")){
+                    p.addOneItem(new Pair(new WarpStone(), 1));
+                }
+            }
+        }
+
         switch (s){
             case "alphaworld":
-                PairWorld alpha = Main.game.getWorld(s);
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
-//                player.setCurrentRoom(alpha.get);
                 Main.currentRoom = Main.player.getCurrentRoom();
                 ParseInput.clearScreen();
                 return true;
             case "caveworld":
-                PairWorld cave = Main.game.getWorld(s);
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
-//                player.setCurrentRoom(alpha.get);
                 Main.currentRoom = Main.player.getCurrentRoom();
                 ParseInput.clearScreen();
                 return true;
@@ -213,7 +222,7 @@ public class GameChanges {
     public static void restartGame(){
         GameChanges.changeWorld(Main.game.getStartingWorld());
         Main.input.setDisable(false);
-        Main.game = new Game(0, player.hasNeeds());
+        Main.game = new Game(player.hasNeeds());
         Main.player = Main.game.getPlayer();
         Main.currentRoom = Main.game.getRoom();
         Main.log.setText("");
