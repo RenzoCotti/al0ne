@@ -34,10 +34,10 @@ public class Game implements Serializable {
         World caveWorld = new CreateSmallCave();
         if (needs) {
             addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true, "You are a knight."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
+//            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
         } else{
             addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), false, "You are a knight."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
+//            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
         }
 
         this.currentWorld = startingWorld.getWorldName();
@@ -103,6 +103,15 @@ public class Game implements Serializable {
 
     public String getStartingWorld() {
         return startingWorld;
+    }
+
+    public Game copyWorld(Game game){
+        Game g = new Game(game.turnCounter, game.getPlayer().hasNeeds());
+        for (PairWorld pw : game.getWorlds().values()){
+            World curr = pw.getWorld();
+            g.addWorld(curr, pw.getPlayer());
+        }
+        return g;
     }
 
 }

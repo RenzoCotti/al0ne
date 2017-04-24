@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.util.ArrayList;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -16,12 +17,12 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class GameChanges {
 
-    public static void save(String s, String path){
+    public static void save(String s, String path, Game g){
         FileOutputStream fop = null;
         ObjectOutputStream oos = null;
         File file;
 
-        Main.game.setNotes(Main.notes.getText());
+        g.setNotes(Main.notes.getText());
 
         try {
             if (path != null){
@@ -39,7 +40,7 @@ public class GameChanges {
             }
 
             // get the content in bytes
-            oos.writeObject(Main.game);
+            oos.writeObject(g);
 
             oos.flush();
             oos.close();
@@ -207,6 +208,19 @@ public class GameChanges {
 
             player.getToApply().clear();
         }
+    }
+
+    public static void restartGame(){
+        GameChanges.changeWorld(Main.game.getStartingWorld());
+        Main.input.setDisable(false);
+        Main.game = new Game(0, player.hasNeeds());
+        Main.player = Main.game.getPlayer();
+        Main.currentRoom = Main.game.getRoom();
+        Main.log.setText("");
+        printToLog("Game restarted.");
+        printToLog();
+        Main.player.getCurrentRoom().printName();
+        Main.player.getCurrentRoom().printRoom();
     }
 
 }

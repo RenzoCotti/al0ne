@@ -42,7 +42,7 @@ public class ParseInput {
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else {
-                    GameChanges.save(parsedInput[1], null);
+                    GameChanges.save(parsedInput[1], null, Main.game);
                 }
                 return false;
             case "warp":
@@ -81,6 +81,9 @@ public class ParseInput {
                 return handleAttack(parsedInput, player);
             case "give":
                 return ParseInput.handleGive(parsedInput, player);
+            case "death":
+                player.killPlayer();
+                return false;
 
             case "cast":
                 return handleCast(parsedInput, player, currentRoom);

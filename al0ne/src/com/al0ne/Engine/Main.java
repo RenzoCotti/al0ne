@@ -1,30 +1,15 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.PairWorld;
-import com.al0ne.Entities.Worlds.CreateAlpha;
-import com.al0ne.Entities.Worlds.CreateSmallCave;
+import com.al0ne.Engine.UI.Popups;
+import com.al0ne.Engine.UI.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import static javafx.scene.input.KeyCode.ENTER;
 
 public class Main extends Application{
 
@@ -82,6 +67,8 @@ public class Main extends Application{
             printToLog();
             printToLog("Game over!");
             input.setDisable(true);
+
+            Popups.deathPopup();
             return;
         }
 

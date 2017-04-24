@@ -99,6 +99,10 @@ public class Player implements Serializable{
         return hasNeeds;
     }
 
+    public void killPlayer(){
+        this.alive = false;
+    }
+
     public Weapon getWeapon(){
         return (Weapon) wornItems.get("main hand");
     }
