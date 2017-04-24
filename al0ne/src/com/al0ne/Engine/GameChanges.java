@@ -177,10 +177,8 @@ public class GameChanges {
 
     public static void attackIfAggro(Player player, Room currentRoom){
         if(currentRoom.hasEnemies()){
-            System.out.println("enemies attacking:");
             for (Enemy e : currentRoom.getEnemyList()){
                 if(e.isAggro() && !e.isSnooze()){
-                    System.out.println(e.getName()+" attacking");
                     e.isAttacked(player, currentRoom);
                 } else{
                     if (e.isSnooze()){

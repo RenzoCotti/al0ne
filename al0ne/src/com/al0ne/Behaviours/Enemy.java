@@ -257,7 +257,7 @@ public abstract class Enemy extends Character {
 
         int attackRoll = Utility.randomNumber(100)+attack;
         int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
-        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
+//        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
         if(attackRoll > dodgeRoll){
             printToLog("The "+name.toLowerCase()+" attacks and hits you.");
             int inflictedDamage = damage-player.getArmorLevel();

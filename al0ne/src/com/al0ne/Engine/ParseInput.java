@@ -276,6 +276,7 @@ public class ParseInput {
                     player.getCurrentRoom().visit();
                 } else{
                     player.getCurrentRoom().printDirections();
+                    printToLog();
                 }
                 return true;
             }

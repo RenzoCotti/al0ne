@@ -775,40 +775,52 @@ public class Player implements Serializable{
 
             int attackRoll = Utility.randomNumber(100)+attack;
             int dodgeRoll = Utility.randomNumber(100)+enemy.getDexterity();
-            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
+//            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
-                    if(!enemy.modifyHealth(-1)){
-                        enemy.handleLoot(currentRoom);
+                    int inflictedDamage = 1-enemy.getArmor();
+                    System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
+                    if(inflictedDamage <= 0){
+                        printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
+                    } else{
+                        boolean attackResult = enemy.modifyHealth(-inflictedDamage);
+                        if(!attackResult){
+                            enemy.handleLoot(currentRoom);
+                            currentRoom.getEntities().remove(enemy.getID());
+                            return true;
+                        } else {
+                            printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
+                        }
                     }
+
                 }else if(enemy.isWeakAgainst(type) ){
 
                     int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
 
-                    if(inflictedDamage < 0){
+                    if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
                     } else{
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
-                        if(enemy.modifyHealth(-(inflictedDamage))){
+                        System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
+                        if(!enemy.modifyHealth(-(inflictedDamage))){
                             enemy.handleLoot(currentRoom);
+                            currentRoom.getEntities().remove(enemy.getID());
+                            return true;
                         }
                     }
                 } else{
                     printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
                 }
 
-                if (enemy.isAttacked(this, currentRoom)) {
-                    currentRoom.getEntities().remove(enemy.getID());
-                }
+                enemy.isAttacked(this, currentRoom);
+
                 enemy.setSnooze(true);
                 return true;
             } else{
                 printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
-                if (enemy.isAttacked(this, currentRoom)) {
-                    currentRoom.getEntities().remove(enemy.getID());
-                }
+                enemy.isAttacked(this, currentRoom);
+                enemy.setSnooze(true);
                 return true;
             }
 
@@ -854,6 +866,7 @@ public class Player implements Serializable{
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
                 st.duration = s.duration;
+                System.out.println(s.getName()+": duration "+s.duration);
                 return false;
             }
         }
