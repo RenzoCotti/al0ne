@@ -18,7 +18,7 @@ public class Main extends Application{
 
     public static TextArea notes;
 
-    public static Game game = new Game(true);
+    public static WarpGame game = new WarpGame(true);
 
     public static Player player = game.getPlayer();
 
@@ -35,13 +35,13 @@ public class Main extends Application{
     }
 
     private static void runGame(){
-        ParseInput.printWelcome();
+        HandleCommands.printWelcome();
         currentRoom.printRoom();
         currentRoom.printName();
     }
     public static void hasNextLine(String s, Scene scene){
         currentCommand = s;
-        if(ParseInput.parse(currentCommand, game, turnCounter, false)){
+        if(ParseInput.parse(currentCommand, game, false)){
             //we add a turn
             game.addTurn();
 
@@ -91,6 +91,13 @@ public class Main extends Application{
 
     public static void printToSingleLine(String s){
         log.appendText(s);
+    }
+
+    //clears the screen by printing 20 new lines
+    public static void clearScreen() {
+        for (int i = 0; i < 30; i++) {
+            printToLog();
+        }
     }
 
 

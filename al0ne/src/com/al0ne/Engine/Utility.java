@@ -66,4 +66,26 @@ public class Utility {
             }
         }
     }
+
+    //this function makes a string from the begin-th element of the array to the end-th
+    public static String stitchFromTo(String[] input, int begin, int end) {
+        String temp = "";
+        for (int i = begin; i != end; i++) {
+            temp += input[i] + " ";
+        }
+
+        temp = temp.substring(0, temp.length() - 1);
+        return temp;
+    }
+
+    //this function looks for token in input
+    public static int checkForToken(String[] input, String token) {
+        for (int i = 0; i != input.length; i++) {
+            if (input[i].equals(token)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

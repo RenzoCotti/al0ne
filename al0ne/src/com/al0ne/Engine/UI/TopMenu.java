@@ -1,9 +1,6 @@
 package com.al0ne.Engine.UI;
 
-import com.al0ne.Engine.Command;
-import com.al0ne.Engine.GameChanges;
-import com.al0ne.Engine.Main;
-import com.al0ne.Engine.ParseInput;
+import com.al0ne.Engine.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,7 +25,7 @@ public class TopMenu {
 
         MenuItem questionButton = new MenuItem("Help");
 
-        questionButton.setOnAction(t -> ParseInput.printHelp());
+        questionButton.setOnAction(t -> HandleCommands.printHelp());
 
         MenuItem commandsButton = new MenuItem("Commands");
 

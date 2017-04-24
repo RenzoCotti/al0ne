@@ -24,7 +24,7 @@ public class Game implements Serializable {
     private HashMap<String, PairWorld> worlds;
     private int turnCounter;
     private int worldCount;
-    private boolean warpstone;
+
 
     private String notes;
 
@@ -32,7 +32,6 @@ public class Game implements Serializable {
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
         this.worldCount = 0;
-        this.warpstone = false;
 
         World startingWorld = new CreateAlpha();
         World caveWorld = new CreateSmallCave();
@@ -55,6 +54,20 @@ public class Game implements Serializable {
 
     public Room getRoom() {
         return worlds.get(currentWorld).getPlayer().getCurrentRoom();
+    }
+
+    public void setPlayer(Player p) {
+        PairWorld pw = worlds.get(currentWorld);
+        pw.setPlayer(p);
+        worlds.put(currentWorld, pw);
+    }
+
+    public void setRoom(Room r) {
+        PairWorld pw = worlds.get(currentWorld);
+        Player p = getPlayer();
+        p.setCurrentRoom(r);
+        pw.setPlayer(p);
+        worlds.put(currentWorld, pw);
     }
 
     public HashMap<String, PairWorld> getWorlds() {
@@ -110,24 +123,9 @@ public class Game implements Serializable {
         return startingWorld;
     }
 
-    public Game copyWorld(Game game){
-        Game g = new Game(game.getPlayer().hasNeeds());
-        for (PairWorld pw : game.getWorlds().values()){
-            World curr = pw.getWorld();
-            g.addWorld(curr, pw.getPlayer());
-        }
-        return g;
-    }
-
     public int getWorldCount() {
         return worldCount;
     }
 
-    public boolean hasWarpstone() {
-        return warpstone;
-    }
 
-    public void setWarpstone() {
-        this.warpstone = true;
-    }
 }

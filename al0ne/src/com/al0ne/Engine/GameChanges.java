@@ -76,7 +76,7 @@ public class GameChanges {
             return;
         }
 
-        Main.game = loaded;
+        Main.game = (WarpGame) loaded;
         Main.player = loaded.getPlayer();
         Main.turnCounter = loaded.getTurnCount();
         Main.currentRoom = loaded.getRoom();
@@ -156,13 +156,13 @@ public class GameChanges {
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
                 Main.currentRoom = Main.player.getCurrentRoom();
-                ParseInput.clearScreen();
+                Main.clearScreen();
                 return true;
             case "caveworld":
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
                 Main.currentRoom = Main.player.getCurrentRoom();
-                ParseInput.clearScreen();
+                Main.clearScreen();
                 return true;
             default:
                 printToLog("404: world not found");
@@ -222,7 +222,7 @@ public class GameChanges {
     public static void restartGame(){
         GameChanges.changeWorld(Main.game.getStartingWorld());
         Main.input.setDisable(false);
-        Main.game = new Game(player.hasNeeds());
+        Main.game = new WarpGame(player.hasNeeds());
         Main.player = Main.game.getPlayer();
         Main.currentRoom = Main.game.getRoom();
         Main.log.setText("");

@@ -1,6 +1,8 @@
 package com.al0ne.Engine.UI;
 
 
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.*;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -70,12 +72,15 @@ public class UI {
 
         Main.input.setOnKeyPressed(event -> {
             if (event.getCode().equals(ENTER)){
-                Game g = Main.game.copyWorld(Main.game);
+                Player player = Main.player;
+                Room currentRoom = Main.currentRoom;
                 try{
                     Main.hasNextLine(Main.input.getText(), done);
                     Main.input.clear();
                 } catch (Exception ex){
-                    GameChanges.save("autosave", null, g);
+                    Main.game.setPlayer(player);
+                    Main.game.setRoom(currentRoom);
+                    GameChanges.save("autosave", null, Main.game);
                     Utility.dumpToFile("gameDump", Main.log.getText());
                     Popups.crashPopup(stage);
                 }
