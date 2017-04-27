@@ -8,7 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
@@ -32,18 +37,20 @@ public class GameChanges {
                 file = new File("./"+s+".save");
             }
             fop = new FileOutputStream(file);
-            oos = new ObjectOutputStream(fop);
+
+            ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
+
+            oos = new ObjectOutputStream(arrayOut);
+
+
+            oos.writeObject(g);
+            fop.write(Base64.getEncoder().encode(arrayOut.toByteArray()));
 
             // if file doesnt exists, then create it
             if (!file.exists()) {
                 printToLog("File already exists. Specify a non existing file name.");
                 return;
             }
-
-            // get the content in bytes
-            oos.writeObject(g);
-
-//            byte[] encodedBytes = Base64.encodeBase64("Test".getBytes());
 
             oos.flush();
             oos.close();
@@ -94,24 +101,33 @@ public class GameChanges {
 
     private static Game deserializeGame(String filename, String path) {
 
-        Game game = null;
+        Game game;
 
         FileInputStream fin = null;
         ObjectInputStream ois = null;
 
         try {
+            Path p;
+            String toUse;
             if (path != null){
+                p = FileSystems.getDefault().getPath("", "myFile");
                 fin = new FileInputStream(path);
+                toUse = path;
             } else{
                 fin = new FileInputStream(filename);
+                toUse = filename;
             }
-            ois = new ObjectInputStream(fin);
+
+
+            ByteArrayInputStream arrayIn = new ByteArrayInputStream(Base64.getDecoder().decode(
+                    Files.readAllBytes(Paths.get(toUse))));
+
+            ois = new ObjectInputStream(arrayIn);
             game = (Game) ois.readObject();
 
         } catch (Exception ex) {
             printToLog("File not found");
             return null;
-//            ex.printStackTrace();
         } finally {
 
             if (fin != null) {
