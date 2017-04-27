@@ -16,6 +16,8 @@ public class Main extends Application{
     public static TextArea log;
     public static TextField input;
 
+    public static int fontSize = 12;
+
     public static TextArea notes;
 
     public static WarpGame game = new WarpGame(true);

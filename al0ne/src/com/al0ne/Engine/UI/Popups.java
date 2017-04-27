@@ -10,6 +10,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 24/04/2017.
  */
@@ -166,6 +168,40 @@ public class Popups {
 
         s.setScene(dialogScene);
         s.setTitle("R.I.P.");
+        s.show();
+    }
+
+
+
+    public static void helpPopup(){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+//        s.initOwner(stage);
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.setPrefSize(200, 100);
+
+        Button close = new Button("Close");
+        close.setOnAction(b -> {
+            GameChanges.restartGame();
+            s.close();
+        });
+
+        HBox buttons = new HBox();
+        buttons.setSpacing(10);
+        buttons.getChildren().addAll(close);
+
+        Text text = new Text("You can type \"north\" to go north, \"east\" to go east,... (shortcut: \"n\" for north, \"s\" " +
+                "for south,...)\n\n"+
+                "Useful commands: \n \"examine a\", where a is an object you can see (shortcut: \"x a\")\n"+
+                "\"use x on y\", \"use x\", \n\"talk to x\", \n\"attack x\", \n\"take x\", \n\"inventory\" (shortcut: \"i\")\n");
+
+        dialogVbox.getChildren().addAll(text, buttons);
+        dialogVbox.setPadding(new Insets(20));
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+        s.setTitle("Help");
         s.show();
     }
 

@@ -31,14 +31,14 @@ public class SideMenu {
         inv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         inv.setId("inv");
         TableColumn itemColumn = new TableColumn("Item");
-        itemColumn.setMinWidth(120);
+        itemColumn.setMinWidth(40);
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         TableColumn amount = new TableColumn("Amt");
-        amount.setMinWidth(10);
+        amount.setMinWidth(40);
         amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         TableColumn weightColumn = new TableColumn("Kg");
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
-        weightColumn.setMinWidth(20);
+        weightColumn.setMinWidth(30);
 
         inv.getColumns().addAll(amount, itemColumn, weightColumn);
 

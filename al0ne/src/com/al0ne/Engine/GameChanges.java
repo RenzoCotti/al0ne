@@ -43,6 +43,8 @@ public class GameChanges {
             // get the content in bytes
             oos.writeObject(g);
 
+//            byte[] encodedBytes = Base64.encodeBase64("Test".getBytes());
+
             oos.flush();
             oos.close();
 

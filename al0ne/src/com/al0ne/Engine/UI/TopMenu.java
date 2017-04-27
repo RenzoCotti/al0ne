@@ -4,10 +4,12 @@ import com.al0ne.Engine.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -18,36 +20,38 @@ public class TopMenu {
     public static MenuBar createTopMenu(Stage stage){
         MenuBar menuBar = new MenuBar();
 
-        Menu fileMenu = new Menu("File");
-        Menu helpMenu = new Menu("?");
-        Menu creditsMenu = new Menu("Credits");
+
+
+//        menuBar.getMenus().addAll(fileMenu, fileOptions, creditsMenu, helpMenu);
+
+        return menuBar;
+    }
+
+
+    public static ArrayList<Menu> createSubMenus(Stage stage){
+        Menu fileMenu = new Menu("Game");
+        Menu fileOptions = new Menu("Options");
+        Menu helpMenu = new Menu("Help");
 
 
         MenuItem questionButton = new MenuItem("Help");
+        questionButton.setOnAction(t -> Popups.helpPopup());
 
-        questionButton.setOnAction(t -> HandleCommands.printHelp());
-
-        MenuItem commandsButton = new MenuItem("Commands");
-
-        commandsButton.setOnAction(t -> {
-            printToLog("Commands:");
-            for (Command command: Command.values()){
-                printToLog(command.toString());
-            }
-        });
-
-        helpMenu.getItems().addAll(questionButton, commandsButton);
-
-
-
-
-        MenuItem creditsButton = new MenuItem("Thanks");
-
+        MenuItem creditsButton = new MenuItem("Credits");
         creditsButton.setOnAction(t -> {
             Popups.creditsPopup(stage);
         });
 
-        creditsMenu.getItems().add(creditsButton);
+        helpMenu.getItems().addAll(questionButton, creditsButton);
+
+
+
+
+        MenuItem biggerFont = new MenuItem("Bigger font");
+        MenuItem smallerFont = new MenuItem("Smaller font");
+
+        fileOptions.getItems().addAll(biggerFont, smallerFont);
+
 
 
 
@@ -65,7 +69,8 @@ public class TopMenu {
         load.setOnAction(t -> {
             FileChooser loadFile = new FileChooser();
             loadFile.setTitle("Open Load File");
-            loadFile.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Save files (*.save)", "*.save"));
+            loadFile.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+                    "Save files (*.save)", "*.save"));
             File file = loadFile.showOpenDialog(stage);
 
             if (file != null) {
@@ -87,8 +92,13 @@ public class TopMenu {
 
         fileMenu.getItems().addAll(save, load, restart, quit);
 
-        menuBar.getMenus().addAll(fileMenu, creditsMenu, helpMenu);
 
-        return menuBar;
+        ArrayList<Menu> menus = new ArrayList<>();
+        menus.add(fileMenu);
+        menus.add(fileOptions);
+        menus.add(helpMenu);
+
+        return menus;
+
     }
 }
