@@ -178,7 +178,8 @@ public class GameChanges {
         else {
             for (Pair pair : Main.player.getInventory().values()) {
                 Item currentItem = (Item) pair.getEntity();
-                SimpleItem s = new SimpleItem(currentItem.getName(), pair.getCount(), currentItem.getWeight()*pair.getCount());
+                double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
+                SimpleItem s = new SimpleItem(currentItem.getName(), pair.getCount(), weight);
                 data.add(s);
             }
         }

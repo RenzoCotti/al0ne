@@ -88,4 +88,8 @@ public class Utility {
         return -1;
     }
 
+    public static double twoDecimals(double number){
+       return Math.round(number*100.0)/100.0;
+    }
+
 }

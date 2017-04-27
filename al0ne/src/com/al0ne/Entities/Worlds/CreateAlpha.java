@@ -35,6 +35,7 @@ public class CreateAlpha extends World{
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
         startRoom.addEntity(new WarpStone());
+        startRoom.addEntity(new Coin(), 100);
         startRoom.visit();
         putRoom(startRoom);
 

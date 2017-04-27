@@ -360,116 +360,148 @@ public class HandleCommands {
     //drop: false-> it's a TAKE action, true-> it's a DROP action
     //we check if it's a drop/take all action, then we check if we have exactly
     //1 item, then we take/drop (all)
-    public static boolean takeOrDrop(String[] temp, Player player, boolean drop) {
+    public static boolean handleTake(String[] temp, Player player) {
 
 
         ArrayList<Pair> possibleItems;
-        if (!drop) {
 
-            if (temp.length == 1) {
-                ParseInput.wrongCommand++;
-                printToLog("The syntax is TAKE (ALL) x");
-                return false;
-            }
-            ParseInput.wrongCommand = 0;
+        if (temp.length == 1) {
+            ParseInput.wrongCommand++;
+            printToLog("The syntax is TAKE (ALL) x");
+            return false;
+        }
+        ParseInput.wrongCommand = 0;
 
 
-            boolean all = false;
+        boolean all = false;
 
-            String item;
-            if (temp.length > 2 && temp[1].equals("all")) {
+        String item;
+        int amt = 0;
+        try{
+            Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, temp.length);
+            amt = Integer.parseInt(temp[1]);
+
+        } catch (NumberFormatException ex){
+            if (2 < temp.length && temp[1].equals("all")) {
                 all = true;
                 item = Utility.stitchFromTo(temp, 2, temp.length);
             } else {
                 item = Utility.stitchFromTo(temp, 1, temp.length);
-            }
-
-
-            possibleItems = getPotentialItem(item, player, 1);
-
-            ArrayList<Pair> items = new ArrayList<>();
-
-            for (Pair p : possibleItems) {
-                if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' || p.getEntity().getType() == 'C') {
-                    items.add(p);
-                }
-            }
-
-
-            if (items.size() > 1) {
-                printToLog("Be more specific.");
-                return false;
-            }
-
-
-            if (all && items.size() == 1) {
-                if (player.pickUpItem(items.get(0), true)) {
-                    printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
-                }
-
-            } else if (items.size() == 1) {
-                if (player.pickUpItem(items.get(0), false)) {
-                    printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
-                }
-            } else if (possibleItems.size() != 0) {
-                printToLog("You can't take it.");
-            } else {
-                printToLog("You can't see such an item to take.");
-            }
-        } else {
-
-
-            if (temp.length == 1) {
-                ParseInput.wrongCommand++;
-                printToLog("The syntax is DROP (ALL) x");
-                return false;
-            }
-
-            ParseInput.wrongCommand = 0;
-
-
-            boolean all = false;
-
-            String item;
-            if (temp.length > 2 && temp[1].equals("all")) {
-                all = true;
-                item = Utility.stitchFromTo(temp, 2, temp.length);
-            } else {
-                item = Utility.stitchFromTo(temp, 1, temp.length);
-            }
-
-
-            possibleItems = getPotentialItem(item, player, 0);
-
-            if (possibleItems.size() > 1) {
-                printToLog("Be more specific.");
-                return false;
-            }
-
-
-            if (all && possibleItems.size() == 1) {
-                int result = player.drop(possibleItems.get(0), true);
-                if (result == 1) {
-                    printToLog("You drop all the " + possibleItems.get(0).getEntity().getName());
-                } else if(result == 0){
-                    printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
-                }
-            } else if (possibleItems.size() == 1) {
-                int result = player.drop(possibleItems.get(0), false);
-                if (result == 1) {
-                    printToLog("You drop the " + possibleItems.get(0).getEntity().getName());
-                } else if (result == 0){
-                    printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
-                }
-            } else {
-                printToLog("You can't see such an item to drop. ");
             }
         }
 
-//        player.printWeight();
-        return true;
 
+        possibleItems = getPotentialItem(item, player, 1);
+
+        ArrayList<Pair> items = new ArrayList<>();
+
+        for (Pair p : possibleItems) {
+            if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' || p.getEntity().getType() == 'C') {
+                items.add(p);
+            }
+        }
+
+
+        if (items.size() > 1) {
+            printToLog("Be more specific.");
+            return false;
+        }
+
+
+        if (all && items.size() == 1) {
+            if (player.pickUpItem(items.get(0), true)) {
+                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
+            }
+
+        } else if (amt != 0 && items.size() == 1) {
+            if (player.pickUpItem(items.get(0), amt)) {
+                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
+            }
+        } else if (items.size() == 1) {
+            if (player.pickUpItem(items.get(0), false)) {
+                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
+            }
+        } else if (possibleItems.size() != 0) {
+            printToLog("You can't take it.");
+        } else {
+            printToLog("You can't see such an item to take.");
+        }
+        return true;
     }
+
+    public static boolean handleDrop(String[] temp, Player player){
+
+
+        if (temp.length == 1) {
+            ParseInput.wrongCommand++;
+            printToLog("The syntax is DROP (ALL) x");
+            return false;
+        }
+
+        ArrayList<Pair> possibleItems;
+
+
+        ParseInput.wrongCommand = 0;
+
+
+        boolean all = false;
+
+        String item;
+        int amt=0;
+
+        try{
+            Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, temp.length);
+            amt = Integer.parseInt(temp[1]);
+
+        } catch (NumberFormatException ex){
+            if (temp.length > 2 && temp[1].equals("all")) {
+                all = true;
+                item = Utility.stitchFromTo(temp, 2, temp.length);
+            } else {
+                item = Utility.stitchFromTo(temp, 1, temp.length);
+            }
+        }
+
+
+
+        possibleItems = getPotentialItem(item, player, 0);
+
+        if (possibleItems.size() > 1) {
+            printToLog("Be more specific.");
+            return false;
+        }
+
+
+        if (all && possibleItems.size() == 1) {
+            int result = player.drop(possibleItems.get(0), true);
+            if (result == 1) {
+                printToLog("You drop all the " + possibleItems.get(0).getEntity().getName());
+            } else if(result == 0){
+                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
+            }
+        } else if (amt != 0 && possibleItems.size() == 1) {
+            int result = player.drop(possibleItems.get(0), amt);
+            if (result == 1) {
+                printToLog("You drop "+ amt+" "+ possibleItems.get(0).getEntity().getName());
+            } else if (result == 0){
+                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
+            }
+        } else if (possibleItems.size() == 1) {
+            int result = player.drop(possibleItems.get(0), false);
+            if (result == 1) {
+                printToLog("You drop the " + possibleItems.get(0).getEntity().getName());
+            } else if (result == 0){
+                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
+            }
+        } else {
+            printToLog("You can't see such an item to drop. ");
+        }
+
+        return true;
+    }
+
 
     //this function handles examining an object:
     //we look in the room for props and items, as well as in the player's inventory

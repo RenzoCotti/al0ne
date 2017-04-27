@@ -11,11 +11,11 @@ import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.NaturalHealing;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
+import javax.rmi.CORBA.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -83,8 +83,8 @@ public class Player implements Serializable{
         this.hasNeeds = needs;
         putStatus(new NaturalHealing());
 
-        addOneItem(new Pair(new Canteen(), 1));
-        addItem(new Pair(new Ration(), 2), 2);
+        simpleAddItem(new Canteen(), 1);
+        simpleAddItem(new Ration(), 2);
 
     }
 
@@ -310,7 +310,7 @@ public class Player implements Serializable{
     public boolean modifyWeight(double weight) {
         if (this.currentWeight+weight <= maxWeight){
             this.currentWeight+=weight;
-            this.currentWeight=Math.round(currentWeight*10.0)/10.0;
+            this.currentWeight= Utility.twoDecimals(currentWeight);
 
             if (currentWeight < 0){
                 currentWeight=0;
@@ -339,7 +339,8 @@ public class Player implements Serializable{
             printToLog("You have these items:");
             for (Pair pair : inventory.values()) {
                 Item currentItem = (Item) pair.getEntity();
-                printToLog("- "+pair.getCount()+"x " + currentItem.getName()+". "+currentItem.getWeight()*pair.getCount()+" kg.");
+                double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
+                printToLog("- "+pair.getCount()+"x " + currentItem.getName()+". "+weight+" kg.");
             }
             printToLog();
             printWeight();
@@ -366,7 +367,7 @@ public class Player implements Serializable{
         }
     }
 
-    public boolean addItem(Pair pair, Integer amount) {
+    public boolean addAmountItem(Pair pair, Integer amount) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight() * amount)){
             if (hasItemInInventory(item.getID())){
@@ -596,6 +597,43 @@ public class Player implements Serializable{
         }
     }
 
+    //this function makes the player drop target, if it has it
+    public int drop(Pair target, Integer amt){
+        if (target != null){
+            if(target.getCount() < amt){
+                printToLog("You have only "+target.getCount()+" of those.");
+                return 2;
+            }
+            //case we drop 1 & target is in room
+            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
+
+            if(!((Item) target.getEntity()).canDrop() ){
+                printToLog("You can't drop it.");
+                return 2;
+            }
+
+            //case we drop all & target is in room
+            if (roomItem != null){
+                roomItem.setCount(roomItem.getCount()+amt);
+            } else {
+                currentRoom.addItem((Item) target.getEntity(), amt);
+            }
+
+            modifyWeight(-(((Item) target.getEntity()).getWeight()*amt));
+            if (target.getCount() == 0){
+                inventory.remove(target.getEntity().getID());
+            }
+            if (target.getEntity().getType()=='w' &&  isWearingItem(target.getEntity().getID())){
+                unequipItem((Wearable) target.getEntity());
+            }
+
+            return 1;
+
+        } else {
+            return 0;
+        }
+    }
+
 
     //this function tries to pick up an item in the currentRoom:
     //it also checks if the player can carry the current item
@@ -614,7 +652,7 @@ public class Player implements Serializable{
 
         Item toAdd = (Item) item.getEntity();
         if (all){
-            if (!addItem(item, item.getCount())){
+            if (!addAllItem(item)){
                 printToLog("Too heavy to carry.");
                 return false;
             } else {
@@ -636,6 +674,33 @@ public class Player implements Serializable{
         return true;
     }
 
+
+
+    //this function tries to pick up an amount from Item
+    public boolean pickUpItem(Pair item, Integer amt){
+
+        if(hasItemInInventory(item.getEntity().getID()) && ((Item)item.getEntity()).isUnique()){
+            printToLog("You can have just one with you.");
+            //bypassed by taking chest with that in it
+            return false;
+        }
+        if(item.getCount() < amt){
+            printToLog("There are just "+item.getCount()+" of those.");
+            return false;
+        }
+
+        Item toAdd = (Item) item.getEntity();
+        if (!addAmountItem(item, amt)){
+            printToLog("Too heavy to carry.");
+            return false;
+        } else {
+            if (item.isEmpty()){
+                currentRoom.getEntities().remove(toAdd.getID());
+            }
+        }
+        return true;
+    }
+
     //this function tries to pick up an item in the currentRoom:
     //it also checks if the player can carry the current item
     //if it didn't succeed, print an error message
@@ -644,7 +709,7 @@ public class Player implements Serializable{
         Item toAdd = (Item) item.getEntity();
         if (all){
             int currentCounter = item.getCount();
-            if (!addItem(item, item.getCount())){
+            if (!addAllItem(item)){
                 printToLog("Too heavy to carry.");
                 return false;
             } else {

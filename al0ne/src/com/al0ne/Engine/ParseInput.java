@@ -147,12 +147,12 @@ public class ParseInput {
 
                 //case simple take
                 if (tokenFrom == -1 && tokenAll == -1) {
-                    return HandleCommands.takeOrDrop(parsedInput, player, false);
+                    return HandleCommands.handleTake(parsedInput, player);
                 }
                 //case take from container:
                 //take normally and all
                 else if (tokenFrom == -1 && tokenAll > -1) {
-                    return HandleCommands.takeOrDrop(parsedInput, player, false);
+                    return HandleCommands.handleTake(parsedInput, player);
                     //take from container normally
                 } else if (tokenFrom > -1 && tokenAll == -1) {
                     return HandleCommands.takePutContainer(parsedInput, player, tokenFrom, false, true);
@@ -206,7 +206,7 @@ public class ParseInput {
                 printToLog("(" + lastCommand + ")");
                 return parse(lastCommand, game, true);
             case "drop":
-                return HandleCommands.takeOrDrop(parsedInput, player, true);
+                return HandleCommands.handleDrop(parsedInput, player);
             case "equipment":
             case "worn":
                 player.printArmor();
