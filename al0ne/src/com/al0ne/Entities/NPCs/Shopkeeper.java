@@ -1,6 +1,7 @@
 package com.al0ne.Entities.NPCs;
 
 import com.al0ne.Behaviours.NPC;
+import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
@@ -31,7 +32,7 @@ public class Shopkeeper extends NPC {
     public void addToInventory(Item item, int price) {
         this.inventory.put(item.getID(), new Pricepair(item, price));
         list+=item.getName()+" - "+price+" coins    ";
-        addSubject("items", list);
+        addSubject("items", new Subject(list));
     }
 
     public boolean hasItem(String item) {

@@ -8,6 +8,5 @@ import com.al0ne.Behaviours.Room;
 public class Apple extends Food {
     public Apple() {
         super("apple","Apple", "A fresh apple. It's green", "green apple", 0.1, Size.VSMALL, 4);
-        addCommand("eat");
     }
 }

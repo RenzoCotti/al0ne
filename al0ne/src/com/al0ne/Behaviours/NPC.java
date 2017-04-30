@@ -1,5 +1,8 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Pairs.Subject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +20,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class NPC extends Character{
 
     //maps subjects to answers
-    protected HashMap<String, String> subjects;
+    protected HashMap<String, Subject> subjects;
     protected HashMap<String, Item> reactionItems;
     protected ArrayList<Item> inventory;
     protected String intro;
@@ -40,8 +43,8 @@ public class NPC extends Character{
     }
 
 
-    public void addSubject(String subject, String answer){
-        subjects.put(subject, answer);
+    public void addSubject(String subjectID, Subject subject){
+        subjects.put(subjectID, subject);
     }
 
     public void addReactionItem(String itemid, Item item){
@@ -49,10 +52,19 @@ public class NPC extends Character{
     }
 
 
-    public boolean talkAbout(String subject){
+    public boolean talkAbout(String subject, Player player){
         for (String s : subjects.keySet()){
             if (s.equals(subject)){
-                printToLog("\""+subjects.get(s)+"\"");
+                Subject temp = subjects.get(s);
+                if(temp.addsQuest()){
+                    player.addQuest(temp.getQuestID());
+                }
+                if(temp.givesItem()){
+                    if(!player.addAllItem(temp.getItem())){
+                        player.getCurrentRoom().addEntity(temp.getItem().getEntity(), temp.getItem().getCount());
+                    }
+                }
+                printToLog("\""+temp.getAnswer()+"\"");
                 return true;
             }
         }
@@ -84,7 +96,7 @@ public class NPC extends Character{
     }
 
     public void printIntro(){
-        printToLog(intro);
+        printToLog("\""+intro+"\"");
     }
 
     public void printLongDescription(Player player, Room room){

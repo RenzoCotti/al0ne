@@ -20,13 +20,13 @@ import java.util.HashMap;
  */
 public class Game implements Serializable {
 
-    private String startingWorld;
-    private String currentWorld;
-    private HashMap<String, PairWorld> worlds;
-    private int turnCounter;
-    private int worldCount;
-    private boolean debugMode;
-    private CommandMap commands;
+    protected String startingWorld;
+    protected String currentWorld;
+    protected HashMap<String, PairWorld> worlds;
+    protected int turnCounter;
+    protected int worldCount;
+    protected boolean debugMode;
+    protected CommandMap commands;
 
 
     private String notes;
@@ -37,19 +37,6 @@ public class Game implements Serializable {
         this.worldCount = 0;
         this.debugMode=false;
         this.commands = new CommandMap();
-
-        World startingWorld = new MedievalYoungWorld();
-        World caveWorld = new CaveWorld();
-        if (needs) {
-            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true, "You are a knight."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
-        } else{
-            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), false, "You are a knight."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
-        }
-
-        this.currentWorld = startingWorld.getWorldName();
-        this.startingWorld = startingWorld.getWorldName();
 
     }
 

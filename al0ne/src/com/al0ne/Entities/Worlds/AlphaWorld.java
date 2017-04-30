@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SnakeSteak;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
@@ -56,8 +57,8 @@ public class AlphaWorld extends World{
         Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.","handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
         emonRoom.addExit("down", "ladderroom");
-        emon.addSubject("keys", "Yup, I fix small keys.");
-        emon.addSubject("beer", "I love beer!");
+        emon.addSubject("keys", new Subject("Yup, I fix small keys."));
+        emon.addSubject("beer", new Subject("I love beer!"));
         emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you.", "a very big key"));
         emonRoom.addEntity(emon);
         putRoom(emonRoom);
@@ -188,7 +189,7 @@ public class AlphaWorld extends World{
 
         Room princessRoom = new Room("princessroom", "Princess room", "a royal room, full of decorations.");
         NPC peach = new NPC("princess", "Peach", "A princess in a pink dress is here", "pink princess", "Congratulations, you saved me!");
-        peach.addSubject("mario", "Thank you Mario! but your princess is in another castle!");
+        peach.addSubject("mario", new Subject("Thank you Mario! but your princess is in another castle!"));
         //maybe exit
         princessRoom.addEntity(peach);
         putRoom(princessRoom);

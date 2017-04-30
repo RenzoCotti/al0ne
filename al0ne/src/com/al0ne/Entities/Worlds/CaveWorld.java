@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Canteen;
@@ -78,8 +79,8 @@ public class CaveWorld extends World{
         Room cave4 = new Room("cave4", "Shop Room", "Lots of items are in this room, all with a price tag on.");
         cave4.addExit("south", "cave2");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
-        emon.addSubject("keys", "Yup, I fix small keys.");
-        emon.addSubject("beer", "I love beer!");
+        emon.addSubject("keys", new Subject("Yup, I fix small keys."));
+        emon.addSubject("beer", new Subject("I love beer!"));
         cave4.addEntity(emon);
 
         putRoom(cave4);

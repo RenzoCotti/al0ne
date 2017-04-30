@@ -41,7 +41,7 @@ public class Player implements Serializable{
     //Current carry weight of the player
     private double currentWeight;
 
-    private int currentHealth =5;
+    private int currentHealth =10;
     private static int maxHealth=10;
 
     private int attack = 70;
@@ -811,7 +811,7 @@ public class Player implements Serializable{
 
     public boolean talkToNPC(String name, String subject){
         NPC npc = currentRoom.getNPC(name);
-        if (npc != null && npc.talkAbout(subject)){
+        if (npc != null && npc.talkAbout(subject, this)){
             return true;
         }
         return false;

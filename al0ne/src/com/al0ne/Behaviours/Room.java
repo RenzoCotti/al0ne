@@ -308,7 +308,7 @@ public class Room extends Entity{
                 }
             }
         }
-        printToSingleLine(toPrint);
+        printToSingleLine(toPrint+".");
     }
 
     //this function prints every time a room is discovered

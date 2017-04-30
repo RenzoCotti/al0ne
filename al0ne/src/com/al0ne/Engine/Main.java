@@ -39,6 +39,7 @@ public class Main extends Application{
     private static void runGame(){
         HandleCommands.printWelcome();
         currentRoom.printRoom();
+        printToLog();
         currentRoom.printName();
     }
     public static void hasNextLine(String s, Scene scene){
