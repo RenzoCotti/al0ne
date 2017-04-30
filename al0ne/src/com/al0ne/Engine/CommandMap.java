@@ -1,75 +1,86 @@
 package com.al0ne.Engine;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by BMW on 30/04/2017.
  */
-public class CommandMap {
-    private static HashMap<String, Command> commandMap;
+public class CommandMap implements Serializable{
+    private HashMap<String, Command> commands;
+    private HashMap<String, Command> aliases;
 
     public CommandMap(){
-        this.commandMap = new HashMap<>();
+        this.commands = new HashMap<>();
+        this.aliases = new HashMap<>();
 
-        commandMap.put("help", Command.HELP);
-        commandMap.put("exit", Command.QUIT);
-        commandMap.put("quit", Command.QUIT);
-        commandMap.put("load", Command.LOAD);
-        commandMap.put("save", Command.SAVE);
-        commandMap.put("weight", Command.WEIGHT);
-        commandMap.put("health", Command.HEALTH);
-        commandMap.put("time", Command.TIME);
-        commandMap.put("use", Command.USE);
-        commandMap.put("examine", Command.EXAMINE);
-        commandMap.put("x", Command.EXAMINE);
-        commandMap.put("drink", Command.DRINK);
-        commandMap.put("eat", Command.EAT);
-        commandMap.put("move", Command.MOVE);
-        commandMap.put("n", Command.NORTH);
-        commandMap.put("north", Command.NORTH);
-        commandMap.put("south", Command.SOUTH);
-        commandMap.put("s", Command.SOUTH);
-        commandMap.put("east", Command.EAST);
-        commandMap.put("e", Command.EAST);
-        commandMap.put("w", Command.WEST);
-        commandMap.put("west", Command.WEST);
-        commandMap.put("u", Command.UP);
-        commandMap.put("up", Command.UP);
-        commandMap.put("d", Command.DOWN);
-        commandMap.put("down", Command.DOWN);
-        commandMap.put("i", Command.INVENTORY);
-        commandMap.put("inventory", Command.INVENTORY);
-        commandMap.put("talk", Command.TALK);
-        commandMap.put("buy", Command.BUY);
-        commandMap.put("give", Command.GIVE);
-        commandMap.put("read", Command.READ);
-        commandMap.put("l", Command.LOOK);
-        commandMap.put("look", Command.LOOK);
-        commandMap.put("wear", Command.EQUIP);
-        commandMap.put("wield", Command.EQUIP);
-        commandMap.put("equip", Command.EQUIP);
-        commandMap.put("attack", Command.ATTACK);
-        commandMap.put("kill", Command.ATTACK);
-        commandMap.put("g", Command.AGAIN);
-        commandMap.put("again", Command.AGAIN);
-        commandMap.put("drop", Command.DROP);
-        commandMap.put("worn", Command.DROP);
-        commandMap.put("equipment", Command.DROP);
-        commandMap.put("story", Command.DROP);
-        commandMap.put("warp", Command.DROP);
-        commandMap.put("death", Command.DROP);
-        commandMap.put("commands", Command.DROP);
-        commandMap.put("ilikecheese", Command.DROP);
-        commandMap.put("execute", Command.DROP);
-    }
+        commands.put("help", Command.HELP);
+        commands.put("exit", Command.QUIT);
+        commands.put("quit", Command.QUIT);
+        commands.put("load", Command.LOAD);
+        commands.put("save", Command.SAVE);
+        commands.put("weight", Command.WEIGHT);
+        commands.put("health", Command.HEALTH);
+        commands.put("time", Command.TIME);
+        commands.put("use", Command.USE);
+        commands.put("examine", Command.EXAMINE);
+        commands.put("drink", Command.DRINK);
+        commands.put("eat", Command.EAT);
+        commands.put("move", Command.MOVE);
+        commands.put("north", Command.NORTH);
+        commands.put("south", Command.SOUTH);
+        commands.put("east", Command.EAST);
+        commands.put("west", Command.WEST);
+        commands.put("up", Command.UP);
+        commands.put("down", Command.DOWN);
+        commands.put("northeast", Command.NORTHEAST);
+        commands.put("northwest", Command.NORTHWEST);
+        commands.put("southeast", Command.SOUTHEAST);
+        commands.put("southwest", Command.SOUTHWEST);
+        commands.put("inventory", Command.INVENTORY);
+        commands.put("talk", Command.TALK);
+        commands.put("buy", Command.BUY);
+        commands.put("give", Command.GIVE);
+        commands.put("read", Command.READ);
+        commands.put("look", Command.LOOK);
+        commands.put("equip", Command.EQUIP);
+        commands.put("attack", Command.ATTACK);
+        commands.put("again", Command.AGAIN);
+        commands.put("drop", Command.DROP);
+        commands.put("equipment", Command.EQUIPMENT);
+        commands.put("story", Command.STORY);
+        commands.put("warp", Command.WARP);
+        commands.put("death", Command.DEATH);
+        commands.put("commands", Command.COMMANDS);
+        commands.put("ilikecheese", Command.DEBUG);
+        commands.put("execute", Command.EXECUTE);
 
-    public void addCommand(String s, Command c){
-        commandMap.put(s, c);
+
+
+        aliases.put("x", Command.EXAMINE);
+        aliases.put("i", Command.INVENTORY);
+        aliases.put("n", Command.NORTH);
+        aliases.put("sw", Command.SOUTHWEST);
+        aliases.put("se", Command.SOUTHEAST);
+        aliases.put("nw", Command.NORTHWEST);
+        aliases.put("ne", Command.NORTHEAST);
+        aliases.put("d", Command.DOWN);
+        aliases.put("u", Command.UP);
+        aliases.put("e", Command.EAST);
+        aliases.put("w", Command.WEST);
+        aliases.put("s", Command.SOUTH);
+        aliases.put("worn", Command.EQUIPMENT);
+        aliases.put("kill", Command.ATTACK);
+        aliases.put("g", Command.AGAIN);
+        aliases.put("wear", Command.EQUIP);
+        aliases.put("wield", Command.EQUIP);
+        aliases.put("l", Command.LOOK);
+
     }
 
     public String stringify(Command command){
-        for(String s: commandMap.keySet()){
-            if(commandMap.get(s).equals(command)){
+        for(String s: commands.keySet()){
+            if(commands.get(s).equals(command)){
                 return s;
             }
         }
@@ -77,6 +88,10 @@ public class CommandMap {
     }
 
     public Command toCommand(String s){
-        return commandMap.get(s);
+        Command c = commands.get(s);
+        if(c == null){
+            return aliases.get(s);
+        }
+        return c;
     }
 }

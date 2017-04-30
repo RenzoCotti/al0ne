@@ -19,6 +19,7 @@ public enum Command {
 
     //movement
     NORTH, SOUTH, EAST, WEST, DOWN, UP,
+    NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST,
 
     //player related
     LOOK, HEALTH, INVENTORY,  EQUIPMENT, STORY, CAST,

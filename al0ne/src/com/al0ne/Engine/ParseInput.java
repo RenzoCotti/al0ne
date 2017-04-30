@@ -97,6 +97,10 @@ public class ParseInput {
             case WEST:
             case UP:
             case DOWN:
+            case NORTHEAST:
+            case NORTHWEST:
+            case SOUTHEAST:
+            case SOUTHWEST:
                 String direction = game.getCommands().stringify(c);
                 return HandleCommands.move(player, rooms, direction, parsedInput);
             case STORY:
