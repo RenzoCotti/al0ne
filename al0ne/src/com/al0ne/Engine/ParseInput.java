@@ -28,6 +28,10 @@ public class ParseInput {
         }
 
         Command c = game.getCommands().toCommand(parsedInput[0]);
+        if(c == null){
+            System.out.println("Command is null!");
+            return false;
+        }
 
         switch (c) {
 
@@ -50,6 +54,7 @@ public class ParseInput {
             case TALK:
                 return HandleCommands.handleTalk(parsedInput, player);
 
+            case TIDY:
             case DRINK:
             case EAT:
             case READ:

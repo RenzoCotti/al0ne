@@ -46,6 +46,17 @@ public class Prop extends Entity {
         this.type='p';
     }
 
+    //quick, for descriptive props
+    public Prop(String name, String description, String shortDescription) {
+        super(name, name, description, shortDescription);
+        this.requiredType = new ArrayList<>();
+        this.properties = new ArrayList<>();
+        this.afterDescription = description;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+    }
+
 
     protected void addType(String type){
         requiredType.add(type);

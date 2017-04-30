@@ -98,6 +98,7 @@ public class UI {
                     GameChanges.save("autosave", null, Main.game);
                     Utility.dumpToFile("gameDump", Main.log.getText());
                     Popups.crashPopup(stage);
+                    ex.printStackTrace();
                 }
             }
         });

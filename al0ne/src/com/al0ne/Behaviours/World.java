@@ -31,19 +31,11 @@ public class World implements Serializable{
         return rooms;
     }
 
-    public void setRooms(HashMap<String, Room> rooms) {
-        this.rooms = rooms;
-    }
-
     public void putRoom(Room room){
         rooms.put(room.getID(), room);
     }
 
     public String getWorldName() {
         return worldName;
-    }
-
-    public void setWorldName(String worldName) {
-        this.worldName = worldName;
     }
 }

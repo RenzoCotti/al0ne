@@ -13,10 +13,10 @@ import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Behaviours.World;
 
-public class CreateSmallCave extends World{
+public class CaveWorld extends World{
 
 
-    public CreateSmallCave() {
+    public CaveWorld() {
 
         super("caveworld", "cave1");
 

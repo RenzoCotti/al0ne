@@ -56,11 +56,10 @@ public class Player implements Serializable{
 
     private String story;
 
+    private HashMap<String, Boolean> quests;
 
-//    private Weapon wieldedWeapon;
     private HashMap<String, Wearable> wornItems;
     
-    // TODO: 08/03/2017 add satiation, thirst level
     // add also money pouch?
 
 
@@ -75,6 +74,7 @@ public class Player implements Serializable{
         this.status = new HashMap<>();
         this.toApply = new ArrayList<>();
         this.story = story;
+        this.quests = new HashMap<>();
         initialiseWorn();
         if(needs){
             putStatus(new Thirst());
@@ -82,10 +82,6 @@ public class Player implements Serializable{
         }
         this.hasNeeds = needs;
         putStatus(new NaturalHealing());
-
-        simpleAddItem(new Canteen(), 1);
-        simpleAddItem(new Ration(), 2);
-
     }
 
     public void initialiseWorn(){
@@ -1011,5 +1007,17 @@ public class Player implements Serializable{
         Wearable s = getOffHand();
         if(s == null) return "None.";
         return s.getName();
+    }
+
+    public HashMap<String, Boolean> getQuests() {
+        return quests;
+    }
+
+    public void addQuest(String s) {
+        this.quests.put(s, false);
+    }
+
+    public boolean hasDoneQuest(String s) {
+        return this.quests.get(s) != null;
     }
 }

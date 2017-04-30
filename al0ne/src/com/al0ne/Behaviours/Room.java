@@ -187,35 +187,80 @@ public class Room extends Entity{
 
 
     //prints items in the room
-    private void printItems(){
-        ArrayList<Pair> items = getItemList();
-        if (items.size()!=0){
-            printToLog("You can see:");
-            for (Pair p : items) {
-                Item currentItem = (Item) p.getEntity();
-                printToLog("- " +p.getCount()+"x "+ currentItem.getName());
-            }
-        }
-    }
+//    private void printItems(){
+//        ArrayList<Pair> items = getItemList();
+//        if (items.size()!=0){
+//            printToLog("You can see: ");
+//            for (Pair p : items) {
+//                Item currentItem = (Item) p.getEntity();
+//                if(p.getCount() == 1){
+//                    printToLog("- " +currentItem.getName());
+//                } else{
+//                    printToLog("- " +p.getCount()+"x "+ currentItem.getName());
+//                }
+//            }
+//        }
+//    }
+
+//    //prints props in the room
+//    private void printProps(){
+//        ArrayList<Prop> items = getPropList();
+//        if (items.size()!=0){
+//            printToSingleLine("There is ");
+//            for (int i=0; i<items.size(); i++) {
+//                printToSingleLine(items.get(i).getShortDescription());
+//                if(i==items.size()-2){
+//                    printToSingleLine(" and ");
+//                } else if(i!=items.size()-1){
+//                    printToSingleLine(", ");
+//                } else{
+//                    printToSingleLine(" here.");
+//                    printToLog();
+//                }
+//            }
+//        }
+//    }
 
     //prints props in the room
-    private void printProps(){
-        ArrayList<Prop> items = getPropList();
-        if (items.size()!=0){
+    private void printItemsOrProps(boolean prop){
+            ArrayList<Prop> props = getPropList();
+            ArrayList<Pair> items = getItemList();
+        if (prop && props.size()!=0){
             printToSingleLine("There is ");
-            for (int i=0; i<items.size(); i++) {
-                printToSingleLine(items.get(i).getShortDescription());
-                if(i==items.size()-2){
+            for (int i=0; i<props.size(); i++) {
+                printToSingleLine(props.get(i).getShortDescription());
+                if(i==props.size()-2){
                     printToSingleLine(" and ");
-                } else if(i!=items.size()-1){
+                } else if(i!=props.size()-1){
                     printToSingleLine(", ");
                 } else{
-                    printToSingleLine(" here.");
-                    printToLog();
+                    printToSingleLine(" here.\n");
+                }
+            }
+        } else{
+            if (items.size()!=0){
+                printToSingleLine("You can see ");
+                for (int i=0; i<items.size(); i++) {
+                    Item currentItem = (Item) items.get(i).getEntity();
+                    int count = items.get(i).getCount();
+                    if(count == 1){
+                        printToSingleLine(currentItem.getShortDescription());
+                    } else{
+                        printToSingleLine(count + " " + currentItem.getName());
+                    }
+                    if(i==items.size()-2){
+                        printToSingleLine(" and ");
+                    } else if(i!=items.size()-1){
+                        printToSingleLine(", ");
+                    } else{
+                        printToSingleLine(" here.");
+                        printToLog();
+                    }
                 }
             }
         }
     }
+
 
     public void printName(){
         printToLog(name);
@@ -269,8 +314,8 @@ public class Room extends Entity{
     //this function prints every time a room is discovered
     public void printRoom(){
         printLongDescription(null, null);
-        printItems();
-        printProps();
+        printItemsOrProps(true);
+        printItemsOrProps(false);
         printNPCs();
         printEnemy();
         printDirections();

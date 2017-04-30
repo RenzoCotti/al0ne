@@ -25,6 +25,7 @@ public class CommandMap implements Serializable{
         commands.put("use", Command.USE);
         commands.put("examine", Command.EXAMINE);
         commands.put("drink", Command.DRINK);
+        commands.put("tidy", Command.TIDY);
         commands.put("eat", Command.EAT);
         commands.put("move", Command.MOVE);
         commands.put("north", Command.NORTH);
@@ -39,6 +40,7 @@ public class CommandMap implements Serializable{
         commands.put("southwest", Command.SOUTHWEST);
         commands.put("inventory", Command.INVENTORY);
         commands.put("talk", Command.TALK);
+        commands.put("take", Command.TAKE);
         commands.put("buy", Command.BUY);
         commands.put("give", Command.GIVE);
         commands.put("read", Command.READ);

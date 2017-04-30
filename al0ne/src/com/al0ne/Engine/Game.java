@@ -4,8 +4,9 @@ import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
-import com.al0ne.Entities.Worlds.CreateAlpha;
-import com.al0ne.Entities.Worlds.CreateSmallCave;
+import com.al0ne.Entities.Worlds.AlphaWorld;
+import com.al0ne.Entities.Worlds.CaveWorld;
+import com.al0ne.Entities.Worlds.MedievalYoungWorld;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -37,8 +38,8 @@ public class Game implements Serializable {
         this.debugMode=false;
         this.commands = new CommandMap();
 
-        World startingWorld = new CreateAlpha();
-        World caveWorld = new CreateSmallCave();
+        World startingWorld = new MedievalYoungWorld();
+        World caveWorld = new CaveWorld();
         if (needs) {
             addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true, "You are a knight."));
             addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );

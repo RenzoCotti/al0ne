@@ -25,9 +25,9 @@ import com.al0ne.Entities.Spells.MidasSpell;
 /**
  * Created by BMW on 14/03/2017.
  */
-public class CreateAlpha extends World{
+public class AlphaWorld extends World{
 
-    public CreateAlpha() {
+    public AlphaWorld() {
         super("alphaworld", "startroom");
 
         Room startRoom = new Room("startroom", "Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");

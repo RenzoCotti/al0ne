@@ -5,6 +5,7 @@ package com.al0ne.Engine;
  */
 public enum Command {
     HELP, QUIT, SAVE, LOAD, DEBUG, COMMANDS,
+    AGAIN,
 
 
     //debug commands
@@ -12,7 +13,7 @@ public enum Command {
     STATUS,
 
     //custom actions
-    DRINK, EAT, OPEN, MOVE, READ, AGAIN,
+    DRINK, EAT, OPEN, MOVE, READ, TIDY,
 
     //item related
     USE, EXAMINE, TAKE, EQUIP, PUT, DROP,
