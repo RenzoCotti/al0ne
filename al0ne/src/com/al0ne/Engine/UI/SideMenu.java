@@ -2,7 +2,6 @@ package com.al0ne.Engine.UI;
 
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
-import com.al0ne.Engine.SimpleItem;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;

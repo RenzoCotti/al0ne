@@ -1,4 +1,4 @@
-package com.al0ne.Engine;
+package com.al0ne.Engine.UI;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;

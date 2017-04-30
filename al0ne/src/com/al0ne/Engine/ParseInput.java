@@ -1,14 +1,6 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.SpellPair;
-import com.al0ne.Entities.Spells.*;
-import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
-import com.al0ne.Entities.NPCs.Shopkeeper;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.*;
@@ -17,7 +9,6 @@ import static com.al0ne.Engine.Main.*;
 * This class handles parsing the input correctly
 * */
 public class ParseInput {
-    //    static String last="help";
     public static int wrongCommand = 0;
     public static String lastCommand = "look";
 
@@ -36,27 +27,19 @@ public class ParseInput {
             printToLog("(" + input + ")");
         }
 
-        switch (parsedInput[0]) {
+        Command c = game.getCommands().toCommand(parsedInput[0]);
 
-            case "save":
+        switch (c) {
+
+            case SAVE:
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else {
                     GameChanges.save(parsedInput[1], null, Main.game);
                 }
                 return false;
-            case "warp":
-                if (parsedInput.length < 2) {
-                    printToLog("The syntax is: WARP world_name");
-                } else {
-                    if (GameChanges.changeWorld(Utility.stitchFromTo(parsedInput, 1, parsedInput.length))) {
-                        printToLog();
-                        currentRoom.printRoom();
-                    }
 
-                }
-                return false;
-            case "load":
+            case LOAD:
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: LOAD path_of_the_save_file");
                 } else {
@@ -64,31 +47,30 @@ public class ParseInput {
                 }
                 return false;
 
-            case "drink":
-                return HandleCommands.customAction(parsedInput, player, "drink");
-            case "talk":
+            case TALK:
                 return HandleCommands.handleTalk(parsedInput, player);
-            case "eat":
-                return HandleCommands.customAction(parsedInput, player, "eat");
-            case "read":
-                return HandleCommands.customAction(parsedInput, player, "read");
-            case "buy":
-                return HandleCommands.handleBuy(parsedInput, player);
-            case "move":
-                return HandleCommands.customAction(parsedInput, player, "move");
-            case "kill":
-            case "attack":
-                return HandleCommands.handleAttack(parsedInput, player);
-            case "give":
-                return HandleCommands.handleGive(parsedInput, player);
-            case "death":
-                player.killPlayer();
-                return false;
 
-            case "cast":
+            case DRINK:
+            case EAT:
+            case READ:
+            case MOVE:
+            case OPEN:
+                String s = game.getCommands().stringify(c);
+                return HandleCommands.customAction(parsedInput, player, s);
+
+            case ATTACK:
+                return HandleCommands.handleAttack(parsedInput, player, false);
+            case GIVE:
+                return HandleCommands.handleGive(parsedInput, player);
+
+
+            case BUY:
+                return HandleCommands.handleBuy(parsedInput, player);
+
+            case CAST:
                 return HandleCommands.handleCast(parsedInput, player, currentRoom);
-                //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
-            case "use":
+            //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
+            case USE:
 
                 int tokenOn = Utility.checkForToken(parsedInput, "on");
                 int tokenWith = Utility.checkForToken(parsedInput, "with");
@@ -103,44 +85,29 @@ public class ParseInput {
                 } else if (tokenOn > -1) {
                     return HandleCommands.useItem(parsedInput, player, true, tokenOn);
                 }
-
-            case "open":
-                return HandleCommands.customAction(parsedInput, player, "open");
-            case "wear":
-            case "wield":
-            case "equip":
+            case EQUIP:
                 return HandleCommands.handleWear(parsedInput, player);
-            case "l":
-            case "look":
+            case LOOK:
                 game.getRoom().printRoom();
                 wrongCommand = 0;
                 return true;
-            case "n":
-            case "north":
-                return HandleCommands.move(player, rooms, "north", parsedInput);
-            case "s":
-            case "south":
-                return HandleCommands.move(player, rooms, "south", parsedInput);
-            case "story":
+            case NORTH:
+            case SOUTH:
+            case EAST:
+            case WEST:
+            case UP:
+            case DOWN:
+                String direction = game.getCommands().stringify(c);
+                return HandleCommands.move(player, rooms, direction, parsedInput);
+            case STORY:
                 if(parsedInput.length == 1){
                     printToLog(player.getStory());
                 } else{
                     printToLog("The syntax is: STORY");
                 }
                 return false;
-            case "e":
-            case "east":
-                return HandleCommands.move(player, rooms, "east", parsedInput);
-            case "w":
-            case "west":
-                return HandleCommands.move(player, rooms, "west", parsedInput);
-            case "d":
-            case "down":
-                return HandleCommands.move(player, rooms, "down", parsedInput);
-            case "u":
-            case "up":
-                return HandleCommands.move(player, rooms, "up", parsedInput);
-            case "take":
+
+            case TAKE:
 
                 int tokenFrom = Utility.checkForToken(parsedInput, "from");
                 int tokenAll = Utility.checkForToken(parsedInput, "all");
@@ -160,7 +127,7 @@ public class ParseInput {
                 } else if (tokenFrom > -1 && tokenAll > -1) {
                     return HandleCommands.takePutContainer(parsedInput, player, tokenFrom, true, true);
                 }
-            case "put":
+            case PUT:
                 int tokenIn = Utility.checkForToken(parsedInput, "in");
                 tokenAll = Utility.checkForToken(parsedInput, "all");
 
@@ -172,59 +139,100 @@ public class ParseInput {
                 } else if (tokenIn == -1) {
                     printToLog("The syntax is PUT item IN container.");
                 }
-            case "x":
-            case "examine":
+            case EXAMINE:
                 return HandleCommands.handleExamine(parsedInput, player);
-            case "i":
-            case "inventory":
+            case INVENTORY:
                 player.printInventory();
                 return false;
-            case "?":
+            case HELP:
                 HandleCommands.printHelp();
                 wrongCommand = 0;
                 return false;
-            case "help":
+            case COMMANDS:
                 printToLog("Commands:");
                 for (Command command : Command.values()) {
                     printToLog(command.toString());
                 }
                 wrongCommand = 0;
                 return false;
-            case "quit":
-            case "exit":
+            case QUIT:
                 HandleCommands.quit();
                 return false;
-            case "weight":
-                player.printWeight();
-                return false;
-            case "health":
-                player.printHealth();
-//                player.printHealthStatus();
-                return false;
-            case "g":
-            case "again":
+
+            case AGAIN:
                 printToLog("(" + lastCommand + ")");
                 return parse(lastCommand, game, true);
-            case "drop":
+            case DROP:
                 return HandleCommands.handleDrop(parsedInput, player);
-            case "equipment":
-            case "worn":
+            case EQUIPMENT:
                 player.printArmor();
                 player.printWielded();
                 return false;
-            case "status":
-                for(Status s: player.getStatus().values()){
-                    printToLog(s.getName()+" : "+s.getDuration());
+            case HEALTH:
+//                player.printHealth();
+                player.printHealthStatus();
+                return false;
+
+
+            case DEBUG:
+                game.toggleDebugMode();
+                if(game.isInDebugMode()){
+                    printToLog("Debug mode: ON");
+                }else{
+                    printToLog("Debug mode: OFF");
                 }
-                return false;
+                return true;
+            case STATUS:
+                if(game.isInDebugMode()){
+                    for(Status status: player.getStatus().values()){
+                        printToLog(status.getName()+" : "+status.getDuration());
+                    }
+                    return false;
+                }
+            case QQQ:
+                if(game.isInDebugMode()){
+                    System.exit(0);
+                }
+            case TIME:
+                if(game.isInDebugMode()){
 
-            case "qqq":
-                System.exit(0);
+                    printToLog(Main.game.getTurnCount() + " turns elapsed.");
+                    wrongCommand = 0;
+                    return false;
+                }
 
-            case "time":
-                printToLog(Main.game.getTurnCount() + " turns elapsed.");
-                wrongCommand = 0;
-                return false;
+            case WEIGHT:
+                if(game.isInDebugMode()){
+
+                    player.printWeight();
+                    return false;
+                }
+
+            case WARP:
+                if(game.isInDebugMode()){
+
+                    if (parsedInput.length < 2) {
+                        printToLog("The syntax is: WARP world_name");
+                    } else {
+                        if (GameChanges.changeWorld(Utility.stitchFromTo(parsedInput, 1, parsedInput.length))) {
+                            printToLog();
+                            currentRoom.printRoom();
+                        }
+
+                    }
+                    return false;
+                }
+            case DEATH:
+                if(game.isInDebugMode()) {
+
+                    player.killPlayer();
+                    return false;
+                }
+            case EXECUTE:
+                if(game.isInDebugMode()) {
+
+                    return HandleCommands.handleAttack(parsedInput, player, true);
+                }
             default:
                 wrongCommand++;
                 printToLog("Sorry?");

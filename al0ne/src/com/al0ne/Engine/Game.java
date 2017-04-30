@@ -24,6 +24,8 @@ public class Game implements Serializable {
     private HashMap<String, PairWorld> worlds;
     private int turnCounter;
     private int worldCount;
+    private boolean debugMode;
+    private CommandMap commands;
 
 
     private String notes;
@@ -32,6 +34,8 @@ public class Game implements Serializable {
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
         this.worldCount = 0;
+        this.debugMode=false;
+        this.commands = new CommandMap();
 
         World startingWorld = new CreateAlpha();
         World caveWorld = new CreateSmallCave();
@@ -125,6 +129,18 @@ public class Game implements Serializable {
 
     public int getWorldCount() {
         return worldCount;
+    }
+
+    public void toggleDebugMode(){
+        this.debugMode = !this.debugMode;
+    }
+
+    public boolean isInDebugMode(){
+        return this.debugMode;
+    }
+
+    public CommandMap getCommands(){
+        return this.commands;
     }
 
 

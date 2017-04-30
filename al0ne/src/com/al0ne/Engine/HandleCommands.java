@@ -11,6 +11,7 @@ import com.al0ne.Entities.Spells.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -54,7 +55,7 @@ public class HandleCommands {
     public static boolean customAction(String[] temp, Player player, String action) {
         if (temp.length == 1) {
             ParseInput.wrongCommand++;
-            printToLog("The syntax is " + action.toUpperCase() + " x.");
+            printToLog("The syntax is " + action + " x.");
             return false;
         }
 
@@ -709,7 +710,7 @@ public class HandleCommands {
 
     }
 
-    public static boolean handleAttack(String[] parsedInput, Player player) {
+    public static boolean handleAttack(String[] parsedInput, Player player, boolean execute) {
         if (parsedInput.length == 1) {
             ParseInput.wrongCommand++;
             printToLog("The syntax is ATTACK x or KILL x");
@@ -719,8 +720,16 @@ public class HandleCommands {
 
         String enemy = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
         ArrayList<Pair> entities = getPotentialItem(enemy, player, 1);
-        if (entities.size() == 1) {
+        if (entities.size() == 1 && !execute) {
             return player.attack(entities.get(0).getEntity());
+        } else if (entities.size() == 1 && execute) {
+            if(entities.get(0).getEntity().getType() == 'n'){
+                ((Enemy)entities.get(0).getEntity()).handleLoot(currentRoom);
+                currentRoom.getEntities().remove(entities.get(0).getEntity().getID());
+                printToLog("You executed the "+entities.get(0).getEntity().getName());
+                return true;
+            }
+            return false;
         } else if (entities.size() > 1) {
             printToLog("Be more specific");
             return false;
