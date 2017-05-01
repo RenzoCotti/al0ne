@@ -3,15 +3,11 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.ConcreteItems.Canteen;
-import com.al0ne.Entities.Items.ConcreteItems.Food.Ration;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.NaturalHealing;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
-
-import javax.rmi.CORBA.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,20 +16,28 @@ import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
 /**
- * Created by BMW on 28/01/2017.
- *
  * a Player is:
  * an inventory, storing itemID and ConcreteItems
- * a currentRoom, a Room
- * a maxWeight, double
+ * a currentRoom, a Room the player is currently in
+ * a maxWeight, double, representing the max carry weight
  * a currentWeight, double
- *
- * TODO probably add currentHealth, belly
+ * a maxHealth, a double representing the max health
+ * a curretnHealth
+ * an attack, int, representing how likely the player is to hit
+ * a dexterity, int, representing the player's dodging chance
+ * a status, a HashMap <StatusID, Status>
+ * a toApply, a queue of status that will be applied at the end of the turn
+ * an alive, boolean. Represents if the player is alive or not
+ * a hasNeeds, boolean: represents if the current Player will become hungry/thirsty
+ * a story, String containing a brief introduction about the player
+ * a quests, HashMap<questID, Boolean>, representing all due quests
+ * a wornItems, HashMap<BodyPart, Item>: all equipped items
  */
 public class Player implements Serializable{
 
-    //Maps ItemID, Item
+    //Maps ItemID, Pair: it's the player's inventory
     private HashMap<String, Pair> inventory;
+    //stores current room the player is in
     private Room currentRoom;
     
     //Maximum carry weight of the player
@@ -41,31 +45,35 @@ public class Player implements Serializable{
     //Current carry weight of the player
     private double currentWeight;
 
+    //current and max Health of the player
     private int currentHealth =10;
     private static int maxHealth=10;
 
+    //fighting stats
     private int attack = 70;
     private int dexterity = 30;
 
+    //statuses
     private HashMap<String, Status> status;
     private ArrayList<Status> toApply;
 
+    //various
     private boolean alive = true;
-
     private boolean hasNeeds;
-
     private String story;
 
+    //maps questID to boolean
     private HashMap<String, Boolean> quests;
 
+    //maps BodyPart to Item
     private HashMap<String, Wearable> wornItems;
     
     // add also money pouch?
 
 
-
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
+    //add thirst and hunger if needs is true
     public Player(Room currentRoom, boolean needs, String story) {
         this.currentRoom = currentRoom;
         this.inventory = new HashMap<>();
@@ -84,6 +92,7 @@ public class Player implements Serializable{
         putStatus(new NaturalHealing());
     }
 
+    //this function initialises the HashMap with all the body parts
     public void initialiseWorn(){
         wornItems.put("main hand", null);
         wornItems.put("off hand", null);
@@ -91,40 +100,32 @@ public class Player implements Serializable{
         wornItems.put("helmet", null);
     }
 
+    //returns true if the player has basic needs
     public boolean hasNeeds() {
         return hasNeeds;
     }
 
+    //debug function to kill the player
     public void killPlayer(){
         this.alive = false;
     }
 
+    //returns the currently equipped X or null
     public Weapon getWeapon(){
         return (Weapon) wornItems.get("main hand");
     }
-
     public Armor getArmor(){
         return (Armor) wornItems.get("armor");
     }
-
     public Helmet getHelmet(){
         return (Helmet) wornItems.get("helmet");
     }
-
     public Wearable getOffHand(){
         return wornItems.get("off hand");
     }
 
-    public void unequipItem(Wearable item){
-        for (String part : wornItems.keySet()){
-            Wearable currentItem = wornItems.get(part);
 
-            if(currentItem != null && item.getID().equals(currentItem.getID())){
-                wornItems.put(part, null);
-            }
-        }
-    }
-
+    //returns true if the player is wearing the current item
     public boolean isWearingItem(String id){
         for (String part : wornItems.keySet()){
             Wearable currentItem = wornItems.get(part);
@@ -138,7 +139,8 @@ public class Player implements Serializable{
         return false;
     }
 
-    public boolean unequipItem(String id){
+    //this function unequips the given item, if it's equipped
+    public void unequipItem(String id){
         for (String part : wornItems.keySet()){
             Wearable currentItem = wornItems.get(part);
             if(currentItem != null) {
@@ -148,18 +150,19 @@ public class Player implements Serializable{
             }
 
         }
-        return false;
     }
 
+    //this functino sets currentWeight to the given weight
     public void setCurrentWeight(double currentWeight) {
         this.currentWeight = currentWeight;
     }
 
+    //this function equips an item to the correct slot, if it's a wearable
     public boolean wear(Item wearable){
         for (Pair pair : inventory.values()){
             Item currentItem = (Item) pair.getEntity();
 
-            if (wearable.getID().equals(currentItem.getID()) && currentItem instanceof Wearable){
+            if (wearable.getID().equals(currentItem.getID()) && currentItem.getType() == 'w'){
                 String part = ((Wearable) currentItem).getPart();
                 if (part.equals("main hand")){
                     wornItems.put(part, (Weapon) currentItem);
@@ -180,6 +183,7 @@ public class Player implements Serializable{
         return false;
     }
 
+    //this function prints the currently equipped weapon
     public void printWielded(){
         if(getWeapon() == null){
             printToLog("You're using your fists");
@@ -188,10 +192,10 @@ public class Player implements Serializable{
         printToLog("You're using your "+getWeapon().getName());
     }
 
+    //this function prints all currently equipped armor pieces
     public void printArmor(){
 
         boolean first=true;
-
         for (Wearable w : wornItems.values()){
             if (w != null && !(w instanceof Weapon)){
                 if(first){
@@ -202,7 +206,6 @@ public class Player implements Serializable{
                 }
             }
         }
-
         if(first){
             printToLog("You're not wearing anything.");
         } else{
@@ -210,6 +213,7 @@ public class Player implements Serializable{
         }
     }
 
+    //this function computes the total level of protection given by armor
     public int getArmorLevel(){
         Armor armor = getArmor();
         Helmet helmet = getHelmet();
@@ -229,22 +233,24 @@ public class Player implements Serializable{
         return armorLevel;
     }
 
+    //this functions return the required value
     public int getAttack() {
         return attack;
     }
-
     public int getDexterity() {
         return dexterity;
     }
-
     public int getMaxHealth() {
         return maxHealth;
     }
 
+    //debug printing
     public void printHealth() {
         printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
     }
 
+    //this function sets the player's health to the amount given
+    //it binds it to maxHealth and 0
     public void setHealth(int amount) {
         if(currentHealth+amount > maxHealth){
             currentHealth=maxHealth;
@@ -254,10 +260,14 @@ public class Player implements Serializable{
         }
     }
 
+    //this function modifies the player's health with the amount given
+    //it binds it to maxHealth and 0
+    //returns true if we actually modify the health
     public boolean modifyHealth(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
             if (this.currentHealth<=0){
+                this.currentHealth=0;
                 alive = false;
             }
             return true;
@@ -267,11 +277,13 @@ public class Player implements Serializable{
     }
 
 
+    //this function modifies the health as above but also prints the health status
     public void modifyHealthPrint(int health) {
         if (this.currentHealth +health <= maxHealth){
             this.currentHealth +=health;
 
             if (this.currentHealth<=0){
+                this.currentHealth=0;
                 alive = false;
             }
         }
@@ -280,6 +292,8 @@ public class Player implements Serializable{
 
     }
 
+    //this function prints a string corresponding to the current
+    //health level
     public void printHealthStatus(){
         double percentage = ((double)currentHealth/(double)maxHealth)*100;
 
@@ -292,17 +306,33 @@ public class Player implements Serializable{
         } else if (percentage >= 20 && percentage < 40){
             printToLog("You're bleeding heavily");
         } else {
-            if (this.currentHealth==0){
+            if (this.currentHealth<=0){
                 return;
             }
             printToLog("You're alive by a miracle");
         }
     }
 
+
+    //gets the requested resource
+    public static double getMaxWeight() {
+        return maxWeight;
+    }
+    public double getCurrentWeight() {
+        return currentWeight;
+    }
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    //debug function, prints the current weight.
     public void printWeight() {
         printToLog(currentWeight+"/"+maxWeight+" kg.");
     }
 
+    //this function modifies the current weight
+    //it rounds off the result correctly
+    //the weight is bound by maxWeight and 0
     public boolean modifyWeight(double weight) {
         if (this.currentWeight+weight <= maxWeight){
             this.currentWeight+=weight;
@@ -317,6 +347,7 @@ public class Player implements Serializable{
         return false;
     }
 
+    //this returns true if the player is alive
     public boolean isAlive(){
         return alive;
     }
@@ -343,8 +374,8 @@ public class Player implements Serializable{
         }
     }
 
-    //this function adds an item to the inventory
-    //returns false if item is not in inv or weight is nope
+    //this function adds 1 item from pair to the inventory
+    //returns true if it's successful, else the player can't carry it
     public boolean addOneItem(Pair pair) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight())){
@@ -363,6 +394,8 @@ public class Player implements Serializable{
         }
     }
 
+    //this function adds X items from pair to the inventory
+    //returns true if it's successful, else the player can't carry them
     public boolean addAmountItem(Pair pair, Integer amount) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight() * amount)){
@@ -381,6 +414,8 @@ public class Player implements Serializable{
         }
     }
 
+    //this function adds all items from pair to the inventory
+    //returns true if it's successful, else the player can't carry them
     public boolean addAllItem(Pair pair) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight() * pair.getCount())){
@@ -399,6 +434,8 @@ public class Player implements Serializable{
         }
     }
 
+    //this function adds an item, amount times
+    //returns true if it's successful, else the player can't carry it
     public boolean simpleAddItem(Item item, Integer amount) {
         if (modifyWeight(item.getWeight() * amount)){
             if (hasItemInInventory(item.getID())){
@@ -415,6 +452,7 @@ public class Player implements Serializable{
     }
 
     //this function checks if the player has an item in the inventory
+    //we check for ITEMID EQUALITY
     //if there is no item, it returns false
     public boolean hasItemInInventory(String item){
         for (String s : inventory.keySet()){
@@ -431,7 +469,6 @@ public class Player implements Serializable{
         if(hasItemInInventory(itemID)){
             return inventory.get(itemID);
         } else {
-            printToLog("No such item in your inventory.");
             return null;
         }
     }
@@ -476,7 +513,10 @@ public class Player implements Serializable{
     }
 
 
-    //this makes the player use an item
+    //this makes the player use an item (simple use, not with an item/prop)
+    //returns 0 if the item can't be used
+    //returns 1 if the item was used successfully
+    //returns 2 if the item was used successfully and it doesn't need to print anything
     public int simpleUse(Entity target){
 
         if (target.getType() == 'p'){
@@ -487,62 +527,46 @@ public class Player implements Serializable{
             Pair pair = inventory.get(target.getID());
             Item item = (Item) pair.getEntity();
             int result = item.used(currentRoom, this);
-            if(result == 1){
+            if(result == 1 || result == 2){
+                //if the item is consumable, we subtract 1 from the inventory
                 if (item.hasProperty("consumable")){
-//                    printToLog("used :"+pair.getCount());
-
                     if(!getItemPair(item.getID()).modifyCount(-1)){
                         inventory.remove(item.getID());
                     }
-
                 }
-
-                return 1;
-            } else if(result == 2){
-                if (item.hasProperty("consumable")){
-//                    printToLog("used :"+pair.getCount());
-
-                    if(!getItemPair(item.getID()).modifyCount(-1)){
-                        inventory.remove(item.getID());
-                    }
-
-                }
-
-                return 2;
+                return result;
             }
         }
         return 0;
     }
 
 
-    //this function makes the player use item on target, item is an inventory Item, target is a Prop
-    public boolean interactOnWith(Entity target, Entity item){
+    //this function makes the player use item on target, item is an inventory Item, target is a Prop/Item
+    //one can't use an enemy or an NPC
 
+    public boolean interactOnWith(Entity target, Entity item){
         if (target.getType() == 'n' || item.getType() == 'e'){
             return false;
         }
-
         if (target.getType() == 'p'){
             return ((Prop) target).usedWith((Item) item, currentRoom, this);
-        } else if (target.getType() == 'i'){
+        } else if (target.getType() == 'i' || target.getType() == 'w'){
             return ((Item) target).usedWith((Item) item, currentRoom, this);
         }
-
         return false;
     }
 
-    //this function prints the longDescription of target, be it a prop or an Item
+    //this function handles examining an entity
     public boolean examine(Entity target){
-
         if(target != null){
             target.printLongDescription(this, currentRoom);
             return true;
         }
         return false;
-
     }
 
     //this function makes the player drop target, if it has it
+    //specifying all makes the player drop all of that item
     public int drop(Pair target, boolean all){
         if (target != null){
             //case we drop 1 & target is in room
@@ -570,19 +594,23 @@ public class Player implements Serializable{
 
             //we dropped 1
             if(!all){
+                //we set the weight accordingly and remove the item if necesssary
+                //we unequip the item
                 modifyWeight(-((Item) target.getEntity()).getWeight());
                 if (!target.subCount()){
                     inventory.remove(target.getEntity().getID());
                     if (target.getEntity().getType()=='w' && isWearingItem(target.getEntity().getID())){
-                        unequipItem((Wearable) target.getEntity());
+                        unequipItem(target.getEntity().getID());
                     }
                 }
                 //we dropped all
             } else{
+                //we set the weight accordingly and remove the item if necesssary
+                //we unequip the item
                 modifyWeight(-(((Item) target.getEntity()).getWeight()*target.getCount()));
                 inventory.remove(target.getEntity().getID());
                 if (target.getEntity().getType()=='w' &&  isWearingItem(target.getEntity().getID())){
-                    unequipItem((Wearable) target.getEntity());
+                    unequipItem(target.getEntity().getID());
                 }
             }
 
@@ -593,39 +621,41 @@ public class Player implements Serializable{
         }
     }
 
-    //this function makes the player drop target, if it has it
+    //this function makes the player drop X amount of target, if it has it
     public int drop(Pair target, Integer amt){
         if (target != null){
+            //trying to drop more than there are, abort
             if(target.getCount() < amt){
                 printToLog("You have only "+target.getCount()+" of those.");
                 return 2;
             }
-            //case we drop 1 & target is in room
-            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
 
+            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
+            //the item is undroppable
             if(!((Item) target.getEntity()).canDrop() ){
                 printToLog("You can't drop it.");
                 return 2;
             }
 
-            //case we drop all & target is in room
+            //we handle adding items to the room
             if (roomItem != null){
                 roomItem.setCount(roomItem.getCount()+amt);
             } else {
                 currentRoom.addItem((Item) target.getEntity(), amt);
             }
 
+            //we modify the player's weight accordingly, and remove the item if necessary
             modifyWeight(-(((Item) target.getEntity()).getWeight()*amt));
             if (target.getCount() == 0){
                 inventory.remove(target.getEntity().getID());
             }
+            //we unequip the item if it was equipped
             if (target.getEntity().getType()=='w' &&  isWearingItem(target.getEntity().getID())){
-                unequipItem((Wearable) target.getEntity());
+                unequipItem(target.getEntity().getID());
             }
-
             return 1;
-
         } else {
+            //the item is not in the inventory
             return 0;
         }
     }
@@ -642,13 +672,14 @@ public class Player implements Serializable{
             return false;
         } else if(all && ((Item)item.getEntity()).isUnique() && item.getCount()>1){
             printToLog("You can have just one with you.");
+            //todo
             //bypassed by taking chest with that in it
             return false;
         }
 
         Item toAdd = (Item) item.getEntity();
         if (all){
-            if (!addAllItem(item)){
+            if (!addAmountItem(item, item.getCount())){
                 printToLog("Too heavy to carry.");
                 return false;
             } else {
@@ -661,7 +692,6 @@ public class Player implements Serializable{
                 printToLog("Too heavy to carry.");
                 return false;
             } else {
-//                printToLog(item.getCount());
                 if (item.isEmpty()){
                     currentRoom.getEntities().remove(toAdd.getID());
                 }
@@ -697,15 +727,12 @@ public class Player implements Serializable{
         return true;
     }
 
-    //this function tries to pick up an item in the currentRoom:
-    //it also checks if the player can carry the current item
-    //if it didn't succeed, print an error message
-    public boolean takeFrom(Pair item, Container container, boolean all){
+    //this function tries to take an item from a container
+    public boolean takeFrom(Pair item, Container container, int amount){
 
         Item toAdd = (Item) item.getEntity();
-        if (all){
             int currentCounter = item.getCount();
-            if (!addAllItem(item)){
+            if (!addAmountItem(item, amount)){
                 printToLog("Too heavy to carry.");
                 return false;
             } else {
@@ -715,49 +742,29 @@ public class Player implements Serializable{
                     container.removeItem(item);
                 }
             }
-        } else {
-            if (!addOneItem(item)){
-                printToLog("Too heavy to carry.");
-                return false;
-            } else {
-                container.modifySize(-toAdd.getSize());
-                if (item.isEmpty()){
-                    container.removeItem(item);
-                }
-            }
-        }
         return true;
     }
 
-    public boolean putIn(Pair item, Container container, boolean all){
+    //this function puts an x items into a container, if the space is enough
 
-        if (all){
+    public boolean putIn(Pair item, Container container, int amount){
+
             int count = item.getCount();
-            if (!container.putIn(item, count)){
+            if (!container.putIn(item, amount)){
                 printToLog("Not enough space in it.");
                 return false;
             } else {
-                printToLog("count : "+count);
-                currentWeight-=count*((Item)item.getEntity()).getWeight();
+                modifyWeight(-count*((Item)item.getEntity()).getWeight());
                 if (item.isEmpty()){
                     inventory.remove(item.getEntity().getID());
                 }
             }
-        } else {
-            if (!container.putIn(item)){
-                printToLog("Not enough space in it.");
-                return false;
-            } else {
-                currentWeight-=((Item)item.getEntity()).getWeight();
-                if (item.isEmpty()){
-                    inventory.remove(item.getEntity().getID());
-                }
-            }
-        }
         return true;
     }
 
 
+    //this function handles custom action entities
+    //atm supports props and items
     public int customAction(String action, Entity entity){
 
         if(entity.getType()=='i'){
@@ -809,6 +816,7 @@ public class Player implements Serializable{
     }
 
 
+    //this function handles talking with an NPC
     public boolean talkToNPC(String name, String subject){
         NPC npc = currentRoom.getNPC(name);
         if (npc != null && npc.talkAbout(subject, this)){
@@ -817,6 +825,14 @@ public class Player implements Serializable{
         return false;
     }
 
+    //this function handles attacking an entity
+    //if it is an enemy, we roll 1d100, we sum attack,
+    //and we check if its bigger than the dodge roll
+    //if it is, we roll for damage, subtract the armor
+    //and inflict the damage (if the enemy isn't resistant
+    // to the type of damage).
+    //at this point, we make the enemy attack, if its still alive
+    //and we snooze him this turn (all aggrod enemies in the room attack at EOT)
     public boolean attack(Entity name){
         Pair p = currentRoom.getEntityPair(name.getID());
         Entity entity;
@@ -897,6 +913,7 @@ public class Player implements Serializable{
     }
 
 
+    //we check if the player has at least amt money
     public boolean hasEnoughMoney(int amt){
         Pair pair = inventory.get("coin");
         if(pair != null){
@@ -907,6 +924,7 @@ public class Player implements Serializable{
         }
     }
 
+    //we give an item to an NPC, if the player has it
     public boolean give(NPC npc, Entity item){
         if(hasItemInInventory(item.getID())){
             Pair pair = getItemPair(item.getID());
@@ -923,10 +941,13 @@ public class Player implements Serializable{
     }
 
 
+    //returns the statuses
     public HashMap<String, Status> getStatus() {
         return status;
     }
 
+    //adds a status to the statuses, it refreshes the duration
+    //todo: need to look into duraitons of status once again
     public boolean putStatus(Status s) {
         for (Status st : status.values()){
             if(s.getName().equals(st.getName())){
@@ -940,6 +961,7 @@ public class Player implements Serializable{
         return true;
     }
 
+    //this removes a status if the name matches
     public boolean removeStatus(String statusName) {
 
         if (status.get(statusName) != null){
@@ -948,43 +970,40 @@ public class Player implements Serializable{
         return true;
     }
 
+    //returns true if the player has the status s
     public boolean hasStatus(String s) {
         return status.get(s) != null;
     }
 
+    //returns the list of statuses that will be applied at EOT
     public ArrayList<Status> getToApply() {
         return toApply;
     }
 
+    //enqueues a status to apply at EOT
     public void queueStatus(Status st) {
         this.toApply.add(st);
     }
 
 
+    //this recalculates weight, run at the end of every turn
     public void recalculateWeight(){
         double amt = 0;
         for(Pair p : inventory.values()){
             amt+=((Item)p.getEntity()).getWeight();
         }
-        currentWeight = amt;
+        currentWeight = Utility.twoDecimals(amt);
     }
 
+    //returns the story of the player
     public String getStory() {
         return story;
     }
 
-    public static double getMaxWeight() {
-        return maxWeight;
-    }
 
-    public double getCurrentWeight() {
-        return currentWeight;
-    }
-
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
+    //these functions return the needed string
+    //for the given body part
+    //used for UI
     public String getHelmetString(){
         Helmet h = getHelmet();
         if(h == null) return "None.";
@@ -1009,14 +1028,17 @@ public class Player implements Serializable{
         return s.getName();
     }
 
+    //returns the quests
     public HashMap<String, Boolean> getQuests() {
         return quests;
     }
 
+    //this adds a quest to the quest log
     public void addQuest(String s) {
         this.quests.put(s, false);
     }
 
+    //returns true if the player has finished the quest
     public boolean hasDoneQuest(String s) {
         return this.quests.get(s) != null;
     }

@@ -60,7 +60,7 @@ public class NPC extends Character{
                     player.addQuest(temp.getQuestID());
                 }
                 if(temp.givesItem()){
-                    if(!player.addAllItem(temp.getItem())){
+                    if(!player.addAmountItem(temp.getItem(), temp.getItem().getCount())){
                         player.getCurrentRoom().addEntity(temp.getItem().getEntity(), temp.getItem().getCount());
                     }
                 }

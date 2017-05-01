@@ -302,13 +302,36 @@ public class HandleCommands {
 
 
     public static boolean takePutContainer(String[] temp, Player player, int fromToken, boolean all, boolean take) {
-        String item;
-        if (all && !take) {
-            item = Utility.stitchFromTo(temp, 2, fromToken);
-        } else {
-            item = Utility.stitchFromTo(temp, 1, fromToken);
+
+        if(temp.length < 2 && take){
+            printToLog("The syntax is TAKE x FROM container.");
+            return false;
+        } else if(temp.length < 2){
+            printToLog("The syntax is PUT x IN container.");
+            return false;
         }
-        String container = Utility.stitchFromTo(temp, fromToken + 1, temp.length);
+
+        int amount;
+        String item;
+        String container;
+
+
+
+        try{
+            Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, fromToken);
+            amount = Integer.parseInt(temp[1]);
+            container = Utility.stitchFromTo(temp, fromToken + 1, temp.length);
+
+        } catch (NumberFormatException ex){
+            if(all){
+                item = Utility.stitchFromTo(temp, 2, fromToken);
+            } else{
+                item = Utility.stitchFromTo(temp, 1, fromToken);
+            }
+            amount=1;
+            container = Utility.stitchFromTo(temp, fromToken + 1, temp.length);
+        }
 
 
         ArrayList<Pair> possibleItems;
@@ -322,8 +345,6 @@ public class HandleCommands {
 
         if ((possibleItems.size() == 0 || possibleContainers.size() == 0)) {
             printToLog("You can't see that.");
-            printToLog(item);
-            printToLog(container);
             return false;
         }
 
@@ -332,22 +353,33 @@ public class HandleCommands {
             return false;
         }
 
-        if (take && possibleItems.size() == 1 && possibleContainers.size() == 1) {
+        if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
+
             int count = possibleItems.get(0).getCount();
-            if (player.takeFrom(possibleItems.get(0), (Container) possibleContainers.get(0).getEntity(), all)) {
-                if (all) {
-                    printToLog(count + " x " + possibleItems.get(0).getEntity().getName() + " added to your inventory.");
-                } else {
-                    printToLog(possibleItems.get(0).getEntity().getName() + " added to your inventory.");
-                }
+            Item currentItem = (Item) possibleItems.get(0).getEntity();
+            Container currentContainer = (Container) possibleContainers.get(0).getEntity();
+
+            if(all){
+                amount=possibleItems.get(0).getCount();
             }
-        } else if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
-            int count = possibleItems.get(0).getCount();
-            if (player.putIn(possibleItems.get(0), (Container) possibleContainers.get(0).getEntity(), all)) {
+
+            boolean result;
+            if(take){
+                result = player.takeFrom(possibleItems.get(0), currentContainer, amount);
+            } else{
+                result = player.putIn(possibleItems.get(0), currentContainer, amount);
+            }
+            if (result && take) {
                 if (all) {
-                    printToLog(count + " x " + possibleItems.get(0).getEntity().getName() + " put in " + possibleContainers.get(0).getEntity().getName());
+                    printToLog(count + " x " +currentItem.getName() + " added to your inventory.");
                 } else {
-                    printToLog(possibleItems.get(0).getEntity().getName() + " put in " + possibleContainers.get(0).getEntity().getName());
+                    printToLog(currentItem.getName() + " added to your inventory.");
+                }
+            } else if(result){
+                if (all) {
+                    printToLog(count + " x " + currentItem.getName() + " put in " + currentContainer.getName());
+                } else {
+                    printToLog(currentItem.getName() + " put in " + currentContainer.getName());
                 }
             }
         } else {

@@ -237,8 +237,7 @@ public class Room extends Entity{
                     printToSingleLine(" here.\n");
                 }
             }
-        } else{
-            if (items.size()!=0){
+        } else if (!prop && items.size()!=0){
                 printToSingleLine("You can see ");
                 for (int i=0; i<items.size(); i++) {
                     Item currentItem = (Item) items.get(i).getEntity();
@@ -257,7 +256,6 @@ public class Room extends Entity{
                         printToLog();
                     }
                 }
-            }
         }
     }
 

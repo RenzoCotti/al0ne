@@ -31,7 +31,8 @@ public class Demon extends Enemy {
             return true;
         }
         printToLog("The "+name+" attacks and hits you.");
-        player.modifyHealthPrint(-damage);
+        //atm it bypasses armor and attack rolls
+        player.modifyHealth(-damage);
         return false;
     }
 }

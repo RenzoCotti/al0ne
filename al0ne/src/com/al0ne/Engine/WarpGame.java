@@ -2,6 +2,7 @@ package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.World;
+import com.al0ne.Entities.Worlds.AlphaWorld;
 import com.al0ne.Entities.Worlds.CaveWorld;
 import com.al0ne.Entities.Worlds.MedievalYoungWorld;
 
@@ -16,18 +17,12 @@ public class WarpGame extends Game{
         this.warpstone = false;
 
         World startingWorld = new MedievalYoungWorld();
+//        World startingWorld = new AlphaWorld();
         World caveWorld = new CaveWorld();
-        if (needs) {
-            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), true,
-                    "You a boy, chestnut hair, brown eyes, and big dreams for the future." +
+        addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), needs,
+                    "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
                             "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), true, "You are a caveman.") );
-        } else{
-            addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), false,
-                    "You a boy, chestnut hair, brown eyes, and big dreams for the future." +
-                    "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet."));
-            addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), false, "You are a caveman."));
-        }
+        addWorld(caveWorld, new Player(caveWorld.getStartingRoom(), needs, "You are a caveman.") );
 
         this.currentWorld = startingWorld.getWorldName();
         this.startingWorld = startingWorld.getWorldName();

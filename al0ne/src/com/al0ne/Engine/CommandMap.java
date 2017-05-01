@@ -42,6 +42,11 @@ public class CommandMap implements Serializable{
         commands.put("talk", Command.TALK);
         commands.put("take", Command.TAKE);
         commands.put("buy", Command.BUY);
+        commands.put("qqq", Command.QQQ);
+        commands.put("cast", Command.CAST);
+        commands.put("status", Command.STATUS);
+        commands.put("open", Command.OPEN);
+        commands.put("put", Command.PUT);
         commands.put("give", Command.GIVE);
         commands.put("read", Command.READ);
         commands.put("look", Command.LOOK);

@@ -40,12 +40,12 @@ public class MidasSpell extends TargetSpell{
                     int goldAmt = Utility.randomNumber(2*(int) (item.getWeight()*10));
                     Coin coin = new Coin();
 
-                    if( player.addAllItem(new Pair(new Coin(), goldAmt)) ){
+                    if( player.addAmountItem(new Pair(new Coin(), goldAmt), goldAmt) ){
                         printToLog("You turn the "+item.getName()+" into "+goldAmt+" coins!");
                         return true;
                     } else {
                         int goldDropped = (int) (coin.getWeight()*goldAmt - (player.getMaxWeight() - player.getCurrentWeight()));
-                        player.addAllItem(new Pair(new Coin(), goldAmt-goldDropped));
+                        player.addAmountItem(new Pair(new Coin(), goldAmt-goldDropped), goldAmt-goldDropped);
                         player.getCurrentRoom().addEntity(new Coin(), goldDropped);
 
                         printToLog("You turn the "+item.getName()+" into gold! "+goldDropped+" coins drop on the floor.");
