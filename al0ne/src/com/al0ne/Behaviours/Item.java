@@ -13,6 +13,7 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public abstract class Item extends Entity {
 
+    //todo: add plural?
     protected double weight;
     protected int size;
     protected ArrayList<String> properties;

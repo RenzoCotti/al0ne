@@ -54,22 +54,6 @@ public abstract class Container extends Item{
         return null;
     }
 
-    public boolean putIn(Pair pair){
-        Item item = (Item) pair.getEntity();
-        if (canAdd && item.getSize()+currentSize < size){
-            if(hasItem(item)){
-                getPair(item).addCount();
-                currentSize+=item.getSize();
-            } else {
-                items.add(new Pair(item, 1));
-                currentSize+=item.getSize();
-            }
-            return true;
-        } else{
-            return false;
-        }
-    }
-
     //return true/false if successful
     public boolean putIn(Pair pair, Integer amount){
         Item item = (Item) pair.getEntity();
@@ -103,7 +87,7 @@ public abstract class Container extends Item{
         return items;
     }
 
-    public boolean isCanAdd() {
+    public boolean canAdd() {
         return canAdd;
     }
 
@@ -134,13 +118,14 @@ public abstract class Container extends Item{
             printToLog(longDescription);
             return;
         }
-        printToLog(longDescription+". It contains: ");
+        printToLog(longDescription);
+        printToLog("It contains: ");
         for (Pair pair: items){
             Item item = (Item) pair.getEntity();
             if ( pair.getCount() == 1 ){
                 printToLog(item.getShortDescription());
             } else{
-                printToLog(pair.getCount()+" x "+item.getName());
+                printToLog(pair.getCount()+"  "+item.getName());
             }
         }
     }

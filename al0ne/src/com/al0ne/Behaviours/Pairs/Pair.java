@@ -28,8 +28,12 @@ public class Pair implements Serializable{
         count++;
     }
 
-    public void setCount(Integer amount) {
+    public boolean setCount(Integer amount) {
         count=amount;
+        if(count <= 0) {
+            return true;
+        }
+        return false;
     }
 
     public boolean modifyCount(Integer amount) {

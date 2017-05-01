@@ -5,6 +5,9 @@ import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.NaturalHealing;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
@@ -820,11 +823,89 @@ public class Player implements Serializable{
 
     //we check if the player has at least amt money
     public boolean hasEnoughMoney(int amt){
-        Pair pair = inventory.get("coin");
-        if(pair != null){
-            int amount = pair.getCount();
-            return amount - amt >= 0;
-        } else {
+        return getMoney() >= amt;
+    }
+
+    //we return the money of the player
+    public int getMoney(){
+        Pair gold = inventory.get("gcoin");
+        Pair silver = inventory.get("scoin");
+        Pair brass = inventory.get("bcoin");
+
+        int value=0;
+        if(gold != null){
+            value += gold.getCount()*100;
+        }
+        if(silver != null){
+            value += silver.getCount()*10;
+        }
+        if(brass != null){
+            value += brass.getCount();
+        }
+        return value;
+    }
+
+    //we remove amt money from the player
+    public boolean removeAmountMoney(int amt){
+        Pair gold = inventory.get("gcoin");
+        Pair silver = inventory.get("scoin");
+        Pair brass = inventory.get("bcoin");
+
+        int toRemove = amt;
+        int totalMoney = getMoney();
+        if(totalMoney >= toRemove){
+
+            System.out.println("total due: "+toRemove+" current money: "+totalMoney);
+            totalMoney-=toRemove;
+
+            Pair tempGold = new Pair(new GoldCoin(), 0);
+            Pair tempSilver = new Pair(new SilverCoin(), 0);
+            Pair tempBrass = new Pair(new BrassCoin(), 0);
+            ArrayList<Pair> values = new ArrayList<>();
+            values.add(tempGold);
+            values.add(tempSilver);
+            values.add(tempBrass);
+
+            while (totalMoney != 0){
+                if(!(totalMoney % 10 == 0)){
+                    //we subtract brass
+                    values.get(2).addCount();
+                    totalMoney--;
+                } else if(!(totalMoney % 100 == 0)){
+                    //we subtract silver
+                    values.get(1).addCount();
+                    totalMoney-=10;
+                } else{
+                    //we subtract gold
+                    values.get(0).addCount();
+                    totalMoney-=100;
+                }
+            }
+
+            int i = 0;
+            for (Pair p : values){
+                Pair money;
+                if(i==0){
+                    money=gold;
+                } else if(i==1){
+                    money=silver;
+                } else{
+                    money=brass;
+                }
+
+                if(money != null){
+                    if(money.setCount(p.getCount())){
+                        inventory.remove(money.getEntity().getID());
+                    }
+                } else if(p.getCount() > 0){
+                    addAllItem(p);
+                }
+                i++;
+            }
+
+            return true;
+
+        }else {
             return false;
         }
     }

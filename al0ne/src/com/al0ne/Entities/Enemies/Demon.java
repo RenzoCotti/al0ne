@@ -2,7 +2,7 @@ package com.al0ne.Entities.Enemies;
 
 import com.al0ne.Behaviours.Enemy;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Entities.Items.ConcreteItems.Coin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -14,7 +14,7 @@ public class Demon extends Enemy {
 
     public Demon() {
         super("boss", "Hellish demon", "A huge horned demon with snake skin.", "a demon");
-        addItemLoot(new Coin(), 100, 100);
+        addItemLoot(new SilverCoin(), 100, 100);
         addResistance("fists");
         addResistance("sharp");
         setStats(20, 3, 40, 3, 10);

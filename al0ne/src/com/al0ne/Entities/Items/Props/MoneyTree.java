@@ -2,7 +2,7 @@ package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Entities.Items.ConcreteItems.Coin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
 
@@ -14,7 +14,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class MoneyTree extends Prop{
     private String usedMessage;
     public MoneyTree() {
-        super("moneytree", "Coin tree", "A tree with money instead of leaves is in the middle of the room", "a tree", "The tree has no leaves anymore...");
+        super("moneytree", "SilverCoin tree", "A tree with money instead of leaves is in the middle of the room", "a tree", "The tree has no leaves anymore...");
         this.usedMessage="You cut the leaves from the money tree.";
     }
 
@@ -29,7 +29,7 @@ public class MoneyTree extends Prop{
 
         if(item.hasProperty("sharp")){
             printToLog(usedMessage);
-            currentRoom.addItem(new Coin(), 100);
+            currentRoom.addItem(new SilverCoin(), 100);
             return true;
         }
         return false;

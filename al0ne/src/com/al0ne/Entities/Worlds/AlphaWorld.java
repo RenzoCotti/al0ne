@@ -3,7 +3,7 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.ConcreteItems.Food.SnakeSteak;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
@@ -37,11 +37,11 @@ public class AlphaWorld extends World{
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
         Container chest = new Chest();
-        chest.addItem(new Coin(), 100);
+        chest.addItem(new SilverCoin(), 100);
         chest.addItem(new Knife(), 1);
         startRoom.addEntity(chest);
         startRoom.addEntity(new WarpStone());
-        startRoom.addEntity(new Coin(), 100);
+        startRoom.addEntity(new SilverCoin(), 100);
         startRoom.visit();
         putRoom(startRoom);
 

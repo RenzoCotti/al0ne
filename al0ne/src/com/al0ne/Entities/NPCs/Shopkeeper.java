@@ -21,7 +21,7 @@ public class Shopkeeper extends NPC {
     public Shopkeeper(String id, String name, String description, String shortDescription, String intro) {
         super(id, name, description,shortDescription, intro);
         inventory = new HashMap<>();
-        list="ConcreteItems: ";
+        list="Items: ";
         isShopkeeper=true;
     }
 
@@ -60,9 +60,9 @@ public class Shopkeeper extends NPC {
     public void buy(Player player, String toBuy){
         if (hasItem(toBuy)){
             Pricepair item = getItem(toBuy);
-            if (player.hasEnoughMoney(-item.getPrice())){
-                Pair pairCoin = player.getInventory().get("coin");
-                pairCoin.setCount(pairCoin.getCount()-item.getPrice());
+            if (player.hasEnoughMoney(item.getPrice())){
+                player.removeAmountMoney(item.getPrice());
+                //todo: need to sort out prices
 
                 Pair pairInv = player.getItemPair(item.getItem().getID());
                 if(pairInv != null){

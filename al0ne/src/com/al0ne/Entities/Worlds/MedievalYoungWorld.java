@@ -4,8 +4,13 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Size;
-import com.al0ne.Entities.Items.ConcreteItems.Coin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
+import com.al0ne.Entities.Items.ConcreteItems.Scroll;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
+import com.al0ne.Entities.NPCs.Shopkeeper;
 
 /**
  * Created by BMW on 30/04/2017.
@@ -29,6 +34,13 @@ public class MedievalYoungWorld extends World{
                 "a small stone", 0.1, Size.SMALL));
 
         yourRoom.addExit("east", "homehallway");
+
+        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
+        bob.addToInventory(new Knife(), 50);
+        bob.addToInventory(new Apple(), 2);
+        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","an old scroll", "Down, Right, Up, Right, Down", 0.1), 20);
+        yourRoom.addEntity(bob);
+        yourRoom.addEntity(new GoldCoin());
 
         yourRoom.visit();
         putRoom(yourRoom);
@@ -60,7 +72,7 @@ public class MedievalYoungWorld extends World{
                 "mom","Hey sweetie, I'd need a favour.");
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
-                true, new Pair(new Coin(), 6), true, "geteggs"));
+                true, new Pair(new SilverCoin(), 6), true, "geteggs"));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addReactionItem("eggs", new SliceOfCake());

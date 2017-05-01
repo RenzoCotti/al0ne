@@ -10,7 +10,7 @@ import com.al0ne.Entities.Items.Behaviours.Container;
  */
 public class Chest extends Container {
     public Chest() {
-        super("chest", "wooden chest", "A fairly large wooden chest", "a wooden chest", 10, Size.VLARGE, true);
+        super("chest", "wooden chest", "A fairly large wooden chest.", "a wooden chest", 10, Size.VLARGE, true);
     }
 
     @Override
