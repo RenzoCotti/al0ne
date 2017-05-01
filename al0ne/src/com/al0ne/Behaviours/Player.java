@@ -565,62 +565,6 @@ public class Player implements Serializable{
         return false;
     }
 
-    //this function makes the player drop target, if it has it
-    //specifying all makes the player drop all of that item
-    public int drop(Pair target, boolean all){
-        if (target != null){
-            //case we drop 1 & target is in room
-            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
-
-            if(roomItem != null && !((Item) roomItem.getEntity()).canDrop() ){
-                printToLog("You can't drop it.");
-                return 2;
-            }
-
-            if (!all && roomItem != null){
-                roomItem.addCount();
-                //case we drop 1 & target is not in room
-            } else if (!all){
-                currentRoom.addItem((Item) target.getEntity());
-                modifyWeight(-((Item) target.getEntity()).getWeight());
-            }
-
-            //case we drop all & target is in room
-            if (all && roomItem != null){
-                roomItem.setCount(roomItem.getCount()+target.getCount());
-            } else if (all){
-                currentRoom.addItem((Item) target.getEntity(), target.getCount());
-            }
-
-            //we dropped 1
-            if(!all){
-                //we set the weight accordingly and remove the item if necesssary
-                //we unequip the item
-                modifyWeight(-((Item) target.getEntity()).getWeight());
-                if (!target.subCount()){
-                    inventory.remove(target.getEntity().getID());
-                    if (target.getEntity().getType()=='w' && isWearingItem(target.getEntity().getID())){
-                        unequipItem(target.getEntity().getID());
-                    }
-                }
-                //we dropped all
-            } else{
-                //we set the weight accordingly and remove the item if necesssary
-                //we unequip the item
-                modifyWeight(-(((Item) target.getEntity()).getWeight()*target.getCount()));
-                inventory.remove(target.getEntity().getID());
-                if (target.getEntity().getType()=='w' &&  isWearingItem(target.getEntity().getID())){
-                    unequipItem(target.getEntity().getID());
-                }
-            }
-
-            return 1;
-
-        } else {
-            return 0;
-        }
-    }
-
     //this function makes the player drop X amount of target, if it has it
     public int drop(Pair target, Integer amt){
         if (target != null){
@@ -646,6 +590,7 @@ public class Player implements Serializable{
 
             //we modify the player's weight accordingly, and remove the item if necessary
             modifyWeight(-(((Item) target.getEntity()).getWeight()*amt));
+            target.modifyCount(-amt);
             if (target.getCount() == 0){
                 inventory.remove(target.getEntity().getID());
             }
@@ -658,46 +603,6 @@ public class Player implements Serializable{
             //the item is not in the inventory
             return 0;
         }
-    }
-
-
-    //this function tries to pick up an item in the currentRoom:
-    //it also checks if the player can carry the current item
-    //if it didn't succeed, print an error message
-    public boolean pickUpItem(Pair item, boolean all){
-
-        if(hasItemInInventory(item.getEntity().getID()) && ((Item)item.getEntity()).isUnique()){
-            printToLog("You can have just one with you.");
-            //bypassed by taking chest with that in it
-            return false;
-        } else if(all && ((Item)item.getEntity()).isUnique() && item.getCount()>1){
-            printToLog("You can have just one with you.");
-            //todo
-            //bypassed by taking chest with that in it
-            return false;
-        }
-
-        Item toAdd = (Item) item.getEntity();
-        if (all){
-            if (!addAmountItem(item, item.getCount())){
-                printToLog("Too heavy to carry.");
-                return false;
-            } else {
-                if (item.isEmpty()){
-                    currentRoom.getEntities().remove(toAdd.getID());
-                }
-            }
-        } else {
-            if (!addOneItem(item)){
-                printToLog("Too heavy to carry.");
-                return false;
-            } else {
-                if (item.isEmpty()){
-                    currentRoom.getEntities().remove(toAdd.getID());
-                }
-            }
-        }
-        return true;
     }
 
 

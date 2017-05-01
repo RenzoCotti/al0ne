@@ -12,7 +12,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
  */
 public class MedievalYoungWorld extends World{
     public MedievalYoungWorld() {
-        super("medievalyoung", "homeyourroom");
+        super("medievaly", "homeyourroom");
 
         Room yourRoom = new Room("homeyourroom", "Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");

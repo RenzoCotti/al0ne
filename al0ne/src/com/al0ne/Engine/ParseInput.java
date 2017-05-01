@@ -125,7 +125,6 @@ public class ParseInput {
                 if (tokenFrom == -1 && tokenAll == -1) {
                     return HandleCommands.handleTake(parsedInput, player);
                 }
-                //case take from container:
                 //take normally and all
                 else if (tokenFrom == -1 && tokenAll > -1) {
                     return HandleCommands.handleTake(parsedInput, player);

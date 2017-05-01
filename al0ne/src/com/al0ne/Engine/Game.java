@@ -31,11 +31,11 @@ public class Game implements Serializable {
 
     private String notes;
 
-    public Game(boolean needs) {
+    public Game() {
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
         this.worldCount = 0;
-        this.debugMode=false;
+        this.debugMode=true;
         this.commands = new CommandMap();
 
     }

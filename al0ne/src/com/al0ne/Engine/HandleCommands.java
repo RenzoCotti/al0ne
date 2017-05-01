@@ -409,6 +409,8 @@ public class HandleCommands {
         boolean all = false;
 
         String item;
+
+        //we try to get a number from temp
         int amt = 0;
         try{
             Integer.parseInt(temp[1]);
@@ -429,6 +431,7 @@ public class HandleCommands {
 
         ArrayList<Pair> items = new ArrayList<>();
 
+        //we get only the items we can pickup
         for (Pair p : possibleItems) {
             if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' || p.getEntity().getType() == 'C') {
                 items.add(p);
@@ -439,27 +442,28 @@ public class HandleCommands {
         if (items.size() > 1) {
             printToLog("Be more specific.");
             return false;
-        }
+        } else if(items.size() == 1){
+            Pair currentPair = items.get(0);
+            Item currentItem = (Item) currentPair.getEntity();
+            int count = currentPair.getCount();
+            if (all) {
+                if (player.pickUpItem(currentPair, count)) {
+                    printToLog(count+" "+currentItem.getName() + " added to your inventory.");
+                }
 
-
-        if (all && items.size() == 1) {
-            if (player.pickUpItem(items.get(0), true)) {
-                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
+            } else if (amt != 0) {
+                if (player.pickUpItem(items.get(0), amt)) {
+                    printToLog(amt+" "+currentItem.getName() + " added to your inventory.");
+                }
+            } else {
+                if (player.pickUpItem(items.get(0), 1)) {
+                    printToLog(currentItem.getName() + " added to your inventory.");
+                }
             }
-
-        } else if (amt != 0 && items.size() == 1) {
-            if (player.pickUpItem(items.get(0), amt)) {
-                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
-            }
-        } else if (items.size() == 1) {
-            if (player.pickUpItem(items.get(0), false)) {
-                printToLog(items.get(0).getEntity().getName() + " added to your inventory.");
-            }
-        } else if (possibleItems.size() != 0) {
-            printToLog("You can't take it.");
         } else {
             printToLog("You can't see such an item to take.");
         }
+
         return true;
     }
 
@@ -504,29 +508,30 @@ public class HandleCommands {
         if (possibleItems.size() > 1) {
             printToLog("Be more specific.");
             return false;
-        }
-
-
-        if (all && possibleItems.size() == 1) {
-            int result = player.drop(possibleItems.get(0), true);
-            if (result == 1) {
-                printToLog("You drop all the " + possibleItems.get(0).getEntity().getName());
-            } else if(result == 0){
-                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
-            }
-        } else if (amt != 0 && possibleItems.size() == 1) {
-            int result = player.drop(possibleItems.get(0), amt);
-            if (result == 1) {
-                printToLog("You drop "+ amt+" "+ possibleItems.get(0).getEntity().getName());
-            } else if (result == 0){
-                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
-            }
-        } else if (possibleItems.size() == 1) {
-            int result = player.drop(possibleItems.get(0), false);
-            if (result == 1) {
-                printToLog("You drop the " + possibleItems.get(0).getEntity().getName());
-            } else if (result == 0){
-                printToLog("You don't seem to have a " + possibleItems.get(0).getEntity().getName() + " with you.");
+        } else if(possibleItems.size() == 1){
+            Item i = (Item)possibleItems.get(0).getEntity();
+            Pair p = possibleItems.get(0);
+            if (all) {
+                int result = player.drop(p, p.getCount());
+                if (result == 1) {
+                    printToLog("You drop all the " + i.getName());
+                } else if(result == 0){
+                    printToLog("You don't seem to have a " + i.getName() + " with you.");
+                }
+            } else if (amt != 0) {
+                int result = player.drop(p, amt);
+                if (result == 1) {
+                    printToLog("You drop "+ amt+" "+ i.getName());
+                } else if (result == 0){
+                    printToLog("You don't seem to have a " + i.getName() + " with you.");
+                }
+            } else {
+                int result = player.drop(p, 1);
+                if (result == 1) {
+                    printToLog("You drop the " + i.getName());
+                } else if (result == 0){
+                    printToLog("You don't seem to have a " + i.getName() + " with you.");
+                }
             }
         } else {
             printToLog("You can't see such an item to drop. ");

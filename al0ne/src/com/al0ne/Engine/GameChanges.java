@@ -171,13 +171,9 @@ public class GameChanges {
         }
 
         switch (s){
-            case "alphaworld":
-                Main.game.setCurrentWorld(s);
-                Main.player = Main.game.getPlayer();
-                Main.currentRoom = Main.player.getCurrentRoom();
-                Main.clearScreen();
-                return true;
-            case "caveworld":
+            case "alpha":
+            case "medievaly":
+            case "cave":
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
                 Main.currentRoom = Main.player.getCurrentRoom();

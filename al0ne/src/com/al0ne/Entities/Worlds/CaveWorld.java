@@ -19,7 +19,7 @@ public class CaveWorld extends World{
 
     public CaveWorld() {
 
-        super("caveworld", "cave1");
+        super("cave", "cave1");
 
 
 
