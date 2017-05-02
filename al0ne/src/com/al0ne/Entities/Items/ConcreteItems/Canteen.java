@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
+import com.al0ne.Entities.Items.Behaviours.Material;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -14,7 +15,10 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Canteen extends ChargeItem{
     public Canteen() {
-        super("canteen", "Canteen", "A canteeen made with the bladder of an animal.", "a leather canteen", 0.6, Size.SMALL, 5, "water", "You refill your canteen.");
+        super("canteen", "Canteen",
+                "A canteeen made with the bladder of an animal.",
+                "a leather canteen", 0.6, Size.SMALL, Material.LEATHER, 5,
+                "water", "You refill your canteen.");
         this.addCommand("drink");
         setUnique();
     }

@@ -15,7 +15,7 @@ public abstract class Food extends Item {
 
     private int foodValue;
     public Food(String id, String name, String description, String shortDescription, double weight, Size size, int foodValue) {
-        super(id, name, description, shortDescription, weight, size);
+        super(id, name, description, shortDescription, weight, size, Material.UNDEFINED);
         addCommand("eat");
         addProperty("food");
         addProperty("consumable");

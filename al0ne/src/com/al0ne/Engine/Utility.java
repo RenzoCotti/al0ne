@@ -1,5 +1,7 @@
 package com.al0ne.Engine;
 
+import com.al0ne.Entities.Items.Behaviours.Material;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -90,6 +92,20 @@ public class Utility {
 
     public static double twoDecimals(double number){
        return Math.round(number*100.0)/100.0;
+    }
+
+    public static Material getRandomMaterial(){
+        int total = Material.values().length;
+        int random = randomNumber(total);
+
+        int i = 0;
+        for(Material m : Material.values()){
+            i++;
+            if(i==random){
+                return m;
+            }
+        }
+        return null;
     }
 
 }

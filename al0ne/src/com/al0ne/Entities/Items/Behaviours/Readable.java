@@ -13,7 +13,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public abstract class Readable extends Item {
     protected String content;
     public Readable(String id, String name, String description, String shortDescription, Size size, String content, double weight) {
-        super(id, name, description, shortDescription, weight, size);
+        super(id, name, description, shortDescription, weight, size, Material.PAPER);
         addCommand("read");
         this.content=content;
     }

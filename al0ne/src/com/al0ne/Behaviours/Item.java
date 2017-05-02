@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Engine.Size;
+import com.al0ne.Entities.Items.Behaviours.Material;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,8 @@ public abstract class Item extends Entity {
     protected boolean unique;
     protected boolean canDrop;
 
+    protected Material material;
+
 
 
     public Item(String id, String name, String description, String shortDescription, double weight, Size size) {
@@ -35,6 +38,20 @@ public abstract class Item extends Entity {
         this.longDescription+=" It's "+ s+".";
         this.unique = false;
         this.canDrop = true;
+        this.material = Material.UNDEFINED;
+    }
+
+    public Item(String id, String name, String description, String shortDescription, double weight, Size size, Material material) {
+        super(id, name, description, shortDescription);
+        this.weight = weight;
+        this.properties = new ArrayList<>();
+        this.requiredType = new ArrayList<>();
+        addCommand("take");
+        this.type='i';
+        this.size=Size.toInt(size);
+        this.unique = false;
+        this.canDrop = true;
+        this.material = material;
     }
 
     public double getWeight() {
@@ -90,5 +107,15 @@ public abstract class Item extends Entity {
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public void printLongDescription(Player player, Room room) {
+        super.printLongDescription(player, room);
+        printToLog("It's "+(Size.toString(this.size))+".");
+        String m = Material.stringify(this.material);
+        if(!m.equals("undefined")){
+            printToLog("It's made of "+(Material.stringify(this.material))+".");
+        }
     }
 }

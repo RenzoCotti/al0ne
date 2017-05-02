@@ -1,5 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Armor;
 
+import com.al0ne.Engine.Utility;
+import com.al0ne.Entities.Items.Behaviours.Material;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
 
 /**
@@ -7,6 +9,8 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
  */
 public class IronHelmet extends Helmet{
     public IronHelmet() {
-        super("ironhelmet", "Iron Helmet", "An iron helmet with a few dents in it. It has probably seen some action before", "an iron helmet", 1.0, 1);
+        super("ironhelmet", "Helmet",
+                "A helmet with a few dents in it. It has probably seen some action before",
+                "a helmet", 1.0, 1, Utility.getRandomMaterial());
     }
 }

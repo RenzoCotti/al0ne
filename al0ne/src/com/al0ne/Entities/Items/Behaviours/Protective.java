@@ -9,8 +9,9 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 public abstract class Protective extends Wearable {
     protected int armor;
 
-    public Protective(String id, String name, String description, String shortDescription, double weight, int armor, Size size) {
-        super(id, name, description, shortDescription, weight, size);
+    public Protective(String id, String name, String description,
+                      String shortDescription, double weight, int armor, Size size, Material material) {
+        super(id, name, description, shortDescription, weight, size, material);
         this.armor=armor;
     }
 

@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems.Armor;
 
+import com.al0ne.Entities.Items.Behaviours.Material;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 
 /**
@@ -7,6 +8,8 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
  */
 public class LeatherArmour extends Armor{
     public LeatherArmour() {
-        super("leatherarmour", "Leather Armor", "A roughly crafted leather armour. It's ok at what it does.", "a leather armour", 3.0, 2);
+        super("leatherarmour", "Leather Armor",
+                "A roughly crafted leather armour. It's ok at what it does.",
+                "a leather armour", 3.0, 2, Material.LEATHER);
     }
 }

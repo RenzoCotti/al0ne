@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
+import com.al0ne.Entities.Items.Behaviours.Material;
 
 /**
  * Created by BMW on 01/05/2017.
@@ -11,7 +12,7 @@ import com.al0ne.Engine.Size;
 public class GoldCoin extends Coin {
     public GoldCoin() {
         super("gcoin", "Gold Coin", "A shiny golden coin",
-                "golden coin.", 0.02, Size.MICRO);
+                "golden coin.", 0.02, Size.MICRO, Material.GOLD);
         this.value = 100;
     }
 

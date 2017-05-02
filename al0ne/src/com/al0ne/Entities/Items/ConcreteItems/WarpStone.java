@@ -8,6 +8,7 @@ import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Size;
 import com.al0ne.Engine.Utility;
+import com.al0ne.Entities.Items.Behaviours.Material;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -17,7 +18,9 @@ import static com.al0ne.Engine.Main.printToLog;
 public class WarpStone extends Item{
 
     public WarpStone() {
-        super("warpstone", "Warp stone", "A glowing opaque light-blue stone, whose edges are roughly shaped in a prism-shape.", "a light-blue stone", 0.3, Size.VSMALL);
+        super("warpstone", "Warp stone",
+                "A glowing opaque light-blue stone, whose edges are roughly shaped in a prism-shape.",
+                "a light-blue stone", 0.3, Size.VSMALL, Material.STONE);
         setUnique();
         setUndroppable();
     }
