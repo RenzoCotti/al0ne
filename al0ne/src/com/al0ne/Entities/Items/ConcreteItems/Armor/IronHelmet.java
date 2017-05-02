@@ -11,6 +11,6 @@ public class IronHelmet extends Helmet{
     public IronHelmet() {
         super("ironhelmet", "Helmet",
                 "A helmet with a few dents in it. It has probably seen some action before",
-                "a helmet", 1.0, 1, Utility.getRandomMaterial());
+                1.0, 1, Material.IRON);
     }
 }

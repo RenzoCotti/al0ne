@@ -17,18 +17,18 @@ public abstract class ChargeItem extends Item{
     protected String property;
     protected String onRefill;
 
-    public ChargeItem(String id, String name, String description, String shortDescription,
+    public ChargeItem(String id, String name, String description,
                       double weight, Size size, Material material, int maxCharges, String onRefill) {
-        super(id, name, description, shortDescription, weight, size, material);
+        super(id, name, description, weight, size, material);
         this.maxCharges = maxCharges;
         this.currentCharges = maxCharges;
         this.canRecharge = false;
         this.onRefill = onRefill;
     }
 
-    public ChargeItem(String id, String name, String description, String shortDescription,
+    public ChargeItem(String id, String name, String description,
                       double weight, Size size, Material material, int maxCharges, String property, String onRefill) {
-        super(id, name, description, shortDescription, weight, size, material);
+        super(id, name, description, weight, size, material);
         this.maxCharges = maxCharges;
         this.currentCharges = maxCharges;
         this.canRecharge = true;

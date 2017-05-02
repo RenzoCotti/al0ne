@@ -12,7 +12,7 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 15/03/2017.
  */
 public class Scroll extends Readable{
-    public Scroll(String id, String name, String description, String shortDescription, String content, double weight) {
-        super(id, name, description, shortDescription, Size.SMALL, content, weight);
+    public Scroll(String id, String name, String description, String content, double weight) {
+        super(id, name, description, Size.SMALL, content, weight);
     }
 }

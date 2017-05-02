@@ -9,6 +9,6 @@ import com.al0ne.Entities.Items.Behaviours.Food;
 public class SliceOfCake extends Food{
     public SliceOfCake() {
         super("sliceofcake","Slice of cake", "Maaan, this apple cake looks just delicious. " +
-                "Both still warm AND fluffy? Can't wait to eat some!", "slice of cake", 0.1, Size.VSMALL, 2);
+                "Both still warm AND fluffy? Can't wait to eat some!", 0.1, Size.VSMALL, 2);
     }
 }

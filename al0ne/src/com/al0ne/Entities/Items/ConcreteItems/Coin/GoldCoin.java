@@ -11,8 +11,8 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public class GoldCoin extends Coin {
     public GoldCoin() {
-        super("gcoin", "Gold Coin", "A shiny golden coin",
-                "golden coin.", 0.02, Size.MICRO, Material.GOLD);
+        super("gcoin", "A shiny coin.",
+                0.02, Material.GOLD);
         this.value = 100;
     }
 

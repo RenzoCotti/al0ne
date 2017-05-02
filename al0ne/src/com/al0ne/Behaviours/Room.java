@@ -185,42 +185,6 @@ public class Room extends Entity{
         return exits;
     }
 
-
-    //prints items in the room
-//    private void printItems(){
-//        ArrayList<Pair> items = getItemList();
-//        if (items.size()!=0){
-//            printToLog("You can see: ");
-//            for (Pair p : items) {
-//                Item currentItem = (Item) p.getEntity();
-//                if(p.getCount() == 1){
-//                    printToLog("- " +currentItem.getName());
-//                } else{
-//                    printToLog("- " +p.getCount()+"x "+ currentItem.getName());
-//                }
-//            }
-//        }
-//    }
-
-//    //prints props in the room
-//    private void printProps(){
-//        ArrayList<Prop> items = getPropList();
-//        if (items.size()!=0){
-//            printToSingleLine("There is ");
-//            for (int i=0; i<items.size(); i++) {
-//                printToSingleLine(items.get(i).getShortDescription());
-//                if(i==items.size()-2){
-//                    printToSingleLine(" and ");
-//                } else if(i!=items.size()-1){
-//                    printToSingleLine(", ");
-//                } else{
-//                    printToSingleLine(" here.");
-//                    printToLog();
-//                }
-//            }
-//        }
-//    }
-
     //prints props in the room
     private void printItemsOrProps(boolean prop){
             ArrayList<Prop> props = getPropList();

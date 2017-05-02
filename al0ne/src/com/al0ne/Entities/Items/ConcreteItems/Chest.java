@@ -11,8 +11,8 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public class Chest extends Container {
     public Chest() {
-        super("chest", "wooden chest", "A fairly large wooden chest.",
-                "a wooden chest", 10, Size.VLARGE, Material.WOOD, true);
+        super("woodchest", "Chest", "A fairly large wooden chest.",
+                10, Size.VLARGE, Material.WOOD, true);
     }
 
     @Override

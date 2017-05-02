@@ -9,7 +9,7 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public abstract class Coin extends Item{
     protected int value;
-    public Coin(String id, String name, String description, String shortDescription, double weight, Size size, Material material) {
-        super(id, name, description, shortDescription, weight, size, material);
+    public Coin(String id, String description, double weight, Material material) {
+        super(id, "Coin", description, weight, Size.MICRO, material);
     }
 }

@@ -108,4 +108,12 @@ public class Utility {
         return null;
     }
 
+    public static String getArticle(String s){
+        char l = s.charAt(0);
+        if (l == 'a' || l == 'e' || l == 'i' || l == 'o' || l == 'u'){
+            return "an";
+        }
+        return "a";
+    }
+
 }

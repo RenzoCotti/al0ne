@@ -7,8 +7,8 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  * Created by BMW on 30/04/2017.
  */
 public class JunkItem extends Item{
-    public JunkItem(String name, String description, String shortDescription, double weight, Size size) {
-        super(name, name, description, shortDescription, weight, size, Material.UNDEFINED);
+    public JunkItem(String name, String description, double weight, Size size) {
+        super(name, name, description, weight, size);
     }
 
     @Override

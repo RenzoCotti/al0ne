@@ -81,4 +81,7 @@ public abstract class Entity implements Serializable{
         requiredCommand.add(cmd);
     }
 
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
 }

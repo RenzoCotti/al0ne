@@ -9,7 +9,8 @@ import static com.al0ne.Engine.Main.printToLog;
 
 public class Mushroom extends Food {
     public Mushroom() {
-        super("mushroom","Brown mushroom", "It has a very pungent smell", "brown mushroom", 0.2, Size.SMALL, 6);
+        super("mushroom","Brown mushroom", "It has a very pungent smell",
+                0.2, Size.SMALL, 6);
     }
 
     @Override

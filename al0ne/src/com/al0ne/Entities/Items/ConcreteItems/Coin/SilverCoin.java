@@ -11,8 +11,8 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public class SilverCoin extends Coin{
     public SilverCoin() {
-        super("scoin", "Silver Coin", "A shiny silver coin.",
-                "silver coin.", 0.01, Size.MICRO, Material.SILVER);
+        super("scoin", "A very polished coin.",
+                 0.01, Material.SILVER);
         this.value = 10;
     }
 

@@ -11,8 +11,8 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public class BrassCoin extends Coin {
     public BrassCoin() {
-        super("bcoin", "Brass Coin", "A fairly opaque brass coin",
-                "brass coin.", 0.01, Size.MICRO, Material.BRASS);
+        super("bcoin", "A fairly opaque coin.",
+                0.01, Material.BRASS);
         this.value = 1;
     }
 

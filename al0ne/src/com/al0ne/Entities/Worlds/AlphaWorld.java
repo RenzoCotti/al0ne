@@ -1,8 +1,13 @@
 package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
@@ -42,6 +47,12 @@ public class AlphaWorld extends World{
         startRoom.addEntity(chest);
         startRoom.addEntity(new WarpStone());
         startRoom.addEntity(new SilverCoin(), 100);
+        startRoom.addEntity(new Helmet(Utility.getRandomMaterial()));
+        startRoom.addEntity(new Armor(Utility.getRandomMaterial()));
+        startRoom.addEntity(new Shield(Utility.getRandomMaterial()));
+        startRoom.addEntity(new Helmet(Utility.getRandomMaterial()));
+        startRoom.addEntity(new Armor(Utility.getRandomMaterial()));
+        startRoom.addEntity(new Shield(Utility.getRandomMaterial()));
         startRoom.visit();
         putRoom(startRoom);
 
@@ -64,7 +75,7 @@ public class AlphaWorld extends World{
         emonRoom.addExit("down", "ladderroom");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
-        emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you.", "a very big key"));
+        emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you."));
         emonRoom.addEntity(emon);
         putRoom(emonRoom);
 
@@ -91,7 +102,7 @@ public class AlphaWorld extends World{
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
         bob.addToInventory(new Knife(), 5);
         bob.addToInventory(new Apple(), 2);
-        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","an old scroll", "Down, Right, Up, Right, Down", 0.1), 20);
+        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);
         shopRoom.addExit("south", "wolfroom");
         putRoom(shopRoom);
@@ -173,7 +184,7 @@ public class AlphaWorld extends World{
         brokenKeyRoom.addExit("east", "gateroom");
         brokenKeyRoom.addEntity(new Prop("hearth", "hearth", "the hearth is alit. somebody has been here recently", "a stone hearth"));
         brokenKeyRoom.addEntity(new Prop("table", "table", "a wooden table. It has a broken key on top.", "a wooden table"));
-        brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two.", "broken key"));
+        brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two."));
         putRoom(brokenKeyRoom);
 
         Room gateRoom = new Room("gateroom", "Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");

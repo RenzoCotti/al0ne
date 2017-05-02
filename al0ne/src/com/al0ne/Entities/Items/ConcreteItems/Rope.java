@@ -11,7 +11,7 @@ import com.al0ne.Entities.Items.Behaviours.Material;
  */
 public class Rope extends Item{
     public Rope() {
-        super("rope", "Rope", "11m of sturdy rope.", "rope", 1.0, Size.NORMAL, Material.FIBRE);
+        super("rope", "Rope", "11m of sturdy rope.", 1.0, Size.NORMAL, Material.FIBRE);
         addProperty("cuttable");
         addCommand("climb");
     }

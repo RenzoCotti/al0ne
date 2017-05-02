@@ -7,8 +7,8 @@ import com.al0ne.Engine.Size;
  * Created by BMW on 02/02/2017.
  */
 public abstract class Potion extends Item {
-    public Potion(String id, String name, String longDescription, String shortDescription) {
-        super(id, name, longDescription, shortDescription, 0.3, Size.SMALL, Material.GLASS);
+    public Potion(String id, String name, String longDescription) {
+        super(id, name, longDescription, 0.3, Size.SMALL, Material.GLASS);
         addProperty("consumable");
         addCommand("drink");
     }

@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Material;
 
 import java.util.ArrayList;
@@ -21,28 +22,26 @@ public abstract class Item extends Entity {
     protected ArrayList<String> requiredType;
     protected boolean unique;
     protected boolean canDrop;
-
     protected Material material;
 
 
-
-    public Item(String id, String name, String description, String shortDescription, double weight, Size size) {
-        super(id, name, description, shortDescription);
+    public Item(String id, String name, String description, double weight, Size size) {
+        super(id, name, description, Utility.getArticle(name)+" "+name.toLowerCase());
         this.weight = weight;
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
         addCommand("take");
         this.type='i';
         this.size=Size.toInt(size);
-        String s = Size.toString(this.size);
-        this.longDescription+=" It's "+ s+".";
         this.unique = false;
         this.canDrop = true;
         this.material = Material.UNDEFINED;
     }
 
-    public Item(String id, String name, String description, String shortDescription, double weight, Size size, Material material) {
-        super(id, name, description, shortDescription);
+    public Item(String id, String name, String description, double weight, Size size, Material material) {
+        super(id, name, description,
+                Utility.getArticle(Material.stringify(material))+
+                        " "+Material.stringify(material)+" "+name.toLowerCase());
         this.weight = weight;
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
@@ -118,4 +117,13 @@ public abstract class Item extends Entity {
             printToLog("It's made of "+(Material.stringify(this.material))+".");
         }
     }
+
+
+
+    @Override
+    public String getName() {
+        return Material.stringify(this.material)+" "+name.toLowerCase();
+    }
+
+
 }

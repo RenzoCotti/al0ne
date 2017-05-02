@@ -3,6 +3,7 @@ package com.al0ne.Entities.Items.Behaviours.Wearable;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Material;
 
 /**
@@ -11,13 +12,14 @@ import com.al0ne.Entities.Items.Behaviours.Material;
 public class Weapon extends Wearable {
     protected int damage;
     protected String damageType;
-    public Weapon(String id, String name, String description, String shortDescription, String damageType,
+    public Weapon(String id, String name, String description, String damageType,
                   int damage, double weight, Size size, Material material) {
-        super(id, name, description, shortDescription, weight, size, material);
+        super(id, name, description, weight, size, material);
         this.damageType=damageType;
         this.damage=damage;
         this.part = "main hand";
     }
+
 
     public int getDamage() {
         return damage;

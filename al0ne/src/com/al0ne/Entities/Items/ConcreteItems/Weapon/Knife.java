@@ -10,7 +10,7 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 public class Knife extends Weapon {
     public Knife() {
         super("knife", "Knife", "A rusty but sharp knife",
-                "a small knife", "sharp", 2, 0.2, Size.SMALL, Material.IRON);
+                "sharp", 2, 0.2, Size.SMALL, Material.IRON);
         addProperty("sharp");
     }
 }

@@ -12,8 +12,8 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public abstract class Readable extends Item {
     protected String content;
-    public Readable(String id, String name, String description, String shortDescription, Size size, String content, double weight) {
-        super(id, name, description, shortDescription, weight, size, Material.PAPER);
+    public Readable(String id, String name, String description, Size size, String content, double weight) {
+        super(id, name, description, weight, size, Material.PAPER);
         addCommand("read");
         this.content=content;
     }

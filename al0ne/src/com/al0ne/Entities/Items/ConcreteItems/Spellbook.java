@@ -17,7 +17,8 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Spellbook extends Readable{
     private HashMap<String, SpellPair> spells;
     public Spellbook() {
-        super("spellbook", "Spellbook", "A tome containing all the spells you can cast.", "a dusty tome", Size.NORMAL, "Plenty of magic formulae here.", 2);
+        super("spellbook", "Spellbook", "A tome containing all the spells you can cast.",
+                Size.NORMAL, "Plenty of magic formulae here.", 2);
         this.spells = new HashMap<>();
         setUnique();
     }

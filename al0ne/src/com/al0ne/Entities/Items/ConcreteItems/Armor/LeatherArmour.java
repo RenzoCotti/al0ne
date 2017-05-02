@@ -10,6 +10,6 @@ public class LeatherArmour extends Armor{
     public LeatherArmour() {
         super("leatherarmour", "Leather Armor",
                 "A roughly crafted leather armour. It's ok at what it does.",
-                "a leather armour", 3.0, 2, Material.LEATHER);
+                3.0, 2, Material.LEATHER);
     }
 }
