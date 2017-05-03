@@ -10,10 +10,10 @@ import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
@@ -503,22 +503,25 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
 
         if(temp.length == 2 && temp[1].equals("all")){
-//             todo: need to fix concurrentModificationException here
-//            Iterator<Pair> cp= player.getInventory().values().iterator();
-//
-//            if(player.getInventory().values().size() == 0){
-//                printToLog("You don't have any item with you.");
-//                return false;
-//            }
-//            while (cp.hasNext()) {
-//                Pair p = cp.next();
-//
-//                if(player.drop(p, p.getCount()) == 1){
-//                    Item currentItem = (Item) p.getEntity();
-//                    printToLog("Dropped "+currentItem.getName()+".");
-//                }
-//            }
-//            return true;
+            Collection<Pair> cp = player.getInventory().values();
+            ArrayList<Pair> toRemove = new ArrayList<>();
+
+            if(cp.size() == 0){
+                printToLog("You don't have any item with you.");
+                return false;
+            }
+            for(Pair p : cp){
+                if(((Item)p.getEntity()).canDrop()){
+                    toRemove.add(p);
+                }
+            }
+            for(Pair p : toRemove){
+                if(player.drop(p, p.getCount())==1){
+                    Item currentItem = (Item) p.getEntity();
+                    printToLog("Dropped "+currentItem.getName()+".");
+                }
+            }
+            return true;
         }
 
 
