@@ -1,6 +1,4 @@
-package com.al0ne.Engine;
-
-import com.al0ne.Behaviours.Room;
+package com.al0ne.Engine.Enums;
 
 /**
  * Created by BMW on 11/04/2017.

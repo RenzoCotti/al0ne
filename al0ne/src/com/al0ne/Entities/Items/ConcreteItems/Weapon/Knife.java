@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems.Weapon;
 
-import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Enums.Size;
 import com.al0ne.Entities.Items.Behaviours.Material;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 

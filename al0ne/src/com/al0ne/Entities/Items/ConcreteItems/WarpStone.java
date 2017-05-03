@@ -1,12 +1,11 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
-import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Enums.Size;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Material;
 

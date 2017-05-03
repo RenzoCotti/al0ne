@@ -3,7 +3,7 @@ package com.al0ne.Entities.Items.Behaviours;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Enums.Size;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;

@@ -1,6 +1,8 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Engine.TextParsing.HandleCommands;
+import com.al0ne.Engine.TextParsing.ParseInput;
 import com.al0ne.Engine.UI.Popups;
 import com.al0ne.Engine.UI.UI;
 import javafx.application.Application;

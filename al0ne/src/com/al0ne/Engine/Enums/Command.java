@@ -1,4 +1,4 @@
-package com.al0ne.Engine;
+package com.al0ne.Engine.Enums;
 
 /**
  * This is a list of all possible commands

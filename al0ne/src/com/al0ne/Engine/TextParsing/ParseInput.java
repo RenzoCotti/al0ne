@@ -1,6 +1,9 @@
-package com.al0ne.Engine;
+package com.al0ne.Engine.TextParsing;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Engine.*;
+import com.al0ne.Engine.Enums.Command;
+
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.*;

@@ -1,9 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Coin;
 
-import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Engine.Size;
 import com.al0ne.Entities.Items.Behaviours.Material;
 
 /**

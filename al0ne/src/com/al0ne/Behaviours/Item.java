@@ -1,6 +1,6 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Enums.Size;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Material;
 
@@ -22,6 +22,7 @@ public abstract class Item extends Entity {
     protected ArrayList<String> requiredType;
     protected boolean unique;
     protected boolean canDrop;
+    public boolean canTake;
     protected Material material;
 
 
@@ -36,6 +37,7 @@ public abstract class Item extends Entity {
         this.unique = false;
         this.canDrop = true;
         this.material = Material.UNDEFINED;
+        this.canTake=true;
     }
 
     public Item(String id, String name, String description, double weight, Size size, Material material) {
@@ -51,6 +53,7 @@ public abstract class Item extends Entity {
         this.unique = false;
         this.canDrop = true;
         this.material = material;
+        this.canTake=true;
     }
 
     public double getWeight() {

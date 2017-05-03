@@ -1,8 +1,10 @@
-package com.al0ne.Engine;
+package com.al0ne.Engine.TextParsing;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.SpellPair;
+import com.al0ne.Engine.Main;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;

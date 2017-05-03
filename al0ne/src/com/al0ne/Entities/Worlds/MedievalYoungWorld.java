@@ -3,7 +3,7 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Size;
+import com.al0ne.Engine.Enums.Size;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
