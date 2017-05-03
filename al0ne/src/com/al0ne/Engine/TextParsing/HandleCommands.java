@@ -33,7 +33,7 @@ public class HandleCommands {
 
     //this handles moving: it checks for exactly one token after the command
     public static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp) {
-        if (temp.length > 1) {
+        if (temp.length > 2) {
             ParseInput.wrongCommand++;
             printToLog("Sorry?");
             return false;

@@ -31,9 +31,10 @@ public class ParseInput {
         }
 
         Command c = game.getCommands().toCommand(parsedInput[0]);
-        if(c == null){
-            System.out.println("Command is null!");
-            return false;
+        if(parsedInput.length == 2 && parsedInput[0].equals("go")){
+            c = game.getCommands().toCommand(parsedInput[0]+" "+parsedInput[1]);
+        } else if(c == null){
+            c = Command.NONE;
         }
 
         switch (c) {
@@ -244,6 +245,7 @@ public class ParseInput {
 
                     return HandleCommands.handleAttack(parsedInput, player, true);
                 }
+            case NONE:
             default:
                 wrongCommand++;
                 printToLog("Sorry?");

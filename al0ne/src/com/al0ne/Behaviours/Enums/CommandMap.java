@@ -34,10 +34,6 @@ public class CommandMap implements Serializable{
         commands.put("west", Command.WEST);
         commands.put("up", Command.UP);
         commands.put("down", Command.DOWN);
-        commands.put("northeast", Command.NORTHEAST);
-        commands.put("northwest", Command.NORTHWEST);
-        commands.put("southeast", Command.SOUTHEAST);
-        commands.put("southwest", Command.SOUTHWEST);
         commands.put("inventory", Command.INVENTORY);
         commands.put("talk", Command.TALK);
         commands.put("take", Command.TAKE);
@@ -82,6 +78,16 @@ public class CommandMap implements Serializable{
         aliases.put("wear", Command.EQUIP);
         aliases.put("wield", Command.EQUIP);
         aliases.put("l", Command.LOOK);
+        aliases.put("go north", Command.NORTH);
+        aliases.put("go south", Command.SOUTH);
+        aliases.put("go east", Command.EAST);
+        aliases.put("go west", Command.WEST);
+        aliases.put("go up", Command.UP);
+        aliases.put("go down", Command.DOWN);
+        aliases.put("go northeast", Command.NORTHEAST);
+        aliases.put("go northwest", Command.NORTHWEST);
+        aliases.put("go southeast", Command.SOUTHEAST);
+        aliases.put("go southwest", Command.SOUTHWEST);
 
     }
 

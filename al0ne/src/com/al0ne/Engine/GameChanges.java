@@ -198,7 +198,7 @@ public class GameChanges {
                 double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
                 String name = currentItem.getName();
                 if (currentItem instanceof Protective){
-                    name+=" ("+((Protective)currentItem).getArmor()+" DEF)";
+                    name=" ("+((Protective)currentItem).getArmor()+" DEF) "+"$"+currentItem.getPrice()+" "+name;
                 }
                 SimpleItem s = new SimpleItem(name, pair.getCount(), weight);
                 data.add(s);

@@ -7,6 +7,8 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Behaviours.Room;
 
+import static java.lang.Math.max;
+
 /**
  * Created by BMW on 23/03/2017.
  */
@@ -20,7 +22,7 @@ public class Armor extends Protective {
     public Armor(Material m) {
         super(Material.stringify(m)+"armor", "Armor",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(), m.getToughness(), Size.LARGE, m);
+                        +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(), max(m.getToughness(), 1), Size.LARGE, m);
         this.part = "armor";
     }
 

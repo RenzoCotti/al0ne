@@ -27,13 +27,14 @@ public class SideMenu {
 
 
         TableView<SimpleItem> inv = new TableView<>();
+        inv.setPlaceholder(new Label("You have no items"));
         inv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         inv.setId("inv");
         TableColumn itemColumn = new TableColumn("Item");
-        itemColumn.setMinWidth(80);
+        itemColumn.setMinWidth(120);
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         TableColumn amount = new TableColumn("Amt");
-        amount.setMinWidth(50);
+        amount.setMinWidth(40);
         amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         TableColumn weightColumn = new TableColumn("Kg");
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));

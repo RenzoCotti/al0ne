@@ -25,6 +25,7 @@ public abstract class Item extends Entity {
     public boolean canTake;
     protected Material material;
     public boolean customName=false;
+    public int price;
 
 
     public Item(String id, String name, String description, double weight, Size size) {
@@ -38,6 +39,7 @@ public abstract class Item extends Entity {
         this.canDrop = true;
         this.material = Material.UNDEFINED;
         this.canTake=true;
+        this.price = 0;
     }
 
     public Item(String id, String name, String description, double weight, Size size, Material material) {
@@ -53,6 +55,9 @@ public abstract class Item extends Entity {
         this.canDrop = true;
         this.material = material;
         this.canTake=true;
+        int quality = Math.max(material.getToughness(), material.getDamage());
+        this.price = ((int) ((material.getPrice()+quality)*weight))*2;
+
     }
 
     public double getWeight() {
@@ -130,7 +135,7 @@ public abstract class Item extends Entity {
 
     @Override
     public String getName() {
-        if(customName){
+        if(customName || Material.stringify(material).equals("undefined")){
             return name.toLowerCase();
         }
         return Material.stringify(this.material)+" "+name.toLowerCase();
@@ -140,5 +145,9 @@ public abstract class Item extends Entity {
     public void setShortDescription(String shortDescription) {
         this.customName=true;
         super.setShortDescription(shortDescription);
+    }
+
+    public int getPrice() {
+        return price;
     }
 }

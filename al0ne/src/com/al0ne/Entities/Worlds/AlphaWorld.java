@@ -50,6 +50,14 @@ public class AlphaWorld extends World{
         for(Material m : Material.getMaterials(true)){
             startRoom.addEntity(new Helmet(m));
         }
+
+        for(Material m : Material.getMaterials(true)){
+            startRoom.addEntity(new Armor(m));
+        }
+
+        for(Material m : Material.getMaterials(true)){
+            startRoom.addEntity(new Shield(m));
+        }
         startRoom.visit();
         putRoom(startRoom);
 

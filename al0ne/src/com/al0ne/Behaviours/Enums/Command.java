@@ -5,7 +5,7 @@ package com.al0ne.Behaviours.Enums;
  */
 public enum Command {
     HELP, QUIT, SAVE, LOAD, DEBUG, COMMANDS,
-    AGAIN,
+    AGAIN, NONE,
 
 
     //debug commands

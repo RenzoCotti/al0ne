@@ -44,7 +44,7 @@ public class Player implements Serializable{
     private Room currentRoom;
     
     //Maximum carry weight of the player
-    private static double maxWeight=30;
+    private static double maxWeight=90;
     //Current carry weight of the player
     private double currentWeight;
 

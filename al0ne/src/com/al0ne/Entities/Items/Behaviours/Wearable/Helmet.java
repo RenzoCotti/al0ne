@@ -22,7 +22,7 @@ public class Helmet extends Protective {
     public Helmet(Material m) {
         super(Material.stringify(m)+"helmet", "Helmet",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" helmet.", 0.2*m.getToughness()+m.getWeight(), max(m.getToughness()-2, 0), Size.SMALL, m);
+                        +Material.stringify(m)+" helmet.", Math.max(m.getWeight()-2, 0.5), max(m.getToughness()-2, 1), Size.SMALL, m);
         this.part = "head";
     }
 
