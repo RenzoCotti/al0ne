@@ -1,6 +1,6 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -94,12 +94,12 @@ public class Utility {
        return Math.round(number*100.0)/100.0;
     }
 
-    public static Material getRandomMaterial(){
-        int total = Material.values().length;
+    public static Material getRandomMaterial(boolean armor){
+        int total = Material.getMaterials(armor).size();
         int random = randomNumber(total);
 
         int i = 0;
-        for(Material m : Material.values()){
+        for(Material m : Material.getMaterials(armor)){
             i++;
             if(i==random){
                 return m;

@@ -1,9 +1,9 @@
 package com.al0ne.Entities.Items.Behaviours.Wearable;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Behaviours.Room;
 
@@ -22,7 +22,7 @@ public class Helmet extends Protective {
     public Helmet(Material m) {
         super(Material.stringify(m)+"helmet", "Helmet",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" helmet.", 1+m.getValue(), max(m.getValue()-2, 0), Size.SMALL, m);
+                        +Material.stringify(m)+" helmet.", 0.2*m.getToughness()+m.getWeight(), max(m.getToughness()-2, 0), Size.SMALL, m);
         this.part = "head";
     }
 

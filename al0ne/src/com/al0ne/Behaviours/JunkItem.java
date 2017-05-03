@@ -1,6 +1,6 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 
 /**
  * Created by BMW on 30/04/2017.

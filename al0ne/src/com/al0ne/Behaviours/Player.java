@@ -44,7 +44,7 @@ public class Player implements Serializable{
     private Room currentRoom;
     
     //Maximum carry weight of the player
-    private static double maxWeight=10;
+    private static double maxWeight=30;
     //Current carry weight of the player
     private double currentWeight;
 
@@ -99,8 +99,8 @@ public class Player implements Serializable{
     public void initialiseWorn(){
         wornItems.put("main hand", null);
         wornItems.put("off hand", null);
-        wornItems.put("armor", null);
-        wornItems.put("helmet", null);
+        wornItems.put("body", null);
+        wornItems.put("head", null);
     }
 
     //returns true if the player has basic needs
@@ -118,10 +118,10 @@ public class Player implements Serializable{
         return (Weapon) wornItems.get("main hand");
     }
     public Armor getArmor(){
-        return (Armor) wornItems.get("armor");
+        return (Armor) wornItems.get("body");
     }
     public Helmet getHelmet(){
-        return (Helmet) wornItems.get("helmet");
+        return (Helmet) wornItems.get("head");
     }
     public Wearable getOffHand(){
         return wornItems.get("off hand");
@@ -176,7 +176,7 @@ public class Player implements Serializable{
                 } else if(part.equals("head")){
                     wornItems.put(part, (Helmet) currentItem);
                     printToLog("You now wear the "+wearable.getName());
-                } else if(part.equals("armor")){
+                } else if(part.equals("body")){
                     wornItems.put(part, (Armor) currentItem);
                     printToLog("You now wear the "+wearable.getName());
                 }
@@ -624,28 +624,33 @@ public class Player implements Serializable{
 
 
     //this function tries to pick up an amount from Item
-    public boolean pickUpItem(Pair item, Integer amt){
+    public int pickUpItem(Pair item, Integer amt){
 
         if(hasItemInInventory(item.getEntity().getID()) && ((Item)item.getEntity()).isUnique()){
             printToLog("You can have just one with you.");
             //bypassed by taking chest with that in it
-            return false;
+            return 0;
         }
         if(item.getCount() < amt){
             printToLog("There are just "+item.getCount()+" of those.");
-            return false;
+            return 0;
+        }
+
+        if(!((Item)item.getEntity()).canTake()){
+            printToLog("You can't take it.");
+            return 0;
         }
 
         Item toAdd = (Item) item.getEntity();
         if (!addAmountItem(item, amt)){
             printToLog("Too heavy to carry.");
-            return false;
+            return 0;
         } else {
             if (item.isEmpty()){
                 currentRoom.getEntities().remove(toAdd.getID());
             }
         }
-        return true;
+        return 1;
     }
 
     //this function tries to take an item from a container

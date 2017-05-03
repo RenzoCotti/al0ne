@@ -2,9 +2,9 @@ package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 
 /**
  * Created by BMW on 12/04/2017.

@@ -1,6 +1,4 @@
-package com.al0ne.Engine.Enums;
-
-import com.al0ne.Engine.Enums.Command;
+package com.al0ne.Behaviours.Enums;
 
 import java.io.Serializable;
 import java.util.HashMap;

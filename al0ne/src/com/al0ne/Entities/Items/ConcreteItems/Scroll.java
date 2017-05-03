@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Behaviours.Readable;
 
 import static com.al0ne.Engine.Main.printToLog;

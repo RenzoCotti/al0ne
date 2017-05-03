@@ -2,7 +2,7 @@ package com.al0ne.Entities.Items.ConcreteItems.Coin;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 
 /**
  * Created by BMW on 09/03/2017.

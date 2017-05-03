@@ -16,9 +16,14 @@ public class WarpGame extends Game{
         super();
         this.warpstone = false;
 
-        World startingWorld = new MedievalYoungWorld();
+        World startingWorld = new AlphaWorld();
+        World alphaWorld = new MedievalYoungWorld();
+
+//        World startingWorld = new MedievalYoungWorld();
+//        World alphaWorld = new AlphaWorld();
+
+
         World caveWorld = new CaveWorld();
-        World alphaWorld = new AlphaWorld();
         addWorld(startingWorld, new Player(startingWorld.getStartingRoom(), needs,
                     "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
                             "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet."));

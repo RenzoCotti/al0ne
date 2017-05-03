@@ -1,8 +1,8 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,7 @@ public abstract class Item extends Entity {
     protected boolean canDrop;
     public boolean canTake;
     protected Material material;
+    public boolean customName=false;
 
 
     public Item(String id, String name, String description, double weight, Size size) {
@@ -31,7 +32,6 @@ public abstract class Item extends Entity {
         this.weight = weight;
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
-        addCommand("take");
         this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
@@ -47,7 +47,6 @@ public abstract class Item extends Entity {
         this.weight = weight;
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
-        addCommand("take");
         this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
@@ -121,12 +120,25 @@ public abstract class Item extends Entity {
         }
     }
 
+    public boolean canTake() {
+        return canTake;
+    }
 
+    public void setCanTake(boolean canTake) {
+        this.canTake = canTake;
+    }
 
     @Override
     public String getName() {
+        if(customName){
+            return name.toLowerCase();
+        }
         return Material.stringify(this.material)+" "+name.toLowerCase();
     }
 
-
+    @Override
+    public void setShortDescription(String shortDescription) {
+        this.customName=true;
+        super.setShortDescription(shortDescription);
+    }
 }

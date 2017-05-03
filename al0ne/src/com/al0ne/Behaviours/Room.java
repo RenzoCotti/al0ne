@@ -90,11 +90,19 @@ public class Room extends Entity{
     }
 
     public void addEntity(Entity entity) {
+        if(entities.get(entity.getID()) != null){
+            entities.get(entity.getID()).addCount();
+            return;
+        }
         this.entities.put(entity.getID(),
                 new Pair(entity, 1));
     }
 
     public void addEntity(Entity entity, int qty) {
+        if(entities.get(entity.getID()) != null){
+            entities.get(entity.getID()).modifyCount(qty);
+            return;
+        }
         this.entities.put(entity.getID(), new Pair(entity, qty));
     }
 

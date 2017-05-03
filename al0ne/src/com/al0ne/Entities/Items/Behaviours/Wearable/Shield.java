@@ -1,9 +1,9 @@
 package com.al0ne.Entities.Items.Behaviours.Wearable;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Material;
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Behaviours.Room;
 
@@ -22,7 +22,7 @@ public class Shield extends Protective{
     public Shield(Material m) {
         super(Material.stringify(m)+"shield", "Shield",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" shield.", 1+m.getValue(), max(m.getValue()-1, 0), Size.NORMAL, m);
+                        +Material.stringify(m)+" shield.", 0.4*m.getToughness()+m.getWeight(), max(m.getToughness()-1, 0), Size.NORMAL, m);
         this.part = "off hand";
     }
 

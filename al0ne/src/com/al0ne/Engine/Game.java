@@ -4,7 +4,7 @@ import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
-import com.al0ne.Engine.Enums.CommandMap;
+import com.al0ne.Behaviours.Enums.CommandMap;
 
 import java.io.Serializable;
 import java.util.HashMap;

@@ -1,7 +1,8 @@
 package com.al0ne.Entities.Items.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Engine.Enums.Size;
+import com.al0ne.Behaviours.Enums.Size;
 
 /**
  * Created by BMW on 02/02/2017.

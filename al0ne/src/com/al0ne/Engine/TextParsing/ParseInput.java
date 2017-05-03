@@ -2,7 +2,7 @@ package com.al0ne.Engine.TextParsing;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Engine.*;
-import com.al0ne.Engine.Enums.Command;
+import com.al0ne.Behaviours.Enums.Command;
 
 import java.util.HashMap;
 

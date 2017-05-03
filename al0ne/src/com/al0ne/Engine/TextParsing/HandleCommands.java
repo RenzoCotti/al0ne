@@ -11,7 +11,9 @@ import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
@@ -407,6 +409,23 @@ public class HandleCommands {
         }
         ParseInput.wrongCommand = 0;
 
+        if(temp.length == 2 && temp[1].equals("all")){
+            possibleItems = currentRoom.getItemList();
+
+            if(possibleItems.size() == 0){
+                printToLog("There are no items here.");
+                return false;
+            }
+            for(Pair p : possibleItems){
+                if(player.pickUpItem(p, p.getCount()) == 0){
+                    break;
+                }
+                Item currentItem = (Item) p.getEntity();
+                printToLog("Taken "+currentItem.getName()+".");
+            }
+            return true;
+        }
+
 
         boolean all = false;
 
@@ -435,7 +454,8 @@ public class HandleCommands {
 
         //we get only the items we can pickup
         for (Pair p : possibleItems) {
-            if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' || p.getEntity().getType() == 'C') {
+            if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' ||
+                    p.getEntity().getType() == 'C' || p.getEntity().getType() == 'p') {
                 items.add(p);
             }
         }
@@ -449,16 +469,16 @@ public class HandleCommands {
             Item currentItem = (Item) currentPair.getEntity();
             int count = currentPair.getCount();
             if (all) {
-                if (player.pickUpItem(currentPair, count)) {
+                if (player.pickUpItem(currentPair, count) == 1) {
                     printToLog(count+" "+currentItem.getName() + " added to your inventory.");
                 }
 
             } else if (amt != 0) {
-                if (player.pickUpItem(items.get(0), amt)) {
+                if (player.pickUpItem(items.get(0), amt) == 1) {
                     printToLog(amt+" "+currentItem.getName() + " added to your inventory.");
                 }
             } else {
-                if (player.pickUpItem(items.get(0), 1)) {
+                if (player.pickUpItem(items.get(0), 1) == 1) {
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
             }
@@ -480,8 +500,26 @@ public class HandleCommands {
 
         ArrayList<Pair> possibleItems;
 
-
         ParseInput.wrongCommand = 0;
+
+        if(temp.length == 2 && temp[1].equals("all")){
+//             todo: need to fix concurrentModificationException here
+//            Iterator<Pair> cp= player.getInventory().values().iterator();
+//
+//            if(player.getInventory().values().size() == 0){
+//                printToLog("You don't have any item with you.");
+//                return false;
+//            }
+//            while (cp.hasNext()) {
+//                Pair p = cp.next();
+//
+//                if(player.drop(p, p.getCount()) == 1){
+//                    Item currentItem = (Item) p.getEntity();
+//                    printToLog("Dropped "+currentItem.getName()+".");
+//                }
+//            }
+//            return true;
+        }
 
 
         boolean all = false;

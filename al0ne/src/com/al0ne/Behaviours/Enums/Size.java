@@ -1,15 +1,17 @@
-package com.al0ne.Engine.Enums;
+package com.al0ne.Behaviours.Enums;
 
 /**
  * Created by BMW on 11/04/2017.
  */
 
 public enum Size {
-    MICRO, VSMALL, SMALL, NORMAL, LARGE, VLARGE, HUGE;
+    UNDEFINED, MICRO, VSMALL, SMALL, NORMAL, LARGE, VLARGE, HUGE;
 
 
     public static int toInt(Size s) {
         switch(s) {
+            case UNDEFINED:
+                return -1;
             case MICRO:
                 return (int) Math.pow(2, 0);
             case VSMALL:
@@ -29,7 +31,9 @@ public enum Size {
     }
 
     public static Size toSize(Integer size){
-        if (toInt(MICRO) > size){
+        if(size == -1){
+            return UNDEFINED;
+        } else if (toInt(MICRO) > size){
             return MICRO;
         } else if (toInt(MICRO) <= size && size < toInt(VSMALL)){
             return MICRO;

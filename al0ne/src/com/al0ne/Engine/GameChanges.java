@@ -4,6 +4,8 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Engine.UI.SimpleItem;
+import com.al0ne.Entities.Items.Behaviours.Protective;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 import com.al0ne.Entities.Items.ConcreteItems.WarpStone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -194,7 +196,11 @@ public class GameChanges {
             for (Pair pair : Main.player.getInventory().values()) {
                 Item currentItem = (Item) pair.getEntity();
                 double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
-                SimpleItem s = new SimpleItem(currentItem.getName(), pair.getCount(), weight);
+                String name = currentItem.getName();
+                if (currentItem instanceof Protective){
+                    name+=" ("+((Protective)currentItem).getArmor()+" DEF)";
+                }
+                SimpleItem s = new SimpleItem(name, pair.getCount(), weight);
                 data.add(s);
             }
         }

@@ -1,10 +1,10 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Material;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
@@ -41,18 +41,15 @@ public class AlphaWorld extends World{
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
-        Container chest = new Chest();
-        chest.addItem(new SilverCoin(), 100);
-        chest.addItem(new Knife(), 1);
-        startRoom.addEntity(chest);
-        startRoom.addEntity(new WarpStone());
-        startRoom.addEntity(new SilverCoin(), 100);
-        startRoom.addEntity(new Helmet(Utility.getRandomMaterial()));
-        startRoom.addEntity(new Armor(Utility.getRandomMaterial()));
-        startRoom.addEntity(new Shield(Utility.getRandomMaterial()));
-        startRoom.addEntity(new Helmet(Utility.getRandomMaterial()));
-        startRoom.addEntity(new Armor(Utility.getRandomMaterial()));
-        startRoom.addEntity(new Shield(Utility.getRandomMaterial()));
+//        Container chest = new Chest();
+//        chest.addItem(new SilverCoin(), 100);
+//        chest.addItem(new Knife(), 1);
+//        startRoom.addEntity(chest);
+//        startRoom.addEntity(new WarpStone());
+//        startRoom.addEntity(new SilverCoin(), 100);
+        for(Material m : Material.getMaterials(true)){
+            startRoom.addEntity(new Helmet(m));
+        }
         startRoom.visit();
         putRoom(startRoom);
 
