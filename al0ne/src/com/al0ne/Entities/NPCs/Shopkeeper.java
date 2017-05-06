@@ -5,7 +5,6 @@ import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.Pricepair;
 
 import java.util.HashMap;
 
@@ -15,7 +14,6 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 14/03/2017.
  */
 public class Shopkeeper extends NPC {
-    private HashMap<String, Pricepair> inventory;
     private String list;
 
     public Shopkeeper(String id, String name, String description, String shortDescription, String intro,
@@ -29,59 +27,35 @@ public class Shopkeeper extends NPC {
     public Shopkeeper(String id, String name, String description, String shortDescription, String intro) {
         super(id, name, description,shortDescription, intro);
         inventory = new HashMap<>();
-        list="Items: ";
+        list="I sell these items: \n";
         isShopkeeper=true;
     }
 
-    public HashMap<String, Pricepair> getInventory() {
-        return inventory;
-    }
-
-    public void addToInventory(Item item, int price) {
-        this.inventory.put(item.getID(), new Pricepair(item, price));
-        list+=item.getName()+" - "+price+" coins    ";
+    @Override
+    public boolean simpleAddItem(Item item, Integer price) {
+        boolean result =  super.simpleAddItem(item, price);
+        list+=item.getName()+" - "+price+" coins\n";
         addSubject("items", new Subject(list));
-    }
-
-    public boolean hasItem(String item) {
-        for (Pricepair p : inventory.values()){
-            Item currentItem = p.getItem();
-            //maybe need to use different check
-            if (currentItem.getName().toLowerCase().equals(item.toLowerCase())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Pricepair getItem(String item) {
-        for (Pricepair p : inventory.values()){
-            Item currentItem = p.getItem();
-            //maybe need to use different check
-            if (currentItem.getName().toLowerCase().equals(item.toLowerCase())){
-                return p;
-            }
-        }
-        return null;
+        return result;
     }
 
     public void buy(Player player, String toBuy){
-        if (hasItem(toBuy)){
-            Pricepair item = getItem(toBuy);
-            if (player.hasEnoughMoney(item.getPrice())){
-                player.removeAmountMoney(item.getPrice());
+        if (hasItemInInventory(toBuy)){
+            Pair item = getItemPair(toBuy);
+            if (player.hasEnoughMoney(item.getCount())){
+                player.removeAmountMoney(item.getCount());
                 //todo: need to sort out prices
 
-                Pair pairInv = player.getItemPair(item.getItem().getID());
+                Pair pairInv = player.getItemPair(item.getEntity().getID());
                 if(pairInv != null){
                     pairInv.setCount(pairInv.getCount()+1);
                 } else {
-                    if (!player.simpleAddItem(item.getItem(), 1)){
-                        player.getCurrentRoom().addEntity(item.getItem(), 1);
+                    if (!player.simpleAddItem((Item) item.getEntity(), 1)){
+                        player.getCurrentRoom().addEntity((Item) item.getEntity(), 1);
                     }
                 }
                 printToLog("\"There you go!\"");
-                printToLog("You received 1 "+item.getItem().getName());
+                printToLog("You received 1 "+item.getEntity().getName());
 
             } else{
                 printToLog("\"You don't have enough money\"");

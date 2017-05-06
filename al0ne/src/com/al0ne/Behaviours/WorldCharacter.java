@@ -101,6 +101,10 @@ public abstract class WorldCharacter extends Entity{
         return damage;
     }
 
+    public int getArmorLevel(){
+        return armor;
+    }
+
 
     //this function checks if the character has an item in the inventory
     //we check for ITEMID EQUALITY
@@ -174,6 +178,17 @@ public abstract class WorldCharacter extends Entity{
             for (Status toApply : toAdd){
                 status.put(toApply.getName(), toApply);
             }
+        }
+    }
+
+    public boolean simpleAddItem(Item item, Integer amount){
+        if (hasItemInInventory(item.getID())){
+            Pair fromInventory = inventory.get(item.getID());
+            fromInventory.modifyCount(amount);
+            return true;
+        } else {
+            inventory.put(item.getID(), new Pair(item, amount));
+            return true;
         }
     }
 

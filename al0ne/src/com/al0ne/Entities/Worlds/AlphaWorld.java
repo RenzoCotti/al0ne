@@ -107,9 +107,9 @@ public class AlphaWorld extends World{
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it.", "a knife"));
         shopRoom.addEntity(new Prop("apple", "A red apple.Probably better not to take it.", "an apple"));
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
-        bob.addToInventory(new Knife(), 5);
-        bob.addToInventory(new Apple(), 2);
-        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
+        bob.simpleAddItem(new Knife(), 5);
+        bob.simpleAddItem(new Apple(), 2);
+        bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);
         shopRoom.addExit("south", "wolfroom");
         putRoom(shopRoom);

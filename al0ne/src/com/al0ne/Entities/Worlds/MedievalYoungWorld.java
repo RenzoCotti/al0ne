@@ -35,9 +35,9 @@ public class MedievalYoungWorld extends World{
         yourRoom.addExit("east", "homehallway");
 
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
-        bob.addToInventory(new Knife(), 50);
-        bob.addToInventory(new Apple(), 2);
-        bob.addToInventory(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
+        bob.simpleAddItem(new Knife(), 50);
+        bob.simpleAddItem(new Apple(), 2);
+        bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         yourRoom.addEntity(bob);
         yourRoom.addEntity(new GoldCoin());
 

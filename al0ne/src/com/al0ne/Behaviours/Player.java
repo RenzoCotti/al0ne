@@ -143,7 +143,7 @@ public class Player extends WorldCharacter implements Serializable{
         }
     }
 
-    //this functino sets currentWeight to the given weight
+    //this function sets currentWeight to the given weight
     public void setCurrentWeight(double currentWeight) {
         this.currentWeight = currentWeight;
     }
@@ -205,6 +205,7 @@ public class Player extends WorldCharacter implements Serializable{
     }
 
     //this function computes the total level of protection given by armor
+    @Override
     public int getArmorLevel(){
         Armor armor = getArmor();
         Helmet helmet = getHelmet();
@@ -236,25 +237,23 @@ public class Player extends WorldCharacter implements Serializable{
 
 
     //debug printing
-    public void printHealth() {
-        printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
-    }
+//    public void printHealth() {
+//        printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
+//    }
 
 
     //this function modifies the health as above but also prints the health status
-    public void modifyHealthPrint(int health) {
-        if (this.currentHealth +health <= maxHealth){
-            this.currentHealth +=health;
-
-            if (this.currentHealth<=0){
-                this.currentHealth=0;
-                alive = false;
-            }
-        }
-
-        printHealthStatus();
-
-    }
+//    public void modifyHealthPrint(int health) {
+//        if (this.currentHealth +health <= maxHealth){
+//            this.currentHealth +=health;
+//
+//            if (this.currentHealth<=0){
+//                this.currentHealth=0;
+//                alive = false;
+//            }
+//        }
+//        printHealthStatus();
+//    }
 
     //this function prints a string corresponding to the current
     //health level
@@ -394,16 +393,10 @@ public class Player extends WorldCharacter implements Serializable{
 
     //this function adds an item, amount times
     //returns true if it's successful, else the player can't carry it
+    @Override
     public boolean simpleAddItem(Item item, Integer amount) {
         if (modifyWeight(item.getWeight() * amount)){
-            if (hasItemInInventory(item.getID())){
-                Pair fromInventory = inventory.get(item.getID());
-                fromInventory.modifyCount(amount);
-                return true;
-            } else {
-                inventory.put(item.getID(), new Pair(item, amount));
-                return true;
-            }
+            return super.simpleAddItem(item, amount);
         } else {
             return false;
         }
@@ -723,7 +716,7 @@ public class Player extends WorldCharacter implements Serializable{
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    int inflictedDamage = getDamage()-enemy.getArmor();
+                    int inflictedDamage = getDamage()-enemy.getArmorLevel();
                     System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
                     if(inflictedDamage <= 0){
                         printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
@@ -740,7 +733,7 @@ public class Player extends WorldCharacter implements Serializable{
 
                 }else if(enemy.isWeakAgainst(type) ){
 
-                    int inflictedDamage = getDamage()-enemy.getArmor();
+                    int inflictedDamage = getDamage()-enemy.getArmorLevel();
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");

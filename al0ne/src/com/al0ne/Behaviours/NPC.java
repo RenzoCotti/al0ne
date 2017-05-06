@@ -21,7 +21,6 @@ public class NPC extends WorldCharacter {
     //maps subjects to answers
     protected HashMap<String, Subject> subjects;
     protected HashMap<String, Item> reactionItems;
-    protected ArrayList<Item> inventory;
     protected String intro;
 
 
@@ -32,7 +31,6 @@ public class NPC extends WorldCharacter {
         super(id, name, description, shortDescription, maxHealth, attack, dexterity, armor, damage);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
-        this.inventory = new ArrayList<>();
         this.intro=intro;
         this.type='n';
     }
@@ -41,7 +39,6 @@ public class NPC extends WorldCharacter {
         super(id, name, description, shortDescription, 20, 40, 40, 1, 2);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
-        this.inventory = new ArrayList<>();
         this.intro=intro;
         this.type='n';
     }
@@ -106,10 +103,6 @@ public class NPC extends WorldCharacter {
 
     public void printIntro(){
         printToLog("\""+intro+"\"");
-    }
-
-    public void printLongDescription(Player player, Room room){
-        printToLog(longDescription);
     }
 
 }

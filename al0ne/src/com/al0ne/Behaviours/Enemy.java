@@ -1,5 +1,6 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairDrop;
 import com.al0ne.Engine.Utility;
 
@@ -22,7 +23,6 @@ public abstract class Enemy extends WorldCharacter {
     protected boolean snooze;
 
     protected ArrayList<String> resistances;
-    protected ArrayList<PairDrop> loot;
     //maps status to percentage of applying
     protected HashMap<Status, Integer> inflictStatuses;
 
@@ -31,7 +31,6 @@ public abstract class Enemy extends WorldCharacter {
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
         super(id, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
         this.resistances = new ArrayList<>();
-        this.loot = new ArrayList<>();
         this.inflictStatuses = new HashMap<>();
         this.alive = true;
         this.type='e';
@@ -41,16 +40,6 @@ public abstract class Enemy extends WorldCharacter {
 
         initialisePrefix();
     }
-
-//    public void setStats( int maxHealth, int damage, int attack, int armor, int dexterity){
-//        this.attack = attack;
-//        this.armor = armor;
-//        this.dexterity = dexterity;
-//        this.maxHealth=maxHealth;
-//        this.currentHealth=maxHealth;
-//        this.damage = damage;
-//
-//    }
 
     public void addInflictedStatus(Status status, Integer chanceToApply){
         inflictStatuses.put(status, chanceToApply);
@@ -103,7 +92,6 @@ public abstract class Enemy extends WorldCharacter {
             case 0:
                 this.maxHealth=maxHealth+maxHealth/2;
                 this.currentHealth=maxHealth;
-//                System.out.println("health");
                 break;
             //case fiery
             case 1:
@@ -114,61 +102,22 @@ public abstract class Enemy extends WorldCharacter {
             case 2:
                 this.damage=damage+damage;
                 this.attack=-10;
-//                System.out.println("strong");
                 break;
             //case resilient
             case 3:
                 this.armor=armor+armor/2;
-//                System.out.println("resilient");
                 break;
             //case fast
             case 4:
                 this.dexterity=dexterity+dexterity/3;
-//                System.out.println("fast");
                 break;
             //case fierce
             case 5:
                 this.attack=attack+attack/3;
-//                System.out.println("fierce");
                 break;
         }
 
         special=true;
-    }
-
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public int getArmor() {
-        return armor;
-    }
-
-    public int getDexterity() {
-        return dexterity;
-    }
-
-
-    public void printHealth() {
-        printToLog(currentHealth+"/"+maxHealth+" HP.");
-    }
-
-
-    public boolean modifyHealth(int health) {
-        if (this.currentHealth+health <= maxHealth){
-            this.currentHealth+=health;
-        }
-        if(this.currentHealth <= 0){
-            this.alive = false;
-            return false;
-        }
-        return true;
-
     }
 
     public void printHealthDescription(){
@@ -202,21 +151,25 @@ public abstract class Enemy extends WorldCharacter {
 
 
     public ArrayList<PairDrop> getLoot() {
+        ArrayList<PairDrop> loot = new ArrayList<>();
+        for(Pair p : inventory.values()){
+            loot.add((PairDrop)p);
+        }
         return loot;
     }
 
     public void addItemLoot(Item item, Integer amount, Integer probability) {
-        this.loot.add(new PairDrop(item, amount, probability));
+        this.inventory.put(item.getID(), new PairDrop(item, amount, probability));
     }
 
     public void addItemLoot(Item item) {
-        this.loot.add(new PairDrop(item, 1, 100));
+        this.inventory.put(item.getID(), new PairDrop(item, 1, 100));
     }
 
 
     public boolean addLoot(Room room) {
         boolean dropped = false;
-        for (PairDrop pair : loot){
+        for (PairDrop pair : getLoot()){
             int rolled = Utility.randomNumber(100);
             if(((100 - pair.getProbability()) - rolled <= 0) || special){
                 Item currentLoot = (Item) pair.getEntity();
