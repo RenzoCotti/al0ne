@@ -1,6 +1,11 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -114,6 +119,33 @@ public class Utility {
             return "an";
         }
         return "a";
+    }
+
+    //these functions return the needed string
+    //for the given body part
+    //used for UI
+    public static String getHelmetString(){
+        Helmet h = Main.player.getHelmet();
+        if(h == null) return "None.";
+        return h.getName();
+    }
+
+    public static String getArmorString(){
+        Armor a = Main.player.getArmor();
+        if(a == null) return "None.";
+        return a.getName();
+    }
+
+    public static String getWeaponString(){
+        Weapon w = Main.player.getWeapon();
+        if(w == null) return "None.";
+        return w.getName();
+    }
+
+    public static String getOffHandString(){
+        Wearable s = Main.player.getOffHand();
+        if(s == null) return "None.";
+        return s.getName();
     }
 
 }

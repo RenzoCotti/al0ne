@@ -12,21 +12,10 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 13/03/2017.
  */
-public abstract class Enemy extends Character {
+public abstract class Enemy extends WorldCharacter {
 
     static final int CHANCE_OF_SPECIAL = 20;
 
-
-
-
-    protected boolean alive;
-
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int attack;
-    protected int armor;
-    protected int dexterity;
 
     protected boolean special;
     protected boolean aggro;
@@ -38,8 +27,9 @@ public abstract class Enemy extends Character {
     protected HashMap<Status, Integer> inflictStatuses;
 
 
-    public Enemy(String id, String name, String description, String shortDescription) {
-        super(id, name, description, shortDescription);
+    public Enemy(String id, String name, String description, String shortDescription,
+                 int maxHealth, int attack, int dexterity, int armor, int damage) {
+        super(id, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
         this.resistances = new ArrayList<>();
         this.loot = new ArrayList<>();
         this.inflictStatuses = new HashMap<>();
@@ -49,24 +39,18 @@ public abstract class Enemy extends Character {
         this.aggro = false;
         this.snooze = false;
 
-        this.attack = 0;
-        this.armor = 0;
-        this.dexterity = 0;
-        this.maxHealth=0;
-        this.currentHealth=0;
-        this.damage = 0;
-    }
-
-    public void setStats( int maxHealth, int damage, int attack, int armor, int dexterity){
-        this.attack = attack;
-        this.armor = armor;
-        this.dexterity = dexterity;
-        this.maxHealth=maxHealth;
-        this.currentHealth=maxHealth;
-        this.damage = damage;
-
         initialisePrefix();
     }
+
+//    public void setStats( int maxHealth, int damage, int attack, int armor, int dexterity){
+//        this.attack = attack;
+//        this.armor = armor;
+//        this.dexterity = dexterity;
+//        this.maxHealth=maxHealth;
+//        this.currentHealth=maxHealth;
+//        this.damage = damage;
+//
+//    }
 
     public void addInflictedStatus(Status status, Integer chanceToApply){
         inflictStatuses.put(status, chanceToApply);

@@ -2,6 +2,7 @@ package com.al0ne.Entities.Statuses.ConcreteStatuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.WorldCharacter;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -15,8 +16,8 @@ public class Starving extends Status{
     }
 
     @Override
-    public boolean resolveStatus(Player player) {
-        player.modifyHealth(-1);
+    public boolean resolveStatus(WorldCharacter character) {
+        character.modifyHealth(-1);
         printToLog(onTick);
         return false;
     }

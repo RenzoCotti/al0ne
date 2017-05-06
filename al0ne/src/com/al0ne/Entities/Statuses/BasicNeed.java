@@ -2,6 +2,7 @@ package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.WorldCharacter;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Dehydrated;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Starving;
 
@@ -21,8 +22,8 @@ public class BasicNeed extends Status {
     }
 
     @Override
-    public boolean resolveStatus(Player player) {
-        if(!player.hasStatus(finalStatus)){
+    public boolean resolveStatus(WorldCharacter character) {
+        if(!character.hasStatus(finalStatus)){
             duration --;
 
             if(duration <= 5){

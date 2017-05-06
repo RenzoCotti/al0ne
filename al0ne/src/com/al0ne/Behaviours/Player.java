@@ -36,10 +36,8 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  * a quests, HashMap<questID, Boolean>, representing all due quests
  * a wornItems, HashMap<BodyPart, Item>: all equipped items
  */
-public class Player implements Serializable{
+public class Player extends WorldCharacter implements Serializable{
 
-    //Maps ItemID, Pair: it's the player's inventory
-    private HashMap<String, Pair> inventory;
     //stores current room the player is in
     private Room currentRoom;
     
@@ -47,14 +45,6 @@ public class Player implements Serializable{
     private static double maxWeight=90;
     //Current carry weight of the player
     private double currentWeight;
-
-    //current and max Health of the player
-    private int currentHealth =10;
-    private static int maxHealth=10;
-
-    //fighting stats
-    private int attack = 70;
-    private int dexterity = 30;
 
     //statuses
     private HashMap<String, Status> status;
@@ -77,11 +67,11 @@ public class Player implements Serializable{
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
     public Player(Room currentRoom, boolean needs, String story) {
+        super("alpha", "player", "nix", "da",
+        10, 70, 30, 0, 1);
         this.currentRoom = currentRoom;
-        this.inventory = new HashMap<>();
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
-        this.status = new HashMap<>();
         this.story = story;
         this.quests = new HashMap<>();
         initialiseWorn();
@@ -220,7 +210,7 @@ public class Player implements Serializable{
         Helmet helmet = getHelmet();
         Wearable offHand = getOffHand();
 
-        int armorLevel=0;
+        int armorLevel=this.armor;
         if(armor != null){
             armorLevel= armor.getArmor();
         }
@@ -234,47 +224,20 @@ public class Player implements Serializable{
         return armorLevel;
     }
 
-    //this functions return the required value
-    public int getAttack() {
-        return attack;
+    @Override
+    public int getDamage(){
+        int damage = this.damage;
+        Wearable weapon = getWeapon();
+        if(weapon != null){
+            damage+=((Weapon) weapon).getDamage();
+        }
+        return damage;
     }
-    public int getDexterity() {
-        return dexterity;
-    }
-    public int getMaxHealth() {
-        return maxHealth;
-    }
+
 
     //debug printing
     public void printHealth() {
         printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
-    }
-
-    //this function sets the player's health to the amount given
-    //it binds it to maxHealth and 0
-    public void setHealth(int amount) {
-        if(currentHealth+amount > maxHealth){
-            currentHealth=maxHealth;
-        } else if(currentHealth+amount < 0){
-            currentHealth=0;
-            alive=false;
-        }
-    }
-
-    //this function modifies the player's health with the amount given
-    //it binds it to maxHealth and 0
-    //returns true if we actually modify the health
-    public boolean modifyHealth(int health) {
-        if (this.currentHealth +health <= maxHealth){
-            this.currentHealth +=health;
-            if (this.currentHealth<=0){
-                this.currentHealth=0;
-                alive = false;
-            }
-            return true;
-        } else{
-            return false;
-        }
     }
 
 
@@ -322,9 +285,6 @@ public class Player implements Serializable{
     public double getCurrentWeight() {
         return currentWeight;
     }
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
 
     //debug function, prints the current weight.
     public void printWeight() {
@@ -348,10 +308,7 @@ public class Player implements Serializable{
         return false;
     }
 
-    //this returns true if the player is alive
-    public boolean isAlive(){
-        return alive;
-    }
+
 
 
     //returns the inventory hashmap
@@ -452,27 +409,7 @@ public class Player implements Serializable{
         }
     }
 
-    //this function checks if the player has an item in the inventory
-    //we check for ITEMID EQUALITY
-    //if there is no item, it returns false
-    public boolean hasItemInInventory(String item){
-        for (String s : inventory.keySet()){
-            if (s.equals(item)){
-                return true;
-            }
-        }
-        return false;
-    }
 
-    //this function tries to get an item from the inventory
-    //if there is no such item, it returns null
-    public Pair getItemPair(String itemID){
-        if(hasItemInInventory(itemID)){
-            return inventory.get(itemID);
-        } else {
-            return null;
-        }
-    }
 
     //this function tries to get an item from the inventory
     //if there is no such item, it returns null
@@ -731,9 +668,10 @@ public class Player implements Serializable{
         } else if (entity.getType() == 'p'){
             Prop prop = (Prop) entity;
             for (String command : prop.getRequiredCommand()){
-
-                    prop.used(currentRoom, this);
-                    return 1;
+                    if(command.equals(action)){
+                        prop.used(currentRoom, this);
+                        return 1;
+                    }
                 }
             }
         return 0;
@@ -785,7 +723,7 @@ public class Player implements Serializable{
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    int inflictedDamage = 1-enemy.getArmor();
+                    int inflictedDamage = getDamage()-enemy.getArmor();
                     System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
                     if(inflictedDamage <= 0){
                         printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
@@ -802,7 +740,7 @@ public class Player implements Serializable{
 
                 }else if(enemy.isWeakAgainst(type) ){
 
-                    int inflictedDamage = getWeapon().getDamage()-enemy.getArmor();
+                    int inflictedDamage = getDamage()-enemy.getArmor();
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
@@ -943,40 +881,6 @@ public class Player implements Serializable{
     }
 
 
-    //returns the statuses
-    public HashMap<String, Status> getStatus() {
-        return status;
-    }
-
-    //adds a status to the statuses, it refreshes the duration
-    public boolean putStatus(Status s) {
-        for (Status st : status.values()){
-            if(s.getName().equals(st.getName())){
-                //refresh on reapply of status
-                st.duration = s.maxDuration;
-                return false;
-            }
-        }
-        s.setDuration(s.maxDuration);
-        status.put(s.getName(), s);
-        return true;
-    }
-
-    //this removes a status if the name matches
-    public boolean removeStatus(String statusName) {
-
-        if (status.get(statusName) != null){
-            status.remove(statusName);
-        }
-        return true;
-    }
-
-    //returns true if the player has the status s
-    public boolean hasStatus(String s) {
-        return status.get(s) != null;
-    }
-
-
     //this recalculates weight, run at the end of every turn
     public void recalculateWeight(){
         double amt = 0;
@@ -989,34 +893,6 @@ public class Player implements Serializable{
     //returns the story of the player
     public String getStory() {
         return story;
-    }
-
-
-    //these functions return the needed string
-    //for the given body part
-    //used for UI
-    public String getHelmetString(){
-        Helmet h = getHelmet();
-        if(h == null) return "None.";
-        return h.getName();
-    }
-
-    public String getArmorString(){
-        Armor a = getArmor();
-        if(a == null) return "None.";
-        return a.getName();
-    }
-
-    public String getWeaponString(){
-        Weapon w = getWeapon();
-        if(w == null) return "None.";
-        return w.getName();
-    }
-
-    public String getOffHandString(){
-        Wearable s = getOffHand();
-        if(s == null) return "None.";
-        return s.getName();
     }
 
     //returns the quests
@@ -1034,23 +910,4 @@ public class Player implements Serializable{
         return this.quests.get(s) != null;
     }
 
-    public void handleStatuses(){
-            if(status.size()>0){
-                ArrayList<Status> toRemove = new ArrayList<>();
-                ArrayList<Status> toAdd = new ArrayList<>();
-                for (Status status: status.values()){
-                    if(status.resolveStatus(this)){
-                        toAdd.addAll(status.getToApply());
-                        toRemove.add(status);
-                    }
-                }
-                for (Status st : toRemove){
-                    status.remove(st.getName());
-                }
-
-                for (Status toApply : toAdd){
-                    status.put(toApply.getName(), toApply);
-                }
-            }
-    }
 }

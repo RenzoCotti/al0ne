@@ -9,10 +9,10 @@ import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
  */
 public class Wolf extends Enemy {
     public Wolf() {
-        super("wolf", "Wolf", "This wolf looks really ferocious and battle hardened.", "a fierce wolf");
+        super("wolf", "Wolf", "This wolf looks really ferocious and battle hardened.", "a fierce wolf",
+                10, 40, 40, 1,2);
         addItemLoot(new SilverCoin(), 20, 50);
         addItemLoot(new Apple(), 1, 100);
         addResistance("fists");
-        setStats(10, 2, 40, 1, 40);
     }
 }

@@ -18,6 +18,14 @@ public class Shopkeeper extends NPC {
     private HashMap<String, Pricepair> inventory;
     private String list;
 
+    public Shopkeeper(String id, String name, String description, String shortDescription, String intro,
+                      int maxHealth, int attack, int dexterity, int armor, int damage) {
+        super(id, name, description,shortDescription, intro, maxHealth, attack, dexterity, armor, damage);
+        inventory = new HashMap<>();
+        list="Items: ";
+        isShopkeeper=true;
+    }
+
     public Shopkeeper(String id, String name, String description, String shortDescription, String intro) {
         super(id, name, description,shortDescription, intro);
         inventory = new HashMap<>();

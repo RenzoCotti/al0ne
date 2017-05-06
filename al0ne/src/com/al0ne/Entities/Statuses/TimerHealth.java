@@ -2,6 +2,7 @@ package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.WorldCharacter;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -16,10 +17,10 @@ public abstract class TimerHealth extends Status{
     }
 
     @Override
-    public boolean resolveStatus(Player player) {
+    public boolean resolveStatus(WorldCharacter character) {
         duration--;
         if(duration <= 0){
-            if(player.modifyHealth(modifier)){
+            if(character.modifyHealth(modifier)){
                 printToLog(onTick);
             }
             duration = maxDuration;

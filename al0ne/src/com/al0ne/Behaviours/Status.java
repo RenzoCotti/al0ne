@@ -43,7 +43,7 @@ public abstract class Status implements Serializable{
         this.toApply = new ArrayList<>();
     }
 
-    public abstract boolean resolveStatus(Player player);
+    public abstract boolean resolveStatus(WorldCharacter character);
 
     public String getName(){
         return name;

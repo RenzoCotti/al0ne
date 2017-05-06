@@ -2,6 +2,7 @@ package com.al0ne.Engine.UI;
 
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
+import com.al0ne.Engine.Utility;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -67,13 +68,13 @@ public class SideMenu {
         equippedItems.setPadding(new Insets(20, 0, 0, 0));
         equippedItems.setStyle("-fx-font-weight: bold");
 
-        Label head = new Label("Head: "+Main.player.getHelmetString());
+        Label head = new Label("Head: "+ Utility.getHelmetString());
         head.setId("headLabel");
-        Label armor = new Label("Armor: "+Main.player.getArmorString());
+        Label armor = new Label("Armor: "+Utility.getArmorString());
         armor.setId("armorLabel");
-        Label weapon = new Label("Weapon: "+Main.player.getWeaponString());
+        Label weapon = new Label("Weapon: "+Utility.getWeaponString());
         weapon.setId("weaponLabel");
-        Label offHand = new Label("Off-Hand: "+Main.player.getOffHandString());
+        Label offHand = new Label("Off-Hand: "+Utility.getOffHandString());
         offHand.setId("offHandLabel");
 
 

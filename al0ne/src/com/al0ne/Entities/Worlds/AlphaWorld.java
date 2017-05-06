@@ -77,7 +77,8 @@ public class AlphaWorld extends World{
         putRoom(daggerRoom);
 
         Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
-        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.","handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
+        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.",
+                "handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
         emonRoom.addExit("down", "ladderroom");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));

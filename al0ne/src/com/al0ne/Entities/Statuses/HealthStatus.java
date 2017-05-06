@@ -2,6 +2,7 @@ package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.WorldCharacter;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -19,9 +20,9 @@ public class HealthStatus extends Status{
     }
 
     @Override
-    public boolean resolveStatus(Player player) {
+    public boolean resolveStatus(WorldCharacter character) {
         duration--;
-        player.modifyHealth(modifier);
+        character.modifyHealth(modifier);
         printToLog(onTick);
 
         if(duration <= 0){

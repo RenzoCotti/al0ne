@@ -1,6 +1,5 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import static com.al0ne.Engine.Main.printToLog;
  * - life?
  * - inventory
  */
-public class NPC extends Character{
+public class NPC extends WorldCharacter {
 
     //maps subjects to answers
     protected HashMap<String, Subject> subjects;
@@ -28,8 +27,18 @@ public class NPC extends Character{
 
     protected boolean isShopkeeper=false;
 
+    public NPC(String id, String name, String description, String shortDescription, String intro,
+            int maxHealth, int attack, int dexterity, int armor, int damage) {
+        super(id, name, description, shortDescription, maxHealth, attack, dexterity, armor, damage);
+        this.subjects = new HashMap<>();
+        this.reactionItems = new HashMap<>();
+        this.inventory = new ArrayList<>();
+        this.intro=intro;
+        this.type='n';
+    }
+
     public NPC(String id, String name, String description, String shortDescription, String intro) {
-        super(id, name, description, shortDescription);
+        super(id, name, description, shortDescription, 20, 40, 40, 1, 2);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.inventory = new ArrayList<>();

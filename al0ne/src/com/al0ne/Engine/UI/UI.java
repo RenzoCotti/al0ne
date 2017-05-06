@@ -123,7 +123,6 @@ public class UI {
             UI.updateUI(done);
         });
 
-//        done.get
 
         return done;
     }
@@ -146,16 +145,16 @@ public class UI {
 
         Label head = (Label) s.lookup("#headLabel");
         head.setFont(Font.font("Verdana", Main.fontSize));
-        head.setText("Head: "+Main.player.getHelmetString());
+        head.setText("Head: "+Utility.getHelmetString());
         Label armor = (Label) s.lookup("#armorLabel");
         armor.setFont(Font.font("Verdana", Main.fontSize));
-        armor.setText("Armor: "+Main.player.getArmorString());
+        armor.setText("Armor: "+Utility.getArmorString());
         Label weapon = (Label) s.lookup("#weaponLabel");
         weapon.setFont(Font.font("Verdana", Main.fontSize));
-        weapon.setText("Weapon: "+Main.player.getWeaponString());
+        weapon.setText("Weapon: "+Utility.getWeaponString());
         Label offHand = (Label) s.lookup("#offHandLabel");
         offHand.setFont(Font.font("Verdana", Main.fontSize));
-        offHand.setText("Off-Hand: "+Main.player.getOffHandString());
+        offHand.setText("Off-Hand: "+Utility.getOffHandString());
 
         Main.log.setFont(Font.font("Verdana", Main.fontSize));
         Main.input.setFont(Font.font("Verdana", Main.fontSize));

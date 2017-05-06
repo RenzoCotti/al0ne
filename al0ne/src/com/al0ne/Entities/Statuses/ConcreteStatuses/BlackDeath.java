@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Statuses.ConcreteStatuses;
 
-import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.WorldCharacter;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -14,10 +14,10 @@ public class BlackDeath extends Status{
     }
 
     @Override
-    public boolean resolveStatus(Player player) {
+    public boolean resolveStatus(WorldCharacter character) {
         duration++;
         if(duration % 5 == 0){
-            player.modifyHealth(-1);
+            character.modifyHealth(-1);
             printToLog(onTick);
         }
         return false;
