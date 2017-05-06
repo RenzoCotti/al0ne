@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Props;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Behaviours.Item;
@@ -18,7 +19,7 @@ public class LockedDoor extends Prop {
     }
 
     public LockedDoor(String id, String name, String key) {
-        super(id, name, "A sturdy wooden door", "wooden door");
+        super(id, name, "A sturdy wooden door", "wooden door", Material.WOOD);
         this.requiresItem=key;
     }
 

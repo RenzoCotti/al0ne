@@ -634,7 +634,7 @@ public class Player implements Serializable{
             return 0;
         }
 
-        if(!((Item)item.getEntity()).canTake()){
+        if(!((Interactable)item.getEntity()).canTake()){
             printToLog("You can't take it.");
             return 0;
         }

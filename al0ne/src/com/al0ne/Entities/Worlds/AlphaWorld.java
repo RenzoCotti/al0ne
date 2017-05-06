@@ -63,7 +63,7 @@ public class AlphaWorld extends World{
         putRoom(startRoom);
 
         Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");
-        ladderRoom.addEntity(new Prop("ladder", "Ladder", "a wooden ladder heading in the ceiling", "a wooden ladder"));
+        ladderRoom.addEntity(new Prop("Ladder", "a wooden ladder heading in the ceiling", "a wooden ladder"));
         ladderRoom.addCustomDirection("You can see a ladder going up. You see an opening to the east.");
         ladderRoom.addExit("up", "emonroom");
         ladderRoom.addExit("east", "startroom");
@@ -92,7 +92,7 @@ public class AlphaWorld extends World{
         putRoom(mushRoom);
 
         Room wolfRoom = new Room("wolfroom", "Wolf Room", "You see some bones scattered on the ground.");
-        wolfRoom.addEntity(new Prop("bones", "bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's.", "a massive pile of bones"));
+        wolfRoom.addEntity(new Prop("bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's.", "a massive pile of bones"));
         wolfRoom.addEntity(new Wolf());
         wolfRoom.addEntity(new Snake());
         wolfRoom.addEntity(new Apple());
@@ -102,9 +102,9 @@ public class AlphaWorld extends World{
         putRoom(wolfRoom);
 
         Room shopRoom = new Room("shoproom", "Shop", "You see several items neatly disposed on a table");
-        shopRoom.addEntity(new Prop("table", "table", "You can see a knife and an apple on the table", "a wooden table"));
-        shopRoom.addEntity(new Prop("appleshop", "knife", "A knife. Probably better not to take it.", "a knife"));
-        shopRoom.addEntity(new Prop("knifeshop", "apple", "A red apple.Probably better not to take it.", "an apple"));
+        shopRoom.addEntity(new Prop("table", "You can see a knife and an apple on the table", "a wooden table"));
+        shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it.", "a knife"));
+        shopRoom.addEntity(new Prop("apple", "A red apple.Probably better not to take it.", "an apple"));
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
         bob.addToInventory(new Knife(), 5);
         bob.addToInventory(new Apple(), 2);
@@ -170,8 +170,8 @@ public class AlphaWorld extends World{
 
         Room swordRoom = new Room("swordroom", "Lake in the mountain", "You suddenly find yourself at the coast of a lake. A little path leads you to a circle of stones, in which you see an exquisitely crafted sword.");
         swordRoom.addItem(new HolySword());
-        swordRoom.addEntity(new Prop("lake", "lake", "A stunningly beautiful lake, very calming", "a calm lake"));
-        swordRoom.addEntity(new Prop("circlestones", "Circle of stones", "a circle made with roundish stones, around 5 m wide", "a circle of stones"));
+        swordRoom.addEntity(new Prop("lake", "A stunningly beautiful lake, very calming", "a calm lake"));
+        swordRoom.addEntity(new Prop("Circle of stones", "a circle made with roundish stones, around 5 m wide", "a circle of stones"));
         swordRoom.addExit("north", "mazemain");
         putRoom(swordRoom);
 
@@ -188,8 +188,8 @@ public class AlphaWorld extends World{
         Room brokenKeyRoom = new Room("brokenkeyroom", "Hearth room", "This room is quite warm.");
         brokenKeyRoom.addExit("west", "cavernroom");
         brokenKeyRoom.addExit("east", "gateroom");
-        brokenKeyRoom.addEntity(new Prop("hearth", "hearth", "the hearth is alit. somebody has been here recently", "a stone hearth"));
-        brokenKeyRoom.addEntity(new Prop("table", "table", "a wooden table. It has a broken key on top.", "a wooden table"));
+        brokenKeyRoom.addEntity(new Prop("hearth", "the hearth is alit. somebody has been here recently", "a stone hearth"));
+        brokenKeyRoom.addEntity(new Prop("table", "a wooden table. It has a broken key on top.", "a wooden table"));
         brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two."));
         putRoom(brokenKeyRoom);
 

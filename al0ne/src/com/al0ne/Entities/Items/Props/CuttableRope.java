@@ -14,7 +14,7 @@ public class CuttableRope extends Prop{
 //    private static int counter=0;
     public CuttableRope() {
         super("rope", "Rope", "A tightened rope holds the Graken still.", "a tightened rope", "The rope has been cut, and the Graken has disappeared.");
-        addType("sharp");
+        addProperty("sharp");
     }
 
     @Override

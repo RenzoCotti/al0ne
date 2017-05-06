@@ -466,7 +466,7 @@ public class HandleCommands {
             return false;
         } else if(items.size() == 1){
             Pair currentPair = items.get(0);
-            Item currentItem = (Item) currentPair.getEntity();
+            Interactable currentItem = (Interactable) currentPair.getEntity();
             int count = currentPair.getCount();
             if (all) {
                 if (player.pickUpItem(currentPair, count) == 1) {

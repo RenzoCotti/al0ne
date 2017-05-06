@@ -13,26 +13,19 @@ import static com.al0ne.Engine.Main.printToLog;
  *
  * Item interface
  */
-public abstract class Item extends Entity {
+public abstract class Item extends Interactable {
 
     //todo: add plural?
     protected double weight;
     protected int size;
-    protected ArrayList<String> properties;
-    protected ArrayList<String> requiredType;
     protected boolean unique;
-    protected boolean canDrop;
-    public boolean canTake;
-    protected Material material;
     public boolean customName=false;
     public int price;
 
 
     public Item(String id, String name, String description, double weight, Size size) {
-        super(id, name, description, Utility.getArticle(name)+" "+name.toLowerCase());
+        super(id, name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.weight = weight;
-        this.properties = new ArrayList<>();
-        this.requiredType = new ArrayList<>();
         this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
@@ -45,47 +38,24 @@ public abstract class Item extends Entity {
     public Item(String id, String name, String description, double weight, Size size, Material material) {
         super(id, name, description,
                 Utility.getArticle(Material.stringify(material))+
-                        " "+Material.stringify(material)+" "+name.toLowerCase());
+                        " "+Material.stringify(material)+" "+name.toLowerCase(), material);
         this.weight = weight;
-        this.properties = new ArrayList<>();
-        this.requiredType = new ArrayList<>();
         this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
         this.canDrop = true;
-        this.material = material;
         this.canTake=true;
         int quality = Math.max(material.getToughness(), material.getDamage());
         this.price = ((int) ((material.getPrice()+quality)*weight))*2;
-
     }
 
     public double getWeight() {
         return weight;
     }
 
-    public void setUndroppable() {
-        this.canDrop = false;
-    }
-
-    public boolean canDrop(){
-        return canDrop;
-    }
-
     public void modifyWeight(double amt) {
         double temp = Math.round((weight+=amt)*100);
         weight = temp/100;
-    }
-
-
-    public boolean usedWith(Item item, Room currentRoom, Player player) {
-        for (String s: requiredType){
-            if (item.hasProperty(s)){
-                used(currentRoom, player);
-                return true;
-            }
-        }
-        return false;
     }
 
     public void setUnique(){
@@ -94,21 +64,6 @@ public abstract class Item extends Entity {
 
     public boolean isUnique(){
         return unique;
-    }
-
-
-
-    protected void addProperty(String behaviour){
-        properties.add(behaviour);
-    }
-
-    public boolean hasProperty(String property){
-        for (String s : properties){
-            if (s.equals(property)){
-                return true;
-            }
-        }
-        return false;
     }
 
     public int getSize() {
@@ -123,28 +78,6 @@ public abstract class Item extends Entity {
         if(!m.equals("undefined")){
             printToLog("It's made of "+(Material.stringify(this.material))+".");
         }
-    }
-
-    public boolean canTake() {
-        return canTake;
-    }
-
-    public void setCanTake(boolean canTake) {
-        this.canTake = canTake;
-    }
-
-    @Override
-    public String getName() {
-        if(customName || Material.stringify(material).equals("undefined")){
-            return name.toLowerCase();
-        }
-        return Material.stringify(this.material)+" "+name.toLowerCase();
-    }
-
-    @Override
-    public void setShortDescription(String shortDescription) {
-        this.customName=true;
-        super.setShortDescription(shortDescription);
     }
 
     public int getPrice() {

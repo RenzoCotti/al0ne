@@ -1,6 +1,8 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
 
 import java.util.ArrayList;
@@ -18,16 +20,18 @@ import static com.al0ne.Engine.Main.printToLog;
  * - requiredType: ArrayList of types of Item required for activation; e.g. for a rope, sharp ConcreteItems are required
  * - requiredCommand: custom actions that can be applied to the item
  */
-public class Prop extends Item {
+public class Prop extends Interactable {
 
     protected String afterDescription;
     protected String requiresItem;
     protected boolean active;
 
 
-    public Prop(String id, String name, String description, String shortDescription) {
-        super(id, name, description, -1, Size.UNDEFINED);
-        setShortDescription(shortDescription);
+
+    //detailed prop creation
+    public Prop(String id, String name, String description, String shortDescription, Material m) {
+        super(id, name, description, shortDescription, m);
+        setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
@@ -35,11 +39,9 @@ public class Prop extends Item {
         this.canTake=false;
     }
 
-    public Prop(String id, String name, String description, String shortDescription, String after) {
-        super(id, name, description, -1, Size.UNDEFINED);
-        setShortDescription(shortDescription);
-        this.requiredType = new ArrayList<>();
-        this.properties = new ArrayList<>();
+    public Prop(String id, String name, String description, String shortDescription, String after, Material m) {
+        super(id, name, description, shortDescription, m);
+        setCustomName();
         this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
@@ -47,11 +49,20 @@ public class Prop extends Item {
         this.canTake=false;
     }
 
+
     //quick, for descriptive props
+
+
+    public Prop(String name, String description) {
+        super(name, name, description, Utility.getArticle(name)+" "+name, Material.UNDEFINED);
+        this.afterDescription = description;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+    }
+
     public Prop(String name, String description, String shortDescription) {
-        super(name, name, description, -1, Size.UNDEFINED);
-        this.requiredType = new ArrayList<>();
-        this.properties = new ArrayList<>();
+        super(name, name, description, shortDescription, Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
@@ -59,18 +70,30 @@ public class Prop extends Item {
     }
 
 
-    protected void addType(String type){
-        requiredType.add(type);
+    public Prop(String id, String name, String description, String shortDescription, String after) {
+        super(id, name, description, shortDescription, Material.UNDEFINED);
+        setCustomName();
+        this.afterDescription = after;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+        this.canTake=false;
     }
 
-    public void addProperty(String property){
-        properties.add(property);
+    public Prop(String id, String name, String description, String shortDescription) {
+        super(id, name, description, shortDescription, Material.UNDEFINED);
+        setCustomName();
+        this.afterDescription = description;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+        this.canTake=false;
     }
 
-    public boolean hasProperty(String property){
-        return properties.contains(property);
-    }
 
+
+
+    @Override
     public boolean usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){
             if (item.hasProperty(s)){

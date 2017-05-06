@@ -32,7 +32,7 @@ public class CaveWorld extends World{
         cave1.addEntity(new Door("cave1door", "Generic Door"));
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
-        Prop river = new Prop("river", "River", "a watery river", "a river");
+        Prop river = new Prop("River", "a watery river", "a river");
         river.addProperty("water");
         cave1.addEntity(river);
         cave1.addEntity(new Canteen());
