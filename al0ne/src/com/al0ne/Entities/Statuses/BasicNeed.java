@@ -45,9 +45,10 @@ public class BasicNeed extends Status {
                     return false;
                 } else{
                     printToLog(finalStatus.getOnApply());
-                    player.queueStatus(finalStatus);
+                    this.toApply.clear();
+                    this.toApply.add(finalStatus);
                     duration = clock;
-                    return false;
+                    return true;
                 }
             }
             return false;

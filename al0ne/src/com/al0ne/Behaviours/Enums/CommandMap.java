@@ -57,10 +57,12 @@ public class CommandMap implements Serializable{
         commands.put("commands", Command.COMMANDS);
         commands.put("ilikecheese", Command.DEBUG);
         commands.put("execute", Command.EXECUTE);
+        commands.put("wait", Command.WAIT);
 
 
 
         aliases.put("x", Command.EXAMINE);
+        aliases.put("z", Command.WAIT);
         aliases.put("i", Command.INVENTORY);
         aliases.put("n", Command.NORTH);
         aliases.put("sw", Command.SOUTHWEST);

@@ -221,26 +221,6 @@ public class GameChanges {
         }
     }
 
-    public static void handleStatus(Player player){
-        if(player.getStatus().size()>0){
-            ArrayList<Status> toResolve = new ArrayList<>();
-            for (Status status: player.getStatus().values()){
-                if(status.resolveStatus(player)){
-                    toResolve.add(status);
-                }
-            }
-            for (Status st : toResolve){
-                player.getStatus().remove(st.getName());
-            }
-
-            for (Status toApply : player.getToApply()){
-                player.getStatus().put(toApply.getName(), toApply);
-            }
-
-            player.getToApply().clear();
-        }
-    }
-
     public static void restartGame(){
         GameChanges.changeWorld(Main.game.getStartingWorld());
         Main.input.setDisable(false);

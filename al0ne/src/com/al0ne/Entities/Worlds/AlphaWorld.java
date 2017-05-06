@@ -47,17 +47,18 @@ public class AlphaWorld extends World{
 //        startRoom.addEntity(chest);
 //        startRoom.addEntity(new WarpStone());
 //        startRoom.addEntity(new SilverCoin(), 100);
-        for(Material m : Material.getMaterials(true)){
-            startRoom.addEntity(new Helmet(m));
-        }
-
-        for(Material m : Material.getMaterials(true)){
-            startRoom.addEntity(new Armor(m));
-        }
-
-        for(Material m : Material.getMaterials(true)){
-            startRoom.addEntity(new Shield(m));
-        }
+        startRoom.addEntity(new Snake());
+//        for(Material m : Material.getMaterials(true)){
+//            startRoom.addEntity(new Helmet(m));
+//        }
+//
+//        for(Material m : Material.getMaterials(true)){
+//            startRoom.addEntity(new Armor(m));
+//        }
+//
+//        for(Material m : Material.getMaterials(true)){
+//            startRoom.addEntity(new Shield(m));
+//        }
         startRoom.visit();
         putRoom(startRoom);
 

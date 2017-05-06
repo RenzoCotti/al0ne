@@ -184,6 +184,9 @@ public class ParseInput {
 //                player.printHealth();
                 player.printHealthStatus();
                 return false;
+            case WAIT:
+                printToLog("You wait.");
+                return true;
 
 
             case DEBUG:

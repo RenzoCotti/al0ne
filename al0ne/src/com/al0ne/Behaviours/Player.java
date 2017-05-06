@@ -58,7 +58,6 @@ public class Player implements Serializable{
 
     //statuses
     private HashMap<String, Status> status;
-    private ArrayList<Status> toApply;
 
     //various
     private boolean alive = true;
@@ -83,7 +82,6 @@ public class Player implements Serializable{
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
         this.status = new HashMap<>();
-        this.toApply = new ArrayList<>();
         this.story = story;
         this.quests = new HashMap<>();
         initialiseWorn();
@@ -951,16 +949,15 @@ public class Player implements Serializable{
     }
 
     //adds a status to the statuses, it refreshes the duration
-    //todo: need to look into duraitons of status once again
     public boolean putStatus(Status s) {
         for (Status st : status.values()){
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
-                st.duration = s.duration;
-                System.out.println(s.getName()+": duration "+s.duration);
+                st.duration = s.maxDuration;
                 return false;
             }
         }
+        s.setDuration(s.maxDuration);
         status.put(s.getName(), s);
         return true;
     }
@@ -977,16 +974,6 @@ public class Player implements Serializable{
     //returns true if the player has the status s
     public boolean hasStatus(String s) {
         return status.get(s) != null;
-    }
-
-    //returns the list of statuses that will be applied at EOT
-    public ArrayList<Status> getToApply() {
-        return toApply;
-    }
-
-    //enqueues a status to apply at EOT
-    public void queueStatus(Status st) {
-        this.toApply.add(st);
     }
 
 
@@ -1045,5 +1032,25 @@ public class Player implements Serializable{
     //returns true if the player has finished the quest
     public boolean hasDoneQuest(String s) {
         return this.quests.get(s) != null;
+    }
+
+    public void handleStatuses(){
+            if(status.size()>0){
+                ArrayList<Status> toRemove = new ArrayList<>();
+                ArrayList<Status> toAdd = new ArrayList<>();
+                for (Status status: status.values()){
+                    if(status.resolveStatus(this)){
+                        toAdd.addAll(status.getToApply());
+                        toRemove.add(status);
+                    }
+                }
+                for (Status st : toRemove){
+                    status.remove(st.getName());
+                }
+
+                for (Status toApply : toAdd){
+                    status.put(toApply.getName(), toApply);
+                }
+            }
     }
 }

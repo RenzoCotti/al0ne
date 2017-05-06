@@ -54,7 +54,7 @@ public class Main extends Application{
             GameChanges.attackIfAggro(player, currentRoom);
 
             //we make the statuses tick
-            GameChanges.handleStatus(player);
+            player.handleStatuses();
         }
 
 

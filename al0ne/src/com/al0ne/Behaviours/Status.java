@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by BMW on 05/04/2017.
@@ -13,6 +14,7 @@ public abstract class Status implements Serializable{
     protected String onApply;
     protected String onResolve;
     protected String onTick;
+    protected ArrayList<Status> toApply;
 
     public Status(String name, Integer duration, String onApply, String tick, String resolve){
         this.name = name;
@@ -21,6 +23,7 @@ public abstract class Status implements Serializable{
         this.onApply=onApply;
         this.onResolve=resolve;
         this.onTick=tick;
+        this.toApply = new ArrayList<>();
     }
 
     public Status(String name, Integer duration, String onApply, String resolve){
@@ -29,6 +32,7 @@ public abstract class Status implements Serializable{
         this.onApply=onApply;
         this.onResolve=resolve;
         this.maxDuration = duration;
+        this.toApply = new ArrayList<>();
     }
 
     public Status(String name, Integer duration, String onApply){
@@ -36,6 +40,7 @@ public abstract class Status implements Serializable{
         this.duration = duration;
         this.onApply=onApply;
         this.maxDuration = duration;
+        this.toApply = new ArrayList<>();
     }
 
     public abstract boolean resolveStatus(Player player);
@@ -64,5 +69,9 @@ public abstract class Status implements Serializable{
         } else{
             this.duration += amount;
         }
+    }
+
+    public ArrayList<Status> getToApply() {
+        return toApply;
     }
 }
