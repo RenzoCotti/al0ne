@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
@@ -15,7 +16,7 @@ public abstract class Readable extends Item {
     protected String content;
     public Readable(String id, String name, String description, Size size, String content, double weight) {
         super(id, name, description, weight, size, Material.PAPER);
-        addCommand("read");
+        addCommand(Command.READ);
         this.content=content;
     }
 

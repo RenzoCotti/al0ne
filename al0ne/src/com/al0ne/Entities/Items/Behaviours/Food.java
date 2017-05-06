@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
@@ -16,7 +17,7 @@ public abstract class Food extends Item {
     private int foodValue;
     public Food(String id, String name, String description, double weight, Size size, int foodValue) {
         super(id, name, description, weight, size);
-        addCommand("eat");
+        addCommand(Command.EAT);
         addProperty("food");
         addProperty("consumable");
         this.foodValue = foodValue;

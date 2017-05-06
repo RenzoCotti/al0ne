@@ -1,11 +1,13 @@
 package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
+import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Scroll;
@@ -24,7 +26,7 @@ public class MedievalYoungWorld extends World{
 
         Prop bed = new Prop("homebed", "bed", "Your bed, it needs tidying.",
                 "a bed", "Your bed. Neatly tidied now.");
-        bed.addCommand("tidy");
+        bed.addCommand(Command.TIDY);
         yourRoom.addEntity(bed);
 
         yourRoom.addEntity(new Prop("window", "A window with a wooden " +
@@ -34,12 +36,12 @@ public class MedievalYoungWorld extends World{
 
         yourRoom.addExit("east", "homehallway");
 
-        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
-        bob.simpleAddItem(new Knife(), 50);
-        bob.simpleAddItem(new Apple(), 2);
-        bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
-        yourRoom.addEntity(bob);
-        yourRoom.addEntity(new GoldCoin());
+//        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
+//        bob.simpleAddItem(new Knife(), 50);
+//        bob.simpleAddItem(new Apple(), 2);
+//        bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
+//        yourRoom.addEntity(bob);
+//        yourRoom.addEntity(new GoldCoin());
 
         yourRoom.visit();
         putRoom(yourRoom);
@@ -77,7 +79,39 @@ public class MedievalYoungWorld extends World{
         mom.addReactionItem("eggs", new SliceOfCake());
         mainHouse.addEntity(mom);
         mainHouse.addExit("south", "homehallway");
+        mainHouse.addExit("west", "neighbourhood");
         putRoom(mainHouse);
+
+        Room neighbourhood = new Room("neighbourhood", "Neighbourhood",
+                "There are several houses in this area, most of them are not terribly run down.");
+        neighbourhood.addExit("east", "home");
+        neighbourhood.addExit("north", "square");
+        neighbourhood.addExit("south", "pathforest");
+        neighbourhood.addExit("west", "neighbourporch");
+        putRoom(neighbourhood);
+
+        Room neighbourPorch = new Room("neighbourporch", "Neighbour's porch",
+                "You are on your neighbour's porch. He doesn't seem to be at home right now.");
+        neighbourPorch.addExit("east", "neighbourhood");
+        neighbourPorch.addExit("west", "neighbourhouse");
+        neighbourPorch.lockDirection("west", "neighbourkey");
+        DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
+                "a door bell", "you rung the door bell.", "neighbourkey");
+        doorBell.addCommand(Command.PRESS);
+        neighbourPorch.addEntity(doorBell);
+        putRoom(neighbourPorch);
+
+        Room neighbourHouse = new Room("neighbourhouse", "Neighbour's house",
+                "How did you even get in here?");
+        neighbourHouse.addExit("east", "neighbourporch");
+        putRoom(neighbourHouse);
+
+        Room pathForest = new Room("pathforest", "Path to the forest",
+                "A path towards the village's forest. Dad forbids you from going there without his consent.");
+        putRoom(pathForest);
+
+        Room square = new Room("square", "Square", "The village square, quite deserted at this time of day.");
+        putRoom(square);
 
     }
 }

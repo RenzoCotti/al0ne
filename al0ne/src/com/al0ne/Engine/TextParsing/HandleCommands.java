@@ -1,6 +1,8 @@
 package com.al0ne.Engine.TextParsing;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Behaviours.Enums.Command;
+import com.al0ne.Behaviours.Enums.CommandMap;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Engine.Main;
@@ -56,7 +58,7 @@ public class HandleCommands {
     }
 
     //this handles trying to apply custom commands on objects
-    public static boolean customAction(String[] temp, Player player, String action) {
+    public static boolean customAction(String[] temp, Player player, Command action, String s) {
         if (temp.length == 1) {
             ParseInput.wrongCommand++;
             printToLog("The syntax is " + action + " x.");
@@ -73,24 +75,23 @@ public class HandleCommands {
 //            printToLog("Be more specific.");
 //            return false;
 //        }
-
         if (possibleItems.size() == 1) {
             int result = player.customAction(action, possibleItems.get(0).getEntity());
             if(result == 1){
-                printToLog("You " + action + " the " + item);
+                printToLog("You " + s + " the " + item);
             }
             return true;
         } else if (possibleEntities.size() == 1) {
             int result = player.customAction(action, possibleEntities.get(0).getEntity());
             if(result == 1){
-                printToLog("You " + action + " the " + item);
+                printToLog("You " + s + " the " + item);
             }
             return true;
         } else if (possibleEntities.size() == 0 && possibleItems.size() == 0) {
             printToLog("You can't see it.");
             return true;
         } else {
-            printToLog("You can't " + action + " it.");
+            printToLog("You can't " + s + " it.");
             return true;
         }
     }

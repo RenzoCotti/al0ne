@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Entities.Enemies.GiantRat;
@@ -61,7 +62,7 @@ public class CaveWorld extends World{
         cave3.addExit("down", "cellar");
         Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor");
         HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "a dusty rug", "The rug is now out of the way.", trapdoor1);
-        rug.addCommand("move");
+        rug.addCommand(Command.MOVE);
         cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");
 

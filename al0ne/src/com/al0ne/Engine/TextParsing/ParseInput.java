@@ -58,6 +58,7 @@ public class ParseInput {
             case TALK:
                 return HandleCommands.handleTalk(parsedInput, player);
 
+            case PRESS:
             case TIDY:
             case DRINK:
             case EAT:
@@ -65,7 +66,7 @@ public class ParseInput {
             case MOVE:
             case OPEN:
                 String s = game.getCommands().stringify(c);
-                return HandleCommands.customAction(parsedInput, player, s);
+                return HandleCommands.customAction(parsedInput, player, c, s);
 
             case ATTACK:
                 return HandleCommands.handleAttack(parsedInput, player, false);

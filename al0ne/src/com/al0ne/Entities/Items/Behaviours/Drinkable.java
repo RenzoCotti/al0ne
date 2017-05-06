@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
@@ -15,7 +16,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Drinkable extends Item{
     public Drinkable(String id, String name, String description, double weight, Size size) {
         super(id, name, description, weight, size, Material.GLASS);
-        addCommand("drink");
+        addCommand(Command.DRINK);
         addProperty("food");
     }
 

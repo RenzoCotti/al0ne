@@ -1,5 +1,6 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
@@ -619,7 +620,7 @@ public class Player extends WorldCharacter implements Serializable{
 
     //this function handles custom action entities
     //atm supports props and items
-    public int customAction(String action, Entity entity){
+    public int customAction(Command action, Entity entity){
 
         if(entity.getType()=='i'){
             boolean inRoom = false;
@@ -637,7 +638,7 @@ public class Player extends WorldCharacter implements Serializable{
                 return 0;
             }
 
-            for (String command : entity.getRequiredCommand()){
+            for (Command command : entity.getRequiredCommand()){
                 if (command.equals(action)){
                     int result = item.used(currentRoom, this);
                     if(result == 1 || result == 2){
@@ -660,7 +661,7 @@ public class Player extends WorldCharacter implements Serializable{
 
         } else if (entity.getType() == 'p'){
             Prop prop = (Prop) entity;
-            for (String command : prop.getRequiredCommand()){
+            for (Command command : prop.getRequiredCommand()){
                     if(command.equals(action)){
                         prop.used(currentRoom, this);
                         return 1;

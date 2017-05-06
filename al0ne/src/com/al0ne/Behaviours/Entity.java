@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Enums.Command;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -28,7 +30,7 @@ public abstract class Entity implements Serializable{
     * */
     protected char type;
 
-    protected ArrayList<String> requiredCommand;
+    protected ArrayList<Command> requiredCommand;
 
 
     public Entity(String id, String name, String longDescription, String shortDescription) {
@@ -37,7 +39,7 @@ public abstract class Entity implements Serializable{
         this.longDescription = longDescription;
         this.shortDescription=shortDescription;
         this.requiredCommand=new ArrayList<>();
-        addCommand("examine");
+        addCommand(Command.EXAMINE);
     }
 
 
@@ -73,12 +75,12 @@ public abstract class Entity implements Serializable{
         printToLog(longDescription);
     }
 
-    public ArrayList<String> getRequiredCommand() {
+    public ArrayList<Command> getRequiredCommand() {
         return requiredCommand;
     }
 
-    public void addCommand(String cmd){
-        requiredCommand.add(cmd);
+    public void addCommand(Command command){
+        requiredCommand.add(command);
     }
 
     public void setShortDescription(String shortDescription) {

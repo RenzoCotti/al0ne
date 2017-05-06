@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Props;
 
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Prop;
@@ -9,12 +10,12 @@ public class Door extends Prop {
 
     public Door(String id, String name) {
         super(id, name, "a sturdy door", "a sturdy door", "The door is now open.");
-        addCommand("open");
+        addCommand(Command.OPEN);
     }
 
     public Door(String id, String name, String description, String after) {
         super(id, name, description, after);
-        addCommand("open");
+        addCommand(Command.OPEN);
     }
 
     @Override

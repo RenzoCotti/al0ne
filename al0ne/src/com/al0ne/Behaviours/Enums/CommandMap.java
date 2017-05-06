@@ -58,6 +58,7 @@ public class CommandMap implements Serializable{
         commands.put("ilikecheese", Command.DEBUG);
         commands.put("execute", Command.EXECUTE);
         commands.put("wait", Command.WAIT);
+        commands.put("press", Command.PRESS);
 
 
 

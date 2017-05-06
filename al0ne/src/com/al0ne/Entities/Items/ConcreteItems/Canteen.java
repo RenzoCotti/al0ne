@@ -1,6 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
@@ -19,7 +20,7 @@ public class Canteen extends ChargeItem{
                 "A canteeen made with the bladder of an animal.",
                 0.6, Size.SMALL, Material.LEATHER, 5,
                 "water", "You refill your canteen.");
-        this.addCommand("drink");
+        this.addCommand(Command.DRINK);
         setUnique();
     }
 
