@@ -70,6 +70,7 @@ public class UI {
         ArrayList<Menu> menus = TopMenu.createSubMenus(stage);
 
         MenuBar menuBar = new MenuBar();
+        menuBar.setId("topmenu");
 
         menuBar.getMenus().addAll(menus);
 
@@ -131,6 +132,7 @@ public class UI {
 
     public static void updateUI(Scene s){
         TableView inv = (TableView) s.lookup("#inv");
+        inv.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
         inv.setItems(GameChanges.getInventoryData());
         Label healthLabel = (Label) s.lookup("#healthLabel");
         healthLabel.setFont(Font.font("Verdana", Main.fontSize));
@@ -159,6 +161,9 @@ public class UI {
         Main.log.setFont(Font.font("Verdana", Main.fontSize));
         Main.input.setFont(Font.font("Verdana", Main.fontSize));
         Main.notes.setFont(Font.font("Verdana", Main.fontSize));
+
+        MenuBar menuBar = (MenuBar) s.lookup("#topmenu");
+        menuBar.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
 
     }
 

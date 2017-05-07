@@ -9,7 +9,6 @@ import com.al0ne.Entities.Items.ConcreteItems.Canteen;
 import com.al0ne.Entities.Items.ConcreteItems.Chest;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.*;
 import com.al0ne.Behaviours.Room;
@@ -51,7 +50,6 @@ public class CaveWorld extends World{
         cave2.addExit("north","cave4");
         cave2.addExit("south","cave3");
         cave2.addExit("east","bossroom");
-        cave2.addItem(new Knife());
         cave2.addItem(new Apple(), 2);
 
         putRoom(cave2);

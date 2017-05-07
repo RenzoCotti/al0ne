@@ -32,6 +32,10 @@ public class CommandMap implements Serializable{
         commands.put("south", Command.SOUTH);
         commands.put("east", Command.EAST);
         commands.put("west", Command.WEST);
+        commands.put("northeast", Command.NORTHEAST);
+        commands.put("southwest", Command.SOUTHWEST);
+        commands.put("northwest", Command.NORTHWEST);
+        commands.put("southeast", Command.SOUTHEAST);
         commands.put("up", Command.UP);
         commands.put("down", Command.DOWN);
         commands.put("inventory", Command.INVENTORY);

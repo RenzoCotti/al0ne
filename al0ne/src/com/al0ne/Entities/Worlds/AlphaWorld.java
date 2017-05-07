@@ -2,12 +2,13 @@ package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Axe;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Dagger;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Mace;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Sword;
+import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
@@ -18,7 +19,6 @@ import com.al0ne.Entities.Items.ConcreteItems.Armor.LeatherArmour;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.HolyFountain;
@@ -41,36 +41,65 @@ public class AlphaWorld extends World{
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
-//        Container chest = new Chest();
-//        chest.addItem(new SilverCoin(), 100);
-//        chest.addItem(new Knife(), 1);
-//        startRoom.addEntity(chest);
-//        startRoom.addEntity(new WarpStone());
-//        startRoom.addEntity(new SilverCoin(), 100);
+        startRoom.addExit("northwest", "armorroom");
+        Container chest = new Chest();
+        chest.addItem(new SilverCoin(), 100);
+        chest.addItem(new Dagger(Material.IRON), 1);
+        startRoom.addEntity(chest);
         startRoom.addEntity(new Snake());
-//        for(Material m : Material.getMaterials(true)){
-//            startRoom.addEntity(new Helmet(m));
-//        }
-//
-//        for(Material m : Material.getMaterials(true)){
-//            startRoom.addEntity(new Armor(m));
-//        }
-//
-//        for(Material m : Material.getMaterials(true)){
-//            startRoom.addEntity(new Shield(m));
-//        }
+
         startRoom.visit();
         putRoom(startRoom);
+
+        Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");
+        for(Material m : Material.getMaterials(true)){
+            armorRoom.addEntity(new Helmet(m));
+        }
+
+        for(Material m : Material.getMaterials(true)){
+            armorRoom.addEntity(new Armor(m));
+        }
+
+        for(Material m : Material.getMaterials(true)){
+            armorRoom.addEntity(new Shield(m));
+        }
+        armorRoom.addExit("south", "startroom");
+        armorRoom.addExit("north", "weaponroom");
+
+        putRoom(armorRoom);
+
+
+        Room weaponRoom = new Room("weaponroom", "Weaponry", "A room full of weapons");
+        for(Material m : Material.getMaterials(false)){
+            weaponRoom.addEntity(new Dagger(m));
+        }
+
+        for(Material m : Material.getMaterials(false)){
+            weaponRoom.addEntity(new Sword(m));
+        }
+
+        for(Material m : Material.getMaterials(false)){
+            weaponRoom.addEntity(new Mace(m));
+        }
+        for(Material m : Material.getMaterials(false)){
+            weaponRoom.addEntity(new Axe(m));
+        }
+        weaponRoom.addExit("south", "armorroom");
+        weaponRoom.addExit("north", "startroom");
+        putRoom(weaponRoom);
+
+
 
         Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");
         ladderRoom.addEntity(new Prop("Ladder", "a wooden ladder heading in the ceiling", "a wooden ladder"));
         ladderRoom.addCustomDirection("You can see a ladder going up. You see an opening to the east.");
         ladderRoom.addExit("up", "emonroom");
         ladderRoom.addExit("east", "startroom");
+        ladderRoom.addEntity(new WarpStone());
         putRoom(ladderRoom);
 
         Room daggerRoom = new Room("daggerroom", "Empty room", "The room is very barren.");
-        daggerRoom.addEntity(new Knife());
+        daggerRoom.addEntity(new Dagger(Material.IRON));
         daggerRoom.addExit("south", "startroom");
         daggerRoom.addExit("east", "wolfroom");
         daggerRoom.addEntity(new IronHelmet());
@@ -107,7 +136,7 @@ public class AlphaWorld extends World{
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it.", "a knife"));
         shopRoom.addEntity(new Prop("apple", "A red apple.Probably better not to take it.", "an apple"));
         Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
-        bob.simpleAddItem(new Knife(), 5);
+        bob.simpleAddItem(new Dagger(Material.IRON), 5);
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);

@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
@@ -12,7 +13,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.NaturalHealing;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

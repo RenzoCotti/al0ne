@@ -6,15 +6,10 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
-import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Note;
-import com.al0ne.Entities.Items.ConcreteItems.Scroll;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
-import com.al0ne.Entities.NPCs.Shopkeeper;
 
 /**
  * Created by BMW on 30/04/2017.

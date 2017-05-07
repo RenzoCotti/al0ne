@@ -5,7 +5,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.WarpStone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +15,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Base64;
 
 import static com.al0ne.Engine.Main.player;
@@ -197,9 +196,15 @@ public class GameChanges {
                 Item currentItem = (Item) pair.getEntity();
                 double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
                 String name = currentItem.getName();
-                if (currentItem instanceof Protective){
-                    name=" ("+((Protective)currentItem).getArmor()+" DEF) "+"$"+currentItem.getPrice()+" "+name;
+                if(Main.game.isInDebugMode()){
+                    if (currentItem instanceof Protective){
+                        name=" ("+((Protective)currentItem).getArmor()+" DEF) "+"$"+currentItem.getPrice()+" "+name;
+                    } else if (currentItem instanceof Weapon){
+                        name=" ("+((Weapon)currentItem).getDamage()+"DMG/ "+
+                                ((Weapon)currentItem).getArmorPenetration()+"AP) "+"$"+currentItem.getPrice()+" "+name;
+                    }
                 }
+
                 SimpleItem s = new SimpleItem(name, pair.getCount(), weight);
                 data.add(s);
             }

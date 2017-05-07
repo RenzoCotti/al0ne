@@ -46,7 +46,7 @@ public abstract class Item extends Interactable {
         this.canDrop = true;
         this.canTake=true;
         int quality = Math.max(material.getToughness(), material.getDamage());
-        this.price = ((int) ((material.getPrice()+quality)*weight))*2;
+        this.price = ((int) ((material.getPrice()*2+quality)*weight))*2;
     }
 
     public double getWeight() {

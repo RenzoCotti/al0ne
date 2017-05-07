@@ -1,10 +1,9 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 
 import java.io.File;

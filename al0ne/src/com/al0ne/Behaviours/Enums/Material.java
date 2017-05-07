@@ -63,11 +63,10 @@ public enum Material {
         ArrayList<Material> materials = new ArrayList<>();
         materials.add(IRON);
         materials.add(WOOD);
-        materials.add(LEATHER);
         materials.add(GOLD);
         materials.add(STEEL);
         if(armor){
-
+            materials.add(LEATHER);
         } else{
             materials.add(STONE);
         }
