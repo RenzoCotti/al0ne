@@ -1,6 +1,13 @@
 package com.al0ne.Engine.UI;
 
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Pairs.PairWorld;
+import com.al0ne.Behaviours.Room;
+import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.GameChanges;
+import com.al0ne.Engine.Main;
+import com.al0ne.Engine.Utility;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -159,7 +167,40 @@ public class Popups {
         buttons.setSpacing(10);
         buttons.getChildren().addAll(restart, quit);
 
-        Text text = new Text("You have died...\nWant to restart?");
+        int total = 0;
+        int visited = 0;
+        for(PairWorld pw : Main.game.getWorlds().values()){
+            World currentWorld = pw.getWorld();
+            total += currentWorld.getRooms().values().size();
+            for(Room r : currentWorld.getRooms().values()){
+                if (!r.isFirstVisit()){
+                    visited++;
+                }
+            }
+        }
+
+        double percentage = ((double) visited/total)*100;
+//        *100;
+        System.out.println(visited+"/"+total);
+        System.out.println(percentage);
+
+        percentage= Utility.twoDecimals(percentage);
+
+        int value = 0;
+        for (Pair p : Main.player.getInventory().values()){
+            value+=((Item)p.getEntity()).getPrice();
+        }
+
+
+
+        String endString = "You have died... \nIn this game, you:\n- lasted for "+ Main.game.getTurnCount()+" turns.\n"+
+                "- explored "+visited+"/"+total+" of all the available places ("+percentage+"%).\n" +
+                "- had a total value of "+value+" in your inventory.\n";
+
+
+        endString+="\nWant to restart?";
+
+        Text text = new Text(endString);
 
         dialogVbox.getChildren().addAll(text, buttons);
         dialogVbox.setPadding(new Insets(20));

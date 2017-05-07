@@ -46,7 +46,7 @@ public class MedievalYoungWorld extends World{
 
         Room hallway = new Room("homehallway", "Hallway", "A hallway. Connects your room and your " +
                 "parents's to the rest of the house.");
-        hallway.addExit("west", "homeyourrrom");
+        hallway.addExit("west", "homeyourroom");
         hallway.addExit("north", "home");
         hallway.addExit("east", "homeparentsroom");
         putRoom(hallway);
