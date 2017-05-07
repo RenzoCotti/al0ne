@@ -37,21 +37,17 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  * a quests, HashMap<questID, Boolean>, representing all due quests
  * a wornItems, HashMap<BodyPart, Item>: all equipped items
  */
-public class Player extends WorldCharacter implements Serializable{
+public class Player extends WorldCharacter{
 
     //stores current room the player is in
     private Room currentRoom;
     
     //Maximum carry weight of the player
-    private static double maxWeight=90;
+    private double maxWeight;
     //Current carry weight of the player
     private double currentWeight;
 
-    //statuses
-    private HashMap<String, Status> status;
-
     //various
-    private boolean alive = true;
     private boolean hasNeeds;
     private String story;
 
@@ -67,10 +63,11 @@ public class Player extends WorldCharacter implements Serializable{
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
-    public Player(Room currentRoom, boolean needs, String story) {
+    public Player(boolean needs, int maxWeight, Room currentRoom, String story) {
         super("alpha", "player", "nix", "da",
         10, 70, 30, 0, 1);
         this.currentRoom = currentRoom;
+        this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
         this.story = story;
@@ -279,7 +276,7 @@ public class Player extends WorldCharacter implements Serializable{
 
 
     //gets the requested resource
-    public static double getMaxWeight() {
+    public double getMaxWeight() {
         return maxWeight;
     }
     public double getCurrentWeight() {
@@ -883,6 +880,12 @@ public class Player extends WorldCharacter implements Serializable{
         }
         currentWeight = Utility.twoDecimals(amt);
     }
+
+    public void setMaxWeight(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+
 
     //returns the story of the player
     public String getStory() {

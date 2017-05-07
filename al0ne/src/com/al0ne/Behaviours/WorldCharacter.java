@@ -16,7 +16,7 @@ public abstract class WorldCharacter extends Entity{
 
     //current and max Health of the player
     protected int currentHealth;
-    protected static int maxHealth;
+    protected int maxHealth;
 
     //fighting stats
     protected int attack;
@@ -190,6 +190,19 @@ public abstract class WorldCharacter extends Entity{
             inventory.put(item.getID(), new Pair(item, amount));
             return true;
         }
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
+    }
+
+    public void setArmor(int armor) {
+        this.armor = armor;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     @Override

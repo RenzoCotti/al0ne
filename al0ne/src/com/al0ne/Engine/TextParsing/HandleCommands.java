@@ -79,12 +79,16 @@ public class HandleCommands {
             int result = player.customAction(action, possibleItems.get(0).getEntity());
             if(result == 1){
                 printToLog("You " + s + " the " + item);
+            } else if(result == 0){
+                printToLog("You can't " + s + " it.");
             }
             return true;
         } else if (possibleEntities.size() == 1) {
             int result = player.customAction(action, possibleEntities.get(0).getEntity());
             if(result == 1){
                 printToLog("You " + s + " the " + item);
+            } else if(result == 0){
+                printToLog("You can't " + s + " it.");
             }
             return true;
         } else if (possibleEntities.size() == 0 && possibleItems.size() == 0) {

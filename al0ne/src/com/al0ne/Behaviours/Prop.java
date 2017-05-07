@@ -64,7 +64,7 @@ public class Prop extends Interactable {
 
     //quick, for descriptive props
     public Prop(String name, String description) {
-        super("prop", name, description, Utility.getArticle(name)+" "+name, Material.UNDEFINED);
+        super("prop", name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;

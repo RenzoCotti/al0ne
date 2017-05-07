@@ -8,7 +8,7 @@ import com.al0ne.Behaviours.Enums.Material;
 /**
  * Created by BMW on 02/02/2017.
  */
-public class Weapon extends Wearable {
+public abstract class  Weapon extends Wearable {
     protected int damage;
     protected String damageType;
     public Weapon(String id, String name, String description, String damageType,

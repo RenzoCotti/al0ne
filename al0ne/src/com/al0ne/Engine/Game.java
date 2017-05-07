@@ -118,6 +118,10 @@ public class Game implements Serializable {
     }
 
     public void toggleDebugMode(){
+        getPlayer().setMaxHealth(99);
+        getPlayer().setMaxWeight(90);
+        getPlayer().setArmor(20);
+        getPlayer().setDamage(20);
         this.debugMode = !this.debugMode;
     }
 

@@ -100,7 +100,7 @@ public class Main extends Application{
 
     //clears the screen by printing 20 new lines
     public static void clearScreen() {
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 33; i++) {
             printToLog();
         }
     }

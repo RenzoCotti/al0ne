@@ -11,6 +11,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
+import com.al0ne.Entities.Items.ConcreteItems.Note;
 import com.al0ne.Entities.Items.ConcreteItems.Scroll;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Knife;
 import com.al0ne.Entities.NPCs.Shopkeeper;
@@ -78,6 +79,7 @@ public class MedievalYoungWorld extends World{
                 true, new Pair(new SilverCoin(), 6), true, "geteggs"));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
+        mom.addSubject("sister", new Subject("She's in a better place now, honey."));
         mom.addReactionItem("eggs", new SliceOfCake());
         mainHouse.addEntity(mom);
         mainHouse.addExit("south", "homehallway");
@@ -112,11 +114,37 @@ public class MedievalYoungWorld extends World{
         square.addCustomDirection("To the east you see your town's church, to the north the village hall, " +
                 "to the west the market and to the south your neighbourhood.");
         square.addExit("east", "villagechurch");
-        square.addExit("west", "villagemarket");
+//        square.addExit("west", "villagemarket");
         square.addExit("south", "neighbourhood");
         square.addExit("north", "villagehall");
-        square.addEntity(new Prop("Fountain", "A fountain made of stone", "a fountain"));
+        square.addEntity(new Prop("Fountain", "A fountain made of stone"));
         putRoom(square);
+
+        Room villageChurch = new Room("villagechurch", "Village Church",
+                "The village's church. It's a fairly large building made out of large blocks of stone, " +
+                        "with a tall bell tower.");
+        villageChurch.addExit("east", "villagegraveyard");
+        villageChurch.addExit("west", "square");
+        putRoom(villageChurch);
+
+        Room villageGraveyard = new Room("villagegraveyard", "Graveyard", "There are a lot of tombstones here.");
+        villageGraveyard.addExit("west", "villagechurch");
+        villageGraveyard.addEntity(new Prop("Family tomb",
+                "The last entry listed on here is the one of your sister...",
+                "your family tomb"));
+        villageGraveyard.addEntity(new JunkItem("dried flower",
+                "a dried white rose that was on your family tomb.", 0.05, Size.SMALL));
+        putRoom(villageGraveyard);
+
+        Room villageHall = new Room("villagehall", "Hall", "This place is strangely deserted. Weird.");
+        villageHall.addExit("south", "square");
+        villageHall.addEntity(new Prop("desk", "A large desk, with some papers on top of it.",
+                "a desk", Material.WOOD));
+        villageHall.addEntity(new Note("vacation", "Hello, we are taking a day off " +
+                "in preparation for the celebration of tomorrow."));
+        putRoom(villageHall);
+
+
 
         //TODO
         Room pathForest = new Room("pathforest", "Path to the forest",
