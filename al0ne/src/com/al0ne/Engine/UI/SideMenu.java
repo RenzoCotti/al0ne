@@ -16,6 +16,7 @@ public class SideMenu {
 
     public static VBox createSideMenu() {
         TabPane tabPane = new TabPane();
+        tabPane.setId("sideTabs");
         Tab notes = new Tab();
         notes.setText("Notes");
         notes.setContent(Main.notes);
@@ -26,11 +27,10 @@ public class SideMenu {
         inventoryTab.setClosable(false);
 
 
-
         TableView<SimpleItem> inv = new TableView<>();
         inv.setPlaceholder(new Label("You have no items"));
         inv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        inv.setId("inv");
+        inv.setId("inventoryTable");
         TableColumn itemColumn = new TableColumn("Item");
         itemColumn.setMinWidth(120);
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -50,6 +50,7 @@ public class SideMenu {
 
         Tab stats = new Tab();
         stats.setText("Stats");
+        stats.setId("statsTab");
         stats.setClosable(false);
 
         Label playerStats = new Label("Player statistics:");

@@ -64,9 +64,6 @@ public class UI {
         container.getItems().addAll(Main.log, sideMenu);
         container.setDividerPosition(0, 0.6);
 
-
-//        MenuBar menuBar = TopMenu.createTopMenu(stage);
-
         ArrayList<Menu> menus = TopMenu.createSubMenus(stage);
 
         MenuBar menuBar = new MenuBar();
@@ -107,11 +104,12 @@ public class UI {
         menus.get(1).getItems().get(0).setOnAction(t -> {
             if(Main.fontSize + 2 >= 20){
                 Main.fontSize = 20;
+
             } else{
                 Main.fontSize+=2;
             }
 
-            UI.updateUI(done);
+            UI.redrawUI(done);
         });
 
         menus.get(1).getItems().get(1).setOnAction(t -> {
@@ -121,7 +119,7 @@ public class UI {
                 Main.fontSize-=2;
             }
 
-            UI.updateUI(done);
+            UI.redrawUI(done);
         });
 
 
@@ -131,8 +129,7 @@ public class UI {
 
 
     public static void updateUI(Scene s){
-        TableView inv = (TableView) s.lookup("#inv");
-        inv.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
+        TableView inv = (TableView) s.lookup("#inventoryTable");
         inv.setItems(GameChanges.getInventoryData());
         Label healthLabel = (Label) s.lookup("#healthLabel");
         healthLabel.setFont(Font.font("Verdana", Main.fontSize));
@@ -157,6 +154,12 @@ public class UI {
         Label offHand = (Label) s.lookup("#offHandLabel");
         offHand.setFont(Font.font("Verdana", Main.fontSize));
         offHand.setText("Off-Hand: "+Utility.getOffHandString());
+    }
+
+    public static void redrawUI(Scene s){
+        updateUI(s);
+        TableView inv = (TableView) s.lookup("#inventoryTable");
+        inv.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
 
         Main.log.setFont(Font.font("Verdana", Main.fontSize));
         Main.input.setFont(Font.font("Verdana", Main.fontSize));
@@ -165,6 +168,9 @@ public class UI {
         MenuBar menuBar = (MenuBar) s.lookup("#topmenu");
         menuBar.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
 
+        TabPane notes = (TabPane) s.lookup("#sideTabs");
+        notes.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
     }
+
 
 }

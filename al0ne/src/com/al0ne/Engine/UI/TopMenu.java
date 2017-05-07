@@ -17,15 +17,6 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 24/04/2017.
  */
 public class TopMenu {
-    public static MenuBar createTopMenu(Stage stage){
-        MenuBar menuBar = new MenuBar();
-
-
-
-//        menuBar.getMenus().addAll(fileMenu, fileOptions, creditsMenu, helpMenu);
-
-        return menuBar;
-    }
 
 
     public static ArrayList<Menu> createSubMenus(Stage stage){
