@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Props;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
@@ -14,12 +15,14 @@ import static com.al0ne.Engine.Main.printToLog;
 public class MoneyTree extends Prop{
     private String usedMessage;
     public MoneyTree() {
-        super("moneytree", "SilverCoin tree", "A tree with money instead of leaves is in the middle of the room", "a tree", "The tree has no leaves anymore...");
+        super("Money tree",
+                "A tree with money instead of leaves is in the middle of the room",
+                "a tree", "The tree has no leaves anymore...", Material.WOOD);
         this.usedMessage="You cut the leaves from the money tree.";
     }
 
     public MoneyTree(String name, String description, String after, String usedMessage) {
-        super("moneytree", name, description, after);
+        super(name, description, after);
         this.usedMessage=usedMessage;
     }
 

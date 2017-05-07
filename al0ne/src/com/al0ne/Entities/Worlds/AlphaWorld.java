@@ -197,7 +197,7 @@ public class AlphaWorld extends World{
         Room gateRoom = new Room("gateroom", "Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         gateRoom.addExit("east", "bossroom");
         gateRoom.addExit("west", "brokenkeyroom");
-        gateRoom.addEntity(new LockedDoor("bossgate", "Huge gate", "This gate has a huge lock on it.", "huge gate", "The gate is open now.","bosskey"));
+        gateRoom.addEntity(new LockedDoor("bossgate", "Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON,"bosskey"));
         gateRoom.lockDirection("east", "bossgate");
         putRoom(gateRoom);
 

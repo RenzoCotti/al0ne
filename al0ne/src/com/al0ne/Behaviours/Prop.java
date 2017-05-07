@@ -29,8 +29,8 @@ public class Prop extends Interactable {
 
 
     //detailed prop creation
-    public Prop(String id, String name, String description, String shortDescription, Material m) {
-        super(id, name, description, shortDescription, m);
+    public Prop(String name, String description, String shortDescription, Material m) {
+        super("prop", name, description, shortDescription, m);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
@@ -39,8 +39,20 @@ public class Prop extends Interactable {
         this.canTake=false;
     }
 
-    public Prop(String id, String name, String description, String shortDescription, String after, Material m) {
-        super(id, name, description, shortDescription, m);
+    public Prop(String name, String description, String shortDescription, String after, Material m) {
+        super("prop", name, description, shortDescription, m);
+        setCustomName();
+        this.afterDescription = after;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+        this.canTake=false;
+    }
+
+
+    //constructors for door
+    public Prop(String doorID, String doorName, String description, String shortDescription, String after, Material m) {
+        super(doorID, doorName, description, shortDescription, m);
         setCustomName();
         this.afterDescription = after;
         this.requiresItem="none";
@@ -51,37 +63,17 @@ public class Prop extends Interactable {
 
 
     //quick, for descriptive props
-
-
     public Prop(String name, String description) {
-        super(name, name, description, Utility.getArticle(name)+" "+name, Material.UNDEFINED);
+        super("prop", name, description, Utility.getArticle(name)+" "+name, Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
+        this.canTake=false;
     }
 
     public Prop(String name, String description, String shortDescription) {
-        super(name, name, description, shortDescription, Material.UNDEFINED);
-        this.afterDescription = description;
-        this.requiresItem="none";
-        this.active=false;
-        this.type='p';
-    }
-
-
-    public Prop(String id, String name, String description, String shortDescription, String after) {
-        super(id, name, description, shortDescription, Material.UNDEFINED);
-        setCustomName();
-        this.afterDescription = after;
-        this.requiresItem="none";
-        this.active=false;
-        this.type='p';
-        this.canTake=false;
-    }
-
-    public Prop(String id, String name, String description, String shortDescription) {
-        super(id, name, description, shortDescription, Material.UNDEFINED);
+        super("prop", name, description, shortDescription, Material.UNDEFINED);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
@@ -89,6 +81,7 @@ public class Prop extends Interactable {
         this.type='p';
         this.canTake=false;
     }
+
 
 
 
@@ -130,6 +123,10 @@ public class Prop extends Interactable {
             printToLog(longDescription);
         } else {
             printToLog(afterDescription);
+        }
+        String m = Material.stringify(this.material);
+        if(!m.equals("undefined")){
+            printToLog("It's made of "+(Material.stringify(this.material))+".");
         }
     }
 

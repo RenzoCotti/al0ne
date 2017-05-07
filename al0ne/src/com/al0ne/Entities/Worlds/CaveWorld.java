@@ -1,6 +1,7 @@
 package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.Enums.Command;
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Entities.Enemies.GiantRat;
@@ -53,15 +54,14 @@ public class CaveWorld extends World{
         cave2.addItem(new Knife());
         cave2.addItem(new Apple(), 2);
 
-        cave2.addEntity(new CuttableRope());
-
         putRoom(cave2);
 
         Room cave3 = new Room("cave3", "Cave 3", "Nothing worth of notice here.");
         cave3.addExit("north", "cave2");
         cave3.addExit("down", "cellar");
-        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor");
-        HideItem rug = new HideItem("rug", "Rug", "A ragged rug. Ruggity rug.", "a dusty rug", "The rug is now out of the way.", trapdoor1);
+        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor", Material.WOOD);
+        HideItem rug = new HideItem("Rug", "A ragged rug. Ruggity rug.", "a dusty rug",
+                "The rug is now out of the way.", Material.FIBRE, trapdoor1);
         rug.addCommand(Command.MOVE);
         cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");

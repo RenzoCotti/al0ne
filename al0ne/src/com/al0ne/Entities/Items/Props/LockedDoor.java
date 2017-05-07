@@ -13,13 +13,13 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 02/02/2017.
  */
 public class LockedDoor extends Prop {
-    public LockedDoor(String id, String name, String description, String shortDescription, String after, String key) {
-        super(id, name, description, shortDescription, after);
+    public LockedDoor(String name, String description, String shortDescription, String after, Material m, String key) {
+        super(name, description, shortDescription, after, m);
         this.requiresItem=key;
     }
 
-    public LockedDoor(String id, String name, String key) {
-        super(id, name, "A sturdy wooden door", "wooden door", Material.WOOD);
+    public LockedDoor(String name, String key) {
+        super(name, "A sturdy wooden door", "a wooden door", Material.WOOD);
         this.requiresItem=key;
     }
 

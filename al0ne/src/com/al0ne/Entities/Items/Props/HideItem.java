@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Items.Props;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Prop;
@@ -13,13 +14,13 @@ public class HideItem extends Prop{
 //    private String useMessage;
     private Prop hidden;
 
-    public HideItem(String id, String name, String description, String shortDescription, String after, Prop hidden) {
-        super(id, name, description, shortDescription, after);
+    public HideItem(String name, String description, String shortDescription, String after, Material m, Prop hidden) {
+        super(name, description, shortDescription, after, m);
         this.hidden=hidden;
     }
 
-    public HideItem(String id, String name, String description, String shortDescription, Prop hidden) {
-        super(id, name, description, shortDescription);
+    public HideItem(String name, String description, String shortDescription, Prop hidden) {
+        super(name, description, shortDescription);
         this.hidden=hidden;
     }
 

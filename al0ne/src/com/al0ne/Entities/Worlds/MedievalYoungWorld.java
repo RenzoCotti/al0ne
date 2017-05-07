@@ -2,6 +2,7 @@ package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
@@ -24,8 +25,8 @@ public class MedievalYoungWorld extends World{
         Room yourRoom = new Room("homeyourroom", "Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");
 
-        Prop bed = new Prop("homebed", "bed", "Your bed, it needs tidying.",
-                "a bed", "Your bed. Neatly tidied now.");
+        Prop bed = new Prop("bed", "Your bed, it needs tidying.",
+                "a bed", "Your bed. Neatly tidied now.", Material.WOOD);
         bed.addCommand(Command.TIDY);
         yourRoom.addEntity(bed);
 
@@ -58,7 +59,8 @@ public class MedievalYoungWorld extends World{
                 "Your parents's room. It's quite warm in here");
         parentsRoom.addExit("west", "homehallway");
         parentsRoom.addEntity(new Prop("flower pot",
-                "A pot filled with water, containing a fairly dried up flower.", "a flower pot"));
+                "A pot filled with water, containing a fairly dried up flower.",
+                "a flower pot", Material.CLAY));
         parentsRoom.addEntity(new Prop("parentsbed", "Your parent's bed, it fits two people.",
                 "a large bed"));
         putRoom(parentsRoom);
@@ -96,7 +98,7 @@ public class MedievalYoungWorld extends World{
         neighbourPorch.addExit("west", "neighbourhouse");
         neighbourPorch.lockDirection("west", "neighbourkey");
         DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
-                "a door bell", "you rung the door bell.", "neighbourkey");
+                "a door bell", "you rung the door bell.", Material.BRASS, "neighbourkey");
         doorBell.addCommand(Command.PRESS);
         neighbourPorch.addEntity(doorBell);
         putRoom(neighbourPorch);
@@ -106,12 +108,23 @@ public class MedievalYoungWorld extends World{
         neighbourHouse.addExit("east", "neighbourporch");
         putRoom(neighbourHouse);
 
+        Room square = new Room("square", "Square", "The village square, quite deserted at this time of day.");
+        square.addCustomDirection("To the east you see your town's church, to the north the village hall, " +
+                "to the west the market and to the south your neighbourhood.");
+        square.addExit("east", "villagechurch");
+        square.addExit("west", "villagemarket");
+        square.addExit("south", "neighbourhood");
+        square.addExit("north", "villagehall");
+        square.addEntity(new Prop("Fountain", "A fountain made of stone", "a fountain"));
+        putRoom(square);
+
+        //TODO
         Room pathForest = new Room("pathforest", "Path to the forest",
                 "A path towards the village's forest. Dad forbids you from going there without his consent.");
+        pathForest.addExit("north", "neighbourhood");
         putRoom(pathForest);
 
-        Room square = new Room("square", "Square", "The village square, quite deserted at this time of day.");
-        putRoom(square);
+
 
     }
 }

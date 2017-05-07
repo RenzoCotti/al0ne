@@ -10,7 +10,7 @@ public enum Material {
 
     WOOD(1, 2, 3, 0), STONE(1, 1, 4, 0), LEATHER(1, 0.5, 4),
 
-    GLASS(0.5, 1), PAPER(1, 1), FIBRE(0.5, 0),
+    GLASS(0.5, 1), PAPER(1, 1), FIBRE(0.5, 0), CLAY(0, 0.5, 0),
 
     UNDEFINED(0, 0);
 
