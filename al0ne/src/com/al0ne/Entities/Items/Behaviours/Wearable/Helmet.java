@@ -19,6 +19,12 @@ public class Helmet extends Protective {
         this.part="head";
     }
 
+    public Helmet(String id, String name, String description,
+                  double weight, int armor, Size s, Material material) {
+        super(id, name, description, weight, armor, s, material);
+        this.part="head";
+    }
+
     public Helmet(Material m) {
         super(Material.stringify(m)+"helmet", "Helmet",
                 Utility.getArticle(Material.stringify(m))+" "

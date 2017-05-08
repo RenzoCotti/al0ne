@@ -25,28 +25,32 @@ public class Prop extends Interactable {
     protected String afterDescription;
     protected String requiresItem;
     protected boolean active;
+    protected boolean invisible;
 
 
 
     //detailed prop creation
     public Prop(String name, String description, String shortDescription, Material m) {
-        super("prop", name, description, shortDescription, m);
+        super(name, name, description, shortDescription, m);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
         this.canTake=false;
+        this.invisible=false;
     }
 
     public Prop(String name, String description, String shortDescription, String after, Material m) {
-        super("prop", name, description, shortDescription, m);
+        super(name, name, description, shortDescription, m);
         setCustomName();
         this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
         this.canTake=false;
+        this.invisible=false;
+
     }
 
 
@@ -59,27 +63,33 @@ public class Prop extends Interactable {
         this.active=false;
         this.type='p';
         this.canTake=false;
+        this.invisible=false;
+
     }
 
 
     //quick, for descriptive props
     public Prop(String name, String description) {
-        super("prop", name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
+        super(name, name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
         this.canTake=false;
+        this.invisible=false;
+
     }
 
     public Prop(String name, String description, String shortDescription) {
-        super("prop", name, description, shortDescription, Material.UNDEFINED);
+        super(name, name, description, shortDescription, Material.UNDEFINED);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
         this.canTake=false;
+        this.invisible=false;
+
     }
 
 
@@ -139,4 +149,7 @@ public class Prop extends Interactable {
         }
     }
 
+    public boolean isInvisible() {
+        return invisible;
+    }
 }

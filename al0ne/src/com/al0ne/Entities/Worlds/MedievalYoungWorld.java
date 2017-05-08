@@ -74,7 +74,7 @@ public class MedievalYoungWorld extends World{
                 true, new Pair(new SilverCoin(), 6), true, "geteggs"));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
-        mom.addSubject("sister", new Subject("She's in a better place now, honey."));
+        mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
         mom.addReactionItem("eggs", new SliceOfCake());
         mainHouse.addEntity(mom);
         mainHouse.addExit("south", "homehallway");
@@ -103,6 +103,9 @@ public class MedievalYoungWorld extends World{
         Room neighbourHouse = new Room("neighbourhouse", "Neighbour's house",
                 "How did you even get in here?");
         neighbourHouse.addExit("east", "neighbourporch");
+        neighbourHouse.addEntity(new Prop("Corpse", "The decomposed corpse of a child. " +
+                "It seems it's holding something in its hand."));
+        neighbourHouse.addEntity(new InvisibleProp("hand", "It's holding a white rose."));
         putRoom(neighbourHouse);
 
         Room square = new Room("square", "Square", "The village square, quite deserted at this time of day.");
@@ -152,7 +155,7 @@ public class MedievalYoungWorld extends World{
                 "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
                         "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet.");
         BodyClothing bc = new BodyClothing("roughclothes", "clothes",
-                "Some rough clothes, they look a bit worn", 0.5, Material.FIBRE);
+                "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FIBRE);
         p.simpleAddItem(bc, 1);
         p.wear(bc);
         setPlayer(p);

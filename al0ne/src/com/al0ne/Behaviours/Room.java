@@ -94,8 +94,7 @@ public class Room extends Entity{
             entities.get(entity.getID()).addCount();
             return;
         }
-        this.entities.put(entity.getID(),
-                new Pair(entity, 1));
+        this.entities.put(entity.getID(), new Pair(entity, 1));
     }
 
     public void addEntity(Entity entity, int qty) {
@@ -119,7 +118,7 @@ public class Room extends Entity{
     public Entity getEntity(String name) {
         for (Pair p : entities.values()){
             Entity currentEntity = p.getEntity();
-            //TODO, FIX THIS ITH PROPER SEEKING
+            //TODO, FIX THIS WITH PROPER SEEKING
             if (currentEntity.getName().toLowerCase().contains(name)){
                 return currentEntity;
             }
@@ -198,9 +197,19 @@ public class Room extends Entity{
             ArrayList<Prop> props = getPropList();
             ArrayList<Pair> items = getItemList();
         if (prop && props.size()!=0){
+            ArrayList<Prop> toRemove = new ArrayList<>();
+            for(Prop p : props){
+                if (p.isInvisible()){
+                    toRemove.add(p);
+                }
+            }
+            props.removeAll(toRemove);
+
             printToSingleLine("There is ");
             for (int i=0; i<props.size(); i++) {
-                printToSingleLine(props.get(i).getShortDescription());
+                if(!props.get(i).isInvisible()){
+                    printToSingleLine(props.get(i).getShortDescription());
+                }
                 if(i==props.size()-2){
                     printToSingleLine(" and ");
                 } else if(i!=props.size()-1){

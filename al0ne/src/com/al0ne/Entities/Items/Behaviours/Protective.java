@@ -27,6 +27,8 @@ public abstract class Protective extends Wearable {
     @Override
     public void printLongDescription(Player player, Room room) {
         super.printLongDescription(player, room);
-        printToLog("It protects for "+ armor+".");
+        if(armor > 0){
+            printToLog("It protects for "+ armor+".");
+        }
     }
 }
