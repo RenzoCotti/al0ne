@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.CommandMap;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Pairs.PotentialItems;
 import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
@@ -68,8 +69,8 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
         String item = Utility.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialItem(item, player, 1);
-        ArrayList<Pair> possibleItems = getPotentialItem(item, player, 0);
+        ArrayList<Pair> possibleEntities = getPotentialItem(item, player, 1).getItems();
+        ArrayList<Pair> possibleItems = getPotentialItem(item, player, 0).getItems();
 
 //        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
 //            printToLog("Be more specific.");
@@ -101,8 +102,8 @@ public class HandleCommands {
     }
 
     public static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
-        ArrayList<Pair> result = getPotentialItem(s, player, 0);
-        result.addAll(getPotentialItem(s, player, 1));
+        ArrayList<Pair> result = getPotentialItem(s, player, 0).getItems();
+        result.addAll(getPotentialItem(s, player, 1).getItems());
         return result;
     }
 
@@ -110,9 +111,10 @@ public class HandleCommands {
     //number = 0: tries to get from the inventory
     //number = 1: tries to get from Entities
     //number = 2: tries to get from containers
-    public static ArrayList<Pair> getPotentialItem(String s, Player player, int number) {
+    public static PotentialItems getPotentialItem(String s, Player player, int number) {
 
         ArrayList<Pair> potentialItems = new ArrayList<>();
+        PotentialItems totalItems = new PotentialItems(potentialItems, 0);
 
         //case inventory
         if (number == 0) {
@@ -122,21 +124,31 @@ public class HandleCommands {
                 Item b = (Item) pair.getEntity();
                 if (b.getName().equals(s)) {
                     potentialItems.add(pair);
-                    return potentialItems;
+                    int reliability = s.split(" ").length;
+                    totalItems.setReliability(reliability);
+                    return totalItems;
                 }
             }
 
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
+            int max = 0;
             //we check the given string token by token
-            for (String token : temp) {
+            for (Pair pair : player.getInventory().values()){
+                int reliability = 0;
                 //and we check with each pair in inventory if it contains the token
-                for (Pair pair : player.getInventory().values()) {
+                for (String token : temp) {
                     Item a = (Item) pair.getEntity();
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem) {
                         if (b.toLowerCase().equals(token)) {
-                            if (!potentialItems.contains(pair)) {
+                            reliability++;
+                            if (reliability > max) {
+                                potentialItems.clear();
+                                max = reliability;
+                                totalItems.setReliability(max);
+                                potentialItems.add(pair);
+                            } else if(reliability == max){
                                 potentialItems.add(pair);
                             }
                         }
@@ -151,21 +163,31 @@ public class HandleCommands {
                 Entity b = pair.getEntity();
                 if (b.getName().equals(s)) {
                     potentialItems.add(pair);
-                    return potentialItems;
+                    int reliability = s.split(" ").length;
+                    totalItems.setReliability(reliability);
+                    return totalItems;
                 }
             }
 
+            int max = 0;
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
             //we check the given string token by token
-            for (String token : temp) {
+            for (Pair pair : entityList.values()) {
+                int reliability = 0;
                 //and we check with each pair in inventory if it contains the token
-                for (Pair pair : entityList.values()) {
+                for (String token : temp) {
                     Entity a = pair.getEntity();
                     String[] currentEntity = a.getName().split(" ");
                     for (String b : currentEntity) {
                         if (b.toLowerCase().equals(token)) {
-                            if (!potentialItems.contains(pair)) {
+                            reliability++;
+                            if (max < reliability) {
+                                potentialItems.clear();
+                                max = reliability;
+                                totalItems.setReliability(max);
+                                potentialItems.add(pair);
+                            } else if(reliability == max){
                                 potentialItems.add(pair);
                             }
                         }
@@ -182,7 +204,8 @@ public class HandleCommands {
                     Item i = (Item) p.getEntity();
                     if (i.getName().equals(s)) {
                         potentialItems.add(p);
-                        return potentialItems;
+                        int reliability = s.split(" ").length;
+                        return new PotentialItems(potentialItems, reliability);
                     }
                 }
 
@@ -203,14 +226,16 @@ public class HandleCommands {
                         for (String string : itemName) {
                             if (string.equals(token)) {
                                 potentialItems.add(p);
-                                return potentialItems;
+                                int reliability = s.split(" ").length;
+                                totalItems.setReliability(reliability);
+                                return totalItems;
                             }
                         }
                     }
                 }
             }
         }
-        return potentialItems;
+        return totalItems;
     }
 
     /*this function is used to handle using an item:
@@ -220,8 +245,8 @@ public class HandleCommands {
         String firstItem;
         String secondItem;
 
-        ArrayList<Pair> inventoryUse;
-        ArrayList<Pair> itemUse;
+        PotentialItems inventoryUse;
+        PotentialItems itemUse;
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
             if (temp.length < 2) {
@@ -239,14 +264,14 @@ public class HandleCommands {
             //prop from room
             itemUse = getPotentialItem(secondItem, player, 1);
 
-            if (inventoryUse.size() > 1 || itemUse.size() > 1) {
+            if (inventoryUse.getItems().size() > 1 || itemUse.getItems().size() > 1) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-            if (inventoryUse.size() == 1 && itemUse.size() == 1) {
+            if (inventoryUse.getItems().size() == 1 && itemUse.getItems().size() == 1) {
 //                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                if (!player.interactOnWith(itemUse.get(0).getEntity(), inventoryUse.get(0).getEntity())) {
+                if (!player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity())) {
                     printToLog("You can't use it.");
                 }
 //                }
@@ -277,26 +302,26 @@ public class HandleCommands {
             itemUse = getPotentialItem(firstItem, player, 1);
 
             //there are more possibilities from the items fetched
-            if ((inventoryUse.size() + itemUse.size() == 0)) {
+            if ((inventoryUse.getItems().size() + itemUse.getItems().size() == 0)) {
                 printToLog("You can't see that.");
                 return false;
             }
 
             //there are more possibilities from the items fetched
-            if (!(inventoryUse.size() + itemUse.size() == 1)) {
+            if (!(inventoryUse.getItems().size() + itemUse.getItems().size() == 1)) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-            if (inventoryUse.size() == 1) {
+            if (inventoryUse.getItems().size() == 1) {
 
-                int result = player.simpleUse(inventoryUse.get(0).getEntity());
+                int result = player.simpleUse(inventoryUse.getItems().get(0).getEntity());
 
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }
-            } else if (itemUse.size() == 1) {
-                int result = player.simpleUse(itemUse.get(0).getEntity());
+            } else if (itemUse.getItems().size() == 1) {
+                int result = player.simpleUse(itemUse.getItems().get(0).getEntity());
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }
@@ -343,13 +368,16 @@ public class HandleCommands {
         }
 
 
-        ArrayList<Pair> possibleItems;
+        PotentialItems items;
         if (take) {
-            possibleItems = HandleCommands.getPotentialItem(item, player, 2);
+            items = HandleCommands.getPotentialItem(item, player, 2);
         } else {
-            possibleItems = HandleCommands.getPotentialItem(item, player, 0);
+            items = HandleCommands.getPotentialItem(item, player, 0);
         }
-        ArrayList<Pair> possibleContainers = HandleCommands.getPotentialItem(container, player, 1);
+        PotentialItems containers = HandleCommands.getPotentialItem(container, player, 1);
+
+        ArrayList<Pair> possibleItems = items.getItems();
+        ArrayList<Pair> possibleContainers = containers.getItems();
 
 
         if ((possibleItems.size() == 0 || possibleContainers.size() == 0)) {
@@ -404,7 +432,7 @@ public class HandleCommands {
     //1 item, then we take/drop (all)
     public static boolean handleTake(String[] temp, Player player) {
 
-
+        //TODO: FIX GET POSSIBLE ITEMS, ADD RELIABILITY OF GUESS, ADD ONLY IF BIG ENOUGH
         ArrayList<Pair> possibleItems;
 
         if (temp.length == 1) {
@@ -453,7 +481,7 @@ public class HandleCommands {
         }
 
 
-        possibleItems = getPotentialItem(item, player, 1);
+        possibleItems = getPotentialItem(item, player, 1).getItems();
 
         ArrayList<Pair> items = new ArrayList<>();
 
@@ -551,7 +579,7 @@ public class HandleCommands {
 
 
 
-        possibleItems = getPotentialItem(item, player, 0);
+        possibleItems = getPotentialItem(item, player, 0).getItems();
 
         if (possibleItems.size() > 1) {
             printToLog("Be more specific.");
@@ -638,9 +666,13 @@ public class HandleCommands {
 
         String wieldItem = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        ArrayList<Pair> possibleItems = getPotentialItem(wieldItem, player, 0);
+        PotentialItems items = getPotentialItem(wieldItem, player, 0);
+        PotentialItems entities = getPotentialItem(wieldItem, player, 1);
 
-        if (possibleItems.size() == 1) {
+        ArrayList<Pair> possibleItems = items.getItems();
+        ArrayList<Pair> possibleEntities = entities.getItems();
+
+        if (possibleItems.size() == 1 && items.getReliability() > entities.getReliability()) {
             Item item = (Item) player.getItemPair(possibleItems.get(0).getEntity().getID()).getEntity();
 
             if (player.wear(item)) {
@@ -650,6 +682,24 @@ public class HandleCommands {
                 return false;
             }
         } else if (possibleItems.size() > 1) {
+            printToLog("Be more specific.");
+            return false;
+        } else if(possibleEntities.size() == 1 && items.getReliability() < entities.getReliability()){
+            printToLog("(first taking the "+possibleEntities.get(0).getEntity().getName()+")");
+            if(player.pickUpItem(possibleEntities.get(0), 1) == 1){
+                Item item = (Item) player.getItemPair(possibleEntities.get(0).getEntity().getID()).getEntity();
+
+                if (player.wear(item)) {
+                   return true;
+                } else {
+                    printToLog("You can't seem to see a " + wieldItem);
+                    return false;
+                }
+            } else{
+                printToLog("You can't carry it.");
+                return false;
+            }
+        } else if (possibleEntities.size() > 1) {
             printToLog("Be more specific.");
             return false;
         } else {
@@ -768,7 +818,7 @@ public class HandleCommands {
             String item = Utility.stitchFromTo(parsedInput, 1, d);
             String npc = Utility.stitchFromTo(parsedInput, d + 1, parsedInput.length);
 
-            ArrayList<Pair> possibleItemFromInventory = getPotentialItem(item, player, 0);
+            ArrayList<Pair> possibleItemFromInventory = getPotentialItem(item, player, 0).getItems();
 
             if ((possibleItemFromInventory.size() > 1)) {
                 printToLog("Be more specific.");
@@ -804,7 +854,7 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
 
         String enemy = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
-        ArrayList<Pair> entities = getPotentialItem(enemy, player, 1);
+        ArrayList<Pair> entities = getPotentialItem(enemy, player, 1).getItems();
         if (entities.size() == 1 && !execute) {
             return player.attack(entities.get(0).getEntity());
         } else if (entities.size() == 1 && execute) {
@@ -1010,8 +1060,10 @@ public class HandleCommands {
                     switch (castOn) {
                         case 'w':
                         case 'i':
-                            ArrayList<Pair> possibleItemsFromInventory = getPotentialItem(target, player, 0);
-                            ArrayList<Pair> possibleItems = getPotentialItem(target, player, 1);
+                            PotentialItems inventoryItems = getPotentialItem(target, player, 0);
+                            ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
+                            PotentialItems items = getPotentialItem(target, player, 1);
+                            ArrayList<Pair> possibleItems = items.getItems();
 
                             if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
                                 printToLog("Be more specific.");
