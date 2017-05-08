@@ -38,14 +38,13 @@ public abstract class Interactable extends Entity{
     }
 
 
-    public boolean usedWith(Item item, Room currentRoom, Player player) {
+    public int usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
-                used(currentRoom, player);
-                return true;
+                return used(currentRoom, player);
             }
         }
-        return false;
+        return 0;
     }
 
     public void addProperty(String behaviour){

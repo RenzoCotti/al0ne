@@ -65,13 +65,13 @@ public class Canteen extends ChargeItem{
     }
 
     @Override
-    public boolean refill(Player player, Entity entity) {
-        if(super.refill(player, entity)){
+    public int refill(Player player, Entity entity) {
+        if(super.refill(player, entity) == 1){
             //bug, can overfill if already full for weight
             weight=0.6;
             player.recalculateWeight();
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 }

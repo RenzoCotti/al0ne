@@ -261,8 +261,15 @@ public class HandleCommands {
             secondItem = Utility.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
             inventoryUse = getPotentialItem(firstItem, player, 0);
+            PotentialItems possibleEntities = getPotentialItem(firstItem, player, 1);
+            if(inventoryUse.getReliability() < possibleEntities.getReliability()){
+                inventoryUse = possibleEntities;
+            }
             //prop from room
             itemUse = getPotentialItem(secondItem, player, 1);
+            if(itemUse.getReliability() < possibleEntities.getReliability()){
+                itemUse = possibleEntities;
+            }
 
             if (inventoryUse.getItems().size() > 1 || itemUse.getItems().size() > 1) {
                 printToLog("Be more specific.");
@@ -271,13 +278,10 @@ public class HandleCommands {
 
             if (inventoryUse.getItems().size() == 1 && itemUse.getItems().size() == 1) {
 //                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                if (!player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity())) {
+                int result = player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity());
+                if (result == 0) {
                     printToLog("You can't use it.");
                 }
-//                }
-//                } else{
-//                    printToLog("USE x WITH y: x must be from your inventory, y must be an object you can see");
-//                }
 
             } else {
                 printToLog("You can't see such items");

@@ -28,14 +28,14 @@ public class MoneyTree extends Prop{
 
 
     @Override
-    public boolean usedWith(Item item, Room currentRoom, Player player) {
+    public int usedWith(Item item, Room currentRoom, Player player) {
 
         if(item.hasProperty("sharp")){
             printToLog(usedMessage);
             currentRoom.addItem(new SilverCoin(), 100);
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 
     @Override

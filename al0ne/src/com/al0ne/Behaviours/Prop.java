@@ -87,23 +87,23 @@ public class Prop extends Interactable {
 
 
     @Override
-    public boolean usedWith(Item item, Room currentRoom, Player player) {
+    public int usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){
             if (item.hasProperty(s)){
                 active=true;
-                return true;
+                return 1;
             }
         }
         if (requiresItem.equals(item.getID())){
             active=true;
-            return true;
+            return 1;
         }
 
         if(item instanceof ChargeItem){
             ChargeItem charge = (ChargeItem) item;
             return charge.refill(player, this);
         }
-        return false;
+        return 0;
     }
 
 

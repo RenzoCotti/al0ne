@@ -470,16 +470,16 @@ public class Player extends WorldCharacter{
     //this function makes the player use item on target, item is an inventory Item, target is a Prop/Item
     //one can't use an enemy or an NPC
 
-    public boolean interactOnWith(Entity target, Entity item){
+    public int interactOnWith(Entity target, Entity item){
         if (target.getType() == 'n' || item.getType() == 'e'){
-            return false;
+            return 0;
         }
         if (target.getType() == 'p'){
             return ((Prop) target).usedWith((Item) item, currentRoom, this);
         } else if (target.getType() == 'i' || target.getType() == 'w'){
             return ((Item) target).usedWith((Item) item, currentRoom, this);
         }
-        return false;
+        return 0;
     }
 
     //this function handles examining an entity

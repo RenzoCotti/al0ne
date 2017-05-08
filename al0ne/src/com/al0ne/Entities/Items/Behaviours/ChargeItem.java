@@ -37,30 +37,30 @@ public abstract class ChargeItem extends Item{
         this.onRefill = onRefill;
     }
 
-    public boolean refill(Player player, Entity entity){
+    public int refill(Player player, Entity entity){
         if(canRecharge && !requiresProperty){
             printToLog(onRefill);
             currentCharges = maxCharges;
-            return true;
+            return 1;
         } else if (canRecharge && (entity.getType() == 'i' || entity.getType() == 'p')){
             if(entity.getType() == 'i'){
                 Item item = (Item) entity;
                 if (item.hasProperty(property)){
                     currentCharges = maxCharges;
                     printToLog(onRefill);
-                    return true;
+                    return 1;
                 }
-                return false;
+                return 0;
             } else{
                 Prop item = (Prop) entity;
                 if (item.hasProperty(property)){
                     currentCharges = maxCharges;
                     printToLog(onRefill);
-                    return true;
+                    return 1;
                 }
-                return false;
+                return 0;
             }
         }
-        return false;
+        return 0;
     }
 }
