@@ -148,7 +148,6 @@ public class Popups {
     public static void deathPopup(){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-//        s.initOwner(stage);
         VBox dialogVbox = new VBox(20);
         dialogVbox.setPrefSize(200, 100);
 
@@ -169,10 +168,9 @@ public class Popups {
 
         int total = 0;
         int visited = 0;
-        for(PairWorld pw : Main.game.getWorlds().values()){
-            World currentWorld = pw.getWorld();
-            total += currentWorld.getRooms().values().size();
-            for(Room r : currentWorld.getRooms().values()){
+        for(World w : Main.game.getWorlds().values()){
+            total += w.getRooms().values().size();
+            for(Room r : w.getRooms().values()){
                 if (!r.isFirstVisit()){
                     visited++;
                 }

@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Entities.Enemies.Snake;
@@ -19,14 +20,10 @@ import com.al0ne.Entities.Items.ConcreteItems.Armor.LeatherArmour;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.HolyFountain;
 import com.al0ne.Entities.Items.Props.LockedDoor;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;
-import com.al0ne.Behaviours.World;
 import com.al0ne.Entities.Spells.MidasSpell;
 
 /**
@@ -243,5 +240,9 @@ public class AlphaWorld extends World{
         //maybe exit
         princessRoom.addEntity(peach);
         putRoom(princessRoom);
+
+        Player p = new Player(true, 20, getStartingRoom(), "You are alpha. And omega. Maybe.");
+
+        setPlayer(p);
     }
 }

@@ -20,7 +20,11 @@ public abstract class TimerHealth extends Status{
     public boolean resolveStatus(WorldCharacter character) {
         duration--;
         if(duration <= 0){
-            if(character.modifyHealth(modifier)){
+            int temp = character.getCurrentHealth();
+            if(!character.modifyHealth(modifier) && character instanceof Player){
+                ((Player) character).setCauseOfDeath(name);
+            }
+            if(temp != character.getCurrentHealth()){
                 printToLog(onTick);
             }
             duration = maxDuration;

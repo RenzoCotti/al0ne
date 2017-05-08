@@ -152,28 +152,28 @@ public class Player extends WorldCharacter{
 
     //this function equips an item to the correct slot, if it's a wearable
     public boolean wear(Item wearable){
-        for (Pair pair : inventory.values()){
-            Item currentItem = (Item) pair.getEntity();
-
-            if (wearable.getID().equals(currentItem.getID()) && currentItem.getType() == 'w'){
-                String part = ((Wearable) currentItem).getPart();
+//        for (Pair pair : inventory.values()){
+//            Item currentItem = (Item) pair.getEntity();
+            if (wearable.getType() == 'w'){
+                String part = ((Wearable) wearable).getPart();
                 if (part.equals("main hand")){
-                    wornItems.put(part, (Weapon) currentItem);
+                    wornItems.put(part, (Weapon) wearable);
                     printToLog("You now wield the "+wearable.getName());
                 } else if(part.equals("off hand")){
-                    wornItems.put(part, (Wearable) currentItem);
+                    wornItems.put(part, (Wearable) wearable);
                     printToLog("You now wear the "+wearable.getName());
                 } else if(part.equals("head")){
-                    wornItems.put(part, (Helmet) currentItem);
+                    wornItems.put(part, (Helmet) wearable);
                     printToLog("You now wear the "+wearable.getName());
                 } else if(part.equals("body")){
-                    wornItems.put(part, (Armor) currentItem);
+                    wornItems.put(part, (Armor) wearable);
                     printToLog("You now wear the "+wearable.getName());
                 }
                 return true;
             }
-        }
+//        }
         return false;
+
     }
 
     //this function prints the currently equipped weapon
@@ -236,26 +236,6 @@ public class Player extends WorldCharacter{
         }
         return damage;
     }
-
-
-    //debug printing
-//    public void printHealth() {
-//        printToLog("You have "+ currentHealth +"/"+maxHealth+" HP.");
-//    }
-
-
-    //this function modifies the health as above but also prints the health status
-//    public void modifyHealthPrint(int health) {
-//        if (this.currentHealth +health <= maxHealth){
-//            this.currentHealth +=health;
-//
-//            if (this.currentHealth<=0){
-//                this.currentHealth=0;
-//                alive = false;
-//            }
-//        }
-//        printHealthStatus();
-//    }
 
     //this function prints a string corresponding to the current
     //health level

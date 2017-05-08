@@ -8,9 +8,9 @@ import com.al0ne.Engine.Utility;
  * Created by BMW on 07/05/2017.
  */
 public class Mace extends Weapon{
-    public Mace(String id, String name, String description, String damageType, int armorPen,
-                 int damage, double weight, Size size, Material material) {
-        super(id, name, description, damageType, armorPen, damage, weight, size, material);
+    public Mace(String id, String name, String description, int armorPen,
+                 int damage, double weight, Material material) {
+        super(id, name, description, "blunt", armorPen, damage, weight, Size.NORMAL, material);
     }
 
     public Mace(Material m) {

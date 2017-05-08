@@ -16,14 +16,14 @@ public class Armor extends Protective {
     public Armor(String id, String name, String description,
                  double weight, int armor, Material material) {
         super(id, name, description, weight, armor, Size.LARGE, material);
-        this.part = "armor";
+        this.part = "body";
     }
 
     public Armor(Material m) {
         super(Material.stringify(m)+"armor", "Armor",
                 Utility.getArticle(Material.stringify(m))+" "
                         +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(), max(m.getToughness(), 1), Size.LARGE, m);
-        this.part = "armor";
+        this.part = "body";
     }
 
     @Override

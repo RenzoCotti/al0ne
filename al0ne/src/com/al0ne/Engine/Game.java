@@ -20,7 +20,7 @@ public class Game implements Serializable {
 
     protected String startingWorld;
     protected String currentWorld;
-    protected HashMap<String, PairWorld> worlds;
+    protected HashMap<String, World> worlds;
     protected int turnCounter;
     protected int worldCount;
     protected boolean debugMode;
@@ -47,20 +47,20 @@ public class Game implements Serializable {
     }
 
     public void setPlayer(Player p) {
-        PairWorld pw = worlds.get(currentWorld);
+        World pw = worlds.get(currentWorld);
         pw.setPlayer(p);
-        worlds.put(currentWorld, pw);
+//        worlds.put(currentWorld, pw);
     }
 
     public void setRoom(Room r) {
-        PairWorld pw = worlds.get(currentWorld);
+        World pw = worlds.get(currentWorld);
         Player p = getPlayer();
         p.setCurrentRoom(r);
         pw.setPlayer(p);
-        worlds.put(currentWorld, pw);
+//        worlds.put(currentWorld, pw);
     }
 
-    public HashMap<String, PairWorld> getWorlds() {
+    public HashMap<String, World> getWorlds() {
         return worlds;
     }
 
@@ -80,9 +80,9 @@ public class Game implements Serializable {
                 .append(this.notes).toString();
     }
 
-    public void addWorld(World world, Player player) {
+    public void addWorld(World world) {
         this.worldCount++;
-        this.worlds.put(world.getWorldName(), new PairWorld(player, world));
+        this.worlds.put(world.getWorldName(), world);
     }
 
     public void setNotes(String s) {
@@ -101,12 +101,12 @@ public class Game implements Serializable {
         this.currentWorld = currentWorld;
     }
 
-    public PairWorld getWorld(String worldID){
+    public World getWorld(String worldID){
         return worlds.get(worldID);
     }
 
     public HashMap<String, Room> getRooms(){
-        return worlds.get(currentWorld).getWorld().getRooms();
+        return worlds.get(currentWorld).getRooms();
     }
 
     public String getStartingWorld() {

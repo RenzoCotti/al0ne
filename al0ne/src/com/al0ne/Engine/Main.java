@@ -30,6 +30,8 @@ public class Main extends Application{
 
     public static int turnCounter = game.getTurnCount();
 
+    public static boolean started = false;
+
 
     public static String currentCommand = "";
 
@@ -39,6 +41,7 @@ public class Main extends Application{
     }
 
     private static void runGame(){
+        started = true;
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();
@@ -87,11 +90,15 @@ public class Main extends Application{
     }
 
     public static void printToLog(){
-        log.appendText("\n");
+        if(started){
+            log.appendText("\n");
+        }
     }
 
     public static void printToLog(String s){
-        log.appendText(s+"\n");
+        if(started){
+            log.appendText(s+"\n");
+        }
     }
 
     public static void printToSingleLine(String s){

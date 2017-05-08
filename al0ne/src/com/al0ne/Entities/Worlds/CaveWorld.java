@@ -1,19 +1,18 @@
 package com.al0ne.Entities.Worlds;
 
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Behaviours.Prop;
 import com.al0ne.Entities.Enemies.GiantRat;
+import com.al0ne.Entities.Items.Behaviours.Weapons.Mace;
 import com.al0ne.Entities.Items.ConcreteItems.Canteen;
 import com.al0ne.Entities.Items.ConcreteItems.Chest;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
-import com.al0ne.Behaviours.NPC;
 import com.al0ne.Entities.Items.Props.*;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Enemies.Wolf;
-import com.al0ne.Behaviours.World;
 
 public class CaveWorld extends World{
 
@@ -89,5 +88,12 @@ public class CaveWorld extends World{
         bossRoom.addEntity(boss);
 
         putRoom(bossRoom);
+
+        Player p = new Player(true, 20, getStartingRoom(), "You are a caveman.");
+        Mace club = new Mace("woodenclub", "Club", "A fairly large club.", 1,
+                1, 0.5, Material.WOOD);
+        p.simpleAddItem(club, 1);
+        p.wear(club);
+        setPlayer(p);
     }
 }

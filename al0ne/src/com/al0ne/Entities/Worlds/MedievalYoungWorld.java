@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
@@ -147,6 +148,13 @@ public class MedievalYoungWorld extends World{
         putRoom(pathForest);
 
 
-
+        Player p = new Player(true, 10, getStartingRoom(),
+                "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
+                        "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet.");
+        BodyClothing bc = new BodyClothing("roughclothes", "clothes",
+                "Some rough clothes, they look a bit worn", 0.5, Material.FIBRE);
+        p.simpleAddItem(bc, 1);
+        p.wear(bc);
+        setPlayer(p);
     }
 }

@@ -12,6 +12,7 @@ public class World implements Serializable{
     protected String worldName;
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
+    protected Player player;
 
     public World(String worldName, String startingRoom) {
         this.worldName = worldName;
@@ -37,5 +38,13 @@ public class World implements Serializable{
 
     public String getWorldName() {
         return worldName;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

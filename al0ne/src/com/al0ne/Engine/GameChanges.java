@@ -156,14 +156,14 @@ public class GameChanges {
 
     public static boolean changeWorld(String s){
         //save old state
-        PairWorld oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
+        World oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
         oldWorld.setPlayer(Main.player);
 
         if (!Main.game.hasWarpstone()){
             Main.game.setWarpstone();
 
-            for (PairWorld pw : Main.game.getWorlds().values()){
-                Player p = pw.getPlayer();
+            for (World w : Main.game.getWorlds().values()){
+                Player p = w.getPlayer();
 
                 if(!p.hasItemInInventory("warpstone")){
                     p.addOneItem(new Pair(new WarpStone(), 1));
@@ -183,9 +183,8 @@ public class GameChanges {
                 return true;
             default:
                 printToLog("404: world not found\nAvailable worlds:");
-                for(PairWorld pw : Main.game.getWorlds().values()){
-                    World currentWorld = pw.getWorld();
-                    printToLog("- "+currentWorld.getWorldName());
+                for(World w : Main.game.getWorlds().values()){
+                    printToLog("- "+w.getWorldName());
                 }
                 return false;
         }
