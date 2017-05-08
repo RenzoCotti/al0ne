@@ -1,10 +1,9 @@
 package com.al0ne.Entities.Statuses;
 
-import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
 import com.al0ne.Behaviours.WorldCharacter;
-import com.al0ne.Entities.Statuses.ConcreteStatuses.Dehydrated;
-import com.al0ne.Entities.Statuses.ConcreteStatuses.Starving;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Dehydration;
+import com.al0ne.Entities.Statuses.ConcreteStatuses.Starvation;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -30,16 +29,16 @@ public class BasicNeed extends Status {
 
                 Status finalStatus;
                 switch(this.finalStatus){
-                    case "starving":
-                        finalStatus = new Starving();
+                    case "starvation":
+                        finalStatus = new Starvation();
                         break;
-                    case "dehydrated":
-                        finalStatus = new Dehydrated();
+                    case "dehydration":
+                        finalStatus = new Dehydration();
                         break;
                     default:
                             //error
                         System.out.println("error in resolving status: "+this.finalStatus);
-                        finalStatus = new Dehydrated();
+                        finalStatus = new Dehydration();
                 }
                 if(duration != 0){
                     printToLog(finalStatus.getOnApply());

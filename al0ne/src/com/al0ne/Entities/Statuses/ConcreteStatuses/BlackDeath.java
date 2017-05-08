@@ -1,5 +1,6 @@
 package com.al0ne.Entities.Statuses.ConcreteStatuses;
 
+import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
 import com.al0ne.Behaviours.WorldCharacter;
 
@@ -17,7 +18,9 @@ public class BlackDeath extends Status{
     public boolean resolveStatus(WorldCharacter character) {
         duration++;
         if(duration % 5 == 0){
-            character.modifyHealth(-1);
+            if(!character.modifyHealth(-1) && character instanceof Player){
+                ((Player) character).setCauseOfDeath(name);
+            }
             printToLog(onTick);
         }
         return false;

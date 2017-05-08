@@ -22,7 +22,9 @@ public class HealthStatus extends Status{
     @Override
     public boolean resolveStatus(WorldCharacter character) {
         duration--;
-        character.modifyHealth(modifier);
+        if(!character.modifyHealth(modifier) && character instanceof Player){
+            ((Player) character).setCauseOfDeath(name);
+        }
         printToLog(onTick);
 
         if(duration <= 0){

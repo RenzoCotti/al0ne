@@ -188,7 +188,7 @@ public abstract class Enemy extends WorldCharacter {
     }
 
 
-    public boolean isAttacked(Player player, Room room){
+    public void isAttacked(Player player, Room room){
 
         aggro = true;
 
@@ -209,16 +209,15 @@ public abstract class Enemy extends WorldCharacter {
                         }
                     }
                 }
-                player.modifyHealth(-inflictedDamage);
-//                player.printHealth();
+                if(player.modifyHealth(-inflictedDamage)) {
+                    player.setCauseOfDeath(shortDescription);
+                }
             } else{
                 printToLog("Your armor absorbs the damage.");
             }
         } else{
             printToLog("The "+name.toLowerCase()+" attacks, but you manage to dodge.");
         }
-
-        return false;
     }
 
     public boolean isWeakAgainst(String type){

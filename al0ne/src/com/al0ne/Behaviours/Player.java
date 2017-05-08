@@ -57,6 +57,8 @@ public class Player extends WorldCharacter{
 
     //maps BodyPart to Item
     private HashMap<String, Wearable> wornItems;
+
+    private String causeOfDeath;
     
     // add also money pouch?
 
@@ -73,6 +75,7 @@ public class Player extends WorldCharacter{
         this.wornItems = new HashMap<>();
         this.story = story;
         this.quests = new HashMap<>();
+        this.causeOfDeath = "unknown causes";
         initialiseWorn();
         if(needs){
             putStatus(new Thirst());
@@ -702,10 +705,13 @@ public class Player extends WorldCharacter{
         } else if (entity.getType() == 'e'){
             Enemy enemy = (Enemy) entity;
             String type;
+            int armorPen;
             if(getWeapon()==null){
                 type="fists";
+                armorPen=0;
             } else{
                 type=getWeapon().getDamageType();
+                armorPen=getWeapon().getArmorPenetration();
             }
 
 
@@ -715,7 +721,7 @@ public class Player extends WorldCharacter{
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    int inflictedDamage = getDamage()-enemy.getArmorLevel();
+                    int inflictedDamage = getDamage() - Math.max(enemy.getArmorLevel()-armorPen, 0);
                     System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
                     if(inflictedDamage <= 0){
                         printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
@@ -730,9 +736,9 @@ public class Player extends WorldCharacter{
                         }
                     }
 
-                }else if(enemy.isWeakAgainst(type) ){
+                } else if(enemy.isWeakAgainst(type) ){
 
-                    int inflictedDamage = getDamage()-enemy.getArmorLevel();
+                    int inflictedDamage = getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
@@ -797,12 +803,10 @@ public class Player extends WorldCharacter{
         Pair silver = inventory.get("scoin");
         Pair brass = inventory.get("bcoin");
 
-        int toRemove = amt;
         int totalMoney = getMoney();
-        if(totalMoney >= toRemove){
+        if(totalMoney >= amt){
 
-            System.out.println("total due: "+toRemove+" current money: "+totalMoney);
-            totalMoney-=toRemove;
+            totalMoney-=amt;
 
             Pair tempGold = new Pair(new GoldCoin(), 0);
             Pair tempSilver = new Pair(new SilverCoin(), 0);
@@ -908,4 +912,11 @@ public class Player extends WorldCharacter{
         return this.quests.get(s) != null;
     }
 
+    public String getCauseOfDeath() {
+        return causeOfDeath;
+    }
+
+    public void setCauseOfDeath(String causeOfDeath) {
+        this.causeOfDeath = causeOfDeath;
+    }
 }

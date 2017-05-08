@@ -190,7 +190,7 @@ public class Popups {
 
 
 
-        String endString = "You have died... \nIn this game, you:\n- lasted for "+ Main.game.getTurnCount()+" turns.\n"+
+        String endString = "You have died...\nCause of death: "+Main.player.getCauseOfDeath()+".\n\nIn this game, you:\n- lasted for "+ Main.game.getTurnCount()+" turns.\n"+
                 "- explored "+visited+"/"+total+" of all the available places ("+percentage+"%).\n" +
                 "- had a total value of "+value+" in your inventory.\n";
 

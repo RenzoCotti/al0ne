@@ -83,17 +83,18 @@ public abstract class WorldCharacter extends Entity{
 
     //this function modifies health with the amount given
     //it binds it to maxHealth and 0
-    //returns true if we actually modify the health
+    //returns true if the player is still alive
     public boolean modifyHealth(int health) {
-        if (this.currentHealth +health <= maxHealth){
-            this.currentHealth +=health;
+        if (this.currentHealth + health <= maxHealth){
+            this.currentHealth += health;
             if (this.currentHealth<=0){
                 this.currentHealth=0;
                 alive = false;
+                return false;
             }
             return true;
         } else{
-            return false;
+            return true;
         }
     }
 

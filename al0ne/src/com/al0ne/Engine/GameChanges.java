@@ -182,7 +182,11 @@ public class GameChanges {
                 Main.currentRoom.visit();
                 return true;
             default:
-                printToLog("404: world not found");
+                printToLog("404: world not found\nAvailable worlds:");
+                for(PairWorld pw : Main.game.getWorlds().values()){
+                    World currentWorld = pw.getWorld();
+                    printToLog("- "+currentWorld.getWorldName());
+                }
                 return false;
         }
     }
@@ -217,6 +221,7 @@ public class GameChanges {
         if(currentRoom.hasEnemies()){
             for (Enemy e : currentRoom.getEnemyList()){
                 if(e.isAggro() && !e.isSnooze()){
+                    System.out.println(e.getName()+" attacks");
                     e.isAttacked(player, currentRoom);
                 } else{
                     if (e.isSnooze()){
