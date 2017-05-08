@@ -39,7 +39,6 @@ public class MedievalYoungWorld extends World{
 //        bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
 //        yourRoom.addEntity(bob);
 //        yourRoom.addEntity(new GoldCoin());
-
         yourRoom.visit();
         putRoom(yourRoom);
 

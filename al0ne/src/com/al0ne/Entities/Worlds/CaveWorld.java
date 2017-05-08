@@ -38,7 +38,6 @@ public class CaveWorld extends World{
         cave1.addEntity(river);
         cave1.addEntity(new Canteen());
         cave1.lockDirection("east", "cave1door");
-        cave1.visit();
 
         cave1.addEntity(new MoneyTree());
 

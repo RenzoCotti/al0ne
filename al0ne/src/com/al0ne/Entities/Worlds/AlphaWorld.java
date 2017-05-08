@@ -47,8 +47,6 @@ public class AlphaWorld extends World{
         chest.addItem(new Dagger(Material.IRON), 1);
         startRoom.addEntity(chest);
         startRoom.addEntity(new Snake());
-
-        startRoom.visit();
         putRoom(startRoom);
 
         Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");

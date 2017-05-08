@@ -180,9 +180,6 @@ public class Popups {
         }
 
         double percentage = ((double) visited/total)*100;
-//        *100;
-        System.out.println(visited+"/"+total);
-        System.out.println(percentage);
 
         percentage= Utility.twoDecimals(percentage);
 

@@ -179,6 +179,7 @@ public class GameChanges {
                 Main.player = Main.game.getPlayer();
                 Main.currentRoom = Main.player.getCurrentRoom();
                 Main.clearScreen();
+                Main.currentRoom.visit();
                 return true;
             default:
                 printToLog("404: world not found");
