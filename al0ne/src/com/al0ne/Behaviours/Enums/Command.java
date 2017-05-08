@@ -26,7 +26,10 @@ public enum Command {
     LOOK, HEALTH, INVENTORY,  EQUIPMENT, STORY, CAST,
 
     //npc
-    TALK, ATTACK, BUY, GIVE
+    TALK, ATTACK, BUY, GIVE,
+
+    //extra
+    LINUX
 
 }
 

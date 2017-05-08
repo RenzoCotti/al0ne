@@ -644,8 +644,7 @@ public class Player extends WorldCharacter{
             Prop prop = (Prop) entity;
             for (Command command : prop.getRequiredCommand()){
                     if(command.equals(action)){
-                        prop.used(currentRoom, this);
-                        return 1;
+                        return prop.used(currentRoom, this);
                     }
                 }
             }

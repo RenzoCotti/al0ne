@@ -249,6 +249,9 @@ public class ParseInput {
 
                     return HandleCommands.handleAttack(parsedInput, player, true);
                 }
+            case LINUX:
+                printToLog("This isn't a UNIX shell, ya dingus!");
+                return false;
             case NONE:
             default:
                 wrongCommand++;

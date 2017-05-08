@@ -12,6 +12,8 @@ import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Note;
 
+import java.util.ArrayList;
+
 /**
  * Created by BMW on 30/04/2017.
  */
@@ -94,10 +96,10 @@ public class MedievalYoungWorld extends World{
         neighbourPorch.addExit("east", "neighbourhood");
         neighbourPorch.addExit("west", "neighbourhouse");
         neighbourPorch.lockDirection("west", "neighbourkey");
-        DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
-                "a door bell", "you rung the door bell.", Material.BRASS, "neighbourkey");
-        doorBell.addCommand(Command.PRESS);
-        neighbourPorch.addEntity(doorBell);
+//        DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
+//                "a door bell", "you rung the door bell.", Material.BRASS, "neighbourkey");
+//        doorBell.addCommand(Command.PRESS);
+//        neighbourPorch.addEntity(doorBell);
         putRoom(neighbourPorch);
 
         Room neighbourHouse = new Room("neighbourhouse", "Neighbour's house",
@@ -121,6 +123,7 @@ public class MedievalYoungWorld extends World{
         Room villageChurch = new Room("villagechurch", "Village Church",
                 "The village's church. It's a fairly large building made out of large blocks of stone, " +
                         "with a tall bell tower.");
+        villageChurch.addEntity(new InvisibleProp("tower", "A tall tower, with a huge brass bell at the top"));
         villageChurch.addExit("east", "villagegraveyard");
         villageChurch.addExit("west", "square");
         putRoom(villageChurch);
@@ -136,8 +139,16 @@ public class MedievalYoungWorld extends World{
 
         Room villageHall = new Room("villagehall", "Hall", "This place is strangely deserted. Weird.");
         villageHall.addExit("south", "square");
-        villageHall.addEntity(new Prop("desk", "A large desk, with some papers on top of it.",
+        villageHall.addEntity(new Prop("desk", "A large desk with some drawers, with some papers on top of it.",
                 "a desk", Material.WOOD));
+        InvisibleProp drawers = new InvisibleProp("drawers", "Wooden drawers. What else did you expect?");
+        ArrayList<Interactable> drawersContent = new ArrayList<>();
+        drawersContent.add(new JunkItem("paperweight", "A paperweight.",
+                0.2, Size.VSMALL, Material.STONE));
+        drawersContent.add(new JunkItem("quill", "A goose quill, pretty light.", 0, Size.VSMALL));
+        drawers.setAddsItem("Opening the drawers reveals a pen and a paperweight", drawersContent);
+        drawers.addCommand(Command.OPEN);
+        villageHall.addEntity(drawers);
         villageHall.addEntity(new Note("vacation", "Hello, we are taking a day off " +
                 "in preparation for the celebration of tomorrow."));
         putRoom(villageHall);

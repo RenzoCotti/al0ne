@@ -63,6 +63,8 @@ public class CommandMap implements Serializable{
         commands.put("execute", Command.EXECUTE);
         commands.put("wait", Command.WAIT);
         commands.put("press", Command.PRESS);
+        commands.put("ls", Command.LINUX);
+
 
 
 
@@ -95,6 +97,9 @@ public class CommandMap implements Serializable{
         aliases.put("go northwest", Command.NORTHWEST);
         aliases.put("go southeast", Command.SOUTHEAST);
         aliases.put("go southwest", Command.SOUTHWEST);
+        aliases.put("mv", Command.LINUX);
+        aliases.put("rm", Command.LINUX);
+        aliases.put("cd", Command.LINUX);
 
     }
 
