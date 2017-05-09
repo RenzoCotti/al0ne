@@ -204,6 +204,7 @@ public class Room extends Entity{
                 }
             }
             props.removeAll(toRemove);
+            if(props.size() == 0) return;
 
             printToSingleLine("There is ");
             for (int i=0; i<props.size(); i++) {
@@ -260,7 +261,7 @@ public class Room extends Entity{
             try{
                 printToLog("The way "+currentDirection+" is blocked by "+entities.get(door).getEntity().getLongDescription().toLowerCase());
             } catch (NullPointerException ex){
-                printToLog("Nothing more to see here >_>");
+                System.out.println("Nothing more to see here >_>");
             }
         }
 

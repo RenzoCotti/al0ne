@@ -48,6 +48,8 @@ public class HandleCommands {
                     player.getCurrentRoom().printRoom();
                     player.getCurrentRoom().visit();
                 } else{
+                    player.getCurrentRoom().printEnemy();
+                    player.getCurrentRoom().printNPCs();
                     player.getCurrentRoom().printDirections();
                     printToLog();
                 }

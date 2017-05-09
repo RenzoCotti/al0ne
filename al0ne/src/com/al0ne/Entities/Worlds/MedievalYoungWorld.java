@@ -99,6 +99,7 @@ public class MedievalYoungWorld extends World{
         neighbourPorch.addExit("east", "neighbourhood");
         neighbourPorch.addExit("west", "neighbourhouse");
         neighbourPorch.lockDirection("west", "neighbourkey");
+        neighbourPorch.addEntity(new InvisibleProp("door", "It's locked"));
 //        DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
 //                "a door bell", "you rung the door bell.", Material.BRASS, "neighbourkey");
 //        doorBell.addCommand(Command.PRESS);
