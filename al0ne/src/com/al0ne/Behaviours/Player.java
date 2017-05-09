@@ -27,7 +27,7 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  * a maxWeight, double, representing the max carry weight
  * a currentWeight, double
  * a maxHealth, a double representing the max health
- * a curretnHealth
+ * a currentHealth
  * an attack, int, representing how likely the player is to hit
  * a dexterity, int, representing the player's dodging chance
  * a status, a HashMap <StatusID, Status>

@@ -6,11 +6,14 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Note;
+import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
 
@@ -70,10 +73,10 @@ public class MedievalYoungWorld extends World{
         mainHouse.addEntity(new Prop("chairs",
                 "Three chairs: one for mom, one for dad, one for you.", "some chairs"));
         NPC mom = new NPC("mom", "mom", "Your mom. She looks a bit tired today.",
-                "mom","Hey sweetie, I'd need a favour.");
+                "Hey sweetie, I'd need a favour.");
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
-                true, new Pair(new SilverCoin(), 6), true, "geteggs"));
+                true, new Pair(new BrassCoin(), 3), true, "geteggs"));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
@@ -114,7 +117,7 @@ public class MedievalYoungWorld extends World{
         square.addCustomDirection("To the east you see your town's church, to the north the village hall, " +
                 "to the west the market and to the south your neighbourhood.");
         square.addExit("east", "villagechurch");
-//        square.addExit("west", "villagemarket");
+        square.addExit("west", "villagemarket");
         square.addExit("south", "neighbourhood");
         square.addExit("north", "villagehall");
         square.addEntity(new Prop("Fountain", "A fountain made of stone"));
@@ -152,6 +155,16 @@ public class MedievalYoungWorld extends World{
         villageHall.addEntity(new Note("vacation", "Hello, we are taking a day off " +
                 "in preparation for the celebration of tomorrow."));
         putRoom(villageHall);
+
+        Room  villageMarket = new Room("villagemarket", "Market", "This is the market. " +
+                "There's a mixed smell of sweat and food lingering in the air ");
+        villageMarket.addExit("east", "square");
+        Shopkeeper Varra = new Shopkeeper("foodvendor", "Varra",
+                "A fairly tall man, a bit on the chubby side.", "Hi, I'm Varra. Want to see the items i sell?");
+        Varra.simpleAddItem(new Food("eggs", "eggs",
+                "A pack of six fresh eggs.", 0.3, Size.SMALL, 3), 3);
+        villageMarket.addEntity(Varra);
+        putRoom(villageMarket);
 
 
 

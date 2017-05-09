@@ -12,7 +12,7 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 11/02/2017.
  */
-public abstract class Food extends Item {
+public class Food extends Item {
 
     private int foodValue;
     public Food(String id, String name, String description, double weight, Size size, int foodValue) {

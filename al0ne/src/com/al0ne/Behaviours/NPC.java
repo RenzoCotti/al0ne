@@ -35,6 +35,14 @@ public class NPC extends WorldCharacter {
         this.type='n';
     }
 
+    public NPC(String id, String name, String description, String intro) {
+        super(id, name, description, name, 20, 40, 40, 1, 2);
+        this.subjects = new HashMap<>();
+        this.reactionItems = new HashMap<>();
+        this.intro=intro;
+        this.type='n';
+    }
+
     public NPC(String id, String name, String description, String shortDescription, String intro) {
         super(id, name, description, shortDescription, 20, 40, 40, 1, 2);
         this.subjects = new HashMap<>();
