@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class Main extends Application{
 
     public static TextArea log;
@@ -32,6 +34,11 @@ public class Main extends Application{
 
     public static boolean started = false;
 
+    public static ArrayList<String> oldCommands = new ArrayList<>();
+
+    public static int maxHistory = 20;
+
+    public static int historyCounter = 0;
 
     public static String currentCommand = "";
 
@@ -66,9 +73,14 @@ public class Main extends Application{
         }
         if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
             ParseInput.lastCommand = currentCommand;
+            if(oldCommands.size()+1 == maxHistory){
+                oldCommands.remove(0);
+            }
+            oldCommands.add(currentCommand);
         }
 
-
+        //we finally update the UI
+        UI.updateUI(scene);
 
         if (!player.isAlive()){
             printToLog("You have died...");
@@ -79,9 +91,6 @@ public class Main extends Application{
             Popups.deathPopup();
             return;
         }
-
-        //we finally update the UI
-        UI.updateUI(scene);
 
 
 

@@ -116,12 +116,23 @@ public class HandleCommands {
         ArrayList<Pair> potentialItems = new ArrayList<>();
         PotentialItems totalItems = new PotentialItems(potentialItems, 0);
 
-        //case inventory
-        if (number == 0) {
+        if(number == 0 || number == 1){
+            HashMap<String, Pair> toCheck;
+            if(number == 0){
+                toCheck = player.getInventory();
+            } else {
+                toCheck = player.getCurrentRoom().getEntities();
+            }
 
             //check if there is an exact match
-            for (Pair pair : player.getInventory().values()) {
-                Item b = (Item) pair.getEntity();
+            for (Pair pair : toCheck.values()) {
+                Entity b;
+                if(number == 0){
+                    b = pair.getEntity();
+                } else {
+                    b = pair.getEntity();
+                }
+
                 if (b.getName().equals(s)) {
                     potentialItems.add(pair);
                     int reliability = s.split(" ").length;
@@ -134,11 +145,12 @@ public class HandleCommands {
             String[] temp = s.split(" ");
             int max = 0;
             //we check the given string token by token
-            for (Pair pair : player.getInventory().values()){
+            for (Pair pair : toCheck.values()){
                 int reliability = 0;
                 //and we check with each pair in inventory if it contains the token
                 for (String token : temp) {
-                    Item a = (Item) pair.getEntity();
+                    Entity a = pair.getEntity();
+
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem) {
                         if (b.toLowerCase().equals(token)) {
@@ -155,46 +167,6 @@ public class HandleCommands {
                     }
                 }
             }
-            //case entity
-        } else if (number == 1) {
-            HashMap<String, Pair> entityList = player.getCurrentRoom().getEntities();
-            //check if there is an exact match
-            for (Pair pair : entityList.values()) {
-                Entity b = pair.getEntity();
-                if (b.getName().equals(s)) {
-                    potentialItems.add(pair);
-                    int reliability = s.split(" ").length;
-                    totalItems.setReliability(reliability);
-                    return totalItems;
-                }
-            }
-
-            int max = 0;
-            //otherwise, parse and check for partial matches
-            String[] temp = s.split(" ");
-            //we check the given string token by token
-            for (Pair pair : entityList.values()) {
-                int reliability = 0;
-                //and we check with each pair in inventory if it contains the token
-                for (String token : temp) {
-                    Entity a = pair.getEntity();
-                    String[] currentEntity = a.getName().split(" ");
-                    for (String b : currentEntity) {
-                        if (b.toLowerCase().equals(token)) {
-                            reliability++;
-                            if (max < reliability) {
-                                potentialItems.clear();
-                                max = reliability;
-                                totalItems.setReliability(max);
-                                potentialItems.add(pair);
-                            } else if(reliability == max){
-                                potentialItems.add(pair);
-                            }
-                        }
-                    }
-                }
-            }
-            //case it's a container
         } else if (number == 2) {
             ArrayList<Container> containers = player.getCurrentRoom().getContainers();
             //check if there is an exact match

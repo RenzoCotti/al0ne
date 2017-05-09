@@ -20,7 +20,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
+import static javafx.scene.input.KeyCode.DOWN;
 import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCode.UP;
 
 /**
  * Created by BMW on 13/04/2017.
@@ -85,6 +87,7 @@ public class UI {
 
         Main.input.setOnKeyPressed(event -> {
             if (event.getCode().equals(ENTER)){
+                Main.historyCounter=0;
                 Player player = Main.player;
                 Room currentRoom = Main.currentRoom;
                 try{
@@ -98,6 +101,25 @@ public class UI {
                     Popups.crashPopup(stage);
                     ex.printStackTrace();
                 }
+            } else if(event.getCode().equals(UP)){
+                if(Main.historyCounter+1 < Main.maxHistory && Main.historyCounter+1 <= Main.oldCommands.size()){
+                    Main.historyCounter++;
+                    Main.input.requestFocus();
+                    Main.input.setText(Main.oldCommands.get(Main.oldCommands.size() - Main.historyCounter));
+                    Main.input.positionCaret(Main.input.getText().length());
+                }
+            } else if(event.getCode().equals(DOWN)){
+                if(Main.historyCounter-1 > 0 ){
+                    Main.historyCounter--;
+                    Main.input.requestFocus();
+                    Main.input.setText(Main.oldCommands.get(Main.oldCommands.size() - Main.historyCounter));
+                    Main.input.positionCaret(Main.input.getText().length());
+                } else if (Main.historyCounter-1 == 0){
+                    Main.historyCounter = 0;
+                    Main.input.requestFocus();
+                    Main.input.setText("");
+                }
+
             }
         });
 
