@@ -31,7 +31,7 @@ public class UI {
 
     public static Scene createContent(){
 
-        VBox root = new VBox(1);
+        VBox root = new VBox();
         Scene done;
 
 
@@ -39,7 +39,7 @@ public class UI {
 
 
         Main.log = new TextArea();
-        Main.log.setPrefHeight(550);
+        Main.log.setPrefHeight(800);
         Main.log.setPrefWidth(800);
         Main.log.setEditable(false);
         Main.log.setWrapText(true);
@@ -80,8 +80,8 @@ public class UI {
 
         root.getChildren().addAll(menuBar, container, Main.input);
 
-        root.setPrefSize(800,600);
-
+        root.setPrefSize(1000,700);
+        root.setVgrow(Main.log, Priority.ALWAYS);
 
         done = new Scene(root);
 

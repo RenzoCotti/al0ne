@@ -33,7 +33,7 @@ public class Game implements Serializable {
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
         this.worldCount = 0;
-        this.debugMode=true;
+        this.debugMode=false;
         this.commands = new CommandMap();
 
     }
@@ -119,7 +119,7 @@ public class Game implements Serializable {
 
     public void toggleDebugMode(){
         getPlayer().setMaxHealth(99);
-        getPlayer().setMaxWeight(90);
+        getPlayer().setMaxWeight(180);
         getPlayer().setArmor(20);
         getPlayer().setDamage(20);
         this.debugMode = !this.debugMode;

@@ -15,7 +15,7 @@ public class Mace extends Weapon{
 
     public Mace(Material m) {
         super(Material.stringify(m)+"mace", "Mace", Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" mace.", "blunt", 2, Math.max(m.getDamage()-2, 1),
+                        +Material.stringify(m)+" mace.", "blunt", Math.max(m.getDamage()-1, 1), Math.max(m.getDamage()-3, 1),
                 Math.max(m.getWeight()-0.8, 2), Size.NORMAL, m);
     }
 }

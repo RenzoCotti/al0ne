@@ -41,8 +41,17 @@ public class SideMenu {
         TableColumn weightColumn = new TableColumn("Kg");
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         weightColumn.setMinWidth(40);
+        TableColumn value = new TableColumn("$");
+        value.setCellValueFactory(new PropertyValueFactory<>("value"));
+        value.setMinWidth(40);
+        TableColumn damage = new TableColumn("ATK/ENC");
+        damage.setCellValueFactory(new PropertyValueFactory<>("damage"));
+        damage.setMinWidth(40);
+        TableColumn defense = new TableColumn("DEF/AP");
+        defense.setCellValueFactory(new PropertyValueFactory<>("defense"));
+        defense.setMinWidth(40);
 
-        inv.getColumns().addAll(amount, itemColumn, weightColumn);
+        inv.getColumns().addAll(amount, itemColumn, weightColumn, value, damage, defense);
 
         inv.setItems(GameChanges.getInventoryData());
 

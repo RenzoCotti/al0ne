@@ -59,7 +59,7 @@ public class CommandMap implements Serializable{
         commands.put("warp", Command.WARP);
         commands.put("death", Command.DEATH);
         commands.put("commands", Command.COMMANDS);
-        commands.put("ilikecheese", Command.DEBUG);
+        commands.put("asd", Command.DEBUG);
         commands.put("execute", Command.EXECUTE);
         commands.put("wait", Command.WAIT);
         commands.put("press", Command.PRESS);

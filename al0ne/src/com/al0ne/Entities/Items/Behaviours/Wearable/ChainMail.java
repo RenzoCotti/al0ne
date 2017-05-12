@@ -24,8 +24,8 @@ public class ChainMail extends Armor {
     public ChainMail(Material m) {
         super(Material.stringify(m)+"chainmail", "Chainmail",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" chainmail.", m.getToughness()+m.getWeight(),
-                m.getToughness(), (int)m.getWeight()*5, Size.LARGE, m);
+                        +Material.stringify(m)+" chainmail.", m.getToughness()+m.getWeight()*1.2,
+                Math.max(m.getToughness(), 1), (int)m.getWeight()*5, Size.LARGE, m);
     }
 
     @Override

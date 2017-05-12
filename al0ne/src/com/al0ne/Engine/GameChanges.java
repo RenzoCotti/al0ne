@@ -200,16 +200,22 @@ public class GameChanges {
                 Item currentItem = (Item) pair.getEntity();
                 double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
                 String name = currentItem.getName();
-                if(Main.game.isInDebugMode()){
+                int damage = 0;
+                int defense = 0;
+//                if(Main.game.isInDebugMode()){
                     if (currentItem instanceof Protective){
-                        name=" ("+((Protective)currentItem).getArmor()+" DEF) "+"$"+currentItem.getPrice()+" "+name;
+                        defense = ((Protective) currentItem).getArmor();
+                        damage = ((Protective) currentItem).getEncumberment();
+//                        name=" ("+((Protective)currentItem).getArmor()+" DEF) "+"$"+currentItem.getPrice()+" "+name;
                     } else if (currentItem instanceof Weapon){
-                        name=" ("+((Weapon)currentItem).getDamage()+"DMG/ "+
-                                ((Weapon)currentItem).getArmorPenetration()+"AP) "+"$"+currentItem.getPrice()+" "+name;
+                        damage = ((Weapon) currentItem).getDamage();
+                        defense = ((Weapon) currentItem).getArmorPenetration();
+//                        name=" ("+((Weapon)currentItem).getDamage()+"DMG/ "+
+//                                ((Weapon)currentItem).getArmorPenetration()+"AP) "+"$"+currentItem.getPrice()+" "+name;
                     }
-                }
+//                }
 
-                SimpleItem s = new SimpleItem(name, pair.getCount(), weight);
+                SimpleItem s = new SimpleItem(name, pair.getCount(), weight, currentItem.getPrice(),defense, damage);
                 data.add(s);
             }
         }

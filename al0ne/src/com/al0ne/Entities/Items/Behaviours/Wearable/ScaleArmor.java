@@ -13,7 +13,7 @@ import com.al0ne.Entities.Items.Behaviours.Protective;
 public class ScaleArmor extends Armor {
     public ScaleArmor(String id, String name, String description,
                       double weight, int armor, Material material) {
-        super(id, name, description, weight, armor, 10, Size.LARGE, material);
+        super(id, name, description, weight, armor, 15, Size.LARGE, material);
         this.part = "body";
     }
 
@@ -26,8 +26,8 @@ public class ScaleArmor extends Armor {
     public ScaleArmor(Material m) {
         super(Material.stringify(m)+"scalearmor", "Scale Armor",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" scale armor.", m.getToughness()+m.getWeight(),
-                m.getToughness(), (int)m.getWeight()*10, Size.LARGE, m);
+                        +Material.stringify(m)+" scale armor.", m.getToughness()+m.getWeight()*1.5,
+                Math.max(m.getToughness(), 1), (int)m.getWeight()*10, Size.LARGE, m);
         this.part = "body";
     }
 

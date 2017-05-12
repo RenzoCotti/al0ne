@@ -29,7 +29,7 @@ public class Armor extends Protective {
         super(Material.stringify(m)+"armor", "Armor",
                 Utility.getArticle(Material.stringify(m))+" "
                         +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(),
-                max(m.getToughness(), 1), (int)m.getWeight(), Size.LARGE, m);
+                max(m.getToughness(), 1), (int)m.getWeight()*10, Size.LARGE, m);
         this.part = "body";
     }
 

@@ -12,10 +12,17 @@ public class SimpleItem {
     private final SimpleIntegerProperty amount;
     private final SimpleDoubleProperty weight;
 
-    public SimpleItem(String name, int amount, double weight) {
+    private final SimpleIntegerProperty value;
+    private final SimpleIntegerProperty damage;
+    private final SimpleIntegerProperty defense;
+
+    public SimpleItem(String name, int amount, double weight, int value, int defense, int damage) {
         this.name = new SimpleStringProperty(name);
         this.amount = new SimpleIntegerProperty(amount);
         this.weight = new SimpleDoubleProperty(weight);
+        this.value = new SimpleIntegerProperty(value);
+        this.damage = new SimpleIntegerProperty(damage);
+        this.defense = new SimpleIntegerProperty(defense);
     }
 
     public String getName() {
@@ -52,5 +59,41 @@ public class SimpleItem {
 
     public void setWeight(double weight) {
         this.weight.set(weight);
+    }
+
+    public int getValue() {
+        return value.get();
+    }
+
+    public SimpleIntegerProperty valueProperty() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value.set(value);
+    }
+
+    public int getDamage() {
+        return damage.get();
+    }
+
+    public SimpleIntegerProperty damageProperty() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage.set(damage);
+    }
+
+    public int getDefense() {
+        return defense.get();
+    }
+
+    public SimpleIntegerProperty defenseProperty() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense.set(defense);
     }
 }

@@ -53,6 +53,7 @@ public class Main extends Application{
         currentRoom.printRoom();
         printToLog();
         currentRoom.printName();
+        game.toggleDebugMode();
     }
     public static void hasNextLine(String s, Scene scene){
         currentCommand = s;

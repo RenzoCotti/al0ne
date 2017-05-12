@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * Created by BMW on 02/05/2017.
  */
 public enum Material {
-    IRON(3, 3, 3, 2), BRASS(0, 0, 1.5, 1), SILVER(2, 2, 1, 6), GOLD(1, 1, 4, 12), STEEL(4, 4, 3, 2),
+    IRON(3, 3, 3, 2), BRASS(0, 0, 2, 1), SILVER(2, 2, 1, 6), GOLD(1, 1, 4, 12), STEEL(4, 4, 3, 2),
 
-    WOOD(1, 2, 3, 0), STONE(1, 1, 4, 0), LEATHER(1, 0.5, 4),
+    WOOD(1, 2, 3, 0), STONE(1, 1, 4, 0), LEATHER(1, 1, 4),
 
     GLASS(0.5, 1), PAPER(1, 1), FIBRE(0.5, 0), CLAY(0, 0.5, 0),
 

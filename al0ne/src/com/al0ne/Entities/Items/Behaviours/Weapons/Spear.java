@@ -15,8 +15,8 @@ public class Spear extends Weapon{
 
     public Spear(Material m) {
         super(Material.stringify(m)+"spear", "Spear", Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" spear.", "pierce", 1, Math.max(m.getDamage()-1, 1),
-                Math.max(m.getWeight()-1, 2), Size.NORMAL, m);
+                        +Material.stringify(m)+" spear.", "pierce", Math.max(m.getDamage()-2, 1), Math.max(m.getDamage()-2, 1),
+                Math.max(m.getWeight()-1.2, 1.4), Size.NORMAL, m);
     }
 }
 
