@@ -4,6 +4,7 @@ import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Priority;
@@ -61,8 +62,11 @@ public class SideMenu {
         weight.setId("weightLabel");
         Label health = new Label("Health: "+Main.player.getCurrentHealth()+" / "+ Main.player.getMaxHealth());
         health.setId("healthLabel");
-        Label totalArmor = new Label("Armor: "+Main.player.getArmorLevel());
+        Label totalArmor = new Label("Total Armor: "+Main.player.getArmorLevel());
         totalArmor.setId("totalArmor");
+        Label encumberment = new Label("Encumberment: "+Main.player.getEncumberment());
+        encumberment.setId("encumberment");
+        encumberment.setPadding(new Insets(10, 0, 0, 0));
 
 
         Label equippedItems = new Label("Equipped items:");
@@ -87,7 +91,11 @@ public class SideMenu {
 
         VBox listStats = new VBox();
         listStats.setPadding(new Insets(10, 10, 10, 10));
-        listStats.getChildren().addAll(playerStats, health, totalArmor, weight, equippedItems, head, armor, weapon, offHand);
+        listStats.getChildren().addAll(playerStats, health, totalArmor, weight, equippedItems, head, armor, weapon, offHand, encumberment);
+
+        for(Node n: listStats.getChildren()){
+            n.setStyle("-fx-font: "+Main.fontSize+"px \"Verdana\";");
+        }
 
         stats.setContent(listStats);
 

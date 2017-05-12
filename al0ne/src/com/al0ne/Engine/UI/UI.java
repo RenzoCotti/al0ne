@@ -162,6 +162,9 @@ public class UI {
         Label totalArmor = (Label) s.lookup("#totalArmor");
         totalArmor.setText("Total Armor: "+Main.player.getArmorLevel());
         totalArmor.setFont(Font.font("Verdana", Main.fontSize));
+        Label encumberment = (Label) s.lookup("#encumberment");
+        encumberment.setText("Encumberment: "+Main.player.getEncumberment());
+        encumberment.setFont(Font.font("Verdana", Main.fontSize));
 
 
         Label head = (Label) s.lookup("#headLabel");

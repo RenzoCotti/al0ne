@@ -47,17 +47,25 @@ public class AlphaWorld extends World{
         putRoom(startRoom);
 
         Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");
-        for(Material m : Material.getMaterials(true)){
-            armorRoom.addEntity(new Helmet(m));
+//        for(Material m : Material.getMaterials(true)){
+//            armorRoom.addEntity(new Helmet(m));
+//        }
+//
+//        for(Material m : Material.getMaterials(true)){
+//            armorRoom.addEntity(new Armor(m));
+//        }
+//
+//        for(Material m : Material.getMaterials(true)){
+//            armorRoom.addEntity(new Shield(m));
+//        }
+        for(Material m : Material.getMetals()){
+            armorRoom.addEntity(new ChainMail(m));
         }
 
-        for(Material m : Material.getMaterials(true)){
-            armorRoom.addEntity(new Armor(m));
+        for(Material m : Material.getMetals()){
+            armorRoom.addEntity(new PlateArmor(m));
         }
 
-        for(Material m : Material.getMaterials(true)){
-            armorRoom.addEntity(new Shield(m));
-        }
         armorRoom.addExit("south", "startroom");
         armorRoom.addExit("north", "weaponroom");
 

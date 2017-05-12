@@ -65,11 +65,23 @@ public enum Material {
         materials.add(WOOD);
         materials.add(GOLD);
         materials.add(STEEL);
+        materials.add(BRASS);
+        materials.add(SILVER);
         if(armor){
             materials.add(LEATHER);
         } else{
             materials.add(STONE);
         }
+        return materials;
+    }
+
+    public static ArrayList<Material> getMetals(){
+        ArrayList<Material> materials = new ArrayList<>();
+        materials.add(IRON);
+        materials.add(GOLD);
+        materials.add(STEEL);
+        materials.add(BRASS);
+        materials.add(SILVER);
         return materials;
     }
 

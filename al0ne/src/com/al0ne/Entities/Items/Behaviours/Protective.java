@@ -13,15 +13,21 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public abstract class Protective extends Wearable {
     protected int armor;
+    protected int encumberment;
 
     public Protective(String id, String name, String description,
-                      double weight, int armor, Size size, Material material) {
+                      double weight, int armor, int encumberment, Size size, Material material) {
         super(id, name, description, weight, size, material);
         this.armor=armor;
+        this.encumberment=encumberment;
     }
 
     public int getArmor() {
         return armor;
+    }
+
+    public int getEncumberment() {
+        return encumberment;
     }
 
     @Override

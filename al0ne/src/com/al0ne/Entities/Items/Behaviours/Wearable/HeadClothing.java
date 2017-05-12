@@ -8,6 +8,6 @@ import com.al0ne.Behaviours.Enums.Size;
  */
 public class HeadClothing extends Helmet{
     public HeadClothing(String id, String name, String description, double weight, Material material) {
-        super(id, name, description, weight, 0, material);
+        super(id, name, description, weight, 0, 0, Size.SMALL, material);
     }
 }

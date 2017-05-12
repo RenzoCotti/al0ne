@@ -14,21 +14,22 @@ import static java.lang.Math.max;
  */
 public class Armor extends Protective {
     public Armor(String id, String name, String description,
-                 double weight, int armor, Material material) {
-        super(id, name, description, weight, armor, Size.LARGE, material);
+                 double weight, int armor, int encumberment, Material material) {
+        super(id, name, description, weight, armor, encumberment, Size.LARGE, material);
         this.part = "body";
     }
 
     public Armor(String id, String name, String description,
-                 double weight, int armor, Size s, Material material) {
-        super(id, name, description, weight, armor, s, material);
+                 double weight, int armor, int encumberment, Size s, Material material) {
+        super(id, name, description, weight, armor, encumberment, s, material);
         this.part = "body";
     }
 
     public Armor(Material m) {
         super(Material.stringify(m)+"armor", "Armor",
                 Utility.getArticle(Material.stringify(m))+" "
-                        +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(), max(m.getToughness(), 1), Size.LARGE, m);
+                        +Material.stringify(m)+" armor.", m.getToughness()+m.getWeight(),
+                max(m.getToughness(), 1), (int)m.getWeight(), Size.LARGE, m);
         this.part = "body";
     }
 

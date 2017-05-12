@@ -237,6 +237,30 @@ public class Player extends WorldCharacter{
         return damage;
     }
 
+    public int getEncumberment(){
+        Armor armor = getArmor();
+        Helmet helmet = getHelmet();
+        Wearable offHand = getOffHand();
+
+        int encumberment=0;
+        if(armor != null){
+            encumberment= armor.getEncumberment();
+        }
+        if(helmet != null){
+            encumberment= helmet.getEncumberment();
+        }
+        if(offHand != null && offHand instanceof Shield){
+            encumberment= ((Shield) offHand).getEncumberment();
+        }
+
+        return encumberment;
+    }
+
+    @Override
+    public int getDexterity(){
+        return dexterity-getEncumberment();
+    }
+
     //this function prints a string corresponding to the current
     //health level
     public void printHealthStatus(){

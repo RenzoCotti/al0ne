@@ -63,6 +63,7 @@ public abstract class WorldCharacter extends Entity{
         return attack;
     }
     public int getDexterity() {
+
         return dexterity;
     }
     public int getMaxHealth() {
