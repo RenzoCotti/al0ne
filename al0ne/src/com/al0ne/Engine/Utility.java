@@ -1,15 +1,21 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
 import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -145,6 +151,39 @@ public class Utility {
         Wearable s = Main.player.getOffHand();
         if(s == null) return "None.";
         return s.getName();
+    }
+
+
+    public static ArrayList<Pair> toCoins(int value){
+
+        int totalMoney = value;
+
+
+            Pair tempGold = new Pair(new GoldCoin(), 0);
+            Pair tempSilver = new Pair(new SilverCoin(), 0);
+            Pair tempBrass = new Pair(new BrassCoin(), 0);
+            ArrayList<Pair> values = new ArrayList<>();
+            values.add(tempGold);
+            values.add(tempSilver);
+            values.add(tempBrass);
+
+            while (totalMoney > 0){
+                if(!(totalMoney % 10 == 0)){
+                    //we subtract brass
+                    values.get(2).addCount();
+                    totalMoney--;
+                } else if(!(totalMoney % 100 == 0)){
+                    //we subtract silver
+                    values.get(1).addCount();
+                    totalMoney = totalMoney - 10;
+                } else{
+                    //we subtract gold
+                    values.get(0).addCount();
+                    totalMoney= totalMoney - 100;
+                }
+            }
+
+            return values;
     }
 
 }

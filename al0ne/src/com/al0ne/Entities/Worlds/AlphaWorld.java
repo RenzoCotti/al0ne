@@ -2,7 +2,9 @@ package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Weapons.*;
@@ -36,12 +38,20 @@ public class AlphaWorld extends World{
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
         startRoom.addExit("northwest", "armorroom");
+        startRoom.addExit("northeast", "lootroom");
         Container chest = new Chest();
         chest.addItem(new SilverCoin(), 100);
         chest.addItem(new Dagger(Material.IRON), 1);
         startRoom.addEntity(chest);
         startRoom.addEntity(new Snake());
         putRoom(startRoom);
+
+        Room lootRoom = new Room("lootroom", "Looty room", "A room full of loot! yay!");
+        lootRoom.addExit("southwest", "startroom");
+        for(Pair p: lootTable.getLoot(123)){
+            lootRoom.addEntity(p.getEntity(), p.getCount());
+        }
+        putRoom(lootRoom);
 
         Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");
 

@@ -13,11 +13,13 @@ public class World implements Serializable{
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
     protected Player player;
+    protected LootTable lootTable;
 
     public World(String worldName, String startingRoom) {
         this.worldName = worldName;
         this.startingRoom=startingRoom;
         this.rooms = new HashMap<>();
+        this.lootTable = new LootTable();
     }
 
     public Room getStartingRoom() {
