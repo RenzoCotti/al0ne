@@ -239,7 +239,7 @@ public class GameChanges {
     public static void restartGame(){
         GameChanges.changeWorld(Main.game.getStartingWorld());
         Main.input.setDisable(false);
-        Main.game = new WarpGame(player.hasNeeds());
+        Main.game = new WarpGame();
         Main.player = Main.game.getPlayer();
         Main.currentRoom = Main.game.getRoom();
         Main.log.setText("");

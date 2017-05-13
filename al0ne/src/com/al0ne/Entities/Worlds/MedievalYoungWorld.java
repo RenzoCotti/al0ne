@@ -72,13 +72,19 @@ public class MedievalYoungWorld extends World{
                 "Three chairs: one for mom, one for dad, one for you.", "some chairs"));
         NPC mom = new NPC("mom", "mom", "Your mom. She looks a bit tired today.",
                 "Hey sweetie, I'd need a favour.");
+        NPC dad = new NPC("dad", "dad", "Your dad. He's a bit flushed, he must've just run.",
+                "Son, we have to talk about the woods");
+        dad.addSubject("woods", new Subject("They are pretty nice huh?"));
+        mainHouse.setQuestRoom("geteggs", "At this very moment," +
+                " the door opens: your dad has come home", dad);
+
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
                 true, new Pair(new BrassCoin(), 3), true, "geteggs"));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
-        mom.addReactionItem("eggs", new SliceOfCake());
+        mom.addReactionItem("eggs", "geteggs", new SliceOfCake());
         mainHouse.addEntity(mom);
         mainHouse.addExit("south", "homehallway");
         mainHouse.addExit("west", "neighbourhood");
@@ -181,6 +187,7 @@ public class MedievalYoungWorld extends World{
                 "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FIBRE);
         p.simpleAddItem(bc, 1);
         p.wear(bc);
+        p.simpleAddItem(new Food("eggs", "eggs", "asd", 0, Size.NORMAL, 0), 1);
         setPlayer(p);
     }
 }

@@ -6,6 +6,7 @@ import com.al0ne.Entities.Items.Behaviours.Container;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -24,17 +25,24 @@ import static com.al0ne.Engine.Main.printToSingleLine;
 public class Room extends Entity{
 
     //maps direction - room ID
-    private HashMap<String, String> exits;
+    protected HashMap<String, String> exits;
     //maps door ID - direction
-    private HashMap<String, String> lockedDirections;
+    protected HashMap<String, String> lockedDirections;
 
     //maps entityID - Pair(Entity, amt)
-    private HashMap<String, Pair> entities;
+    protected HashMap<String, Pair> entities;
 
+    protected String customDirections;
 
-    private String customDirections;
+    protected boolean firstVisit;
 
-    private boolean firstVisit;
+    protected boolean questRoom;
+
+    private String questID;
+    private String onQuestCompletion;
+
+    private boolean addsEntity;
+    private Entity toAdd;
 
 
 
@@ -42,9 +50,10 @@ public class Room extends Entity{
         super(id, name, description, name);
         this.exits=new HashMap<>();
         this.lockedDirections =new HashMap<>();
-        customDirections = null;
-        entities = new HashMap<>();
-        firstVisit = true;
+        this.customDirections = null;
+        this.entities = new HashMap<>();
+        this.firstVisit = true;
+        this.questRoom = false;
     }
 
     @Override
@@ -58,6 +67,22 @@ public class Room extends Entity{
 
     public void visit(){
         firstVisit = false;
+    }
+
+    public void setQuestRoom(String questID, String onQuestCompletion){
+        this.questRoom = true;
+        this.questID = questID;
+        this.onQuestCompletion = onQuestCompletion;
+        this.addsEntity = false;
+        this.toAdd = null;
+    }
+
+    public void setQuestRoom(String questID, String onQuestCompletion, Entity toAdd){
+        this.questRoom = true;
+        this.questID = questID;
+        this.onQuestCompletion = onQuestCompletion;
+        this.addsEntity = true;
+        this.toAdd = toAdd;
     }
 
 
@@ -378,4 +403,25 @@ public class Room extends Entity{
         return getEnemyList().size() > 0;
     }
 
+    public String getQuestID() {
+        return questID;
+    }
+
+    public Entity getToAdd() {
+        return toAdd;
+    }
+
+    public void setToAdd(Entity toAdd) {
+        this.toAdd = toAdd;
+    }
+
+    public void handleQuestRoom(Player player){
+        if(questRoom && player.hasDoneQuest(questID)){
+            printToLog(onQuestCompletion);
+            if(addsEntity){
+                addEntity(toAdd);
+            }
+            questID=null;
+        }
+    }
 }

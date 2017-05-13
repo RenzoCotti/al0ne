@@ -12,7 +12,7 @@ import com.al0ne.Entities.Worlds.MedievalYoungWorld;
 public class WarpGame extends Game{
     private boolean warpstone;
 
-    public WarpGame(boolean needs) {
+    public WarpGame() {
         super();
         this.warpstone = false;
 

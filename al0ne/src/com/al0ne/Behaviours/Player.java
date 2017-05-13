@@ -910,9 +910,18 @@ public class Player extends WorldCharacter{
         this.quests.put(s, false);
     }
 
+    public void completeQuest(String s) {
+        if(this.quests.get(s) != null){
+            this.quests.put(s, true);
+        }
+    }
+
     //returns true if the player has finished the quest
     public boolean hasDoneQuest(String s) {
-        return this.quests.get(s) != null;
+        if(this.quests.get(s) != null){
+            return this.quests.get(s);
+        }
+        return false;
     }
 
     public String getCauseOfDeath() {

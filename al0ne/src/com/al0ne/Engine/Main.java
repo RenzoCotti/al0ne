@@ -24,7 +24,7 @@ public class Main extends Application{
 
     public static TextArea notes;
 
-    public static WarpGame game = new WarpGame(true);
+    public static WarpGame game = new WarpGame();
 
     public static Player player = game.getPlayer();
 
@@ -66,6 +66,8 @@ public class Main extends Application{
 
             //we make the statuses tick
             player.handleStatuses();
+
+            currentRoom.handleQuestRoom(player);
         }
 
 
