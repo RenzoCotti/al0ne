@@ -2,10 +2,9 @@ package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.WarpStone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

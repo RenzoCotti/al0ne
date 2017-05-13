@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.Behaviours.Wearable;
+package com.al0ne.Entities.Items.ConcreteItems.Armor;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Protective;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 
 /**
  * Created by BMW on 23/03/2017.
@@ -26,10 +27,5 @@ public class ChainMail extends Armor {
                 Utility.getArticle(Material.stringify(m))+" "
                         +Material.stringify(m)+" chainmail.", m.getToughness()+m.getWeight()*1.2,
                 Math.max(m.getToughness(), 1), (int)m.getWeight()*5, Size.LARGE, m);
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 }

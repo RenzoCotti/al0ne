@@ -59,7 +59,11 @@ public enum Material {
         return price;
     }
 
-    public static ArrayList<Material> getMaterials(boolean armor){
+    //0: armor
+    //1: weapon
+    //2: shield
+    //3: helmet
+    public static ArrayList<Material> getMaterials(int number){
         ArrayList<Material> materials = new ArrayList<>();
         materials.add(IRON);
         materials.add(WOOD);
@@ -67,10 +71,14 @@ public enum Material {
         materials.add(STEEL);
         materials.add(BRASS);
         materials.add(SILVER);
-        if(armor){
+        if(number == 0){
             materials.add(LEATHER);
-        } else{
+        } else if(number == 1){
             materials.add(STONE);
+        } else if(number == 2){
+
+        } else if(number == 3){
+
         }
         return materials;
     }

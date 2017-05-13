@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.ConcreteItems;
+package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;

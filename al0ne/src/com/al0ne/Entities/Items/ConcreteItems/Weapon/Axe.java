@@ -1,13 +1,14 @@
-package com.al0ne.Entities.Items.Behaviours.Weapons;
+package com.al0ne.Entities.Items.ConcreteItems.Weapon;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 
 /**
  * Created by BMW on 07/05/2017.
  */
-public class Axe extends Weapon{
+public class Axe extends Weapon {
     public Axe(String id, String name, String description, String damageType, int armorPen,
                 int damage, double weight, Size size, Material material) {
         super(id, name, description, damageType, armorPen, damage, weight, size, material);

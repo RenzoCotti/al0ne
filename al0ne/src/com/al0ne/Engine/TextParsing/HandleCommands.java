@@ -2,18 +2,16 @@ package com.al0ne.Engine.TextParsing;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
-import com.al0ne.Behaviours.Enums.CommandMap;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PotentialItems;
 import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.ConcreteItems.Spellbook;
+import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

@@ -13,6 +13,13 @@ import static java.lang.Math.max;
  * Created by BMW on 23/03/2017.
  */
 public class Shield extends Protective{
+
+    public Shield(String id, String name, String description,
+                  double weight, int armor, int encumberment, Size s, Material material) {
+        super(id, name, description, weight, armor, encumberment, s, material);
+        this.part="off hand";
+    }
+
     public Shield(String id, String name, String description,
                   double weight, int armor, Material material) {
         super(id, name, description, weight, armor, 10, Size.NORMAL, material);

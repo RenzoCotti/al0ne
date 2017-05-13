@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.Behaviours.Weapons;
+package com.al0ne.Entities.Items.Behaviours.Wearable;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;

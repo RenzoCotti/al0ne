@@ -1,11 +1,10 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
@@ -104,12 +103,12 @@ public class Utility {
        return Math.round(number*100.0)/100.0;
     }
 
-    public static Material getRandomMaterial(boolean armor){
-        int total = Material.getMaterials(armor).size();
+    public static Material getRandomMaterial(int kind){
+        int total = Material.getMaterials(kind).size();
         int random = randomNumber(total);
 
         int i = 0;
-        for(Material m : Material.getMaterials(armor)){
+        for(Material m : Material.getMaterials(kind)){
             i++;
             if(i==random){
                 return m;

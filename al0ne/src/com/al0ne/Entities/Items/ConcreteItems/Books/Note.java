@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.ConcreteItems;
+package com.al0ne.Entities.Items.ConcreteItems.Books;
 
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Behaviours.Readable;

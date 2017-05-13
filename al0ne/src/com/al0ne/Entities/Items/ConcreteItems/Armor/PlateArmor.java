@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.Behaviours.Wearable;
+package com.al0ne.Entities.Items.ConcreteItems.Armor;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Protective;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
 
 import static java.lang.Math.max;
 
@@ -28,10 +29,5 @@ public class PlateArmor extends Armor {
                 Utility.getArticle(Material.stringify(m))+" "
                         +Material.stringify(m)+" plate armor.", m.getToughness()+m.getWeight()*2,
                 m.getToughness()+1, (int)m.getWeight()*15, Size.LARGE, m);
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 }

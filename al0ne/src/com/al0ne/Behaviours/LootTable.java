@@ -3,14 +3,16 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Weapons.*;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.Barbute;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.Sallet;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -30,13 +32,19 @@ public class LootTable implements Serializable{
             loot.add(new ScaleArmor(m));
         }
 
-        for (Material m : Material.getMaterials(true)){
+        for (Material m : Material.getMaterials(0)){
             loot.add(new Armor(m));
+        }
+
+        for (Material m : Material.getMaterials(2)){
             loot.add(new Shield(m));
+        }
+
+        for (Material m : Material.getMaterials(3)){
             loot.add(new Helmet(m));
         }
 
-        for (Material m : Material.getMaterials(false)){
+        for (Material m : Material.getMaterials(1)){
             loot.add(new Sword(m));
             loot.add(new Mace(m));
             loot.add(new Spear(m));
@@ -65,10 +73,10 @@ public class LootTable implements Serializable{
 
                 int chanceToContinue = (int)((((double)currentItem.getPrice())
                         /(double)value)*100);
-                System.out.println("must roll above: "+chanceToContinue);
+//                System.out.println("must roll above: "+chanceToContinue);
 
                 int random = Utility.randomNumber(currentItem.getPrice());
-                System.out.println("rolled: "+random);
+//                System.out.println("rolled: "+random);
                 if(random > 100 - chanceToContinue || maxItems == 2){
                     break;
                 }

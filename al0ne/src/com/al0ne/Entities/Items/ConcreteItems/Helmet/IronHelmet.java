@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.ConcreteItems.Armor;
+package com.al0ne.Entities.Items.ConcreteItems.Helmet;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;

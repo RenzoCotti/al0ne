@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.ConcreteItems;
+package com.al0ne.Entities.Items.ConcreteItems.Books;
 
 import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Behaviours.Player;

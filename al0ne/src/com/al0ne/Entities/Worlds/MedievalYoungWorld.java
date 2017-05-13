@@ -9,10 +9,8 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
-import com.al0ne.Entities.Items.ConcreteItems.DoorUnlocker;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
-import com.al0ne.Entities.Items.ConcreteItems.Note;
+import com.al0ne.Entities.Items.ConcreteItems.Books.Note;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;

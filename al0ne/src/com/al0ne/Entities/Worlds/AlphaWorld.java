@@ -4,21 +4,25 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Weapons.*;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
+import com.al0ne.Entities.Items.ConcreteItems.Books.Scroll;
+import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.Barbute;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.IronHelmet;
+import com.al0ne.Entities.Items.ConcreteItems.Helmet.Sallet;
+import com.al0ne.Entities.Items.ConcreteItems.Shield.*;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.*;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
 import com.al0ne.Entities.Items.ConcreteItems.*;
-import com.al0ne.Entities.Items.ConcreteItems.Armor.IronHelmet;
-import com.al0ne.Entities.Items.ConcreteItems.Armor.LeatherArmour;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Mushroom;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.HolySword;
 import com.al0ne.Entities.Items.Props.HolyFountain;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.NPCs.Shopkeeper;
@@ -37,7 +41,7 @@ public class AlphaWorld extends World{
         startRoom.addExit("north","daggerroom");
         startRoom.addExit("south","mushroomroom");
         startRoom.addExit("west","ladderroom");
-        startRoom.addExit("northwest", "armorroom");
+        startRoom.addExit("northwest", "shieldroom");
         startRoom.addExit("northeast", "lootroom");
         Container chest = new Chest();
         chest.addItem(new SilverCoin(), 100);
@@ -53,33 +57,50 @@ public class AlphaWorld extends World{
         }
         putRoom(lootRoom);
 
+
+        Room shieldRoom = new Room("shieldroom", "Shieldery", "A room full of shields");
+
+
+
+        for(Material m : Material.getMetals()){
+            shieldRoom.addEntity(new Buckler(m));
+            shieldRoom.addEntity(new TowerShield(m));
+            shieldRoom.addEntity(new RoundShield(m));
+            shieldRoom.addEntity(new HeaterShield(m));
+            shieldRoom.addEntity(new KiteShield(m));
+        }
+
+        for(Material m : Material.getMaterials(2)){
+            shieldRoom.addEntity(new Shield(m));
+        }
+
+
+
+
+
+        shieldRoom.addExit("south", "startroom");
+        shieldRoom.addExit("north", "armorroom");
+
+        putRoom(shieldRoom);
+
         Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");
 
 
 
-        for(Material m : Material.getMaterials(true)){
+        for(Material m : Material.getMaterials(0)){
             armorRoom.addEntity(new Armor(m));
         }
 
-        for(Material m : Material.getMaterials(true)){
-            armorRoom.addEntity(new Shield(m));
-        }
         for(Material m : Material.getMetals()){
             armorRoom.addEntity(new ChainMail(m));
-        }
-
-        for(Material m : Material.getMetals()){
             armorRoom.addEntity(new PlateArmor(m));
-        }
-
-        for(Material m : Material.getMetals()){
             armorRoom.addEntity(new ScaleArmor(m));
         }
 
 
 
 
-        armorRoom.addExit("south", "startroom");
+        armorRoom.addExit("south", "shieldroom");
         armorRoom.addExit("north", "helmetroom");
 
         putRoom(armorRoom);
@@ -88,17 +109,11 @@ public class AlphaWorld extends World{
 
         for(Material m : Material.getMetals()){
             helmetRoom.addEntity(new Sallet(m));
-        }
-
-        for(Material m : Material.getMetals()){
+            helmetRoom.addEntity(new Barbute(m));
             helmetRoom.addEntity(new GreatHelm(m));
         }
 
-        for(Material m : Material.getMetals()){
-            helmetRoom.addEntity(new Barbute(m));
-        }
-
-        for(Material m : Material.getMaterials(true)){
+        for(Material m : Material.getMaterials(3)){
             helmetRoom.addEntity(new Helmet(m));
         }
 
@@ -110,24 +125,14 @@ public class AlphaWorld extends World{
 
 
         Room weaponRoom = new Room("weaponroom", "Weaponry", "A room full of weapons");
-        for(Material m : Material.getMaterials(false)){
+        for(Material m : Material.getMaterials(1)){
             weaponRoom.addEntity(new Dagger(m));
-        }
-
-        for(Material m : Material.getMaterials(false)){
+            weaponRoom.addEntity(new Spear(m));
             weaponRoom.addEntity(new Sword(m));
-        }
-
-        for(Material m : Material.getMaterials(false)){
             weaponRoom.addEntity(new Mace(m));
-        }
-        for(Material m : Material.getMaterials(false)){
             weaponRoom.addEntity(new Axe(m));
         }
 
-        for(Material m : Material.getMaterials(false)){
-            weaponRoom.addEntity(new Spear(m));
-        }
         weaponRoom.addExit("south", "helmetroom");
         weaponRoom.addExit("north", "startroom");
         putRoom(weaponRoom);

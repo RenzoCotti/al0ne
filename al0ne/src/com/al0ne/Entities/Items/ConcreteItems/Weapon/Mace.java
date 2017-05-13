@@ -1,13 +1,14 @@
-package com.al0ne.Entities.Items.Behaviours.Weapons;
+package com.al0ne.Entities.Items.ConcreteItems.Weapon;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 
 /**
  * Created by BMW on 07/05/2017.
  */
-public class Mace extends Weapon{
+public class Mace extends Weapon {
     public Mace(String id, String name, String description, int armorPen,
                  int damage, double weight, Material material) {
         super(id, name, description, "blunt", armorPen, damage, weight, Size.NORMAL, material);

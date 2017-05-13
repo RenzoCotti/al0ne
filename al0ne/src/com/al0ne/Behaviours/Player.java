@@ -5,7 +5,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Weapons.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
