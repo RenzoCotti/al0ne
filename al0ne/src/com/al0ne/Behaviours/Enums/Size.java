@@ -1,5 +1,8 @@
 package com.al0ne.Behaviours.Enums;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 /**
  * Created by BMW on 11/04/2017.
  */
@@ -72,10 +75,34 @@ public enum Size {
             case VLARGE:
                 return "very big";
             case HUGE:
-                return "enornmous";
+                return "enormous";
             default:
                 return null;
         }
 
+    }
+
+    public static ArrayList<Size> getSizes(){
+        ArrayList<Size> temp = new ArrayList<>();
+        temp.add(MICRO);
+        temp.add(VSMALL);
+        temp.add(SMALL);
+        temp.add(NORMAL);
+        temp.add(LARGE);
+        temp.add(VLARGE);
+        temp.add(HUGE);
+        return temp;
+    }
+
+    public static ArrayList<String> getSizeStrings(){
+        ArrayList<Size> sizes = getSizes();
+        ArrayList<String> temp = new ArrayList<>();
+
+        for(Size s : sizes){
+            String currentSize = toString(toInt(s));
+            currentSize = currentSize.substring(0, 1).toUpperCase()+currentSize.substring(1, currentSize.length());
+            temp.add(currentSize);
+        }
+        return temp;
     }
 }

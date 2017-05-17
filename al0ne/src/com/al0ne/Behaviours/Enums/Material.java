@@ -83,6 +83,38 @@ public enum Material {
         return materials;
     }
 
+    public static ArrayList<Material> getAllMaterials(){
+        ArrayList<Material> materials = new ArrayList<>();
+        materials.add(IRON);
+        materials.add(WOOD);
+        materials.add(GOLD);
+        materials.add(STEEL);
+        materials.add(BRASS);
+        materials.add(SILVER);
+        materials.add(LEATHER);
+        materials.add(STONE);
+        materials.add(CLAY);
+        materials.add(FIBRE);
+        materials.add(GLASS);
+        materials.add(PAPER);
+        materials.add(UNDEFINED);
+        return materials;
+    }
+
+    public static ArrayList<String> getAllMaterialString(){
+        ArrayList<Material> materials = getAllMaterials();
+        ArrayList<String> temp = new ArrayList<>();
+
+        for(Material m : materials){
+            String current = m.toString().toLowerCase();
+            current = current.substring(0, 1).toUpperCase()+current.substring(1, current.length());
+            temp.add(current);
+        }
+        return temp;
+    }
+
+
+
     public static ArrayList<Material> getMetals(){
         ArrayList<Material> materials = new ArrayList<>();
         materials.add(IRON);

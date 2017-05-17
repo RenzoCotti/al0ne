@@ -241,5 +241,18 @@ public class Popups {
         s.show();
     }
 
+    public static void openEditor(){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = Editor.createEditor();
+        dialogVbox.setPrefSize(500, 500);
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+        s.setTitle("Editor");
+        s.show();
+    }
+
 
 }

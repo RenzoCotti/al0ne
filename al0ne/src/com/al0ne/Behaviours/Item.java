@@ -49,6 +49,19 @@ public abstract class Item extends Interactable {
         this.price = ((int) ((material.getPrice()*2+quality)*weight))*2;
     }
 
+    public Item(String id, String name, String description, double weight, Size size, Material material, int price) {
+        super(id, name, description,
+                Utility.getArticle(Material.stringify(material))+
+                        " "+Material.stringify(material)+" "+name.toLowerCase(), material);
+        this.weight = weight;
+        this.type='i';
+        this.size=Size.toInt(size);
+        this.unique = false;
+        this.canDrop = true;
+        this.canTake=true;
+        this.price = price;
+    }
+
     public double getWeight() {
         return weight;
     }

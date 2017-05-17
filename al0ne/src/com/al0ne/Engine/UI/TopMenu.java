@@ -22,7 +22,14 @@ public class TopMenu {
     public static ArrayList<Menu> createSubMenus(Stage stage){
         Menu fileMenu = new Menu("Game");
         Menu fileOptions = new Menu("Options");
+        Menu editorMenu = new Menu("Editor");
         Menu helpMenu = new Menu("Help");
+
+        MenuItem openEditor = new MenuItem("Open editor");
+        openEditor.setOnAction(t -> {
+            Popups.openEditor();
+        });
+        editorMenu.getItems().add(openEditor);
 
 
         MenuItem questionButton = new MenuItem("Help");
@@ -87,6 +94,7 @@ public class TopMenu {
         ArrayList<Menu> menus = new ArrayList<>();
         menus.add(fileMenu);
         menus.add(fileOptions);
+        menus.add(editorMenu);
         menus.add(helpMenu);
 
         return menus;
