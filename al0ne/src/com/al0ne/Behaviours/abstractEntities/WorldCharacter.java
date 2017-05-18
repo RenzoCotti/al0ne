@@ -38,17 +38,42 @@ public abstract class WorldCharacter extends Entity {
     protected boolean alive;
 
     public WorldCharacter(String id, String name, String longDescription, String shortDescription,
-                          int maxHealth, int attack, int dexterity, int armor, int damage) {
+                          Integer maxHealth, Integer attack, Integer dexterity, Integer armor, Integer damage) {
         super(id, name, longDescription, shortDescription);
         this.inventory = new HashMap<>();
 
         this.alive = true;
-        this.maxHealth = maxHealth;
-        this.currentHealth = maxHealth;
-        this.attack = attack;
-        this.dexterity = dexterity;
-        this.armor = armor;
-        this.damage = damage;
+        if(maxHealth == null){
+            this.maxHealth = 20;
+            this.currentHealth = 20;
+        } else{
+            this.maxHealth = maxHealth;
+            this.currentHealth = maxHealth;
+        }
+
+        if(attack == null){
+            this.attack = 40;
+        } else{
+            this.attack = attack;
+        }
+
+        if(dexterity == null){
+            this.dexterity = 40;
+        } else{
+            this.dexterity = dexterity;
+        }
+
+        if(armor == null){
+            this.armor = 1;
+        } else{
+            this.armor = armor;
+        }
+
+        if(damage == null){
+            this.damage = 2;
+        } else{
+            this.damage = damage;
+        }
 
         this.status = new HashMap<>();
     }

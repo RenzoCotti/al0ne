@@ -17,7 +17,7 @@ public class InvisibleProp extends Prop{
     protected String onToggle;
 
     public InvisibleProp(String name, String description, String shortDescription, Material m) {
-        super(name, description, shortDescription, m);
+        super(name, description, shortDescription, null, m);
         this.invisible=true;
     }
 

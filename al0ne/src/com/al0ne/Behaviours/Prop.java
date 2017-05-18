@@ -27,38 +27,16 @@ public class Prop extends Interactable {
     protected boolean active;
     protected boolean invisible;
 
-
-
-    //detailed prop creation
-    public Prop(String name, String description, String shortDescription, Material m) {
-        super("prop"+(propCounter++), name, description, shortDescription, m);
+    public Prop(String name, String description, String shortDescription, String after, Material material) {
+        super("prop"+(propCounter++), name, description, shortDescription, material);
         setCustomName();
-        this.afterDescription = description;
-        this.requiresItem="none";
-        this.active=false;
-        this.type='p';
-        this.canTake=false;
-        this.invisible=false;
-    }
 
-    public Prop(String name, String description, String shortDescription, String after, Material m) {
-        super("prop"+(propCounter++), name, description, shortDescription, m);
-        setCustomName();
-        this.afterDescription = after;
-        this.requiresItem="none";
-        this.active=false;
-        this.type='p';
-        this.canTake=false;
-        this.invisible=false;
+        if(after == null){
+            this.afterDescription = description;
+        } else{
+            this.afterDescription = after;
+        }
 
-    }
-
-
-    //constructors for door
-    public Prop(String doorID, String doorName, String description, String shortDescription, String after, Material m) {
-        super(doorID, doorName, description, shortDescription, m);
-        setCustomName();
-        this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
@@ -79,19 +57,17 @@ public class Prop extends Interactable {
 
     }
 
-    public Prop(String name, String description, String shortDescription) {
-        super("prop"+(propCounter++), name, description, shortDescription, Material.UNDEFINED);
+    //constructors for door
+    public Prop(String doorID, String doorName, String description, String shortDescription, String after, Material m) {
+        super(doorID, doorName, description, shortDescription, m);
         setCustomName();
-        this.afterDescription = description;
+        this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
         this.type='p';
         this.canTake=false;
         this.invisible=false;
     }
-
-
-
 
 
     @Override

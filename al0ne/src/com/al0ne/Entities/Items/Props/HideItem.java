@@ -19,11 +19,6 @@ public class HideItem extends Prop{
         this.hidden=hidden;
     }
 
-    public HideItem(String name, String description, String shortDescription, Prop hidden) {
-        super(name, description, shortDescription);
-        this.hidden=hidden;
-    }
-
     @Override
     public int used(Room currentRoom, Player player){
         currentRoom.getEntities().remove(name);

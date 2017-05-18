@@ -21,11 +21,6 @@ public class MoneyTree extends Prop{
         this.usedMessage="You cut the leaves from the money tree.";
     }
 
-    public MoneyTree(String name, String description, String after, String usedMessage) {
-        super(name, description, after);
-        this.usedMessage=usedMessage;
-    }
-
 
     @Override
     public int usedWith(Item item, Room currentRoom, Player player) {

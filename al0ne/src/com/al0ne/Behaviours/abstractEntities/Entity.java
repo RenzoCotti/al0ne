@@ -3,6 +3,7 @@ package com.al0ne.Behaviours.abstractEntities;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Engine.Utility;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,7 +43,13 @@ public abstract class Entity implements Serializable{
         this.ID = id;
         this.name = name;
         this.longDescription = longDescription;
-        this.shortDescription=shortDescription;
+
+        if(shortDescription == null){
+            this.shortDescription= Utility.getArticle(name)+" "+name.toLowerCase();
+        } else {
+            this.shortDescription=shortDescription;
+        }
+
         this.requiredCommand=new ArrayList<>();
         addCommand(Command.EXAMINE);
     }

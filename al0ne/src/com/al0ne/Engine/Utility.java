@@ -118,7 +118,7 @@ public class Utility {
     }
 
     public static String getArticle(String s){
-        char l = s.charAt(0);
+        char l = s.toLowerCase().charAt(0);
         if (l == 'a' || l == 'e' || l == 'i' || l == 'o' || l == 'u'){
             return "an";
         }

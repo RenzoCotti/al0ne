@@ -32,7 +32,7 @@ public class MedievalYoungWorld extends World{
         yourRoom.addEntity(bed);
 
         yourRoom.addEntity(new Prop("window", "A window with a wooden " +
-                "frame. You can see your neighbour's house from it.", "a window"));
+                "frame. You can see your neighbour's house from it."));
         yourRoom.addEntity(new JunkItem("lucky stone",
                 "Your lucky stone. You're confident it brings good luck.", 0.1, Size.SMALL));
 
@@ -58,17 +58,19 @@ public class MedievalYoungWorld extends World{
 
         parentsRoom.addEntity(new Prop("flower pot",
                 "A pot filled with water, containing a fairly dried up flower.",
-                "a flower pot", Material.CLAY));
-        parentsRoom.addEntity(new Prop("parentsbed", "Your parent's bed, it fits two people.",
-                "a large bed"));
+                "a flower pot", null, Material.CLAY));
+        parentsRoom.addEntity(new Prop("bed", "Your parent's bed, it fits two people."));
         putRoom(parentsRoom);
 
         Room mainHouse = new Room("Living Room", "Your house's living room.");
-        mainHouse.addEntity(new Prop("hearth", "A hearth made of stone blocks.", "a hearth"));
+        mainHouse.addEntity(new Prop("hearth", "A hearth made of stone blocks.",
+                "a hearth", null, Material.STONE));
         mainHouse.addEntity(new Prop("table",
-                "A wooden table; it's made of walnut, if you remember correctly.", "a table"));
+                "A wooden table; it's made of walnut, if you remember correctly.", "a table",
+                null, Material.WOOD));
         mainHouse.addEntity(new Prop("chairs",
-                "Three chairs: one for mom, one for dad, one for you.", "some chairs"));
+                "Three chairs: one for mom, one for dad, one for you.",
+                "some chairs", null, null));
         NPC mom = new NPC("mom", "mom", "Your mom. She looks a bit tired today.",
                 "Hey sweetie, I'd need a favour.");
         NPC dad = new NPC("dad", "dad", "Your dad. He's a bit flushed, he must've just run.",
@@ -128,7 +130,7 @@ public class MedievalYoungWorld extends World{
 
         villageGraveyard.addEntity(new Prop("Family tomb",
                 "The last entry listed on here is the one of your sister...",
-                "your family tomb"));
+                "your family tomb", null, Material.STONE));
         villageGraveyard.addEntity(new JunkItem("dried flower",
                 "a dried white rose that was on your family tomb.", 0.05, Size.SMALL));
         putRoom(villageGraveyard);
@@ -136,7 +138,7 @@ public class MedievalYoungWorld extends World{
         Room villageHall = new Room("Hall", "This place is strangely deserted. Weird.");
 
         villageHall.addEntity(new Prop("desk", "A large desk with some drawers, with some papers on top of it.",
-                "a desk", Material.WOOD));
+                "a desk", null, Material.WOOD));
         InvisibleProp drawers = new InvisibleProp("drawers", "Wooden drawers. What else did you expect?");
         ArrayList<Interactable> drawersContent = new ArrayList<>();
         drawersContent.add(new JunkItem("paperweight", "A paperweight.",

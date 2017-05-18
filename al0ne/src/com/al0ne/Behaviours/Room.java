@@ -49,7 +49,7 @@ public class Room extends Entity {
     public Room(String name, String description) {
         super("room"+(entityCounter++), name, description, name);
         this.exits=new HashMap<>();
-        this.lockedDirections =new HashMap<>();
+        this.lockedDirections = new HashMap<>();
         this.customDirections = null;
         this.entities = new HashMap<>();
         this.firstVisit = true;

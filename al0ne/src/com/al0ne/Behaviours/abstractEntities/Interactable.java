@@ -28,7 +28,11 @@ public abstract class Interactable extends Entity {
         super(id, name, description, shortDescription);
         this.properties = new ArrayList<>();
         this.requiredType = new ArrayList<>();
-        this.material = m;
+        if (m == null){
+            this.material = Material.UNDEFINED;
+        } else{
+            this.material = m;
+        }
     }
 
     public void setUndroppable() {
