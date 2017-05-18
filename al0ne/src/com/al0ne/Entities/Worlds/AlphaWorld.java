@@ -144,7 +144,7 @@ public class AlphaWorld extends World{
         putRoom(daggerRoom);
 
         Room emonRoom = new Room("Attic", "You're in a wooden attic.");
-        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.",
+        NPC emon = new NPC("Emon", "A handy man. Probably fixes small keys.",
                 "handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
@@ -169,7 +169,7 @@ public class AlphaWorld extends World{
         shopRoom.addEntity(new Prop("table", "You can see a knife and an apple on the table", "a wooden table"));
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it.", "a knife"));
         shopRoom.addEntity(new Prop("apple", "A red apple.Probably better not to take it.", "an apple"));
-        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
+        Shopkeeper bob = new Shopkeeper("Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
         bob.simpleAddItem(new Dagger(Material.IRON), 5);
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
@@ -177,7 +177,7 @@ public class AlphaWorld extends World{
         putRoom(shopRoom);
 
         Room sanctuary = new Room("Sanctuary", "There is a holy aura permeating this place.");
-        NPC priest = new NPC("priest", "Asdolfo", "A holy man, hood up.", "hooded man", "Greetings, child. I can bless items for you. Should you be wounded, you can use this fountain to strengthen your spirits.");
+        NPC priest = new NPC("Asdolfo", "A holy man, hood up.", "hooded man", "Greetings, child. I can bless items for you. Should you be wounded, you can use this fountain to strengthen your spirits.");
         HolySword sword = new HolySword();
         sword.setType("holy");
         sword.setDamage(8);
@@ -242,7 +242,7 @@ public class AlphaWorld extends World{
         putRoom(bossRoom);
 
         Room princessRoom = new Room("Princess room", "a royal room, full of decorations.");
-        NPC peach = new NPC("princess", "Peach", "A princess in a pink dress is here", "pink princess", "Congratulations, you saved me!");
+        NPC peach = new NPC("Peach", "A princess in a pink dress is here", "pink princess", "Congratulations, you saved me!");
         peach.addSubject("mario", new Subject("Thank you Mario! but your princess is in another castle!"));
         //maybe exit
         princessRoom.addEntity(peach);

@@ -9,7 +9,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Food.SnakeSteak;
  */
 public class Snake extends Enemy{
     public Snake() {
-        super("snake", "Snake","This snake hisses and looks at you menacingly.", "a snake",
+        super("Snake","This snake hisses and looks at you menacingly.", "a snake",
                 5, 40, 40, 0, 1);
         addItemLoot(new SnakeSteak(), 1, 80);
         addInflictedStatus(new Poisoning(3, 1), 40);

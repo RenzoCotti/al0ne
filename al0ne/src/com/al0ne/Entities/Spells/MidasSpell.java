@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Spells;
 
-import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;

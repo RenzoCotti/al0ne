@@ -1,6 +1,6 @@
 package com.al0ne.Behaviours.Pairs;
 
-import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 
 import java.io.Serializable;
 

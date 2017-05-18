@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Status;
-import com.al0ne.Behaviours.WorldCharacter;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Dehydration;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Starvation;
 

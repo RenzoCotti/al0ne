@@ -1,6 +1,9 @@
-package com.al0ne.Behaviours;
+package com.al0ne.Behaviours.abstractEntities;
 
+import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +11,9 @@ import java.util.HashMap;
 /**
  * placeholder class for attackable npcs
  */
-public abstract class WorldCharacter extends Entity{
+public abstract class WorldCharacter extends Entity {
+
+
 
     //Maps ItemID, Pair
     protected HashMap<String, Pair> inventory;
@@ -140,11 +145,11 @@ public abstract class WorldCharacter extends Entity{
         for (Status st : status.values()){
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
-                st.duration = s.maxDuration;
+                st.setDuration(s.getMaxDuration());
                 return false;
             }
         }
-        s.setDuration(s.maxDuration);
+        s.setDuration(s.getMaxDuration());
         status.put(s.getName(), s);
         return true;
     }

@@ -2,6 +2,7 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairDrop;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Engine.Utility;
 
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public abstract class Enemy extends WorldCharacter {
     protected HashMap<Status, Integer> inflictStatuses;
 
 
-    public Enemy(String id, String name, String description, String shortDescription,
+    public Enemy(String name, String description, String shortDescription,
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
-        super(id, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
+        super("enemy"+(entityCounter++), name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
         this.resistances = new ArrayList<>();
         this.inflictStatuses = new HashMap<>();
         this.alive = true;

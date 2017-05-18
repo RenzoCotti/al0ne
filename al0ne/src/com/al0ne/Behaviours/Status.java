@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -69,6 +71,10 @@ public abstract class Status implements Serializable{
         } else{
             this.duration += amount;
         }
+    }
+
+    public Integer getMaxDuration() {
+        return maxDuration;
     }
 
     public ArrayList<Status> getToApply() {

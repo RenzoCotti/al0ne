@@ -1,11 +1,9 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
-
-import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -22,6 +20,8 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Prop extends Interactable {
 
+    private static int propCounter=0;
+
     protected String afterDescription;
     protected String requiresItem;
     protected boolean active;
@@ -31,7 +31,7 @@ public class Prop extends Interactable {
 
     //detailed prop creation
     public Prop(String name, String description, String shortDescription, Material m) {
-        super(name, name, description, shortDescription, m);
+        super("prop"+(propCounter++), name, description, shortDescription, m);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";
@@ -42,7 +42,7 @@ public class Prop extends Interactable {
     }
 
     public Prop(String name, String description, String shortDescription, String after, Material m) {
-        super(name, name, description, shortDescription, m);
+        super("prop"+(propCounter++), name, description, shortDescription, m);
         setCustomName();
         this.afterDescription = after;
         this.requiresItem="none";
@@ -70,7 +70,7 @@ public class Prop extends Interactable {
 
     //quick, for descriptive props
     public Prop(String name, String description) {
-        super(name, name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
+        super("prop"+(propCounter++), name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
@@ -81,7 +81,7 @@ public class Prop extends Interactable {
     }
 
     public Prop(String name, String description, String shortDescription) {
-        super(name, name, description, shortDescription, Material.UNDEFINED);
+        super("prop"+(propCounter++), name, description, shortDescription, Material.UNDEFINED);
         setCustomName();
         this.afterDescription = description;
         this.requiresItem="none";

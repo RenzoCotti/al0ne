@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,8 @@
-package com.al0ne.Behaviours;
+package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Command;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +15,9 @@ import static com.al0ne.Engine.Main.printToLog;
  * Item interface
  */
 public abstract class Entity implements Serializable{
+
+    protected static int entityCounter = 0;
+
 
     protected String name;
     protected String ID;

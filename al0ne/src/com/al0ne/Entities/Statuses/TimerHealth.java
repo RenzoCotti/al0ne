@@ -2,7 +2,7 @@ package com.al0ne.Entities.Statuses;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Status;
-import com.al0ne.Behaviours.WorldCharacter;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 
 import static com.al0ne.Engine.Main.printToLog;
 

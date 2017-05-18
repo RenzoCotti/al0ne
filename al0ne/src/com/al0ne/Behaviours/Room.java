@@ -1,12 +1,12 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Entities.Items.Behaviours.Container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -22,9 +22,7 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  * an lockedDirection, HashMap of doorName - direction
  *
  */
-public class Room extends Entity{
-
-    static int roomCounter = 0;
+public class Room extends Entity {
 
     //maps direction - room ID
     protected HashMap<String, String> exits;
@@ -49,7 +47,7 @@ public class Room extends Entity{
 
 
     public Room(String name, String description) {
-        super("room"+(roomCounter++), name, description, name);
+        super("room"+(entityCounter++), name, description, name);
         this.exits=new HashMap<>();
         this.lockedDirections =new HashMap<>();
         this.customDirections = null;

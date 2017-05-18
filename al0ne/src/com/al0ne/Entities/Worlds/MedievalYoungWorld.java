@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;

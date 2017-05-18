@@ -8,7 +8,7 @@ import com.al0ne.Entities.Statuses.ConcreteStatuses.BlackDeath;
  */
 public class GiantRat extends Enemy{
     public GiantRat() {
-        super("giantrat", "Giant rat", "A big, disgusting rat. It looks somehow ill.", "a rat",
+        super("Giant rat", "A big, disgusting rat. It looks somehow ill.", "a rat",
                 5, 40, 40, 0, 1);
         addInflictedStatus(new BlackDeath(), 5);
     }

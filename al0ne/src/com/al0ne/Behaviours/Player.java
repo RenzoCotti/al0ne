@@ -2,6 +2,9 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
@@ -38,7 +41,7 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  * a quests, HashMap<questID, Boolean>, representing all due quests
  * a wornItems, HashMap<BodyPart, Item>: all equipped items
  */
-public class Player extends WorldCharacter{
+public class Player extends WorldCharacter {
 
     //stores current room the player is in
     private Room currentRoom;
@@ -725,7 +728,7 @@ public class Player extends WorldCharacter{
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
                     int inflictedDamage = getDamage() - Math.max(enemy.getArmorLevel()-armorPen, 0);
-                    System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
+                    System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
                     if(inflictedDamage <= 0){
                         printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
                     } else{
@@ -747,7 +750,7 @@ public class Player extends WorldCharacter{
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
                     } else{
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
-                        System.out.println(enemy.getName()+" HP: "+enemy.currentHealth+" damage: "+inflictedDamage);
+                        System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
                         if(!enemy.modifyHealth(-(inflictedDamage))){
                             enemy.handleLoot(currentRoom);
                             currentRoom.getEntities().remove(enemy.getID());

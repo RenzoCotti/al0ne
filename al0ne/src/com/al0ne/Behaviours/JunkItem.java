@@ -8,11 +8,11 @@ import com.al0ne.Behaviours.Enums.Size;
  */
 public class JunkItem extends Item{
     public JunkItem(String name, String description, double weight, Size size) {
-        super(name, name, description, weight, size);
+        super("junk"+(entityCounter++), name, description, weight, size);
     }
 
     public JunkItem(String name, String description, double weight, Size size, Material material) {
-        super(name, name, description, weight, size, material);
+        super("junk"+(entityCounter++), name, description, weight, size, material);
     }
 
     @Override

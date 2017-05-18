@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
-import com.al0ne.Behaviours.Entity;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;

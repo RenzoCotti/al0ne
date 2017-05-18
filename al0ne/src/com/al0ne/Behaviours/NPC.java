@@ -2,8 +2,8 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.PairReactionItem;
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -27,25 +27,25 @@ public class NPC extends WorldCharacter {
 
     protected boolean isShopkeeper=false;
 
-    public NPC(String id, String name, String description, String shortDescription, String intro,
+    public NPC(String name, String description, String shortDescription, String intro,
             int maxHealth, int attack, int dexterity, int armor, int damage) {
-        super(id, name, description, shortDescription, maxHealth, attack, dexterity, armor, damage);
+        super("npc"+(entityCounter++), name, description, shortDescription, maxHealth, attack, dexterity, armor, damage);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;
         this.type='n';
     }
 
-    public NPC(String id, String name, String description, String intro) {
-        super(id, name, description, name, 20, 40, 40, 1, 2);
+    public NPC(String name, String description, String intro) {
+        super("npc"+(entityCounter++), name, description, name, 20, 40, 40, 1, 2);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;
         this.type='n';
     }
 
-    public NPC(String id, String name, String description, String shortDescription, String intro) {
-        super(id, name, description, shortDescription, 20, 40, 40, 1, 2);
+    public NPC(String name, String description, String shortDescription, String intro) {
+        super("npc"+(entityCounter++), name, description, shortDescription, 20, 40, 40, 1, 2);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;

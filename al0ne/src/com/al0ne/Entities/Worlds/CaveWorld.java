@@ -65,7 +65,7 @@ public class CaveWorld extends World{
         putRoom(cellar);
 
         Room cave4 = new Room( "Shop Room", "Lots of items are in this room, all with a price tag on.");
-        NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
+        NPC emon = new NPC("Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
         cave4.addEntity(emon);

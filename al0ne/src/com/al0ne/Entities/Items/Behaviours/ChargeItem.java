@@ -3,6 +3,7 @@ package com.al0ne.Entities.Items.Behaviours;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 
 import static com.al0ne.Engine.Main.printToLog;
 

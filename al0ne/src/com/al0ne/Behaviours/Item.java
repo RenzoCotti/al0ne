@@ -1,10 +1,9 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Behaviours.Enums.Material;
-
-import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
