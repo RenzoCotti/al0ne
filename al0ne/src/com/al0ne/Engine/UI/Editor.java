@@ -18,9 +18,7 @@ public class Editor {
         TabPane editor = new TabPane();
         editor.setId("editor");
 
-        Tab rooms = new Tab();
-        rooms.setText("Rooms");
-        rooms.setClosable(false);
+        Tab rooms = createRoom();
 
         Tab items = createItem();
 
@@ -103,5 +101,50 @@ public class Editor {
         items.setContent(itemContent);
 
         return items;
+    }
+
+    public static Tab createRoom(){
+        Tab rooms = new Tab();
+        rooms.setText("Rooms");
+        rooms.setClosable(false);
+
+        GridPane itemContent = new GridPane();
+
+//        Label createNewItem = new Label("Create new item:");
+//        createNewItem.setStyle("-fx-font-weight: bold");
+
+        Label idLabel = new Label("Create new Room:");
+        idLabel.setStyle("-fx-font-weight: bold");
+        itemContent.add(idLabel, 0, 0);
+
+        TextField nameText = new TextField();
+        Label nameLabel = new Label("Name:");
+        itemContent.add(nameLabel, 0, 1);
+        itemContent.add(nameText, 1, 1);
+
+        TextArea descText = new TextArea();
+        descText.setPrefWidth(100);
+        descText.setPrefHeight(50);
+        Label descLabel = new Label("Description:");
+        itemContent.add(descLabel, 0, 2);
+        itemContent.add(descText, 1, 2);
+
+        TextArea customExit = new TextArea();
+        customExit.setPrefWidth(100);
+        customExit.setPrefHeight(50);
+        Label customExitLabel = new Label("Exit description \n(optional):");
+        itemContent.add(customExitLabel, 0, 3);
+        itemContent.add(customExit, 1, 3);
+
+        Button addEntity = new Button("Add Entity");
+        itemContent.add(addEntity, 0, 4);
+
+
+
+        itemContent.setPadding(new Insets(5, 10, 5, 5));
+
+        rooms.setContent(itemContent);
+
+        return rooms;
     }
 }

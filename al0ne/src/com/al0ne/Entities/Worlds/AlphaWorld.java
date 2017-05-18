@@ -35,14 +35,10 @@ import com.al0ne.Entities.Spells.MidasSpell;
 public class AlphaWorld extends World{
 
     public AlphaWorld() {
-        super("alpha", "startroom");
+        super("alpha");
 
-        Room startRoom = new Room("startroom", "Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
-        startRoom.addExit("north","daggerroom");
-        startRoom.addExit("south","mushroomroom");
-        startRoom.addExit("west","ladderroom");
-        startRoom.addExit("northwest", "shieldroom");
-        startRoom.addExit("northeast", "lootroom");
+        Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
+
         Container chest = new Chest();
         chest.addItem(new SilverCoin(), 100);
         chest.addItem(new Dagger(Material.IRON), 1);
@@ -50,15 +46,15 @@ public class AlphaWorld extends World{
         startRoom.addEntity(new Snake());
         putRoom(startRoom);
 
-        Room lootRoom = new Room("lootroom", "Looty room", "A room full of loot! yay!");
-        lootRoom.addExit("southwest", "startroom");
+        Room lootRoom = new Room("Looty room", "A room full of loot! yay!");
+
         for(Pair p: lootTable.getLoot(123)){
             lootRoom.addEntity(p.getEntity(), p.getCount());
         }
         putRoom(lootRoom);
 
 
-        Room shieldRoom = new Room("shieldroom", "Shieldery", "A room full of shields");
+        Room shieldRoom = new Room("Shieldery", "A room full of shields");
 
 
 
@@ -78,12 +74,11 @@ public class AlphaWorld extends World{
 
 
 
-        shieldRoom.addExit("south", "startroom");
-        shieldRoom.addExit("north", "armorroom");
+
 
         putRoom(shieldRoom);
 
-        Room armorRoom = new Room("armorroom", "Armory", "A room full of armor");
+        Room armorRoom = new Room("Armory", "A room full of armor");
 
 
 
@@ -100,12 +95,11 @@ public class AlphaWorld extends World{
 
 
 
-        armorRoom.addExit("south", "shieldroom");
-        armorRoom.addExit("north", "helmetroom");
+
 
         putRoom(armorRoom);
 
-        Room helmetRoom = new Room("helmetroom", "Helmetry", "A room full of helmets");
+        Room helmetRoom = new Room("Helmetry", "A room full of helmets");
 
         for(Material m : Material.getMetals()){
             helmetRoom.addEntity(new Sallet(m));
@@ -117,14 +111,13 @@ public class AlphaWorld extends World{
             helmetRoom.addEntity(new Helmet(m));
         }
 
-        helmetRoom.addExit("south", "armorroom");
-        helmetRoom.addExit("north", "weaponroom");
+
 
         putRoom(helmetRoom);
 
 
 
-        Room weaponRoom = new Room("weaponroom", "Weaponry", "A room full of weapons");
+        Room weaponRoom = new Room("Weaponry", "A room full of weapons");
         for(Material m : Material.getMaterials(1)){
             weaponRoom.addEntity(new Dagger(m));
             weaponRoom.addEntity(new Spear(m));
@@ -133,54 +126,46 @@ public class AlphaWorld extends World{
             weaponRoom.addEntity(new Axe(m));
         }
 
-        weaponRoom.addExit("south", "helmetroom");
-        weaponRoom.addExit("north", "startroom");
+
         putRoom(weaponRoom);
 
 
 
-        Room ladderRoom = new Room("ladderroom", "Dusty Room", "It's very dusty in here.");
+        Room ladderRoom = new Room( "Dusty Room", "It's very dusty in here.");
         ladderRoom.addEntity(new Prop("Ladder", "a wooden ladder heading in the ceiling", "a wooden ladder"));
         ladderRoom.addCustomDirection("You can see a ladder going up. You see an opening to the east.");
-        ladderRoom.addExit("up", "emonroom");
-        ladderRoom.addExit("east", "startroom");
+
         ladderRoom.addEntity(new WarpStone());
         putRoom(ladderRoom);
 
-        Room daggerRoom = new Room("daggerroom", "Empty room", "The room is very barren.");
+        Room daggerRoom = new Room("Empty room", "The room is very barren.");
         daggerRoom.addEntity(new Dagger(Material.IRON));
-        daggerRoom.addExit("south", "startroom");
-        daggerRoom.addExit("east", "wolfroom");
         daggerRoom.addEntity(new IronHelmet());
         putRoom(daggerRoom);
 
-        Room emonRoom = new Room("emonroom", "Attic", "You're in a wooden attic.");
+        Room emonRoom = new Room("Attic", "You're in a wooden attic.");
         NPC emon = new NPC("emon", "Emon", "A handy man. Probably fixes small keys.",
                 "handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
-        emonRoom.addExit("down", "ladderroom");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
         emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you."));
         emonRoom.addEntity(emon);
         putRoom(emonRoom);
 
-        Room mushRoom = new Room("mushroomroom", "Mushy Room", "The air is very damp.");
+        Room mushRoom = new Room("Mushy Room", "The air is very damp.");
         mushRoom.addItem(new Mushroom());
-        mushRoom.addExit("north", "startroom");
-        mushRoom.addExit("east", "cavernroom");
+
         putRoom(mushRoom);
 
-        Room wolfRoom = new Room("wolfroom", "Wolf Room", "You see some bones scattered on the ground.");
+        Room wolfRoom = new Room("Wolf Room", "You see some bones scattered on the ground.");
         wolfRoom.addEntity(new Prop("bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's.", "a massive pile of bones"));
         wolfRoom.addEntity(new Wolf());
         wolfRoom.addEntity(new Snake());
         wolfRoom.addEntity(new Apple());
-        wolfRoom.addExit("west", "daggerroom");
-        wolfRoom.addExit("north", "shoproom");
-        wolfRoom.addExit("down", "sanctuary");
+
         putRoom(wolfRoom);
 
-        Room shopRoom = new Room("shoproom", "Shop", "You see several items neatly disposed on a table");
+        Room shopRoom = new Room("Shop", "You see several items neatly disposed on a table");
         shopRoom.addEntity(new Prop("table", "You can see a knife and an apple on the table", "a wooden table"));
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it.", "a knife"));
         shopRoom.addEntity(new Prop("apple", "A red apple.Probably better not to take it.", "an apple"));
@@ -189,74 +174,48 @@ public class AlphaWorld extends World{
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);
-        shopRoom.addExit("south", "wolfroom");
         putRoom(shopRoom);
 
-        Room sanctuary = new Room("sanctuary", "Sanctuary", "There is a holy aura permeating this place.");
+        Room sanctuary = new Room("Sanctuary", "There is a holy aura permeating this place.");
         NPC priest = new NPC("priest", "Asdolfo", "A holy man, hood up.", "hooded man", "Greetings, child. I can bless items for you. Should you be wounded, you can use this fountain to strengthen your spirits.");
         HolySword sword = new HolySword();
         sword.setType("holy");
         sword.setDamage(8);
         priest.addReactionItem("holysword", sword);
         sanctuary.addEntity(priest);
-        sanctuary.addExit("up", "wolfroom");
         sanctuary.addEntity(new HolyFountain());
         putRoom(sanctuary);
 
-        Room cavernRoom = new Room("cavernroom", "Cavernous opening", "The tunnel suddenly opens up in this place.");
-        cavernRoom.addExit("west", "mushroomroom");
-        cavernRoom.addExit("north", "minibossroom");
-        cavernRoom.addExit("south", "mazemain");
-        cavernRoom.addExit("east", "brokenkeyroom");
+        Room cavernRoom = new Room( "Cavernous opening", "The tunnel suddenly opens up in this place.");
+
         putRoom(cavernRoom);
 
-        Room mazeMain = new Room("mazemain", "Maze", "These walls all look the same, you feel very disorientated");
-        mazeMain.addExit("north", "cavernroom");
-        mazeMain.addExit("south", "maze1");
-        mazeMain.addExit("east", "mazemain");
-        mazeMain.addExit("west", "mazemain");
+        Room mazeMain = new Room("Maze", "These walls all look the same, you feel very disorientated");
         putRoom(mazeMain);
 
-        Room maze1 = new Room("maze1", "Maze", "These walls all look the same, you feel very disorientated");
-        maze1.addExit("north", "mazemain");
-        maze1.addExit("south", "mazemain");
-        maze1.addExit("east", "maze2");
-        maze1.addExit("west", "mazemain");
+        Room maze1 = new Room("Maze", "These walls all look the same, you feel very disorientated");
         putRoom(maze1);
 
-        Room maze2 = new Room("maze2", "Maze", "These walls all look the same, you feel very disorientated");
-        maze2.addExit("north", "maze3");
-        maze2.addExit("south", "mazemain");
-        maze2.addExit("east", "mazemain");
-        maze2.addExit("west", "mazemain");
+        Room maze2 = new Room( "Maze", "These walls all look the same, you feel very disorientated");
+
         putRoom(maze2);
 
-        Room maze3 = new Room("maze3", "Maze", "These walls all look the same, you feel very disorientated");
-        maze3.addExit("east", "maze4");
-        maze3.addExit("south", "mazemain");
-        maze3.addExit("north", "mazemain");
-        maze3.addExit("west", "mazemain");
-
+        Room maze3 = new Room( "Maze", "These walls all look the same, you feel very disorientated");
         //add corrosive slime
         putRoom(maze3);
 
-        Room maze4 = new Room("maze4", "Maze", "These walls all look the same, you feel very disorientated");
-        maze4.addExit("east", "mazemain");
-        maze4.addExit("south", "swordroom");
-        maze4.addExit("north", "mazemain");
-        maze4.addExit("west", "mazemain");
+        Room maze4 = new Room("Maze", "These walls all look the same, you feel very disorientated");
+
         putRoom(maze4);
 
-        Room swordRoom = new Room("swordroom", "Lake in the mountain", "You suddenly find yourself at the coast of a lake. A little path leads you to a circle of stones, in which you see an exquisitely crafted sword.");
+        Room swordRoom = new Room("Lake in the mountain", "You suddenly find yourself at the coast of a lake. A little path leads you to a circle of stones, in which you see an exquisitely crafted sword.");
         swordRoom.addItem(new HolySword());
         swordRoom.addEntity(new Prop("lake", "A stunningly beautiful lake, very calming", "a calm lake"));
         swordRoom.addEntity(new Prop("Circle of stones", "a circle made with roundish stones, around 5 m wide", "a circle of stones"));
-        swordRoom.addExit("north", "mazemain");
         putRoom(swordRoom);
 
-        Room miniBossRoom = new Room("minibossroom", "Skeleton Room", "Everything in this room is of a very white colour. Upon further examination, you realise it's because everything is made of bones. Human ones.");
+        Room miniBossRoom = new Room( "Skeleton Room", "Everything in this room is of a very white colour. Upon further examination, you realise it's because everything is made of bones. Human ones.");
         //add miniboss
-        miniBossRoom.addExit("south", "cavernroom");
         Spellbook sb = new Spellbook();
         sb.addSpell(new Fireball(), 5);
         sb.addSpell(new LightHeal(), 3);
@@ -264,36 +223,92 @@ public class AlphaWorld extends World{
         miniBossRoom.addEntity(sb, 1);
         putRoom(miniBossRoom);
 
-        Room brokenKeyRoom = new Room("brokenkeyroom", "Hearth room", "This room is quite warm.");
-        brokenKeyRoom.addExit("west", "cavernroom");
-        brokenKeyRoom.addExit("east", "gateroom");
+        Room brokenKeyRoom = new Room("Hearth room", "This room is quite warm.");
         brokenKeyRoom.addEntity(new Prop("hearth", "the hearth is alit. somebody has been here recently", "a stone hearth"));
         brokenKeyRoom.addEntity(new Prop("table", "a wooden table. It has a broken key on top.", "a wooden table"));
         brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two."));
         putRoom(brokenKeyRoom);
 
-        Room gateRoom = new Room("gateroom", "Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
-        gateRoom.addExit("east", "bossroom");
-        gateRoom.addExit("west", "brokenkeyroom");
+        Room gateRoom = new Room("Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         gateRoom.addEntity(new LockedDoor("bossgate", "Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON,"bosskey"));
         gateRoom.lockDirection("east", "bossgate");
         putRoom(gateRoom);
 
-        Room bossRoom = new Room("bossroom", "Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
+        Room bossRoom = new Room("Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
         bossRoom.addCustomDirection("You sense a magical barrier east.");
-        bossRoom.addExit("west", "gateroom");
-        bossRoom.addExit("east", "princessroom");
         bossRoom.addEntity(new LeatherArmour());
         bossRoom.lockDirection("east", "boss");
         bossRoom.addEntity(new Demon());
         putRoom(bossRoom);
 
-        Room princessRoom = new Room("princessroom", "Princess room", "a royal room, full of decorations.");
+        Room princessRoom = new Room("Princess room", "a royal room, full of decorations.");
         NPC peach = new NPC("princess", "Peach", "A princess in a pink dress is here", "pink princess", "Congratulations, you saved me!");
         peach.addSubject("mario", new Subject("Thank you Mario! but your princess is in another castle!"));
         //maybe exit
         princessRoom.addEntity(peach);
         putRoom(princessRoom);
+
+
+        maze1.addExit("north", mazeMain);
+        maze1.addExit("south", mazeMain);
+        maze1.addExit("east", maze2);
+        maze1.addExit("west", mazeMain);
+        mazeMain.addExit("north", cavernRoom);
+        mazeMain.addExit("south", maze1);
+        mazeMain.addExit("east", mazeMain);
+        mazeMain.addExit("west", mazeMain);
+        cavernRoom.addExit("west", mushRoom);
+        cavernRoom.addExit("north", miniBossRoom);
+        cavernRoom.addExit("south", mazeMain);
+        cavernRoom.addExit("east", brokenKeyRoom);
+        sanctuary.addExit("up", wolfRoom);
+        shopRoom.addExit("south", wolfRoom);
+        wolfRoom.addExit("west", daggerRoom);
+        wolfRoom.addExit("north", shopRoom);
+        wolfRoom.addExit("down", sanctuary);
+        mushRoom.addExit("north", startRoom);
+        mushRoom.addExit("east", cavernRoom);
+        emonRoom.addExit("down", ladderRoom);
+        daggerRoom.addExit("south", startRoom);
+        daggerRoom.addExit("east", wolfRoom);
+        ladderRoom.addExit("up", emonRoom);
+        ladderRoom.addExit("east", startRoom);
+        weaponRoom.addExit("south", helmetRoom);
+        weaponRoom.addExit("north", startRoom);
+        helmetRoom.addExit("south", armorRoom);
+        helmetRoom.addExit("north", weaponRoom);
+        armorRoom.addExit("south", shieldRoom);
+        armorRoom.addExit("north", helmetRoom);
+        shieldRoom.addExit("south", startRoom);
+        shieldRoom.addExit("north", armorRoom);
+        lootRoom.addExit("southwest", startRoom);
+        startRoom.addExit("north",daggerRoom);
+        startRoom.addExit("south",mushRoom);
+        startRoom.addExit("west",ladderRoom);
+        startRoom.addExit("northwest", shieldRoom);
+        startRoom.addExit("northeast", lootRoom);
+        bossRoom.addExit("west", gateRoom);
+        bossRoom.addExit("east", princessRoom);
+        gateRoom.addExit("east", bossRoom);
+        gateRoom.addExit("west", brokenKeyRoom);
+        brokenKeyRoom.addExit("west", cavernRoom);
+        brokenKeyRoom.addExit("east", gateRoom);
+        miniBossRoom.addExit("south", cavernRoom);
+        swordRoom.addExit("north", mazeMain);
+        maze3.addExit("east", maze4);
+        maze3.addExit("south", mazeMain);
+        maze3.addExit("north", mazeMain);
+        maze3.addExit("west", mazeMain);
+        maze4.addExit("east", mazeMain);
+        maze4.addExit("south", swordRoom);
+        maze4.addExit("north", mazeMain);
+        maze4.addExit("west", mazeMain);
+        maze2.addExit("north", maze3);
+        maze2.addExit("south", mazeMain);
+        maze2.addExit("east", mazeMain);
+        maze2.addExit("west", mazeMain);
+        
+        setStartingRoom(startRoom);
 
         Player p = new Player(true, 20, getStartingRoom(), "You are alpha. And omega. Maybe.");
 

@@ -96,4 +96,5 @@ public abstract class Item extends Interactable {
     public int getPrice() {
         return price;
     }
+
 }

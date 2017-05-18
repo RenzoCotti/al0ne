@@ -15,9 +15,8 @@ public class World implements Serializable{
     protected Player player;
     protected LootTable lootTable;
 
-    public World(String worldName, String startingRoom) {
+    public World(String worldName) {
         this.worldName = worldName;
-        this.startingRoom=startingRoom;
         this.rooms = new HashMap<>();
         this.lootTable = new LootTable();
     }
@@ -26,8 +25,8 @@ public class World implements Serializable{
         return rooms.get(startingRoom);
     }
 
-    public void setStartingRoom(String startingRoom) {
-        this.startingRoom = startingRoom;
+    public void setStartingRoom(Room startingRoom) {
+        this.startingRoom = startingRoom.getID();
     }
 
     public HashMap<String, Room> getRooms() {

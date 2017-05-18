@@ -43,10 +43,7 @@ public abstract class Entity implements Serializable{
     }
 
 
-    //returns 0 if false
-    //1 if true
-    //2 if doesn't require a print afterwards
-    public abstract int used(Room currentRoom, Player player);
+
 
 
 

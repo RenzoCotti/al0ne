@@ -20,9 +20,9 @@ import java.util.ArrayList;
  */
 public class MedievalYoungWorld extends World{
     public MedievalYoungWorld() {
-        super("medievaly", "homeyourroom");
+        super("medievaly");
 
-        Room yourRoom = new Room("homeyourroom", "Your bedroom", "You are in a fairly chaotic bedroom. " +
+        Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");
 
         Prop bed = new Prop("bed", "Your bed, it needs tidying.",
@@ -35,7 +35,6 @@ public class MedievalYoungWorld extends World{
         yourRoom.addEntity(new JunkItem("lucky stone",
                 "Your lucky stone. You're confident it brings good luck.", 0.1, Size.SMALL));
 
-        yourRoom.addExit("east", "homehallway");
 
 //        Shopkeeper bob = new Shopkeeper("shopkeeper", "Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
 //        bob.simpleAddItem(new Knife(), 50);
@@ -47,16 +46,15 @@ public class MedievalYoungWorld extends World{
         putRoom(yourRoom);
 
 
-        Room hallway = new Room("homehallway", "Hallway", "A hallway. Connects your room and your " +
+        Room hallway = new Room("Hallway", "A hallway. Connects your room and your " +
                 "parents's to the rest of the house.");
-        hallway.addExit("west", "homeyourroom");
-        hallway.addExit("north", "home");
-        hallway.addExit("east", "homeparentsroom");
+
+
         putRoom(hallway);
 
-        Room parentsRoom = new Room("homeparentsroom", "Your parent's room",
+        Room parentsRoom = new Room("Your parent's room",
                 "Your parents's room. It's quite warm in here");
-        parentsRoom.addExit("west", "homehallway");
+
         parentsRoom.addEntity(new Prop("flower pot",
                 "A pot filled with water, containing a fairly dried up flower.",
                 "a flower pot", Material.CLAY));
@@ -64,7 +62,7 @@ public class MedievalYoungWorld extends World{
                 "a large bed"));
         putRoom(parentsRoom);
 
-        Room mainHouse = new Room("home", "Living Room", "Your house's living room.");
+        Room mainHouse = new Room("Living Room", "Your house's living room.");
         mainHouse.addEntity(new Prop("hearth", "A hearth made of stone blocks.", "a hearth"));
         mainHouse.addEntity(new Prop("table",
                 "A wooden table; it's made of walnut, if you remember correctly.", "a table"));
@@ -86,22 +84,15 @@ public class MedievalYoungWorld extends World{
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
         mom.addReactionItem("eggs", "geteggs", new SliceOfCake());
         mainHouse.addEntity(mom);
-        mainHouse.addExit("south", "homehallway");
-        mainHouse.addExit("west", "neighbourhood");
+
         putRoom(mainHouse);
 
-        Room neighbourhood = new Room("neighbourhood", "Neighbourhood",
+        Room neighbourhood = new Room("Neighbourhood",
                 "There are several houses in this area, most of them are not terribly run down.");
-        neighbourhood.addExit("east", "home");
-        neighbourhood.addExit("north", "square");
-        neighbourhood.addExit("south", "pathforest");
-        neighbourhood.addExit("west", "neighbourporch");
         putRoom(neighbourhood);
 
-        Room neighbourPorch = new Room("neighbourporch", "Neighbour's porch",
+        Room neighbourPorch = new Room("Neighbour's porch",
                 "You are on your neighbour's porch. He doesn't seem to be at home right now.");
-        neighbourPorch.addExit("east", "neighbourhood");
-        neighbourPorch.addExit("west", "neighbourhouse");
         neighbourPorch.lockDirection("west", "neighbourkey");
         neighbourPorch.addEntity(new InvisibleProp("door", "It's locked"));
 //        DoorUnlocker doorBell = new DoorUnlocker("bell", "the door bell of your neighbour.",
@@ -110,34 +101,30 @@ public class MedievalYoungWorld extends World{
 //        neighbourPorch.addEntity(doorBell);
         putRoom(neighbourPorch);
 
-        Room neighbourHouse = new Room("neighbourhouse", "Neighbour's house",
+        Room neighbourHouse = new Room("Neighbour's house",
                 "How did you even get in here?");
-        neighbourHouse.addExit("east", "neighbourporch");
+
         neighbourHouse.addEntity(new Prop("Corpse", "The decomposed corpse of a child. " +
                 "It seems it's holding something in its hand."));
         neighbourHouse.addEntity(new InvisibleProp("hand", "It's holding a white rose."));
         putRoom(neighbourHouse);
 
-        Room square = new Room("square", "Square", "The village square, quite deserted at this time of day.");
+        Room square = new Room("Square", "The village square, quite deserted at this time of day.");
         square.addCustomDirection("To the east you see your town's church, to the north the village hall, " +
                 "to the west the market and to the south your neighbourhood.");
-        square.addExit("east", "villagechurch");
-        square.addExit("west", "villagemarket");
-        square.addExit("south", "neighbourhood");
-        square.addExit("north", "villagehall");
+
         square.addEntity(new Prop("Fountain", "A fountain made of stone"));
         putRoom(square);
 
-        Room villageChurch = new Room("villagechurch", "Village Church",
+        Room villageChurch = new Room("Village Church",
                 "The village's church. It's a fairly large building made out of large blocks of stone, " +
                         "with a tall bell tower.");
         villageChurch.addEntity(new InvisibleProp("tower", "A tall tower, with a huge brass bell at the top"));
-        villageChurch.addExit("east", "villagegraveyard");
-        villageChurch.addExit("west", "square");
+
         putRoom(villageChurch);
 
-        Room villageGraveyard = new Room("villagegraveyard", "Graveyard", "There are a lot of tombstones here.");
-        villageGraveyard.addExit("west", "villagechurch");
+        Room villageGraveyard = new Room("Graveyard", "There are a lot of tombstones here.");
+
         villageGraveyard.addEntity(new Prop("Family tomb",
                 "The last entry listed on here is the one of your sister...",
                 "your family tomb"));
@@ -145,8 +132,8 @@ public class MedievalYoungWorld extends World{
                 "a dried white rose that was on your family tomb.", 0.05, Size.SMALL));
         putRoom(villageGraveyard);
 
-        Room villageHall = new Room("villagehall", "Hall", "This place is strangely deserted. Weird.");
-        villageHall.addExit("south", "square");
+        Room villageHall = new Room("Hall", "This place is strangely deserted. Weird.");
+
         villageHall.addEntity(new Prop("desk", "A large desk with some drawers, with some papers on top of it.",
                 "a desk", Material.WOOD));
         InvisibleProp drawers = new InvisibleProp("drawers", "Wooden drawers. What else did you expect?");
@@ -161,9 +148,9 @@ public class MedievalYoungWorld extends World{
                 "in preparation for the celebration of tomorrow."));
         putRoom(villageHall);
 
-        Room  villageMarket = new Room("villagemarket", "Market", "This is the market. " +
+        Room  villageMarket = new Room( "Market", "This is the market. " +
                 "There's a mixed smell of sweat and food lingering in the air ");
-        villageMarket.addExit("east", "square");
+
         Shopkeeper Varra = new Shopkeeper("foodvendor", "Varra",
                 "A fairly tall man, a bit on the chubby side.", "Hi, I'm Varra. Want to see the items i sell?");
         Varra.simpleAddItem(new Food("eggs", "eggs",
@@ -174,11 +161,40 @@ public class MedievalYoungWorld extends World{
 
 
         //TODO
-        Room pathForest = new Room("pathforest", "Path to the forest",
+        Room pathForest = new Room("Path to the forest",
                 "A path towards the village's forest. Dad forbids you from going there without his consent.");
-        pathForest.addExit("north", "neighbourhood");
+
         putRoom(pathForest);
 
+
+        pathForest.addExit("north", neighbourhood);
+        villageMarket.addExit("east", square);
+        villageHall.addExit("south", square);
+        villageGraveyard.addExit("west", villageChurch);
+        villageChurch.addExit("east", villageGraveyard);
+        villageChurch.addExit("west", square);
+        square.addExit("east", villageChurch);
+        square.addExit("west", villageMarket);
+        square.addExit("south", neighbourhood);
+        square.addExit("north", villageHall);
+        neighbourHouse.addExit("east", neighbourPorch);
+        neighbourPorch.addExit("east", neighbourhood);
+        neighbourPorch.addExit("west", neighbourHouse);
+        neighbourhood.addExit("east", mainHouse);
+        neighbourhood.addExit("north", square);
+        neighbourhood.addExit("south", pathForest);
+        neighbourhood.addExit("west", neighbourPorch);
+        mainHouse.addExit("south", mainHouse);
+        mainHouse.addExit("west", neighbourhood);
+        parentsRoom.addExit("west", hallway);
+        hallway.addExit("west", yourRoom);
+        hallway.addExit("north", mainHouse);
+        hallway.addExit("east", parentsRoom);
+        yourRoom.addExit("east", hallway);
+
+
+
+        setStartingRoom(yourRoom);
 
         Player p = new Player(true, 10, getStartingRoom(),
                 "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +

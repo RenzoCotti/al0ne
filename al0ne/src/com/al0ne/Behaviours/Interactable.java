@@ -37,6 +37,11 @@ public abstract class Interactable extends Entity{
         return canDrop;
     }
 
+    //returns 0 if false
+    //1 if true
+    //2 if doesn't require a print afterwards
+    public abstract int used(Room currentRoom, Player player);
+
 
     public int usedWith(Item item, Room currentRoom, Player player) {
         for (String s: requiredType){

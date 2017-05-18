@@ -207,8 +207,4 @@ public abstract class WorldCharacter extends Entity{
         this.damage = damage;
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

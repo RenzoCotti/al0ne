@@ -24,6 +24,8 @@ import static com.al0ne.Engine.Main.printToSingleLine;
  */
 public class Room extends Entity{
 
+    static int roomCounter = 0;
+
     //maps direction - room ID
     protected HashMap<String, String> exits;
     //maps door ID - direction
@@ -46,19 +48,14 @@ public class Room extends Entity{
 
 
 
-    public Room(String id, String name, String description) {
-        super(id, name, description, name);
+    public Room(String name, String description) {
+        super("room"+(roomCounter++), name, description, name);
         this.exits=new HashMap<>();
         this.lockedDirections =new HashMap<>();
         this.customDirections = null;
         this.entities = new HashMap<>();
         this.firstVisit = true;
         this.questRoom = false;
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 
     public boolean isFirstVisit(){
@@ -376,8 +373,8 @@ public class Room extends Entity{
         else return null;
     }
 
-    public void addExit(String exit, String roomid) {
-        this.exits.put(exit, roomid);
+    public void addExit(String exit, Room room) {
+        this.exits.put(exit, room.getID());
     }
 
     //this function locks direction behind doorID
