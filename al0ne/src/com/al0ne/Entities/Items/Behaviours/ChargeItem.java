@@ -21,7 +21,7 @@ public abstract class ChargeItem extends Item{
 
     public ChargeItem(String id, String name, String description,
                       double weight, Size size, Material material, int maxCharges, String onRefill) {
-        super(id, name, description, weight, size, material);
+        super(id, name, description, weight, size, material, null);
         this.maxCharges = maxCharges;
         this.currentCharges = maxCharges;
         this.canRecharge = false;
@@ -30,7 +30,7 @@ public abstract class ChargeItem extends Item{
 
     public ChargeItem(String id, String name, String description,
                       double weight, Size size, Material material, int maxCharges, String property, String onRefill) {
-        super(id, name, description, weight, size, material);
+        super(id, name, description, weight, size, material, null);
         this.maxCharges = maxCharges;
         this.currentCharges = maxCharges;
         this.canRecharge = true;

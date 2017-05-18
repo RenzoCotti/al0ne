@@ -11,12 +11,12 @@ import com.al0ne.Behaviours.Enums.Material;
  */
 public class Key extends Item{
     public Key(String id, String name, String description) {
-        super(id, name, description, 0.1, Size.VSMALL, Material.IRON);
+        super(id, name, description, 0.1, Size.VSMALL, Material.IRON, null);
         addProperty("key");
     }
 
     public Key(String id, String name) {
-        super(id, name, "A plain looking key.", 0.1, Size.VSMALL, Material.IRON);
+        super(id, name, "A plain looking key.", 0.1, Size.VSMALL, Material.IRON, null);
         addProperty("key");
     }
 

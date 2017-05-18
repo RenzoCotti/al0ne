@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Entities.Items.Behaviours.Container;
 
@@ -147,9 +148,23 @@ public class Room extends Entity {
     }
 
     public void printEnemy() {
-        ArrayList<Enemy> enemies = getEnemyList();
-        for (Enemy enemy : enemies){
-            printToLog("You can see "+enemy.getShortDescription()+" here.");
+        ArrayList enemies = getEnemyList();
+        printArrayInRoom(enemies, "You can see ");
+    }
+
+    public void printArrayInRoom(ArrayList entities, String begin){
+        if(entities.size() > 0){
+            printToSingleLine(begin);
+            for (int i=0; i<entities.size(); i++) {
+                printToSingleLine(((Entity)entities.get(i)).getShortDescription());
+                if(i==entities.size()-2){
+                    printToSingleLine(" and ");
+                } else if(i!=entities.size()-1){
+                    printToSingleLine(", ");
+                } else{
+                    printToSingleLine(" here.\n");
+                }
+            }
         }
     }
 
@@ -178,9 +193,7 @@ public class Room extends Entity {
 
     public void printNPCs() {
         ArrayList<NPC> npcs = getNPCList();
-        for (NPC npc : npcs){
-            printToLog("You can see "+npc.getName()+" here.");
-        }
+        printArrayInRoom(npcs, "There is ");
     }
 
 
@@ -212,53 +225,44 @@ public class Room extends Entity {
         return exits;
     }
 
-    //prints props in the room
-    private void printItemsOrProps(boolean prop){
-            ArrayList<Prop> props = getPropList();
-            ArrayList<Pair> items = getItemList();
-        if (prop && props.size()!=0){
-            ArrayList<Prop> toRemove = new ArrayList<>();
-            for(Prop p : props){
-                if (p.isInvisible()){
-                    toRemove.add(p);
+    private void printItems(){
+        ArrayList<Pair> items = getItemList();
+        if (items.size()!=0){
+            printToSingleLine("You can see ");
+            for (int i=0; i<items.size(); i++) {
+                Item currentItem = (Item) items.get(i).getEntity();
+                int count = items.get(i).getCount();
+                if(count == 1){
+                    printToSingleLine(currentItem.getShortDescription());
+                } else{
+                    printToSingleLine(count + " " + currentItem.getName());
                 }
-            }
-            props.removeAll(toRemove);
-            if(props.size() == 0) return;
-
-            printToSingleLine("There is ");
-            for (int i=0; i<props.size(); i++) {
-                if(!props.get(i).isInvisible()){
-                    printToSingleLine(props.get(i).getShortDescription());
-                }
-                if(i==props.size()-2){
+                if(i==items.size()-2){
                     printToSingleLine(" and ");
-                } else if(i!=props.size()-1){
+                } else if(i!=items.size()-1){
                     printToSingleLine(", ");
                 } else{
-                    printToSingleLine(" here.\n");
+                    printToSingleLine(" here.");
+                    printToLog();
                 }
             }
-        } else if (!prop && items.size()!=0){
-                printToSingleLine("You can see ");
-                for (int i=0; i<items.size(); i++) {
-                    Item currentItem = (Item) items.get(i).getEntity();
-                    int count = items.get(i).getCount();
-                    if(count == 1){
-                        printToSingleLine(currentItem.getShortDescription());
-                    } else{
-                        printToSingleLine(count + " " + currentItem.getName());
-                    }
-                    if(i==items.size()-2){
-                        printToSingleLine(" and ");
-                    } else if(i!=items.size()-1){
-                        printToSingleLine(", ");
-                    } else{
-                        printToSingleLine(" here.");
-                        printToLog();
-                    }
-                }
         }
+    }
+
+    private void printProps(){
+        ArrayList<Prop> props = getPropList();
+        ArrayList<Prop> toRemove = new ArrayList<>();
+
+        for(Prop p : props){
+            if (p.isInvisible()){
+                toRemove.add(p);
+            }
+        }
+        props.removeAll(toRemove);
+
+        if(props.size() == 0) return;
+
+        printArrayInRoom(props, "You can see ");
     }
 
 
@@ -314,8 +318,8 @@ public class Room extends Entity {
     //this function prints every time a room is discovered
     public void printRoom(){
         printLongDescription(null, null);
-        printItemsOrProps(true);
-        printItemsOrProps(false);
+        printItems();
+        printProps();
         printNPCs();
         printEnemy();
         printDirections();

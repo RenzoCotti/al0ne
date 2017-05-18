@@ -15,7 +15,7 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Drinkable extends Item{
     public Drinkable(String id, String name, String description, double weight, Size size) {
-        super(id, name, description, weight, size, Material.GLASS);
+        super(id, name, description, weight, size, Material.GLASS, null);
         addCommand(Command.DRINK);
         addProperty("food");
     }

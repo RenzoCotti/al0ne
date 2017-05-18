@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PotentialItems;
 import com.al0ne.Behaviours.Pairs.SpellPair;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Main;

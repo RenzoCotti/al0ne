@@ -19,7 +19,7 @@ public class WarpStone extends Item{
     public WarpStone() {
         super("warpstone", "Warp stone",
                 "A glowing opaque light-blue stone, whose edges are roughly shaped in a prism-shape.",
-                0.3, Size.VSMALL, Material.STONE);
+                0.3, Size.VSMALL, Material.STONE, 0);
         setShortDescription("a light-blue stone");
         setUnique();
         setUndroppable();

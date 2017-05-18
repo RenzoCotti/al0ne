@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Spells.ConcreteSpells;
 
-import com.al0ne.Behaviours.Enemy;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Spells.DamagingSpell;

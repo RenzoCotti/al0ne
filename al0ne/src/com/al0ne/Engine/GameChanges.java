@@ -2,6 +2,7 @@ package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
@@ -16,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
-import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**

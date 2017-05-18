@@ -40,6 +40,7 @@ public enum Material {
     }
 
     public static String stringify(Material m){
+        if (m == null) return "";
         return m.toString().toLowerCase();
     }
 

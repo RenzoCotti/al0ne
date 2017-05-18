@@ -123,6 +123,7 @@ public class UI {
             }
         });
 
+        //bigger font
         menus.get(1).getItems().get(0).setOnAction(t -> {
             if(Main.fontSize + 2 >= 20){
                 Main.fontSize = 20;
@@ -134,6 +135,7 @@ public class UI {
             UI.redrawUI(done);
         });
 
+        //smaller font
         menus.get(1).getItems().get(1).setOnAction(t -> {
             if(Main.fontSize - 2 <= 10){
                 Main.fontSize = 10;
@@ -142,6 +144,17 @@ public class UI {
             }
 
             UI.redrawUI(done);
+        });
+
+        //hide menu
+        menus.get(1).getItems().get(2).setOnAction(t -> {
+            if(Main.sideMenuShown){
+                container.getItems().remove(sideMenu);
+                Main.sideMenuShown = false;
+            } else {
+                container.getItems().add(1, sideMenu);
+                container.setDividerPosition(0, 0.6);
+            }
         });
 
 

@@ -1,7 +1,11 @@
-package com.al0ne.Behaviours;
+package com.al0ne.Behaviours.abstractEntities;
 
+import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairDrop;
+import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Room;
+import com.al0ne.Behaviours.Status;
 import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Engine.Utility;
 

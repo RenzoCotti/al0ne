@@ -47,8 +47,9 @@ public class TopMenu {
 
         MenuItem biggerFont = new MenuItem("Bigger font");
         MenuItem smallerFont = new MenuItem("Smaller font");
+        MenuItem disableSideMenu = new MenuItem("Toggle Side Menu");
 
-        fileOptions.getItems().addAll(biggerFont, smallerFont);
+        fileOptions.getItems().addAll(biggerFont, smallerFont, disableSideMenu);
 
 
 

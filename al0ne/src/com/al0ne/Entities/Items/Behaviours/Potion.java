@@ -10,7 +10,7 @@ import com.al0ne.Behaviours.Enums.Size;
  */
 public abstract class Potion extends Item {
     public Potion(String id, String name, String longDescription) {
-        super(id, name, longDescription, 0.3, Size.SMALL, Material.GLASS);
+        super(id, name, longDescription, 0.3, Size.SMALL, Material.GLASS, null);
         addProperty("consumable");
         addCommand(Command.DRINK);
     }

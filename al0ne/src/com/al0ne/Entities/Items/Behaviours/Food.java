@@ -16,7 +16,7 @@ public class Food extends Item {
 
     private int foodValue;
     public Food(String id, String name, String description, double weight, Size size, int foodValue) {
-        super(id, name, description, weight, size);
+        super(id, name, description, weight, size, null, null);
         addCommand(Command.EAT);
         addProperty("food");
         addProperty("consumable");

@@ -1,6 +1,6 @@
 package com.al0ne.Entities.Enemies;
 
-import com.al0ne.Behaviours.Enemy;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Poisoning;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SnakeSteak;
 

@@ -38,6 +38,8 @@ public class Main extends Application{
 
     public static int maxHistory = 20;
 
+    public static boolean sideMenuShown = true;
+
     public static int historyCounter = 0;
 
     public static String currentCommand = "";

@@ -18,47 +18,34 @@ public abstract class Item extends Interactable {
     protected double weight;
     protected int size;
     protected boolean unique;
-    public boolean customName=false;
     public int price;
 
-
-    public Item(String id, String name, String description, double weight, Size size) {
-        super(id, name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
-        this.weight = weight;
-        this.type='i';
-        this.size=Size.toInt(size);
-        this.unique = false;
-        this.canDrop = true;
-        this.material = Material.UNDEFINED;
-        this.canTake=true;
-        this.price = 0;
-    }
-
-    public Item(String id, String name, String description, double weight, Size size, Material material) {
+    public Item(String id, String name, String description, double weight, Size size, Material material, Integer price) {
         super(id, name, description,
-                Utility.getArticle(Material.stringify(material))+
-                        " "+Material.stringify(material)+" "+name.toLowerCase(), material);
+                "temp", material);
         this.weight = weight;
         this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
         this.canDrop = true;
         this.canTake=true;
-        int quality = Math.max(material.getToughness(), material.getDamage());
-        this.price = ((int) ((material.getPrice()*2+quality)*weight))*2;
-    }
 
-    public Item(String id, String name, String description, double weight, Size size, Material material, int price) {
-        super(id, name, description,
-                Utility.getArticle(Material.stringify(material))+
-                        " "+Material.stringify(material)+" "+name.toLowerCase(), material);
-        this.weight = weight;
-        this.type='i';
-        this.size=Size.toInt(size);
-        this.unique = false;
-        this.canDrop = true;
-        this.canTake=true;
-        this.price = price;
+        if(material != null){
+            this.shortDescription = Utility.getArticle(Material.stringify(material))+
+                    " "+Material.stringify(material)+" "+name.toLowerCase();
+        } else {
+            this.shortDescription = Utility.getArticle(name)+" "+name.toLowerCase();
+        }
+
+
+        if(price == null && material != null){
+            int quality = Math.max(material.getToughness(), material.getDamage());
+            this.price = ((int) ((material.getPrice()*2+quality)*weight))*2;
+        } else if (material == null){
+            this.price = 0;
+        } else {
+            this.price = price;
+        }
     }
 
     public double getWeight() {

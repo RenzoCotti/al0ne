@@ -23,7 +23,7 @@ public abstract class Container extends Item{
 
     public Container(String id, String name, String description, double weight, Size size,
                      Material material, boolean canAdd) {
-        super(id, name, description, weight, size, material);
+        super(id, name, description, weight, size, material, null);
         this.canAdd = canAdd;
         this.currentWeight = 0;
         this.currentSize = 0;
