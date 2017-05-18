@@ -64,7 +64,6 @@ public class Prop extends Interactable {
         this.type='p';
         this.canTake=false;
         this.invisible=false;
-
     }
 
 
@@ -89,7 +88,6 @@ public class Prop extends Interactable {
         this.type='p';
         this.canTake=false;
         this.invisible=false;
-
     }
 
 
