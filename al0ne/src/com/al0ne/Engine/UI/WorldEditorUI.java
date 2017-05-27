@@ -2,31 +2,39 @@ package com.al0ne.Engine.UI;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Engine.Game;
+import com.al0ne.Engine.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by BMW on 17/05/2017.
  */
 public class WorldEditorUI {
-    public static VBox createEditor(){
+    public static VBox createEditor(Game g){
         TabPane editor = new TabPane();
         editor.setId("editor");
 
-        Tab rooms = createRoom();
+        Tab rooms = createRoom(g);
 
-        Tab items = createItem();
+        Tab items = createItem(g);
 
 
-        Tab props = createProp();
+        Tab props = createProp(g);
 
-        Tab npc = createNPC();
+        Tab npc = createNPC(g);
 
-        Tab enemy = createEnemy();
+        Tab enemy = createEnemy(g);
 
         Tab other = new Tab();
         other.setText("Other");
@@ -38,10 +46,12 @@ public class WorldEditorUI {
         return temp;
     }
 
-    public static Tab createProp(){
+    public static Tab createProp(Game g){
         Tab items = new Tab();
         items.setText("Prop");
         items.setClosable(false);
+
+        HBox temp = new HBox();
 
         GridPane itemContent = new GridPane();
 
@@ -91,7 +101,8 @@ public class WorldEditorUI {
 
         itemContent.setPadding(new Insets(5, 10, 5, 5));
 
-        items.setContent(itemContent);
+        temp.getChildren().addAll(itemContent);
+        items.setContent(temp);
 
         Button create = new Button("Create Prop");
         itemContent.add(create, 0, 12);
@@ -99,7 +110,7 @@ public class WorldEditorUI {
         return items;
     }
 
-    public static Tab createNPC(){
+    public static Tab createNPC(Game g){
         Tab items = new Tab();
         items.setText("NPC");
         items.setClosable(false);
@@ -194,7 +205,7 @@ public class WorldEditorUI {
     }
 
 
-    public static Tab createEnemy(){
+    public static Tab createEnemy(Game g){
         Tab enemy = new Tab();
         enemy.setText("Enemy");
         enemy.setClosable(false);
@@ -292,10 +303,12 @@ public class WorldEditorUI {
         return enemy;
     }
 
-    public static Tab createItem(){
+    public static Tab createItem(Game g){
         Tab items = new Tab();
         items.setText("Items");
         items.setClosable(false);
+
+        HBox temp = new HBox();
 
         GridPane itemContent = new GridPane();
 
@@ -361,12 +374,13 @@ public class WorldEditorUI {
 
         itemContent.setPadding(new Insets(10, 10, 10, 10));
 
+        temp.getChildren().addAll(itemContent, createListItems(Main.edit.getItems().values()));
         items.setContent(itemContent);
 
         return items;
     }
 
-    public static Tab createRoom(){
+    public static Tab createRoom(Game g){
         Tab rooms = new Tab();
         rooms.setText("Rooms");
         rooms.setClosable(false);
@@ -414,5 +428,30 @@ public class WorldEditorUI {
         rooms.setContent(itemContent);
 
         return rooms;
+    }
+
+    public static VBox createListItems(Collection<Item> items){
+        VBox list = new VBox();
+
+        ListView<String> games = new ListView<>();
+        ArrayList<String> temp = new ArrayList<>();
+        for(Entity e: items){
+            temp.add(e.getID());
+        }
+        ObservableList<String> itemsArray = FXCollections.observableArrayList (temp);
+        games.setItems(itemsArray);
+
+
+        Button load = new Button("Edit Item");
+        load.setOnAction(t -> {
+            int selectedIndex = games.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                Item i = Main.edit.getItems().get(games.getItems().get(selectedIndex));
+                System.out.println(i.getName());
+            }
+        });
+        list.getChildren().addAll(games, load);
+
+        return list;
     }
 }

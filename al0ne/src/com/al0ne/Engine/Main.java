@@ -46,7 +46,7 @@ public class Main extends Application{
 
     public static String currentCommand = "";
 
-    public static HashMap<String, Game> editorGames = new HashMap<>();
+    public static EditorInfo edit = new EditorInfo();
 
     public static void main(String[] args) {
         launch(args);
@@ -55,8 +55,8 @@ public class Main extends Application{
 
     private static void runGame(){
         started = true;
-        editorGames.put(game.getGameName(), game);
-        editorGames.put(game.getGameName(), game);
+        edit.addGame(game);
+        edit.addGame(game);
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();

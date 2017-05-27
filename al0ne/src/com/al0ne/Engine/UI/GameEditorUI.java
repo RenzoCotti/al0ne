@@ -28,7 +28,7 @@ import static com.al0ne.Engine.UI.GameEditorUI.updateList;
 public class GameEditorUI {
     public static HBox createEditor(){
 
-        VBox game = createList();
+        VBox gameList = createList();
 
         VBox newGameBox = new VBox();
 
@@ -38,16 +38,16 @@ public class GameEditorUI {
         Button create = new Button("Create new Game");
         create.setOnAction(t -> {
             if(!nameText.getText().equals("")){
-                for(Game g : Main.editorGames.values()){
+                for(Game g : Main.edit.getGames().values()){
                     if(g.getGameName().equals(nameText.getText())){
-                        System.out.println("Same game name");
                         return;
                     }
                 }
                 Game newGame = new Game(nameText.getText());
-                Main.editorGames.put(newGame.getGameName(), newGame);
-                System.out.println("created nicely");
-                updateList((ListView<String>) game.getChildren().get(0));
+                Main.edit.addGame(newGame);
+                Main.edit.setCurrentEdit(newGame);
+                Popups.openWorldEditor(newGame);
+                updateList((ListView<String>) gameList.getChildren().get(0));
             }
         });
 
@@ -56,7 +56,7 @@ public class GameEditorUI {
 
 
         HBox temp = new HBox();
-        temp.getChildren().addAll(newGameBox, game);
+        temp.getChildren().addAll(newGameBox, gameList);
         return temp;
     }
 
@@ -73,8 +73,9 @@ public class GameEditorUI {
         load.setOnAction(t -> {
             int selectedIndex = games.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                Game current = Main.editorGames.get(games.getItems().get(selectedIndex));
+                Game current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
                 System.out.println(current.getGameName());
+                Main.edit.setCurrentEdit(current);
             }
         });
         list.getChildren().addAll(games, load);
@@ -86,9 +87,9 @@ public class GameEditorUI {
 
         ObservableList<String> data = FXCollections.observableArrayList();
 
-        if (Main.editorGames.size()==0){}
+        if (Main.edit.getGames().size()==0){}
         else {
-            for(Game g: Main.editorGames.values()){
+            for(Game g: Main.edit.getGames().values()){
                 data.add(g.getGameName());
             }
         }

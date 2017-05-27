@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
+import com.al0ne.Engine.Game;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
@@ -243,6 +244,19 @@ public class Popups {
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         HBox dialogVbox = GameEditorUI.createEditor();
+        dialogVbox.setPrefSize(500, 500);
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+        s.setTitle("Game Editor");
+        s.show();
+    }
+
+    public static void openWorldEditor(Game g){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = WorldEditorUI.createEditor(g);
         dialogVbox.setPrefSize(500, 500);
 
         Scene dialogScene = new Scene(dialogVbox);
