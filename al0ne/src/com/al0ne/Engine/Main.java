@@ -1,11 +1,11 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.TextParsing.ParseInput;
 import com.al0ne.Engine.UI.Popups;
 import com.al0ne.Engine.UI.UI;
-import com.al0ne.Entities.Worlds.AlphaWorld;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Main extends Application{
 
@@ -55,8 +54,6 @@ public class Main extends Application{
 
     private static void runGame(){
         started = true;
-        edit.addGame(game);
-        edit.addGame(game);
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();

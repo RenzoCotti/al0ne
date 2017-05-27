@@ -22,7 +22,7 @@ public class TopMenu {
     public static ArrayList<Menu> createSubMenus(Stage stage){
         Menu fileMenu = new Menu("Game");
         Menu fileOptions = new Menu("Options");
-        Menu editorMenu = new Menu("WorldEditorUI");
+        Menu editorMenu = new Menu("Editor");
         Menu helpMenu = new Menu("Help");
 
         MenuItem openEditor = new MenuItem("Open editor");

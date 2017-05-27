@@ -1,19 +1,18 @@
-package com.al0ne.Engine;
+package com.al0ne.Engine.Editing;
 
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
+import com.al0ne.Engine.Game;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by BMW on 27/05/2017.
  */
-public class EditorInfo implements Serializable{
-    private HashMap<String, Game> games;
+public class EditingGame {
 
     private Game currentEdit;
 
@@ -28,20 +27,12 @@ public class EditorInfo implements Serializable{
     private HashMap<String, Enemy> enemies;
 
 
-    public EditorInfo() {
-        this.games = new HashMap<>();
+    public EditingGame(String s) {
+        this.currentEdit = new Game(s);
         this.items = new HashMap<>();
         this.props = new HashMap<>();
         this.npcs = new HashMap<>();
         this.enemies = new HashMap<>();
-    }
-
-    public HashMap<String, Game> getGames() {
-        return games;
-    }
-
-    public void addGame(Game g) {
-        this.games.put(g.getGameName(), g);
     }
 
     public Game getCurrentEdit() {
@@ -93,5 +84,4 @@ public class EditorInfo implements Serializable{
     public void addEnemy(Enemy e) {
         this.enemies.put(e.getID(), e);
     }
-
 }

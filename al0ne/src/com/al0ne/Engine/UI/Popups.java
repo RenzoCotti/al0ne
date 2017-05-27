@@ -7,6 +7,8 @@ import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.Game;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
+import com.al0ne.Engine.UI.EditorUI.GameEditorUI;
+import com.al0ne.Engine.UI.EditorUI.WorldEditorUI;
 import com.al0ne.Engine.Utility;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

@@ -1,6 +1,5 @@
 package com.al0ne.Behaviours.Enums;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +32,7 @@ public enum Size {
         return -1;
     }
 
-    public static Size toSize(Integer size){
+    public static Size intToSize(Integer size){
         if(size == -1){
             return UNDEFINED;
         } else if (toInt(MICRO) > size){
@@ -58,8 +57,29 @@ public enum Size {
         }
     }
 
+    public static Size stringToSize(String s){
+        if (s.equals("tiny")){
+            return MICRO;
+        } else if (s.equals("very small")){
+            return VSMALL;
+        } else if (s.equals("small")){
+            return SMALL;
+        } else if (s.equals("averagely sized")){
+            return NORMAL;
+        } else if (s.equals("quite large")){
+            return LARGE;
+        } else if (s.equals("very big")){
+            return VLARGE;
+        } else if (s.equals("enormous")){
+            return HUGE;
+        } else{
+            System.out.println("error in converting size");
+            return null;
+        }
+    }
+
     public static String toString(Integer size){
-        Size s = toSize(size);
+        Size s = intToSize(size);
 
         switch(s) {
             case MICRO:

@@ -1,26 +1,13 @@
-package com.al0ne.Engine.UI;
+package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Engine.Game;
-import com.al0ne.Engine.GameChanges;
-import com.al0ne.Engine.Main;
-import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Engine.*;
+import com.al0ne.Engine.Editing.EditingGame;
+import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
-
-import static com.al0ne.Engine.UI.GameEditorUI.updateList;
 
 /**
  * Created by BMW on 17/05/2017.
@@ -38,15 +25,16 @@ public class GameEditorUI {
         Button create = new Button("Create new Game");
         create.setOnAction(t -> {
             if(!nameText.getText().equals("")){
-                for(Game g : Main.edit.getGames().values()){
-                    if(g.getGameName().equals(nameText.getText())){
+                for(EditingGame g : Main.edit.getGames().values()){
+                    if(g.getCurrentEdit().getGameName().equals(nameText.getText())){
                         return;
                     }
                 }
-                Game newGame = new Game(nameText.getText());
+                EditingGame newGame = new EditingGame(nameText.getText());
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);
-                Popups.openWorldEditor(newGame);
+                Main.edit.getCurrentEdit().getItems();
+                Popups.openWorldEditor(newGame.getCurrentEdit());
                 updateList((ListView<String>) gameList.getChildren().get(0));
             }
         });
@@ -73,8 +61,8 @@ public class GameEditorUI {
         load.setOnAction(t -> {
             int selectedIndex = games.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                Game current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
-                System.out.println(current.getGameName());
+                EditingGame current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
+                System.out.println(current.getCurrentEdit().getGameName());
                 Main.edit.setCurrentEdit(current);
             }
         });
@@ -89,8 +77,8 @@ public class GameEditorUI {
 
         if (Main.edit.getGames().size()==0){}
         else {
-            for(Game g: Main.edit.getGames().values()){
-                data.add(g.getGameName());
+            for(EditingGame g: Main.edit.getGames().values()){
+                data.add(g.getCurrentEdit().getGameName());
             }
         }
         return data;
