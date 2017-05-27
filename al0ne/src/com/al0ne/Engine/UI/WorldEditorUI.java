@@ -7,13 +7,12 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
  * Created by BMW on 17/05/2017.
  */
-public class Editor {
+public class WorldEditorUI {
     public static VBox createEditor(){
         TabPane editor = new TabPane();
         editor.setId("editor");

@@ -5,6 +5,7 @@ import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.TextParsing.ParseInput;
 import com.al0ne.Engine.UI.Popups;
 import com.al0ne.Engine.UI.UI;
+import com.al0ne.Entities.Worlds.AlphaWorld;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main extends Application{
 
@@ -44,6 +46,8 @@ public class Main extends Application{
 
     public static String currentCommand = "";
 
+    public static HashMap<String, Game> editorGames = new HashMap<>();
+
     public static void main(String[] args) {
         launch(args);
         runGame();
@@ -51,6 +55,8 @@ public class Main extends Application{
 
     private static void runGame(){
         started = true;
+        editorGames.put(game.getGameName(), game);
+        editorGames.put(game.getGameName(), game);
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();

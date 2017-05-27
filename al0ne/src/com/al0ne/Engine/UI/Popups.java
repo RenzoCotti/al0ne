@@ -2,7 +2,6 @@ package com.al0ne.Engine.UI;
 
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.PairWorld;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.GameChanges;
@@ -17,7 +16,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -244,13 +242,13 @@ public class Popups {
     public static void openEditor(){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-        VBox dialogVbox = Editor.createEditor();
+        HBox dialogVbox = GameEditorUI.createEditor();
         dialogVbox.setPrefSize(500, 500);
 
         Scene dialogScene = new Scene(dialogVbox);
 
         s.setScene(dialogScene);
-        s.setTitle("Editor");
+        s.setTitle("World Editor");
         s.show();
     }
 

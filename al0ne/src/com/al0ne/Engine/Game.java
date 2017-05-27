@@ -18,6 +18,7 @@ import java.util.HashMap;
  */
 public class Game implements Serializable {
 
+    protected String gameName;
     protected String startingWorld;
     protected String currentWorld;
     protected HashMap<String, World> worlds;
@@ -29,7 +30,8 @@ public class Game implements Serializable {
 
     private String notes;
 
-    public Game() {
+    public Game(String name) {
+        this.gameName = name;
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
         this.worldCount = 0;
@@ -133,5 +135,7 @@ public class Game implements Serializable {
         return this.commands;
     }
 
-
+    public String getGameName() {
+        return gameName;
+    }
 }

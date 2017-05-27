@@ -13,7 +13,7 @@ public class WarpGame extends Game{
     private boolean warpstone;
 
     public WarpGame() {
-        super();
+        super("warpgame");
         this.warpstone = false;
 
         World startingWorld = new AlphaWorld();
