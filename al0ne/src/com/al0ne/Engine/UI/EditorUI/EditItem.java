@@ -7,10 +7,8 @@ import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Main;
 import com.al0ne.Entities.Items.Behaviours.Drinkable;
 import com.al0ne.Entities.Items.Behaviours.Food;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Behaviours.Protective;
+import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Axe;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Mace;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Sword;
@@ -37,9 +35,17 @@ public class EditItem {
 
         HBox temp = new HBox();
 
-        VBox listItem = createListItems();
+        VBox listItem = new VBox();
 
-        listItem.setPrefWidth(200);
+        ListView<String> games = new ListView<>();
+
+        ObservableList<String> itemsArray = getItems();
+
+        games.setItems(itemsArray);
+
+
+
+
 
 
         GridPane itemContent = new GridPane();
@@ -148,6 +154,7 @@ public class EditItem {
             //TODO: ADD SWITCHING FOR DIFFERENT TYPES
             itemContent.getChildren().remove(foodLabel);
             itemContent.getChildren().remove(foodValue);
+            itemContent.getChildren().remove(foodType);
             itemContent.getChildren().remove(foodDisplay);
             itemContent.getChildren().remove(damageTypeLabel);
             itemContent.getChildren().remove(damageDisplay);
@@ -181,7 +188,6 @@ public class EditItem {
                 itemContent.add(contentLabel, 0, 10);
                 itemContent.add(contentText, 1, 10);
             }
-            System.out.println(t1);
         });
 
         itemContent.add(typeLabel, 0, 9);
@@ -192,6 +198,8 @@ public class EditItem {
             String material = materialDisplay.getSelectionModel().getSelectedItem();
             String size = sizeDisplay.getSelectionModel().getSelectedItem();
             String type = typeDisplay.getSelectionModel().getSelectedItem();
+
+            boolean done = false;
             if(checkIfNotEmptyAndNotExisting(nameText.getText(), "name") &&
                     checkIfNotEmpty(descText.getText()) &&
                     material != null && size != null){
@@ -217,7 +225,7 @@ public class EditItem {
                                 Weapon weapon = new Weapon(name, name, desc, damageType, armorpen, damage, weight, s, m);
 
                                 Main.edit.getCurrentEdit().addItem(weapon);
-                                ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
+                                done = true;
                             } else {
                                 System.out.println("Damage type is null");
                             }
@@ -234,17 +242,20 @@ public class EditItem {
                                     case "body armor":
                                         Armor bodyArmor = new Armor(name, name, desc, weight, armor, encumb, s, m);
                                         Main.edit.getCurrentEdit().addItem(bodyArmor);
+                                        done = true;
                                         break;
                                     case "helmet":
                                         Helmet helmet = new Helmet(name, name, desc, weight, armor, encumb, s, m);
                                         Main.edit.getCurrentEdit().addItem(helmet);
+                                        done = true;
+
                                         break;
                                     case "shield":
                                         Shield shield = new Shield(name, name, desc, weight, armor, encumb, s, m);
                                         Main.edit.getCurrentEdit().addItem(shield);
+                                        done = true;
                                         break;
                                 }
-                                ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
 
                             } else {
                                 System.out.println("armor type is null");
@@ -257,13 +268,14 @@ public class EditItem {
                                 int foodVal = foodValue.getValue();
                                 Food food = new Food(name, desc, weight, s, foodVal);
                                 Main.edit.getCurrentEdit().addItem(food);
+                                done = true;
                             } else if(foodInput != null && foodInput.equals("Drink")){
                                 Drinkable drink = new Drinkable(name, desc, weight, s);
                                 Main.edit.getCurrentEdit().addItem(drink);
+                                done = true;
                             } else {
                                 System.out.println("food type is null");
                             }
-                            ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
 
                             break;
                         case "book":
@@ -275,6 +287,32 @@ public class EditItem {
                 }  else {
                     System.out.println("Item type is null");
                 }
+
+                if(done){
+                    ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
+                    nameText.clear();
+                    descText.clear();
+                    weightText.getValueFactory().setValue(0.0);
+                    materialDisplay.getSelectionModel().select(-1);
+                    sizeDisplay.getSelectionModel().select(-1);
+
+                    itemContent.getChildren().remove(foodLabel);
+                    itemContent.getChildren().remove(foodValue);
+                    itemContent.getChildren().remove(foodDisplay);
+                    itemContent.getChildren().remove(foodType);
+                    itemContent.getChildren().remove(damageTypeLabel);
+                    itemContent.getChildren().remove(damageDisplay);
+                    itemContent.getChildren().remove(damageText);
+                    itemContent.getChildren().remove(damageLabel);
+                    itemContent.getChildren().remove(apText);
+                    itemContent.getChildren().remove(apLabel);
+                    itemContent.getChildren().remove(armorTypeLabel);
+                    itemContent.getChildren().remove(armorDisplay);
+                    itemContent.getChildren().remove(armorText);
+                    itemContent.getChildren().remove(armorLabel);
+                    itemContent.getChildren().remove(contentText);
+                    itemContent.getChildren().remove(contentLabel);
+                }
             }  else {
                 System.out.println("name, description, material or size are null");
             }
@@ -283,6 +321,77 @@ public class EditItem {
         itemContent.add(create, 0, 14);
 
         itemContent.setPadding(new Insets(10, 10, 10, 10));
+
+        Button load = new Button("Edit Item");
+        load.setOnAction(t -> {
+            int selectedIndex = games.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                Item i = Main.edit.getCurrentEdit().getItems().get(games.getItems().get(selectedIndex));
+                //TODO: ADD SWITCHING FOR DIFFERENT TYPES
+                itemContent.getChildren().remove(foodLabel);
+                itemContent.getChildren().remove(foodValue);
+                itemContent.getChildren().remove(foodDisplay);
+                itemContent.getChildren().remove(foodType);
+                itemContent.getChildren().remove(damageTypeLabel);
+                itemContent.getChildren().remove(damageDisplay);
+                itemContent.getChildren().remove(damageText);
+                itemContent.getChildren().remove(damageLabel);
+                itemContent.getChildren().remove(apText);
+                itemContent.getChildren().remove(apLabel);
+                itemContent.getChildren().remove(armorTypeLabel);
+                itemContent.getChildren().remove(armorDisplay);
+                itemContent.getChildren().remove(armorText);
+                itemContent.getChildren().remove(armorLabel);
+                itemContent.getChildren().remove(contentText);
+                itemContent.getChildren().remove(contentLabel);
+
+                nameText.setText(i.getRootName());
+                descText.setText(i.getLongDescription());
+                sizeDisplay.setValue(Size.intToString(i.getSize()));
+                materialDisplay.setValue(Material.materialToString(i.getMaterial()));
+                weightText.getValueFactory().setValue(i.getWeight());
+
+                if(i instanceof Food){
+                    itemContent.add(foodType, 0, 10);
+                    itemContent.add(foodDisplay, 1, 10);
+
+                    itemContent.add(foodLabel, 0, 11);
+                    itemContent.add(foodValue, 1, 11);
+
+                    foodDisplay.setValue("Food");
+                    foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
+                } else if(i instanceof Drinkable){
+                    itemContent.add(foodType, 0, 10);
+                    itemContent.add(foodDisplay, 1, 10);
+
+                    foodDisplay.setValue("Drink");
+                } else if(i instanceof Weapon){
+                    itemContent.add(damageTypeLabel, 0, 10);
+                    itemContent.add(damageDisplay, 1, 10);
+                    itemContent.add(damageLabel, 0, 11);
+                    itemContent.add(damageText, 1, 11);
+                    itemContent.add(apLabel, 0, 12);
+                    itemContent.add(apText, 1, 12);
+
+                    damageDisplay.setValue(((Weapon) i).getDamageType());
+                    damageText.getValueFactory().setValue(((Weapon) i).getDamage());
+                    apText.getValueFactory().setValue(((Weapon) i).getArmorPenetration());
+                } else if(i instanceof Protective){
+                    itemContent.add(armorTypeLabel, 0, 10);
+                    itemContent.add(armorDisplay, 1, 10);
+                    itemContent.add(armorLabel, 0, 11);
+                    itemContent.add(armorText, 1, 11);
+
+                    armorText.getValueFactory().setValue(((Protective) i).getArmor());
+                    //TODO fix armor
+//                    armorDisplay.setValue(i.get);
+                } else if(i instanceof Readable){
+                    itemContent.add(contentLabel, 0, 10);
+                    itemContent.add(contentText, 1, 10);
+                }
+            }
+        });
+        listItem.getChildren().addAll(games, load);
 
 
         temp.getChildren().addAll(itemContent, listItem);
@@ -301,29 +410,6 @@ public class EditItem {
     }
 
 
-    public static VBox createListItems(){
-        VBox list = new VBox();
-
-        ListView<String> games = new ListView<>();
-
-        ObservableList<String> itemsArray = getItems();
-
-        games.setItems(itemsArray);
-
-
-        Button load = new Button("Edit Item");
-        load.setOnAction(t -> {
-            int selectedIndex = games.getSelectionModel().getSelectedIndex();
-            if(selectedIndex > -1){
-                Item i = Main.edit.getCurrentEdit().getItems().get(games.getItems().get(selectedIndex));
-                System.out.println(i.getName());
-            }
-        });
-        list.getChildren().addAll(games, load);
-
-        return list;
-    }
-
     public static boolean checkIfNotEmptyAndNotExisting(String s, String field){
         for (Item i : Main.edit.getCurrentEdit().getItems().values()){
             if (field.equals("name") &&( s.equals("") || i.getName().equals(s) )){
@@ -337,31 +423,4 @@ public class EditItem {
         return !s.equals((""));
     }
 
-    public static VBox weaponStats(){
-        VBox weapon = new VBox();
-
-        HBox type = new HBox();
-        Label weaponTypeLabel = new Label("Weapon type:");
-        ObservableList<String> weaponList = FXCollections.observableArrayList("Sword", "Axe", "Mace",
-                "Spear", "Dagger");
-        ComboBox<String> weaponDisplay = new ComboBox<>(weaponList);
-        type.getChildren().addAll(weaponTypeLabel, weaponDisplay);
-
-        HBox damage = new HBox();
-        Spinner<Integer> damageText = new Spinner<>();
-        damageText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
-        Label damageLabel = new Label("Damage:");
-        damage.getChildren().addAll(damageLabel, damageText);
-
-        HBox ap = new HBox();
-        Spinner<Integer> apText = new Spinner<>();
-        apText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
-        Label apLabel = new Label("Armor Piercing:");
-        ap.getChildren().addAll(apLabel, apText);
-
-        weapon.getChildren().addAll(type, damage, ap);
-
-
-        return weapon;
-    }
 }

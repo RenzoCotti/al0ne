@@ -246,7 +246,7 @@ public class Popups {
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         HBox dialogVbox = GameEditorUI.createEditor();
-        dialogVbox.setPrefSize(500, 500);
+        dialogVbox.setPrefSize(300, 300);
 
         Scene dialogScene = new Scene(dialogVbox);
 

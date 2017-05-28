@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours.Enums;
 
+import com.al0ne.Engine.Utility;
+
 import java.util.ArrayList;
 
 /**
@@ -127,6 +129,18 @@ public enum Material {
             }
         }
         return UNDEFINED;
+    }
+
+    public static String materialToString(Material m){
+        ArrayList<Material> materials = getAllMaterials();
+        for (Material material: materials){
+            if(material.toString().toLowerCase().equals(material.toString().toLowerCase())){
+                String temp = material.toString().toLowerCase();
+                temp = temp.substring(0, 1).toUpperCase()+temp.substring(1, temp.length());
+                return temp;
+            }
+        }
+        return "Not specified";
     }
 
 

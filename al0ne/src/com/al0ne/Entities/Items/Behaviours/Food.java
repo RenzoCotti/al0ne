@@ -23,6 +23,14 @@ public class Food extends Item {
         this.foodValue = foodValue;
     }
 
+    public int getFoodValue() {
+        return foodValue;
+    }
+
+    public void setFoodValue(int foodValue) {
+        this.foodValue = foodValue;
+    }
+
     @Override
     public int used(Room currentRoom, Player player) {
         if(!player.hasNeeds()){

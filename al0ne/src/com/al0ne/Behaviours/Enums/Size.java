@@ -78,7 +78,7 @@ public enum Size {
         }
     }
 
-    public static String toString(Integer size){
+    public static String intToString(Integer size){
         Size s = intToSize(size);
 
         switch(s) {
@@ -119,7 +119,7 @@ public enum Size {
         ArrayList<String> temp = new ArrayList<>();
 
         for(Size s : sizes){
-            String currentSize = toString(toInt(s));
+            String currentSize = intToString(toInt(s));
             currentSize = currentSize.substring(0, 1).toUpperCase()+currentSize.substring(1, currentSize.length());
             temp.add(currentSize);
         }

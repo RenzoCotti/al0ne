@@ -102,6 +102,10 @@ public abstract class Interactable extends Entity {
         return Material.stringify(this.material)+" "+name.toLowerCase();
     }
 
+    public String getRootName() {
+        return name.toLowerCase();
+    }
+
     public void setCustomName() {
         this.customName=true;
     }
@@ -112,4 +116,11 @@ public abstract class Interactable extends Entity {
         super.setShortDescription(shortDescription);
     }
 
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
 }
