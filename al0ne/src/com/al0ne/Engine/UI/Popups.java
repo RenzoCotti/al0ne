@@ -259,7 +259,7 @@ public class Popups {
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         VBox dialogVbox = WorldEditorUI.createEditor(g);
-        dialogVbox.setPrefSize(500, 500);
+        dialogVbox.setPrefSize(800, 500);
 
         Scene dialogScene = new Scene(dialogVbox);
 

@@ -9,9 +9,9 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
  * Created by BMW on 07/05/2017.
  */
 public class Spear extends Weapon {
-    public Spear(String id, String name, String description, int armorPen,
+    public Spear(String name, String description, String damageType, int armorPen,
                  int damage, double weight, Material material) {
-        super(id, name, description, "blunt", armorPen, damage, weight, Size.NORMAL, material);
+        super(name, name, description, damageType, armorPen, damage, weight, Size.NORMAL, material);
     }
 
     public Spear(Material m) {

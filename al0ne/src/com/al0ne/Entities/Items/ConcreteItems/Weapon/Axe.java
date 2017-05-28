@@ -9,9 +9,9 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
  * Created by BMW on 07/05/2017.
  */
 public class Axe extends Weapon {
-    public Axe(String id, String name, String description, String damageType, int armorPen,
+    public Axe(String name, String description, String damageType, int armorPen,
                 int damage, double weight, Size size, Material material) {
-        super(id, name, description, damageType, armorPen, damage, weight, size, material);
+        super(name, name, description, damageType, armorPen, damage, weight, size, material);
     }
 
     public Axe(Material m) {

@@ -33,7 +33,6 @@ public class GameEditorUI {
                 EditingGame newGame = new EditingGame(nameText.getText());
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);
-                Main.edit.getCurrentEdit().getItems();
                 Popups.openWorldEditor(newGame.getCurrentEdit());
                 updateList((ListView<String>) gameList.getChildren().get(0));
             }
@@ -62,8 +61,8 @@ public class GameEditorUI {
             int selectedIndex = games.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
                 EditingGame current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
-                System.out.println(current.getCurrentEdit().getGameName());
                 Main.edit.setCurrentEdit(current);
+                Popups.openWorldEditor(current.getCurrentEdit());
             }
         });
         list.getChildren().addAll(games, load);

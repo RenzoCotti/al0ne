@@ -3,6 +3,7 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Mace;
@@ -94,8 +95,8 @@ public class CaveWorld extends World{
         setStartingRoom(cave1);
 
         Player p = new Player(true, 20, getStartingRoom(), "You are a caveman.");
-        Mace club = new Mace("woodenclub", "Club", "A fairly large club.", 1,
-                1, 0.5, Material.WOOD);
+        Mace club = new Mace("wooden club", "A fairly large club.", "blunt",
+                1, 1, 0.5, Material.WOOD, Size.NORMAL);
         p.simpleAddItem(club, 1);
         p.wear(club);
         setPlayer(p);

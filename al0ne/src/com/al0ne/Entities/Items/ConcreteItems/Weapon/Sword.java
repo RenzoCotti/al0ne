@@ -11,9 +11,9 @@ import static java.lang.Math.max;
  * Created by BMW on 07/05/2017.
  */
 public class Sword extends Weapon {
-    public Sword(String id, String name, String description, String damageType,
+    public Sword(String name, String description, String damageType,
                  int damage, int armorPen, double weight, Size size, Material material) {
-        super(id, name, description, damageType, armorPen, damage, weight, size, material);
+        super(name, name, description, damageType, armorPen, damage, weight, size, material);
     }
 
     public Sword(Material m) {

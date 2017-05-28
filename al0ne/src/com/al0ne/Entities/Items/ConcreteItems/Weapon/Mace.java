@@ -9,9 +9,9 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
  * Created by BMW on 07/05/2017.
  */
 public class Mace extends Weapon {
-    public Mace(String id, String name, String description, int armorPen,
-                 int damage, double weight, Material material) {
-        super(id, name, description, "blunt", armorPen, damage, weight, Size.NORMAL, material);
+    public Mace(String name, String description, String damageType, int armorPen,
+                 int damage, double weight, Material material, Size s) {
+        super(name, name, description, damageType, armorPen, damage, weight, s, material);
     }
 
     public Mace(Material m) {

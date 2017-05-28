@@ -9,7 +9,7 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 /**
  * Created by BMW on 02/02/2017.
  */
-public abstract class  Weapon extends Wearable {
+public class  Weapon extends Wearable {
     protected int damage;
     public int armorPenetration;
     protected String damageType;
