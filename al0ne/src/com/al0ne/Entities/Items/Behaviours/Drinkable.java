@@ -14,8 +14,8 @@ import static com.al0ne.Engine.Main.printToLog;
  * Created by BMW on 23/03/2017.
  */
 public class Drinkable extends Item{
-    public Drinkable(String id, String name, String description, double weight, Size size) {
-        super(id, name, description, weight, size, Material.GLASS, null);
+    public Drinkable(String name, String description, double weight, Size size) {
+        super(name, name, description, weight, size, Material.GLASS, null);
         addCommand(Command.DRINK);
         addProperty("food");
     }

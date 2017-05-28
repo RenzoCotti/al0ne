@@ -6,6 +6,10 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Game;
 import com.al0ne.Engine.Main;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.ConcreteItems.Weapon.Sword;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -29,6 +33,11 @@ public class EditItem {
 
         HBox temp = new HBox();
 
+        VBox listItem = createListItems();
+
+        listItem.setPrefWidth(200);
+
+
         GridPane itemContent = new GridPane();
 
         Label createNewItem = new Label("Create new item:");
@@ -41,12 +50,6 @@ public class EditItem {
         Label nameLabel = new Label("Name:");
         itemContent.add(nameLabel, 0, 1);
         itemContent.add(nameText, 1, 1);
-
-        TextField shortDesc = new TextField();
-        shortDesc.setPromptText("a bread loaf");
-        Label shortDescLabel = new Label("Short Description:");
-        itemContent.add(shortDescLabel, 0, 2);
-        itemContent.add(shortDesc, 1, 2);
 
         TextArea descText = new TextArea();
         descText.setPrefWidth(100);
@@ -82,46 +85,175 @@ public class EditItem {
         itemContent.add(isUnique, 1, 8);
 
         Label typeLabel = new Label("Type\n(optional):");
-        ObservableList<String> typeList = FXCollections.observableArrayList("Weapon", "Body Armor",
-                "Helmet", "Shield", "Food", "Book", "Coin", "Key");
+        ObservableList<String> typeList = FXCollections.observableArrayList("Weapon", "Armor",
+                "Food", "Scroll", "Coin", "Key", "Generic");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
+
+        //food
+        Spinner<Integer> foodValue = new Spinner<>();
+        foodValue.setEditable(true);
+        foodValue.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label foodLabel = new Label("Nutrition:");
+
+
+        //weapon
+        Label weaponTypeLabel = new Label("Weapon type:");
+        ObservableList<String> weaponList = FXCollections.observableArrayList("Sword", "Axe", "Mace",
+                "Spear", "Dagger");
+        ComboBox<String> weaponDisplay = new ComboBox<>(weaponList);
+
+        Spinner<Integer> damageText = new Spinner<>();
+        damageText.setEditable(true);
+        damageText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label damageLabel = new Label("Damage:");
+
+        Spinner<Integer> apText = new Spinner<>();
+        apText.setEditable(true);
+        apText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label apLabel = new Label("Armor Piercing:");
+
+        //armor
+        Label armorTypeLabel = new Label("Armor type:");
+        ObservableList<String> armorList = FXCollections.observableArrayList("Body Armor", "Helmet", "Shield");
+        ComboBox<String> armorDisplay = new ComboBox<>(armorList);
+
+        Spinner<Integer> armorText = new Spinner<>();
+        armorText.setEditable(true);
+        armorText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label armorLabel = new Label("Armor:");
+
+        TextArea contentText = new TextArea();
+        contentText.setPrefWidth(100);
+        contentText.setPrefHeight(50);
+        Label contentLabel = new Label("Content:");
+        contentText.setPromptText("Hello, I am writing to you to say hi.");
+
+        typeDisplay.valueProperty().addListener((ov, t, t1) -> {
+            //TODO: ADD SWITCHING FOR DIFFERENT TYPES
+            itemContent.getChildren().remove(foodLabel);
+            itemContent.getChildren().remove(foodValue);
+            itemContent.getChildren().remove(weaponTypeLabel);
+            itemContent.getChildren().remove(weaponDisplay);
+            itemContent.getChildren().remove(damageText);
+            itemContent.getChildren().remove(damageLabel);
+            itemContent.getChildren().remove(apText);
+            itemContent.getChildren().remove(apLabel);
+            itemContent.getChildren().remove(armorTypeLabel);
+            itemContent.getChildren().remove(armorDisplay);
+            itemContent.getChildren().remove(armorText);
+            itemContent.getChildren().remove(armorLabel);
+
+            if(t1.toLowerCase().equals("food")){
+                itemContent.add(foodLabel, 0, 10);
+                itemContent.add(foodValue, 1, 10);
+            } else if(t1.toLowerCase().equals("weapon")){
+                itemContent.add(weaponTypeLabel, 0, 10);
+                itemContent.add(weaponDisplay, 1, 10);
+                itemContent.add(damageLabel, 0, 11);
+                itemContent.add(damageText, 1, 11);
+                itemContent.add(apLabel, 0, 12);
+                itemContent.add(apText, 1, 12);
+            } else if(t1.toLowerCase().equals("armor")){
+                itemContent.add(armorTypeLabel, 0, 10);
+                itemContent.add(armorDisplay, 1, 10);
+                itemContent.add(armorLabel, 0, 11);
+                itemContent.add(armorText, 1, 11);
+            } else if(t1.toLowerCase().equals("scroll")){
+                itemContent.add(contentLabel, 0, 10);
+                itemContent.add(contentText, 1, 10);
+            }
+            System.out.println(t1);
+        });
+
         itemContent.add(typeLabel, 0, 9);
         itemContent.add(typeDisplay, 1, 9);
 
         Button create = new Button("Create Item");
         create.setOnAction( t -> {
-            if(checkIfNotEmptyAndNotExisting(nameText.getText(), "name")
-                && checkIfNotEmpty(shortDesc.getText()) &&
+            String material = materialDisplay.getSelectionModel().getSelectedItem();
+            String size = sizeDisplay.getSelectionModel().getSelectedItem();
+            String type = typeDisplay.getSelectionModel().getSelectedItem();
+            if(checkIfNotEmptyAndNotExisting(nameText.getText(), "name") &&
                     checkIfNotEmpty(descText.getText()) &&
-                    materialDisplay.getSelectionModel().getSelectedItem() != null
-                    && sizeDisplay.getSelectionModel().getSelectedItem() != null){
-                if(typeDisplay.getSelectionModel().getSelectedItem() != null){
-                    Size s = Size.stringToSize(sizeDisplay.getSelectionModel().getSelectedItem().toLowerCase());
-                    System.out.println(s);
+                    material != null && size != null){
+                if( type != null ){
+                    Size s = Size.stringToSize(size.toLowerCase());
+                    Material m = Material.strToMaterial(material.toLowerCase());
+
+                    type = type.toLowerCase();
+
+                    switch (type){
+                        case "weapon":
+                            String weaponType = weaponDisplay.getSelectionModel().getSelectedItem();
+                            if(weaponType != null){
+                                switch (weaponType.toLowerCase()){
+                                    case "sword":
+                                        Sword sword = new Sword("sword"+material.toLowerCase(), nameText.getText(),
+                                                descText.getText(), "sharp", apText.getValue(), damageText.getValue(), weightText.getValue(), s, m );
+                                        Main.edit.getCurrentEdit().addItem(sword);
+
+
+                                        ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
+                                        System.out.println(sword);
+
+                                        break;
+                                    case "axe":
+                                        break;
+                                    case "mace":
+                                        break;
+                                    case "spear":
+                                        break;
+                                    case "dagger":
+                                        break;
+
+                                }
+                            }
+                            break;
+                        case "armor":
+                            break;
+                        case "food":
+                            System.out.println(foodValue.getValue());
+                            break;
+                        case "book":
+                            break;
+                        case "coin":
+                            break;
+                    }
+
+                } else {
+
                 }
             }
 
         });
-        itemContent.add(create, 0, 12);
+        itemContent.add(create, 0, 14);
 
         itemContent.setPadding(new Insets(10, 10, 10, 10));
 
-        temp.getChildren().addAll(itemContent, createListItems(Main.edit.getCurrentEdit().getItems().values()));
-        items.setContent(itemContent);
+
+        temp.getChildren().addAll(itemContent, listItem);
+        items.setContent(temp);
 
         return items;
     }
 
+    public static ObservableList<String> getItems(){
+        ArrayList<String> temp = new ArrayList<>();
+        for(Entity e: Main.edit.getCurrentEdit().getItems().values()){
+            temp.add(e.getID());
+        }
 
-    public static VBox createListItems(Collection<Item> items){
+        return FXCollections.observableArrayList (temp);
+    }
+
+
+    public static VBox createListItems(){
         VBox list = new VBox();
 
         ListView<String> games = new ListView<>();
-        ArrayList<String> temp = new ArrayList<>();
-        for(Entity e: items){
-            temp.add(e.getID());
-        }
-        ObservableList<String> itemsArray = FXCollections.observableArrayList (temp);
+
+        ObservableList<String> itemsArray = getItems();
+
         games.setItems(itemsArray);
 
 
@@ -149,5 +281,35 @@ public class EditItem {
 
     public static boolean checkIfNotEmpty(String s){
         return !s.equals((""));
+    }
+
+    public static VBox weaponStats(){
+        VBox weapon = new VBox();
+
+        HBox type = new HBox();
+        Label weaponTypeLabel = new Label("Weapon type:");
+        ObservableList<String> weaponList = FXCollections.observableArrayList("Sword", "Axe", "Mace",
+                "Spear", "Dagger");
+        ComboBox<String> weaponDisplay = new ComboBox<>(weaponList);
+        type.getChildren().addAll(weaponTypeLabel, weaponDisplay);
+
+        HBox damage = new HBox();
+        Spinner<Integer> damageText = new Spinner<>();
+        damageText.setEditable(true);
+        damageText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label damageLabel = new Label("Damage:");
+        damage.getChildren().addAll(damageLabel, damageText);
+
+        HBox ap = new HBox();
+        Spinner<Integer> apText = new Spinner<>();
+        apText.setEditable(true);
+        apText.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
+        Label apLabel = new Label("Armor Piercing:");
+        ap.getChildren().addAll(apLabel, apText);
+
+        weapon.getChildren().addAll(type, damage, ap);
+
+
+        return weapon;
     }
 }

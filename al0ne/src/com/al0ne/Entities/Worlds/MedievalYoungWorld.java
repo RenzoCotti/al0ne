@@ -156,7 +156,7 @@ public class MedievalYoungWorld extends World{
 
         Shopkeeper Varra = new Shopkeeper("foodvendor", "Varra",
                 "A fairly tall man, a bit on the chubby side.", "Hi, I'm Varra. Want to see the items i sell?");
-        Varra.simpleAddItem(new Food("eggs", "eggs",
+        Varra.simpleAddItem(new Food("eggs",
                 "A pack of six fresh eggs.", 0.3, Size.SMALL, 3), 3);
         villageMarket.addEntity(Varra);
         putRoom(villageMarket);
@@ -206,7 +206,7 @@ public class MedievalYoungWorld extends World{
                 "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FIBRE);
         p.simpleAddItem(bc, 1);
         p.wear(bc);
-        p.simpleAddItem(new Food("eggs", "eggs", "asd", 0, Size.NORMAL, 0), 1);
+//        p.simpleAddItem(new Food("eggs", "asd", 0, Size.NORMAL, 0), 1);
         setPlayer(p);
     }
 }

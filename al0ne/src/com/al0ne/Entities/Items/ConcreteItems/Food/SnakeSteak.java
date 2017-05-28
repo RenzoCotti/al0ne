@@ -8,7 +8,7 @@ import com.al0ne.Entities.Items.Behaviours.Food;
  */
 public class SnakeSteak extends Food{
     public SnakeSteak() {
-        super("snakesteak","Snake Steak", "Some meat from a snake. Doesn't look too inviting",
+        super("Snake Steak", "Some meat from a snake. Doesn't look too inviting",
                 0.3, Size.NORMAL, 10);
     }
 }

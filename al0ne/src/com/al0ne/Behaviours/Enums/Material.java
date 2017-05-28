@@ -107,11 +107,26 @@ public enum Material {
         ArrayList<String> temp = new ArrayList<>();
 
         for(Material m : materials){
-            String current = m.toString().toLowerCase();
-            current = current.substring(0, 1).toUpperCase()+current.substring(1, current.length());
+            String current;
+            if(m.toString().equals("UNDEFINED")){
+                current = "Not specified";
+            } else {
+                current = m.toString().toLowerCase();
+                current = current.substring(0, 1).toUpperCase()+current.substring(1, current.length());
+            }
             temp.add(current);
         }
         return temp;
+    }
+
+    public static Material strToMaterial(String s){
+        ArrayList<Material> materials = getAllMaterials();
+        for (Material m: materials){
+            if(m.toString().toLowerCase().equals(s.toLowerCase())){
+                return m;
+            }
+        }
+        return UNDEFINED;
     }
 
 

@@ -15,8 +15,8 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Food extends Item {
 
     private int foodValue;
-    public Food(String id, String name, String description, double weight, Size size, int foodValue) {
-        super(id, name, description, weight, size, null, null);
+    public Food(String name, String description, double weight, Size size, int foodValue) {
+        super(name, name, description, weight, size, null, null);
         addCommand(Command.EAT);
         addProperty("food");
         addProperty("consumable");
