@@ -79,14 +79,17 @@ public class EditItem {
         ObservableList<String> sizeList = FXCollections.observableArrayList(
                 Size.getSizeStrings());
         ComboBox<String> sizeDisplay = new ComboBox<>(sizeList);
+        sizeDisplay.getSelectionModel().select(sizeList.size()/2);
         itemContent.add(sizeLabel, 0, 5);
         itemContent.add(sizeDisplay, 1, 5);
 
         Label materialLabel = new Label("Material:");
         ObservableList<String> materialList = FXCollections.observableArrayList(Material.getAllMaterialString());
         ComboBox<String> materialDisplay = new ComboBox<>(materialList);
+        materialDisplay.getSelectionModel().select(materialList.size()-1);
         itemContent.add(materialLabel, 0, 6);
         itemContent.add(materialDisplay, 1, 6);
+
 
         ToggleButton canDrop = new RadioButton("Can be dropped?");
         ToggleButton isUnique = new RadioButton("Is unique?");
@@ -156,20 +159,27 @@ public class EditItem {
             itemContent.getChildren().remove(foodValue);
             itemContent.getChildren().remove(foodType);
             itemContent.getChildren().remove(foodDisplay);
+
             itemContent.getChildren().remove(damageTypeLabel);
             itemContent.getChildren().remove(damageDisplay);
             itemContent.getChildren().remove(damageText);
             itemContent.getChildren().remove(damageLabel);
             itemContent.getChildren().remove(apText);
             itemContent.getChildren().remove(apLabel);
+
             itemContent.getChildren().remove(armorTypeLabel);
             itemContent.getChildren().remove(armorDisplay);
             itemContent.getChildren().remove(armorText);
             itemContent.getChildren().remove(armorLabel);
+            itemContent.getChildren().remove(encLabel);
+            itemContent.getChildren().remove(encText);
+
             itemContent.getChildren().remove(contentText);
             itemContent.getChildren().remove(contentLabel);
 
-            if(t1.toLowerCase().equals("food")){
+            if(t1 == null){
+                return;
+            } else if(t1.toLowerCase().equals("food")){
                 itemContent.add(foodType, 0, 10);
                 itemContent.add(foodDisplay, 1, 10);
             } else if(t1.toLowerCase().equals("weapon")){
@@ -184,6 +194,8 @@ public class EditItem {
                 itemContent.add(armorDisplay, 1, 10);
                 itemContent.add(armorLabel, 0, 11);
                 itemContent.add(armorText, 1, 11);
+                itemContent.add(encLabel, 0, 12);
+                itemContent.add(encText, 1, 12);
             } else if(t1.toLowerCase().equals("scroll")){
                 itemContent.add(contentLabel, 0, 10);
                 itemContent.add(contentText, 1, 10);
@@ -193,30 +205,48 @@ public class EditItem {
         itemContent.add(typeLabel, 0, 9);
         itemContent.add(typeDisplay, 1, 9);
 
+        Label errorMessage = new Label("");
+        errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
         Button create = new Button("Create Item");
         create.setOnAction( t -> {
+            String name = nameText.getText();
+            String desc = descText.getText();
+            double weight = weightText.getValue();
             String material = materialDisplay.getSelectionModel().getSelectedItem();
             String size = sizeDisplay.getSelectionModel().getSelectedItem();
             String type = typeDisplay.getSelectionModel().getSelectedItem();
 
-            boolean done = false;
-            if(checkIfNotEmptyAndNotExisting(nameText.getText(), "name") &&
-                    checkIfNotEmpty(descText.getText()) &&
-                    material != null && size != null){
 
-                String name = nameText.getText();
-                String desc = descText.getText();
-                double weight = weightText.getValue();
+            boolean done = false;
+            if(checkIfNotEmpty(name) && checkIfNotEmpty(desc) && material != null && size != null){
+                if(checkIfExists(name) && !(create.getText().equals("Save changes"))){
+                    nameText.setStyle("-fx-border-color: red ;");
+                    return;
+                }
+                nameText.setStyle("");
+                descText.setStyle("");
+                sizeDisplay.setStyle("");
+                materialDisplay.setStyle("");
+
+
+                Size s = Size.stringToSize(size.toLowerCase());
+                Material m = Material.strToMaterial(material.toLowerCase());
+
+
+
 
 
                 if( type != null ){
-                    Size s = Size.stringToSize(size.toLowerCase());
-                    Material m = Material.strToMaterial(material.toLowerCase());
+                    typeDisplay.setStyle("");
+
+
 
                     type = type.toLowerCase();
 
                     switch (type){
                         case "weapon":
+                            damageDisplay.setStyle("");
                             String damageType = damageDisplay.getSelectionModel().getSelectedItem();
                             int armorpen = apText.getValue();
                             int damage = damageText.getValue();
@@ -227,6 +257,8 @@ public class EditItem {
                                 Main.edit.getCurrentEdit().addItem(weapon);
                                 done = true;
                             } else {
+                                damageDisplay.setStyle("-fx-border-color: red ;");
+                                errorMessage.setText("Please select a value for Damage type");
                                 System.out.println("Damage type is null");
                             }
                             break;
@@ -237,6 +269,7 @@ public class EditItem {
                             int encumb = encText.getValue();
                             String armorType = armorDisplay.getSelectionModel().getSelectedItem();
                             if(armorType != null){
+                                armorDisplay.setStyle("");
                                 armorType = armorType.toLowerCase();
                                 switch (armorType){
                                     case "body armor":
@@ -258,7 +291,8 @@ public class EditItem {
                                 }
 
                             } else {
-                                System.out.println("armor type is null");
+                                errorMessage.setText("Please select a value for Armor type");
+                                armorDisplay.setStyle("-fx-border-color: red ;");
                             }
 
                             break;
@@ -274,7 +308,7 @@ public class EditItem {
                                 Main.edit.getCurrentEdit().addItem(drink);
                                 done = true;
                             } else {
-                                System.out.println("food type is null");
+                                errorMessage.setText("Please select a value for Food type");
                             }
 
                             break;
@@ -285,21 +319,28 @@ public class EditItem {
                     }
 
                 }  else {
-                    System.out.println("Item type is null");
+                    typeDisplay.setStyle("-fx-border-color: red ;");
+                    errorMessage.setText("Please select a value for Item type");
                 }
 
                 if(done){
+
+                    //we update the item list and reset all the fields
+
                     ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
+                    errorMessage.setText("");
+                    create.setText("Create Item");
                     nameText.clear();
                     descText.clear();
                     weightText.getValueFactory().setValue(0.0);
-                    materialDisplay.getSelectionModel().select(-1);
-                    sizeDisplay.getSelectionModel().select(-1);
+                    materialDisplay.getSelectionModel().clearSelection();
+                    sizeDisplay.getSelectionModel().clearSelection();
+                    typeDisplay.getSelectionModel().clearSelection();
 
                     itemContent.getChildren().remove(foodLabel);
                     itemContent.getChildren().remove(foodValue);
-                    itemContent.getChildren().remove(foodDisplay);
                     itemContent.getChildren().remove(foodType);
+                    itemContent.getChildren().remove(foodDisplay);
                     itemContent.getChildren().remove(damageTypeLabel);
                     itemContent.getChildren().remove(damageDisplay);
                     itemContent.getChildren().remove(damageText);
@@ -310,38 +351,63 @@ public class EditItem {
                     itemContent.getChildren().remove(armorDisplay);
                     itemContent.getChildren().remove(armorText);
                     itemContent.getChildren().remove(armorLabel);
+                    itemContent.getChildren().remove(encLabel);
+                    itemContent.getChildren().remove(encText);
                     itemContent.getChildren().remove(contentText);
                     itemContent.getChildren().remove(contentLabel);
                 }
             }  else {
-                System.out.println("name, description, material or size are null");
+                if(name.equals("")){
+                    errorMessage.setText("Please select a value for Name");
+                    nameText.setStyle("-fx-text-box-border: red ;");
+                }
+                if(desc.equals("")){
+                    errorMessage.setText("Please select a value for Description");
+                    descText.setStyle("-fx-text-box-border: red ;");
+                }
+                if(size == null){
+                    errorMessage.setText("Please select a value for Size");
+                    sizeDisplay.setStyle("-fx-border-color: red ;");
+                }
+                if(material == null){
+                    errorMessage.setText("Please select a value for Material");
+                    materialDisplay.setStyle("-fx-border-color: red ;");
+                }
             }
 
         });
         itemContent.add(create, 0, 14);
+        itemContent.add(errorMessage, 0, 15);
+
 
         itemContent.setPadding(new Insets(10, 10, 10, 10));
 
+        //LOADING OF ITEM
         Button load = new Button("Edit Item");
         load.setOnAction(t -> {
             int selectedIndex = games.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
                 Item i = Main.edit.getCurrentEdit().getItems().get(games.getItems().get(selectedIndex));
-                //TODO: ADD SWITCHING FOR DIFFERENT TYPES
+                create.setText("Save changes");
                 itemContent.getChildren().remove(foodLabel);
                 itemContent.getChildren().remove(foodValue);
                 itemContent.getChildren().remove(foodDisplay);
                 itemContent.getChildren().remove(foodType);
+
                 itemContent.getChildren().remove(damageTypeLabel);
                 itemContent.getChildren().remove(damageDisplay);
                 itemContent.getChildren().remove(damageText);
                 itemContent.getChildren().remove(damageLabel);
                 itemContent.getChildren().remove(apText);
                 itemContent.getChildren().remove(apLabel);
+
                 itemContent.getChildren().remove(armorTypeLabel);
                 itemContent.getChildren().remove(armorDisplay);
                 itemContent.getChildren().remove(armorText);
                 itemContent.getChildren().remove(armorLabel);
+                itemContent.getChildren().remove(encLabel);
+                itemContent.getChildren().remove(encText);
+
                 itemContent.getChildren().remove(contentText);
                 itemContent.getChildren().remove(contentLabel);
 
@@ -351,41 +417,38 @@ public class EditItem {
                 materialDisplay.setValue(Material.materialToString(i.getMaterial()));
                 weightText.getValueFactory().setValue(i.getWeight());
 
+                //"Weapon", "Armor", "Food", "Scroll", "Coin", "Key", "Generic");
+
                 if(i instanceof Food){
-                    itemContent.add(foodType, 0, 10);
-                    itemContent.add(foodDisplay, 1, 10);
+                    typeDisplay.getSelectionModel().select("Food");
 
-                    itemContent.add(foodLabel, 0, 11);
-                    itemContent.add(foodValue, 1, 11);
-
-                    foodDisplay.setValue("Food");
+                    foodDisplay.getSelectionModel().select("Food");
                     foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
                 } else if(i instanceof Drinkable){
-                    itemContent.add(foodType, 0, 10);
-                    itemContent.add(foodDisplay, 1, 10);
-
-                    foodDisplay.setValue("Drink");
+                    typeDisplay.getSelectionModel().select("Food");
+                    foodDisplay.getSelectionModel().select("Drink");
                 } else if(i instanceof Weapon){
-                    itemContent.add(damageTypeLabel, 0, 10);
-                    itemContent.add(damageDisplay, 1, 10);
-                    itemContent.add(damageLabel, 0, 11);
-                    itemContent.add(damageText, 1, 11);
-                    itemContent.add(apLabel, 0, 12);
-                    itemContent.add(apText, 1, 12);
+                    typeDisplay.getSelectionModel().select("Weapon");
 
                     damageDisplay.setValue(((Weapon) i).getDamageType());
                     damageText.getValueFactory().setValue(((Weapon) i).getDamage());
                     apText.getValueFactory().setValue(((Weapon) i).getArmorPenetration());
                 } else if(i instanceof Protective){
-                    itemContent.add(armorTypeLabel, 0, 10);
-                    itemContent.add(armorDisplay, 1, 10);
-                    itemContent.add(armorLabel, 0, 11);
-                    itemContent.add(armorText, 1, 11);
+                    typeDisplay.getSelectionModel().select("Armor");
 
                     armorText.getValueFactory().setValue(((Protective) i).getArmor());
-                    //TODO fix armor
-//                    armorDisplay.setValue(i.get);
+                    encText.getValueFactory().setValue(((Protective) i).getEncumberment());
+
+                    if(((Protective) i).getPart().equals("body")){
+                        armorDisplay.getSelectionModel().select("Body Armor");
+                    } else if(((Protective) i).getPart().equals("head")){
+                        armorDisplay.getSelectionModel().select("Helmet");
+                    } else if(((Protective) i).getPart().equals("off hand")){
+                        armorDisplay.getSelectionModel().select("Shield");
+                    }
+
                 } else if(i instanceof Readable){
+                    typeDisplay.getSelectionModel().select(3);
                     itemContent.add(contentLabel, 0, 10);
                     itemContent.add(contentText, 1, 10);
                 }
@@ -410,13 +473,13 @@ public class EditItem {
     }
 
 
-    public static boolean checkIfNotEmptyAndNotExisting(String s, String field){
+    public static boolean checkIfExists(String s){
         for (Item i : Main.edit.getCurrentEdit().getItems().values()){
-            if (field.equals("name") &&( s.equals("") || i.getName().equals(s) )){
-                return false;
+            if (i.getRootName().toLowerCase().equals(s.toLowerCase())){
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public static boolean checkIfNotEmpty(String s){
