@@ -7,11 +7,11 @@ import javafx.beans.property.SimpleStringProperty;
 /**
  * Created by BMW on 29/05/2017.
  */
-public class IdandName {
+public class IdName {
     private final SimpleStringProperty id;
     private final SimpleStringProperty name;
 
-    public IdandName(String id, String name) {
+    public IdName(String id, String name) {
         this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
     }

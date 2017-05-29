@@ -5,7 +5,6 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
-import com.al0ne.Engine.Editing.IdandName;
 import com.al0ne.Engine.Main;
 import com.al0ne.Entities.Items.Behaviours.Drinkable;
 import com.al0ne.Entities.Items.Behaviours.Food;

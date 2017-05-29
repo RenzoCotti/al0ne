@@ -3,8 +3,9 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Editing.IdandName;
+import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Main;
+import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -32,7 +33,7 @@ public class EditRoom {
 
         VBox listRoom = new VBox();
 
-        TableView<IdandName> roomsList = new TableView<>();
+        TableView<IdName> roomsList = new TableView<>();
 
         TableColumn idColumn = new TableColumn("ID");
         idColumn.setMinWidth(120);
@@ -49,7 +50,7 @@ public class EditRoom {
 
         roomsList.getItems().addAll(getRooms());
 
-        ObservableList<IdandName> roomsArray = getRooms();
+        ObservableList<IdName> roomsArray = getRooms();
 
         roomsList.setItems(roomsArray);
 
@@ -90,38 +91,40 @@ public class EditRoom {
         roomContent.add(customExitLabel, 0, 3);
         roomContent.add(customExit, 1, 3);
 
-        Button addEnemy = new Button("Add Enemy");
-        roomContent.add(addEnemy, 0, 4);
-        Button addNPC = new Button("Add NPC");
-        roomContent.add(addNPC, 1, 4);
-        Button addItem = new Button("Add Item");
-        roomContent.add(addItem, 0, 5);
-        Button addProp = new Button("Add Prop");
-        roomContent.add(addProp, 1, 5);
+        Button addEntity = new Button("Add Entity");
+        addEntity.setOnAction(t-> Popups.openAddEntity());
+        roomContent.add(addEntity, 0, 5);
 
         Label addExitLabel = new Label("Add Exit:");
         ObservableList<String> directionList = FXCollections.observableArrayList("North", "East", "South",
                 "West", "NorthWest", "NorthEast", "SouthWest", "SouthEast");
         ComboBox<String> directionDisplay = new ComboBox<>(directionList);
-        roomContent.add(addExitLabel, 0, 6);
-        roomContent.add(directionDisplay, 1, 6);
+        roomContent.add(addExitLabel, 0, 4);
+        roomContent.add(directionDisplay, 1, 4);
         Button addExit = new Button("Add Exit");
         addExit.setOnAction( t->{
             String direction = directionDisplay.getSelectionModel().getSelectedItem();
             if(direction != null){
                 direction = direction.toLowerCase();
 
-                Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
-                        get(roomsList.getSelectionModel().getSelectedItem().getId());
+                if(roomsList.getSelectionModel().getSelectedItem() != null){
+                    Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
+                            get(roomsList.getSelectionModel().getSelectedItem().getId());
 
-                exits.put(direction, target);
+                    exits.put(direction, target);
+                } else {
+                    roomsList.setStyle("-fx-border-color: red;");
+                    errorMessage.setText("Please select a destination room.");
+                }
+
+
 
             } else {
                 directionDisplay.setStyle("-fx-border-color: red;");
                 errorMessage.setText("Please select a direction.");
             }
         });
-        roomContent.add(addExit, 2, 6);
+        roomContent.add(addExit, 2, 4);
 
         Button create = new Button("Create Room");
         roomContent.add(create, 0, 8);
@@ -168,7 +171,7 @@ public class EditRoom {
 
                 //we update the item list and reset all the fields
 
-                ((TableView<IdandName>)listRoom.getChildren().get(0)).getItems().setAll(getRooms());
+                ((TableView<IdName>)listRoom.getChildren().get(0)).getItems().setAll(getRooms());
                 errorMessage.setText("");
                 create.setText("Create Room");
                 nameText.clear();
@@ -218,11 +221,11 @@ public class EditRoom {
         return rooms;
     }
 
-    public static ObservableList<IdandName> getRooms(){
-        ArrayList<IdandName> temp = new ArrayList<>();
+    public static ObservableList<IdName> getRooms(){
+        ArrayList<IdName> temp = new ArrayList<>();
         for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
             System.out.println(r.getID());
-            temp.add(new IdandName(r.getID(), r.getName()));
+            temp.add(new IdName(r.getID(), r.getName()));
         }
 
         return FXCollections.observableArrayList (temp);

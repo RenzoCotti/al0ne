@@ -4,20 +4,26 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
-import com.al0ne.Engine.Game;
+import com.al0ne.Engine.Editing.IdNameType;
+import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
+import com.al0ne.Engine.UI.EditorUI.EditItem;
 import com.al0ne.Engine.UI.EditorUI.GameEditorUI;
 import com.al0ne.Engine.UI.EditorUI.WorldEditorUI;
 import com.al0ne.Engine.Utility;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.net.IDN;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -265,6 +271,99 @@ public class Popups {
 
         s.setScene(dialogScene);
         s.setTitle("World Editor");
+        s.show();
+    }
+
+    public static void openAddEntity(){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        VBox dialogVbox = new VBox();
+        dialogVbox.setPrefSize(500, 500);
+
+        TabPane parent = new TabPane();
+
+        Tab item = new Tab();
+        item.setText("Item");
+        item.setClosable(false);
+
+        TableView<IdNameType> itemList = new TableView<>();
+        TableColumn idColumn = new TableColumn("ID");
+        idColumn.setMinWidth(120);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(120);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn typeColumn = new TableColumn("Type");
+        typeColumn.setMinWidth(120);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
+
+        ObservableList<IdNameType> itemsArray = EditItem.getItems();
+
+        itemList.setItems(itemsArray);
+
+        item.setContent(itemList);
+
+        parent.getTabs().add(item);
+
+
+        Tab props = new Tab();
+        props.setClosable(false);
+        props.setText("Props");
+
+        TableView<IdName> propList = new TableView<>();
+        TableColumn idProp = new TableColumn("ID");
+        idProp.setMinWidth(120);
+        idProp.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameProp = new TableColumn("Name");
+        nameProp.setMinWidth(120);
+        nameProp.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+
+        propList.getColumns().addAll(idProp, nameProp);
+
+//        ObservableList<IdName> propArray = EditItem.getItems();
+//
+//        itemList.setItems(itemsArray);
+
+        props.setContent(propList);
+
+        parent.getTabs().add(props);
+
+
+//        Tab npc = new Tab();
+//
+//        TableView<IdName> npcList = new TableView<>();
+//        TableColumn npcId = new TableColumn("ID");
+//        npcId.setMinWidth(120);
+//        npcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+//
+//        TableColumn npcName = new TableColumn("Name");
+//        npcName.setMinWidth(120);
+//        npcName.setCellValueFactory(new PropertyValueFactory<>("name"));
+//
+//
+//        npcList.getColumns().addAll(npcId, npcName);
+//
+//        ObservableList<IdName> itemsArray = EditItem.getItems();
+//
+//        itemList.setItems(itemsArray);
+//
+//        item.setContent(itemList);
+
+
+
+        Button add = new Button("Add Entity");
+        dialogVbox.getChildren().addAll(parent, add);
+
+        Scene dialogScene = new Scene(dialogVbox);
+
+        s.setScene(dialogScene);
+        s.setTitle("Add Entity");
         s.show();
     }
 
