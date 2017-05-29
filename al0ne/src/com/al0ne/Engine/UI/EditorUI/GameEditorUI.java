@@ -1,5 +1,6 @@
 package com.al0ne.Engine.UI.EditorUI;
 
+import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
 import com.al0ne.Engine.UI.Popups;
@@ -22,23 +23,50 @@ public class GameEditorUI {
         TextField nameText = new TextField();
         Label nameLabel = new Label("Name:");
         nameText.setPromptText("Awesome game");
+
+        TextField worldText = new TextField();
+        nameText.setPromptText("The village of Nir");
+        Label worldLabel = new Label("Starting world name:");
         Button create = new Button("Create new Game");
+
+        Label errorMessage = new Label("");
+        errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
+
         create.setOnAction(t -> {
-            if(!nameText.getText().equals("")){
+            if(!nameText.getText().equals("") && !worldText.getText().equals("")){
                 for(EditingGame g : Main.edit.getGames().values()){
                     if(g.getCurrentEdit().getGameName().equals(nameText.getText())){
+                        errorMessage.setText("A game with the same name already exists.");
+                        nameText.setStyle("-fx-border-color: red;");
                         return;
                     }
                 }
+                nameText.setStyle("");
+                worldText.setStyle("");
+                errorMessage.setText("");
                 EditingGame newGame = new EditingGame(nameText.getText());
+                World newWorld = new World(worldText.getText());
+                newGame.getCurrentEdit().addWorld(newWorld);
+                newGame.setCurrentWorld(newWorld);
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);
-                Popups.openWorldEditor(newGame.getCurrentEdit());
+                Popups.openWorldEditor();
                 updateList((ListView<String>) gameList.getChildren().get(0));
+            } else{
+                if(!nameText.getText().equals("")){
+                    errorMessage.setText("Please insert a name.");
+                    nameText.setStyle("-fx-border-color: red;");
+                }
+
+                if(!worldText.getText().equals("")){
+                    errorMessage.setText("Please insert a name.");
+                    nameText.setStyle("-fx-border-color: red;");
+                }
             }
         });
 
-        newGameBox.getChildren().addAll(nameLabel, nameText, create);
+        newGameBox.getChildren().addAll(nameLabel, nameText, worldLabel, worldText, create, errorMessage);
 
 
 
@@ -62,7 +90,7 @@ public class GameEditorUI {
             if(selectedIndex > -1){
                 EditingGame current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
                 Main.edit.setCurrentEdit(current);
-                Popups.openWorldEditor(current.getCurrentEdit());
+                Popups.openWorldEditor();
             }
         });
         list.getChildren().addAll(games, load);

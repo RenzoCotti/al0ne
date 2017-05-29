@@ -37,11 +37,11 @@ public class EditItem {
 
         VBox listItem = new VBox();
 
-        ListView<String> games = new ListView<>();
+        ListView<String> itemList = new ListView<>();
 
         ObservableList<String> itemsArray = getItems();
 
-        games.setItems(itemsArray);
+        itemList.setItems(itemsArray);
 
 
 
@@ -385,9 +385,9 @@ public class EditItem {
         //LOADING OF ITEM
         Button load = new Button("Edit Item");
         load.setOnAction(t -> {
-            int selectedIndex = games.getSelectionModel().getSelectedIndex();
+            int selectedIndex = itemList.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                Item i = Main.edit.getCurrentEdit().getItems().get(games.getItems().get(selectedIndex));
+                Item i = Main.edit.getCurrentEdit().getItems().get(itemList.getItems().get(selectedIndex));
                 create.setText("Save changes");
                 itemContent.getChildren().remove(foodLabel);
                 itemContent.getChildren().remove(foodValue);
@@ -454,7 +454,7 @@ public class EditItem {
                 }
             }
         });
-        listItem.getChildren().addAll(games, load);
+        listItem.getChildren().addAll(itemList, load);
 
 
         temp.getChildren().addAll(itemContent, listItem);

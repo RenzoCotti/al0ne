@@ -1,11 +1,6 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Game;
-import com.al0ne.Engine.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -14,29 +9,27 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import static com.al0ne.Engine.UI.EditorUI.EditItem.createItem;
+import static com.al0ne.Engine.UI.EditorUI.EditRoom.createRoom;
 
 /**
  * Created by BMW on 17/05/2017.
  */
 public class WorldEditorUI {
-    public static VBox createEditor(Game g){
+    public static VBox createEditor(){
         TabPane editor = new TabPane();
         editor.setId("editor");
 
-        Tab rooms = createRoom(g);
+        Tab rooms = createRoom();
 
         Tab items = createItem();
 
 
-        Tab props = createProp(g);
+        Tab props = createProp();
 
-        Tab npc = createNPC(g);
+        Tab npc = createNPC();
 
-        Tab enemy = createEnemy(g);
+        Tab enemy = createEnemy();
 
         Tab other = new Tab();
         other.setText("Other");
@@ -48,7 +41,7 @@ public class WorldEditorUI {
         return temp;
     }
 
-    public static Tab createProp(Game g){
+    public static Tab createProp(){
         Tab items = new Tab();
         items.setText("Prop");
         items.setClosable(false);
@@ -112,7 +105,7 @@ public class WorldEditorUI {
         return items;
     }
 
-    public static Tab createNPC(Game g){
+    public static Tab createNPC(){
         Tab items = new Tab();
         items.setText("NPC");
         items.setClosable(false);
@@ -207,7 +200,7 @@ public class WorldEditorUI {
     }
 
 
-    public static Tab createEnemy(Game g){
+    public static Tab createEnemy(){
         Tab enemy = new Tab();
         enemy.setText("Enemy");
         enemy.setClosable(false);
@@ -303,58 +296,6 @@ public class WorldEditorUI {
 
 
         return enemy;
-    }
-
-
-
-    public static Tab createRoom(Game g){
-        Tab rooms = new Tab();
-        rooms.setText("Rooms");
-        rooms.setClosable(false);
-
-        GridPane itemContent = new GridPane();
-
-//        Label createNewItem = new Label("Create new item:");
-//        createNewItem.setStyle("-fx-font-weight: bold");
-
-        Label idLabel = new Label("Create new Room:");
-        idLabel.setStyle("-fx-font-weight: bold");
-        itemContent.add(idLabel, 0, 0);
-
-        TextField nameText = new TextField();
-        Label nameLabel = new Label("Name:");
-        nameText.setPromptText("Shop");
-        itemContent.add(nameLabel, 0, 1);
-        itemContent.add(nameText, 1, 1);
-
-        TextArea descText = new TextArea();
-        descText.setPromptText("This shop is full of interesting items disposed on wooden shelves.");
-        descText.setPrefWidth(200);
-        descText.setPrefHeight(100);
-        Label descLabel = new Label("Description:");
-        itemContent.add(descLabel, 0, 2);
-        itemContent.add(descText, 1, 2);
-
-        TextArea customExit = new TextArea();
-        customExit.setPrefWidth(200);
-        customExit.setPrefHeight(100);
-        Label customExitLabel = new Label("Exit description \n(optional):");
-        customExit.setPromptText("To the east you can see a weird door, and to the south you can go back home");
-        itemContent.add(customExitLabel, 0, 3);
-        itemContent.add(customExit, 1, 3);
-
-        Button addEntity = new Button("Add Entity");
-        itemContent.add(addEntity, 0, 4);
-
-        Button create = new Button("Create Room");
-        itemContent.add(create, 0, 8);
-
-
-        itemContent.setPadding(new Insets(5, 10, 5, 5));
-
-        rooms.setContent(itemContent);
-
-        return rooms;
     }
 
 }

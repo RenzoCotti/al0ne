@@ -255,10 +255,10 @@ public class Popups {
         s.show();
     }
 
-    public static void openWorldEditor(Game g){
+    public static void openWorldEditor(){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-        VBox dialogVbox = WorldEditorUI.createEditor(g);
+        VBox dialogVbox = WorldEditorUI.createEditor();
         dialogVbox.setPrefSize(800, 500);
 
         Scene dialogScene = new Scene(dialogVbox);

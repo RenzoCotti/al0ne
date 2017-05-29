@@ -423,4 +423,8 @@ public class Room extends Entity {
             questID=null;
         }
     }
+
+    public String getCustomDirections() {
+        return customDirections;
+    }
 }
