@@ -1,19 +1,10 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Editing.IDandName;
+import com.al0ne.Engine.Editing.IdandName;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.Items.Behaviours.Drinkable;
-import com.al0ne.Entities.Items.Behaviours.Food;
-import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by BMW on 27/05/2017.
@@ -35,11 +27,12 @@ public class EditRoom {
         rooms.setText("Rooms");
         rooms.setClosable(false);
 
+        VBox parent = new VBox();
         HBox temp = new HBox();
 
         VBox listRoom = new VBox();
 
-        TableView<IDandName> roomsList = new TableView<>();
+        TableView<IdandName> roomsList = new TableView<>();
 
         TableColumn idColumn = new TableColumn("ID");
         idColumn.setMinWidth(120);
@@ -49,11 +42,14 @@ public class EditRoom {
         nameColumn.setMinWidth(120);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
 
+        HashMap<String, Room> exits = new HashMap<>();
+        ArrayList<Entity> entities = new ArrayList<>();
+
         roomsList.getColumns().addAll(idColumn, nameColumn);
 
         roomsList.getItems().addAll(getRooms());
 
-        ObservableList<IDandName> roomsArray = getRooms();
+        ObservableList<IdandName> roomsArray = getRooms();
 
         roomsList.setItems(roomsArray);
 
@@ -114,7 +110,12 @@ public class EditRoom {
             String direction = directionDisplay.getSelectionModel().getSelectedItem();
             if(direction != null){
                 direction = direction.toLowerCase();
-//                Room r = roomsList.getSelectionModel().getSelectedItem();
+
+                Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
+                        get(roomsList.getSelectionModel().getSelectedItem().getId());
+
+                exits.put(direction, target);
+
             } else {
                 directionDisplay.setStyle("-fx-border-color: red;");
                 errorMessage.setText("Please select a direction.");
@@ -130,8 +131,6 @@ public class EditRoom {
 
         rooms.setContent(roomContent);
 
-
-        roomContent.add(errorMessage, 0, 9);
 
         create.setOnAction( t -> {
             String name = nameText.getText();
@@ -155,18 +154,27 @@ public class EditRoom {
                     r.addCustomDirection(exit);
                 }
 
+                if(exits.keySet().size() > 0){
+                    for(String dir : exits.keySet()){
+                        r.addExit(dir, exits.get(dir));
+                    }
+
+                    exits.clear();
+                }
+
                 Main.edit.getCurrentEdit().getCurrentWorld().putRoom(r);
 
 
 
                 //we update the item list and reset all the fields
 
-                ((TableView<IDandName>)listRoom.getChildren().get(0)).getItems().setAll(getRooms());
+                ((TableView<IdandName>)listRoom.getChildren().get(0)).getItems().setAll(getRooms());
                 errorMessage.setText("");
                 create.setText("Create Room");
                 nameText.clear();
                 descText.clear();
                 customExit.clear();
+                directionDisplay.getSelectionModel().clearSelection();
 
 
             }  else {
@@ -204,16 +212,17 @@ public class EditRoom {
 
 
         temp.getChildren().addAll(roomContent, listRoom);
-        rooms.setContent(temp);
+        parent.getChildren().addAll(temp, errorMessage);
+        rooms.setContent(parent);
 
         return rooms;
     }
 
-    public static ObservableList<IDandName> getRooms(){
-        ArrayList<IDandName> temp = new ArrayList<>();
+    public static ObservableList<IdandName> getRooms(){
+        ArrayList<IdandName> temp = new ArrayList<>();
         for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
             System.out.println(r.getID());
-            temp.add(new IDandName(r.getID(), r.getName()));
+            temp.add(new IdandName(r.getID(), r.getName()));
         }
 
         return FXCollections.observableArrayList (temp);

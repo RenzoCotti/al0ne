@@ -4,24 +4,23 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Engine.Editing.IdNameType;
+import com.al0ne.Engine.Editing.IdandName;
 import com.al0ne.Engine.Main;
 import com.al0ne.Entities.Items.Behaviours.Drinkable;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Axe;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Mace;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.Sword;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by BMW on 27/05/2017.
@@ -37,9 +36,23 @@ public class EditItem {
 
         VBox listItem = new VBox();
 
-        ListView<String> itemList = new ListView<>();
+        TableView<IdNameType> itemList = new TableView<>();
+        TableColumn idColumn = new TableColumn("ID");
+        idColumn.setMinWidth(120);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        ObservableList<String> itemsArray = getItems();
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(120);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn typeColumn = new TableColumn("Type");
+        typeColumn.setMinWidth(120);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
+
+
+        ObservableList<IdNameType> itemsArray = getItems();
 
         itemList.setItems(itemsArray);
 
@@ -327,7 +340,7 @@ public class EditItem {
 
                     //we update the item list and reset all the fields
 
-                    ((ListView<String>)listItem.getChildren().get(0)).setItems(getItems());
+                    ((TableView<IdNameType>)listItem.getChildren().get(0)).setItems(getItems());
                     errorMessage.setText("");
                     create.setText("Create Item");
                     nameText.clear();
@@ -463,10 +476,18 @@ public class EditItem {
         return items;
     }
 
-    public static ObservableList<String> getItems(){
-        ArrayList<String> temp = new ArrayList<>();
+    public static ObservableList<IdNameType> getItems(){
+        ArrayList<IdNameType> temp = new ArrayList<>();
         for(Entity e: Main.edit.getCurrentEdit().getItems().values()){
-            temp.add(e.getID());
+            if(e instanceof Armor){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Armor"));
+            } else if(e instanceof Weapon){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Weapon"));
+            } else if(e instanceof Food || e instanceof Drinkable){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Food"));
+            } else if(e instanceof Readable){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Scroll"));
+            }
         }
 
         return FXCollections.observableArrayList (temp);
