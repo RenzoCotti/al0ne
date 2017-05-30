@@ -20,15 +20,13 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Prop extends Interactable {
 
-    private static int propCounter=0;
-
     protected String afterDescription;
     protected String requiresItem;
     protected boolean active;
     protected boolean invisible;
 
     public Prop(String name, String description, String shortDescription, String after, Material material) {
-        super("prop"+(propCounter++), name, description, shortDescription, material);
+        super("prop"+(entityCounter++), name, description, shortDescription, material);
         setCustomName();
 
         if(after == null){
@@ -47,7 +45,7 @@ public class Prop extends Interactable {
 
     //quick, for descriptive props
     public Prop(String name, String description) {
-        super("prop"+(propCounter++), name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
+        super("prop"+(entityCounter++), name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;

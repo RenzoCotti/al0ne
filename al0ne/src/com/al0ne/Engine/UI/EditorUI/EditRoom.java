@@ -92,7 +92,7 @@ public class EditRoom {
         roomContent.add(customExit, 1, 3);
 
         Button addEntity = new Button("Add Entity");
-        addEntity.setOnAction(t-> Popups.openAddEntity());
+        addEntity.setOnAction(t-> Popups.openAddEntity(entities));
         roomContent.add(addEntity, 0, 5);
 
         Label addExitLabel = new Label("Add Exit:");
@@ -155,6 +155,13 @@ public class EditRoom {
 
                 if(checkIfNotEmpty(exit)){
                     r.addCustomDirection(exit);
+                }
+
+                if(entities.size() > 0){
+                    for(Entity e: entities){
+                        //TODO: ADD QUANTITY
+                        r.addEntity(e);
+                    }
                 }
 
                 if(exits.keySet().size() > 0){

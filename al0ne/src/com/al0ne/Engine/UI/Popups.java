@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.World;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.GameChanges;
@@ -24,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.IDN;
+import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -274,7 +276,7 @@ public class Popups {
         s.show();
     }
 
-    public static void openAddEntity(){
+    public static void openAddEntity(ArrayList<Entity> entities){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         VBox dialogVbox = new VBox();
@@ -304,6 +306,8 @@ public class Popups {
         ObservableList<IdNameType> itemsArray = EditItem.getItems();
 
         itemList.setItems(itemsArray);
+
+
 
         item.setContent(itemList);
 
@@ -358,7 +362,25 @@ public class Popups {
 
 
         Button add = new Button("Add Entity");
-        dialogVbox.getChildren().addAll(parent, add);
+
+        add.setOnAction(t->{
+            if(parent.getSelectionModel().getSelectedItem().getText().equals("Item")){
+                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
+                        getSelectionModel().getSelectedItem();
+                System.out.println(temp.getId());
+            } else {
+                IdName temp = ((TableView<IdName>)parent.getSelectionModel().getSelectedItem().getContent()).
+                        getSelectionModel().getSelectedItem();
+                System.out.println(temp.getId());
+            }
+
+        });
+        Button done = new Button("Done");
+        done.setOnAction(t->s.close());
+
+        HBox temp = new HBox();
+        temp.getChildren().addAll(add, done);
+        dialogVbox.getChildren().addAll(parent, temp);
 
         Scene dialogScene = new Scene(dialogVbox);
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import static com.al0ne.Engine.UI.EditorUI.EditItem.createItem;
+import static com.al0ne.Engine.UI.EditorUI.EditProp.createProp;
 import static com.al0ne.Engine.UI.EditorUI.EditRoom.createRoom;
 
 /**
@@ -39,70 +40,6 @@ public class WorldEditorUI {
         VBox temp = new VBox();
         temp.getChildren().add(editor);
         return temp;
-    }
-
-    public static Tab createProp(){
-        Tab items = new Tab();
-        items.setText("Prop");
-        items.setClosable(false);
-
-        HBox temp = new HBox();
-
-        GridPane itemContent = new GridPane();
-
-        Label createNewProp = new Label("Create new Prop:");
-        createNewProp.setStyle("-fx-font-weight: bold");
-        itemContent.add(createNewProp, 0, 0);
-
-        TextField nameText = new TextField();
-        nameText.setPromptText("lever");
-        Label nameLabel = new Label("Name:");
-        itemContent.add(nameLabel, 0, 1);
-        itemContent.add(nameText, 1, 1);
-
-        TextField shortDesc = new TextField();
-        shortDesc.setPromptText("a lever");
-        Label shortDescLabel = new Label("Short Description\n(optional):");
-        itemContent.add(shortDescLabel, 0, 2);
-        itemContent.add(shortDesc, 1, 2);
-
-        TextArea descText = new TextArea();
-        descText.setPrefWidth(100);
-        descText.setPrefHeight(50);
-        Label descLabel = new Label("Description:");
-        descText.setPromptText("A rusty lever, you probably can pull it.");
-        itemContent.add(descLabel, 0, 3);
-        itemContent.add(descText, 1, 3);
-
-        TextArea afterText = new TextArea();
-        afterText.setPrefWidth(100);
-        afterText.setPrefHeight(50);
-        Label afterTextLabel = new Label("After use\n(optional):");
-        afterText.setPromptText("The lever has been pulled.");
-        itemContent.add(afterTextLabel, 0, 4);
-        itemContent.add(afterText, 1, 4);
-
-
-        Label materialLabel = new Label("Material\n(optional):");
-        ObservableList<String> materialList = FXCollections.observableArrayList(Material.getAllMaterialString());
-        ComboBox<String> materialDisplay = new ComboBox<>(materialList);
-        itemContent.add(materialLabel, 0, 5);
-        itemContent.add(materialDisplay, 1, 5);
-
-        ToggleButton isVisible = new RadioButton("Is visible immediately?");
-        ToggleButton isDoor = new RadioButton("Is Door?");
-        itemContent.add(isVisible, 1, 7);
-        itemContent.add(isDoor, 1, 8);
-
-        itemContent.setPadding(new Insets(5, 10, 5, 5));
-
-        temp.getChildren().addAll(itemContent);
-        items.setContent(temp);
-
-        Button create = new Button("Create Prop");
-        itemContent.add(create, 0, 12);
-
-        return items;
     }
 
     public static Tab createNPC(){
