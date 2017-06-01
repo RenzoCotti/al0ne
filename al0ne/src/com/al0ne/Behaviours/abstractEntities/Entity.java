@@ -95,4 +95,12 @@ public abstract class Entity implements Serializable{
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
 }

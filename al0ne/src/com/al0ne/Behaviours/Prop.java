@@ -35,6 +35,10 @@ public class Prop extends Interactable {
             this.afterDescription = after;
         }
 
+        if(shortDescription == null){
+
+        }
+
         this.requiresItem="none";
         this.active=false;
         this.type='p';

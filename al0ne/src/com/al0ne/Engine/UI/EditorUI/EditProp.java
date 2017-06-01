@@ -3,6 +3,7 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameType;
@@ -93,7 +94,7 @@ public class EditProp {
         shortDescText.setPrefWidth(100);
         shortDescText.setPrefHeight(50);
         Label shortDescLabel = new Label("Short Description:");
-        descText.setPromptText("a rusty lever");
+        shortDescText.setPromptText("a rusty lever");
         propContent.add(shortDescLabel, 0, 4);
         propContent.add(shortDescText, 1, 4);
 
@@ -105,32 +106,95 @@ public class EditProp {
         propContent.add(materialDisplay, 1, 6);
 
 
-        ToggleButton canDrop = new RadioButton("Is visible immediately?");
-        propContent.add(canDrop, 1, 7);
 
         Label typeLabel = new Label("Type:");
         ObservableList<String> typeList = FXCollections.observableArrayList("Door", "Locked Door");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
+        propContent.add(typeLabel, 0, 7);
+        propContent.add(typeDisplay, 1, 7);
+
+
+        ToggleButton canDrop = new RadioButton("Is visible immediately?");
+        propContent.add(canDrop, 1, 78);
+
 
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
         Button create = new Button("Create Prop");
         create.setOnAction( t -> {
+
             String name = nameText.getText();
             String desc = descText.getText();
             String material = materialDisplay.getSelectionModel().getSelectedItem();
-            String type = typeDisplay.getSelectionModel().getSelectedItem();
-        });
 
-        //LOADING OF ITEM
-        Button load = new Button("Edit Item");
+            String shortDesc = shortDescText.getText();
+
+            String propType = typeDisplay.getSelectionModel().getSelectedItem();
+            if(!name.equals("") && !desc.equals("")){
+                if(propType == null){
+                    Entity entity = Main.edit.getCurrentEdit().getCurrentEntity();
+                    if(entity != null && entity.getType() == 'p'){
+                        Prop old = (Prop) entity;
+                        old.setName(name);
+                        old.setShortDescription(shortDesc);
+                        old.setLongDescription(desc);
+                        old.setMaterial(Material.strToMaterial(material));
+                    } else {
+                        Prop p = new Prop(name, desc, shortDesc, null, Material.strToMaterial(material));
+                        Main.edit.getCurrentEdit().addProp(p);
+                        propList.setItems(getProps());
+                    }
+                    nameText.setStyle("");
+                    descText.setStyle("");
+                    nameText.clear();
+                    descText.clear();
+                    shortDescText.clear();
+                    typeDisplay.getSelectionModel().clearSelection();
+                    materialDisplay.getSelectionModel().select(materialList.size()-1);
+
+
+                } else{
+                    //todo
+                }
+            } else {
+                if(name.equals("")){
+                    nameText.setStyle("-fx-border-color: red;");
+                    errorMessage.setText("Please insert a name");
+                }
+
+                if(desc.equals("")){
+                    descText.setStyle("-fx-border-color: red;");
+                    errorMessage.setText("Please insert a description");
+                }
+            }
+
+
+        });
+        propContent.add(create, 0, 10);
+
+        //LOADING OF PROP
+        Button load = new Button("Edit Prop");
         load.setOnAction(t -> {
+            IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
+            if(tempProp != null){
+                create.setText("Save changes");
+                Prop p = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
+                Main.edit.getCurrentEdit().setCurrentEntity(p);
+                System.out.println(p.getName());
+                nameText.setText(p.getName());
+                descText.setText(p.getLongDescription());
+                shortDescText.setText(p.getShortDescription());
+
+            }
+
         });
 
         listProps.getChildren().add(load);
 
-        temp.getChildren().addAll(propContent, listProps);
+        VBox propBox = new VBox();
+        propBox.getChildren().addAll(propContent, errorMessage);
+        temp.getChildren().addAll(propBox, listProps);
 
         props.setContent(temp);
 

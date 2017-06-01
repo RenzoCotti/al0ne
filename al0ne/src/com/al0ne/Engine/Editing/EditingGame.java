@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Game;
 
 import java.util.HashMap;
@@ -26,6 +27,8 @@ public class EditingGame {
 
     private HashMap<String, Enemy> enemies;
 
+    private Entity currentEntity;
+
 
     public EditingGame(String s) {
         this.currentEdit = new Game(s);
@@ -33,6 +36,7 @@ public class EditingGame {
         this.props = new HashMap<>();
         this.npcs = new HashMap<>();
         this.enemies = new HashMap<>();
+        this.currentEntity = null;
     }
 
     public Game getCurrentEdit() {
@@ -83,5 +87,13 @@ public class EditingGame {
 
     public void addEnemy(Enemy e) {
         this.enemies.put(e.getID(), e);
+    }
+
+    public Entity getCurrentEntity() {
+        return currentEntity;
+    }
+
+    public void setCurrentEntity(Entity currentEntity) {
+        this.currentEntity = currentEntity;
     }
 }

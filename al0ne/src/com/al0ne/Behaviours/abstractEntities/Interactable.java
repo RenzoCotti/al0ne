@@ -123,4 +123,6 @@ public abstract class Interactable extends Entity {
     public void setMaterial(Material material) {
         this.material = material;
     }
+
+
 }
