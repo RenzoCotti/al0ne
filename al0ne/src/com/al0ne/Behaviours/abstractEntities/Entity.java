@@ -27,12 +27,12 @@ public abstract class Entity implements Serializable{
 
 
     /**
-    * i: item
-    * p: prop
-    * n: npc
-    * e: enemy
-     *  w: wearable
-     *  C: container
+     * i: item
+     * p: prop
+     * n: npc
+     * e: enemy
+     * w: wearable
+     * C: container
     * */
     protected char type;
 

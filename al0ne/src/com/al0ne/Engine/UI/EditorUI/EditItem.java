@@ -3,6 +3,7 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
@@ -234,8 +235,10 @@ public class EditItem {
             if(checkIfNotEmpty(name) && checkIfNotEmpty(desc) && material != null && size != null){
                 if(checkIfExists(name) && !(create.getText().equals("Save changes"))){
                     nameText.setStyle("-fx-border-color: red ;");
+                    errorMessage.setText("That name already exists.");
                     return;
                 }
+
                 nameText.setStyle("");
                 descText.setStyle("");
                 sizeDisplay.setStyle("");
@@ -399,7 +402,11 @@ public class EditItem {
         load.setOnAction(t -> {
             int selectedIndex = itemList.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                Item i = Main.edit.getCurrentEdit().getItems().get(itemList.getItems().get(selectedIndex));
+                IdNameType tempItem = itemList.getItems().get(selectedIndex);
+                Item i = Main.edit.getCurrentEdit().getItems().get(tempItem.getId());
+
+                Main.edit.getCurrentEdit().setCurrentEntity(i);
+
                 create.setText("Save changes");
                 itemContent.getChildren().remove(foodLabel);
                 itemContent.getChildren().remove(foodValue);

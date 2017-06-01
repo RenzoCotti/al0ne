@@ -132,10 +132,21 @@ public class EditProp {
 
             String propType = typeDisplay.getSelectionModel().getSelectedItem();
             if(!name.equals("") && !desc.equals("")){
+                //creating a generic prop
                 if(propType == null){
                     Entity entity = Main.edit.getCurrentEdit().getCurrentEntity();
-                    if(entity != null && entity.getType() == 'p'){
-                        Prop old = (Prop) entity;
+                    //we are editing an item
+                    if(entity != null && create.getText().equals("Save changes")){
+                        Prop old;
+                        if(entity.getType() == 'p'){
+                            old = (Prop) entity;
+
+                        } else {
+                            IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
+                            old = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
+                            Main.edit.getCurrentEdit().setCurrentEntity(old);
+                        }
+
                         old.setName(name);
                         old.setShortDescription(shortDesc);
                         old.setLongDescription(desc);
@@ -152,10 +163,12 @@ public class EditProp {
                     shortDescText.clear();
                     typeDisplay.getSelectionModel().clearSelection();
                     materialDisplay.getSelectionModel().select(materialList.size()-1);
+                    create.setText("Create new Prop");
+
 
 
                 } else{
-                    //todo
+                    //todo specific prop types
                 }
             } else {
                 if(name.equals("")){

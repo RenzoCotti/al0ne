@@ -83,4 +83,11 @@ public abstract class Item extends Interactable {
         return price;
     }
 
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 }
