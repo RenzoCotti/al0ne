@@ -9,10 +9,7 @@ import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
-import com.al0ne.Engine.UI.EditorUI.EditItem;
-import com.al0ne.Engine.UI.EditorUI.EditProp;
-import com.al0ne.Engine.UI.EditorUI.GameEditorUI;
-import com.al0ne.Engine.UI.EditorUI.WorldEditorUI;
+import com.al0ne.Engine.UI.EditorUI.*;
 import com.al0ne.Engine.Utility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.net.IDN;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -437,6 +435,87 @@ public class Popups {
             temp.add(new IdName(e.getID(), e.getName()));
         }
         return temp;
+    }
+
+    public static void openAddExit(HashMap<String, Room> exits){
+        Stage s = new Stage();
+        s.initModality(Modality.APPLICATION_MODAL);
+        HBox totalContainer = new HBox();
+        VBox selectionContainer = new VBox();
+        selectionContainer.setPrefSize(200, 300);
+
+        Label errorMessage = new Label("");
+        errorMessage.setStyle("-fx-font-weight: bold; -fx-color: red;");
+
+        TableView<IdName> roomsList = EditRoom.createRoomTable();
+
+        //exit view
+        TableView<IdNameType> exitList = new TableView<>();
+        TableColumn roomID = new TableColumn("Room ID");
+        roomID.setMinWidth(120);
+        roomID.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn directionColumn = new TableColumn("Direction");
+        directionColumn.setMinWidth(120);
+        directionColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        TableColumn name = new TableColumn("Room name");
+        name.setMinWidth(120);
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        exitList.getColumns().addAll(directionColumn, roomID, name);
+
+        exitList.setItems(getExits(exits));
+
+        selectionContainer.getChildren().addAll(exitList);
+
+        Label addExitLabel = new Label("Add Exit:");
+        ObservableList<String> directionList = FXCollections.observableArrayList("North", "East", "South",
+                "West", "NorthWest", "NorthEast", "SouthWest", "SouthEast");
+        ComboBox<String> directionDisplay = new ComboBox<>(directionList);
+
+        Button addExit = new Button("Add Exit");
+        addExit.setOnAction(t->{
+            String direction = directionDisplay.getSelectionModel().getSelectedItem();
+            if(direction != null){
+                direction = direction.toLowerCase();
+
+                if(roomsList.getSelectionModel().getSelectedItem() != null){
+                    Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
+                            get(roomsList.getSelectionModel().getSelectedItem().getId());
+
+                    exits.put(direction, target);
+                } else {
+                    roomsList.setStyle("-fx-border-color: red;");
+                    errorMessage.setText("Please select a destination room.");
+                }
+
+
+
+            } else {
+                directionDisplay.setStyle("-fx-border-color: red;");
+                errorMessage.setText("Please select a direction.");
+            }
+        });
+
+        selectionContainer.getChildren().addAll(addExitLabel, directionDisplay, addExit);
+        totalContainer.getChildren().addAll(selectionContainer, roomsList);
+
+        Scene dialogScene = new Scene(totalContainer);
+
+        s.setScene(dialogScene);
+        s.setTitle("Add Exit");
+        s.show();
+
+    }
+
+    public static ObservableList<IdNameType> getExits(HashMap<String, Room> exits){
+        ArrayList<IdNameType> temp = new ArrayList<>();
+        for(String dir : exits.keySet()){
+            Room r = exits.get(dir);
+            temp.add(new IdNameType(dir, r.getID(), r.getName()));
+        }
+        return FXCollections.observableArrayList(temp);
     }
 
 

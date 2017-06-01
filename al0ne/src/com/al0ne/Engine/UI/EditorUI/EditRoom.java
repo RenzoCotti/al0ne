@@ -36,26 +36,12 @@ public class EditRoom {
 
         VBox listRoom = new VBox();
 
-        TableView<IdName> roomsList = new TableView<>();
-
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
-
-        HashMap<String, Room> exits = new HashMap<>();
         ArrayList<Entity> entities = new ArrayList<>();
+        HashMap<String, Room> exits = new HashMap<>();
 
-        roomsList.getColumns().addAll(idColumn, nameColumn);
 
-        roomsList.getItems().addAll(getRooms());
 
-        ObservableList<IdName> roomsArray = getRooms();
-
-        roomsList.setItems(roomsArray);
+        TableView<IdName> roomsList = createRoomTable();
 
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
@@ -97,37 +83,11 @@ public class EditRoom {
         Button addEntity = new Button("Add Entity");
         addEntity.setOnAction(t-> Popups.openAddEntity(entities));
         roomContent.add(addEntity, 0, 5);
-
-        Label addExitLabel = new Label("Add Exit:");
-        ObservableList<String> directionList = FXCollections.observableArrayList("North", "East", "South",
-                "West", "NorthWest", "NorthEast", "SouthWest", "SouthEast");
-        ComboBox<String> directionDisplay = new ComboBox<>(directionList);
-        roomContent.add(addExitLabel, 0, 4);
-        roomContent.add(directionDisplay, 1, 4);
         Button addExit = new Button("Add Exit");
-        addExit.setOnAction( t->{
-            String direction = directionDisplay.getSelectionModel().getSelectedItem();
-            if(direction != null){
-                direction = direction.toLowerCase();
-
-                if(roomsList.getSelectionModel().getSelectedItem() != null){
-                    Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
-                            get(roomsList.getSelectionModel().getSelectedItem().getId());
-
-                    exits.put(direction, target);
-                } else {
-                    roomsList.setStyle("-fx-border-color: red;");
-                    errorMessage.setText("Please select a destination room.");
-                }
+        addExit.setOnAction(t-> Popups.openAddExit(exits));
+        roomContent.add(addExit, 1, 5);
 
 
-
-            } else {
-                directionDisplay.setStyle("-fx-border-color: red;");
-                errorMessage.setText("Please select a direction.");
-            }
-        });
-        roomContent.add(addExit, 2, 4);
 
         Button create = new Button("Create Room");
         roomContent.add(create, 0, 8);
@@ -186,7 +146,6 @@ public class EditRoom {
                 nameText.clear();
                 descText.clear();
                 customExit.clear();
-                directionDisplay.getSelectionModel().clearSelection();
 
 
             }  else {
@@ -254,6 +213,25 @@ public class EditRoom {
 
     public static boolean checkIfNotEmpty(String s){
         return !s.equals((""));
+    }
+
+
+    public static TableView<IdName> createRoomTable(){
+        TableView<IdName> roomsList = new TableView<>();
+
+        TableColumn idColumn = new TableColumn("ID");
+        idColumn.setMinWidth(120);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(120);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+
+        roomsList.getColumns().addAll(idColumn, nameColumn);
+
+        roomsList.getItems().addAll(getRooms());
+        return roomsList;
     }
 
 }
