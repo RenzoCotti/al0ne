@@ -9,14 +9,15 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Created by BMW on 17/05/2017.
  */
 public class GameEditorUI {
-    public static HBox createEditor(){
+    public static HBox createEditor(Stage s){
 
-        VBox gameList = createList();
+        VBox gameList = createList(s);
 
         VBox newGameBox = new VBox();
 
@@ -53,6 +54,7 @@ public class GameEditorUI {
                 Main.edit.setCurrentEdit(newGame);
                 Popups.openWorldEditor();
                 updateList((ListView<String>) gameList.getChildren().get(0));
+                s.close();
             } else{
                 if(!nameText.getText().equals("")){
                     errorMessage.setText("Please insert a name.");
@@ -75,7 +77,7 @@ public class GameEditorUI {
         return temp;
     }
 
-    public static VBox createList(){
+    public static VBox createList(Stage s){
         VBox list = new VBox();
 
         ListView<String> games = new ListView<>();
@@ -91,6 +93,7 @@ public class GameEditorUI {
                 EditingGame current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
                 Main.edit.setCurrentEdit(current);
                 Popups.openWorldEditor();
+                s.close();
             }
         });
         list.getChildren().addAll(games, load);

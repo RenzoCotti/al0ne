@@ -1,6 +1,9 @@
 package com.al0ne.Engine.UI.EditorUI;
 
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.JunkItem;
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdName;
@@ -159,16 +162,15 @@ public class EditRoom {
 
                 if(entities.size() > 0){
                     for(Entity e: entities){
-                        //TODO: ADD QUANTITY
                         r.addEntity(e);
                     }
+                    entities.clear();
                 }
 
                 if(exits.keySet().size() > 0){
                     for(String dir : exits.keySet()){
                         r.addExit(dir, exits.get(dir));
                     }
-
                     exits.clear();
                 }
 
@@ -210,7 +212,9 @@ public class EditRoom {
             if(selectedIndex > -1){
                 Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(roomsList.getSelectionModel().getSelectedItem().getId());
                 create.setText("Save changes");
-
+                for(Pair p: r.getEntities().values()){
+                    entities.add(p.getEntity());
+                }
                 nameText.setText(r.getName());
                 descText.setText(r.getLongDescription());
                 if(r.getCustomDirections() != null){

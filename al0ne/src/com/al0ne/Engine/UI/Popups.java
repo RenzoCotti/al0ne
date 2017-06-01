@@ -10,9 +10,11 @@ import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.EditorUI.EditItem;
+import com.al0ne.Engine.UI.EditorUI.EditProp;
 import com.al0ne.Engine.UI.EditorUI.GameEditorUI;
 import com.al0ne.Engine.UI.EditorUI.WorldEditorUI;
 import com.al0ne.Engine.Utility;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -253,7 +255,7 @@ public class Popups {
     public static void openEditor(){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-        HBox dialogVbox = GameEditorUI.createEditor();
+        HBox dialogVbox = GameEditorUI.createEditor(s);
         dialogVbox.setPrefSize(300, 300);
 
         Scene dialogScene = new Scene(dialogVbox);
@@ -279,8 +281,36 @@ public class Popups {
     public static void openAddEntity(ArrayList<Entity> entities){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-        VBox dialogVbox = new VBox();
-        dialogVbox.setPrefSize(500, 500);
+        HBox totalContainer = new HBox();
+        VBox selectionContainer = new VBox();
+        selectionContainer.setPrefSize(200, 300);
+
+        TableView<IdName> entityList = new TableView<>();
+        TableColumn entityID = new TableColumn("ID");
+        entityID.setMinWidth(120);
+        entityID.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn entityName = new TableColumn("Name");
+        entityName.setMinWidth(120);
+        entityName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        entityList.getColumns().addAll(entityID, entityName);
+
+        Entity e = Main.edit.getCurrentEdit().getCurrentEntity();
+        if(e != null && e instanceof Room){
+            if(Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(e.getID()) != null){
+                for(Pair p: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(e.getID()).getEntities().values()){
+                    entities.add(p.getEntity());
+                }
+            }
+        }
+
+
+        ObservableList<IdName> entityArray = FXCollections.observableArrayList(getEntities(entities));
+
+
+        entityList.setItems(entityArray);
+
 
         TabPane parent = new TabPane();
 
@@ -318,7 +348,7 @@ public class Popups {
         props.setClosable(false);
         props.setText("Props");
 
-        TableView<IdName> propList = new TableView<>();
+        TableView<IdNameType> propList = new TableView<>();
         TableColumn idProp = new TableColumn("ID");
         idProp.setMinWidth(120);
         idProp.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -330,9 +360,9 @@ public class Popups {
 
         propList.getColumns().addAll(idProp, nameProp);
 
-//        ObservableList<IdName> propArray = EditItem.getItems();
-//
-//        itemList.setItems(itemsArray);
+        ObservableList<IdNameType> propArray = EditProp.getProps();
+
+        propList.setItems(propArray);
 
         props.setContent(propList);
 
@@ -364,29 +394,49 @@ public class Popups {
         Button add = new Button("Add Entity");
 
         add.setOnAction(t->{
-            if(parent.getSelectionModel().getSelectedItem().getText().equals("Item")){
+            String tab = parent.getSelectionModel().getSelectedItem().getText();
+            if(tab.equals("Item")){
                 IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
-                System.out.println(temp.getId());
-            } else {
-                IdName temp = ((TableView<IdName>)parent.getSelectionModel().getSelectedItem().getContent()).
+                entities.add(Main.edit.getCurrentEdit().getItems().get(temp.getId()));
+            } else if (tab.equals("Props")){
+                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
-                System.out.println(temp.getId());
+                entities.add(Main.edit.getCurrentEdit().getProps().get(temp.getId()));
             }
+
+            entityList.setItems(FXCollections.observableArrayList(getEntities(entities)));
 
         });
         Button done = new Button("Done");
-        done.setOnAction(t->s.close());
+        done.setOnAction(t->{
+//            for (Entity e: entities){
+//                System.out.println(e.getName());
+//            }
+            s.close();
+        });
 
         HBox temp = new HBox();
         temp.getChildren().addAll(add, done);
-        dialogVbox.getChildren().addAll(parent, temp);
+        selectionContainer.getChildren().addAll(parent, temp);
+        totalContainer.getChildren().addAll(selectionContainer, entityList);
+        totalContainer.setPrefSize(600, 600);
+        totalContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        Scene dialogScene = new Scene(dialogVbox);
+        Scene dialogScene = new Scene(totalContainer);
 
         s.setScene(dialogScene);
         s.setTitle("Add Entity");
         s.show();
+    }
+
+
+    public static ArrayList<IdName> getEntities(ArrayList<Entity> entities){
+        ArrayList<IdName> temp = new ArrayList<>();
+        for(Entity e : entities){
+            temp.add(new IdName(e.getID(), e.getName()));
+        }
+        return temp;
     }
 
 

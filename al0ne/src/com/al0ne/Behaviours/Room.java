@@ -427,4 +427,5 @@ public class Room extends Entity {
     public String getCustomDirections() {
         return customDirections;
     }
+
 }
