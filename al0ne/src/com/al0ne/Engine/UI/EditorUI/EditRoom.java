@@ -218,6 +218,9 @@ public class EditRoom {
 
     public static TableView<IdName> createRoomTable(){
         TableView<IdName> roomsList = new TableView<>();
+        roomsList.setPlaceholder(new Label("No rooms created."));
+        roomsList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
 
         TableColumn idColumn = new TableColumn("ID");
         idColumn.setMinWidth(120);

@@ -36,26 +36,7 @@ public class EditItem {
 
         VBox listItem = new VBox();
 
-        TableView<IdNameType> itemList = new TableView<>();
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setMinWidth(120);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
-
-
-        ObservableList<IdNameType> itemsArray = getItems();
-
-        itemList.setItems(itemsArray);
-
+        TableView<IdNameType> itemList = createItemTable();
 
 
 
@@ -511,6 +492,33 @@ public class EditItem {
 
     public static boolean checkIfNotEmpty(String s){
         return !s.equals((""));
+    }
+
+    public static TableView<IdNameType> createItemTable(){
+        TableView<IdNameType> itemList = new TableView<>();
+        itemList.setPlaceholder(new Label("No items created."));
+        itemList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+        TableColumn idColumn = new TableColumn("ID");
+        idColumn.setMinWidth(120);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(120);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn typeColumn = new TableColumn("Type");
+        typeColumn.setMinWidth(120);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
+
+
+        ObservableList<IdNameType> itemsArray = getItems();
+
+        itemList.setItems(itemsArray);
+        return itemList;
     }
 
 }

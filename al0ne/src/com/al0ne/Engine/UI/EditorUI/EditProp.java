@@ -42,31 +42,9 @@ public class EditProp {
 
         VBox listProps = new VBox();
 
-        TableView<IdNameType> propList = new TableView<>();
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setMinWidth(120);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        propList.getColumns().addAll(idColumn, nameColumn, typeColumn);
-
-
-        ObservableList<IdNameType> propArray = getProps();
-
-        propList.setItems(propArray);
+        TableView<IdNameType> propList = createPropTable();
 
         listProps.getChildren().add(propList);
-
-
-
-
 
 
         GridPane propContent = new GridPane();
@@ -232,6 +210,33 @@ public class EditProp {
         }
 
         return FXCollections.observableArrayList (temp);
+    }
+
+    public static TableView<IdNameType> createPropTable(){
+        TableView<IdNameType> propList = new TableView<>();
+        propList.setPlaceholder(new Label("No props created."));
+        propList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+
+        TableColumn idColumn = new TableColumn("ID");
+        idColumn.setMinWidth(120);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn nameColumn = new TableColumn("Name");
+        nameColumn.setMinWidth(120);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn typeColumn = new TableColumn("Type");
+        typeColumn.setMinWidth(120);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        propList.getColumns().addAll(idColumn, nameColumn, typeColumn);
+
+
+        ObservableList<IdNameType> propArray = getProps();
+
+        propList.setItems(propArray);
+        return propList;
     }
 
 }

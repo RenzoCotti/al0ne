@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.UI.EditorUI.EditProp.createPropTable;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -281,9 +282,13 @@ public class Popups {
         s.initModality(Modality.APPLICATION_MODAL);
         HBox totalContainer = new HBox();
         VBox selectionContainer = new VBox();
-        selectionContainer.setPrefSize(200, 300);
+        selectionContainer.setMinSize(300, 200);
+        selectionContainer.setPadding(new Insets(10, 10, 10, 10));
 
         TableView<IdName> entityList = new TableView<>();
+        entityList.setMinSize(300, 200);
+        entityList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         TableColumn entityID = new TableColumn("ID");
         entityID.setMinWidth(120);
         entityID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -316,29 +321,8 @@ public class Popups {
         item.setText("Item");
         item.setClosable(false);
 
-        TableView<IdNameType> itemList = new TableView<>();
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setMinWidth(120);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
-
-        ObservableList<IdNameType> itemsArray = EditItem.getItems();
-
-        itemList.setItems(itemsArray);
-
-
-
+        TableView<IdNameType> itemList = EditItem.createItemTable();
         item.setContent(itemList);
-
         parent.getTabs().add(item);
 
 
@@ -346,21 +330,7 @@ public class Popups {
         props.setClosable(false);
         props.setText("Props");
 
-        TableView<IdNameType> propList = new TableView<>();
-        TableColumn idProp = new TableColumn("ID");
-        idProp.setMinWidth(120);
-        idProp.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameProp = new TableColumn("Name");
-        nameProp.setMinWidth(120);
-        nameProp.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-
-        propList.getColumns().addAll(idProp, nameProp);
-
-        ObservableList<IdNameType> propArray = EditProp.getProps();
-
-        propList.setItems(propArray);
+        TableView<IdNameType> propList = createPropTable();
 
         props.setContent(propList);
 
@@ -442,7 +412,9 @@ public class Popups {
         s.initModality(Modality.APPLICATION_MODAL);
         HBox totalContainer = new HBox();
         VBox selectionContainer = new VBox();
-        selectionContainer.setPrefSize(200, 300);
+        selectionContainer.setMinSize(400, 300);
+        selectionContainer.setPadding(new Insets(10, 10, 10, 10));
+
 
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-font-weight: bold; -fx-color: red;");
