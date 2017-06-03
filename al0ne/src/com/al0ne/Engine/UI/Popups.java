@@ -11,6 +11,7 @@ import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.EditorUI.*;
 import com.al0ne.Engine.Utility;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -407,22 +408,37 @@ public class Popups {
         return temp;
     }
 
-    public static void openAddExit(HashMap<String, Room> exits){
+    public static void openAddExit(HashMap<String, Room> exits, String room){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         HBox totalContainer = new HBox();
-        VBox selectionContainer = new VBox();
-        selectionContainer.setMinSize(400, 300);
-        selectionContainer.setPadding(new Insets(10, 10, 10, 10));
+        VBox addExit = new VBox();
+        addExit.setMinSize(400, 300);
+        addExit.setPadding(new Insets(10, 10, 10, 10));
+
+        VBox totalExits = new VBox();
 
 
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-font-weight: bold; -fx-color: red;");
 
+        Label chooseTarget = new Label("Choose target:");
         TableView<IdName> roomsList = EditRoom.createRoomTable();
+
+        addExit.getChildren().addAll(chooseTarget, roomsList);
+
 
         //exit view
         TableView<IdNameType> exitList = new TableView<>();
+        exitList.setMinSize(300, 200);
+        exitList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        Label exitListRooms;
+        if(room.equals("Create new Room:")){
+            exitListRooms  = new Label("Exits of this room:");
+        } else{
+            exitListRooms = new Label("Exits of "+room+":");
+        }
         TableColumn roomID = new TableColumn("Room ID");
         roomID.setMinWidth(120);
         roomID.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -437,17 +453,19 @@ public class Popups {
 
         exitList.getColumns().addAll(directionColumn, roomID, name);
 
-        exitList.setItems(getExits(exits));
+        exitList.setItems(getExits(exits, room));
 
-        selectionContainer.getChildren().addAll(exitList);
+        totalExits.getChildren().addAll(exitListRooms, exitList);
 
-        Label addExitLabel = new Label("Add Exit:");
+        Label addExitLabel = new Label("Choose direction:");
         ObservableList<String> directionList = FXCollections.observableArrayList("North", "East", "South",
                 "West", "NorthWest", "NorthEast", "SouthWest", "SouthEast");
         ComboBox<String> directionDisplay = new ComboBox<>(directionList);
 
-        Button addExit = new Button("Add Exit");
-        addExit.setOnAction(t->{
+        //TODO: PERSIST EXITS
+
+        Button addExitButton = new Button("Add Exit");
+        addExitButton.setOnAction(t->{
             String direction = directionDisplay.getSelectionModel().getSelectedItem();
             if(direction != null){
                 direction = direction.toLowerCase();
@@ -457,6 +475,7 @@ public class Popups {
                             get(roomsList.getSelectionModel().getSelectedItem().getId());
 
                     exits.put(direction, target);
+                    exitList.setItems(getExits(exits, room));
                 } else {
                     roomsList.setStyle("-fx-border-color: red;");
                     errorMessage.setText("Please select a destination room.");
@@ -470,8 +489,11 @@ public class Popups {
             }
         });
 
-        selectionContainer.getChildren().addAll(addExitLabel, directionDisplay, addExit);
-        totalContainer.getChildren().addAll(selectionContainer, roomsList);
+        Button doneButton = new Button("Done");
+        doneButton.setOnAction(t-> s.close());
+
+        addExit.getChildren().addAll(addExitLabel, directionDisplay, addExitButton, doneButton);
+        totalContainer.getChildren().addAll(addExit, totalExits);
 
         Scene dialogScene = new Scene(totalContainer);
 
@@ -481,11 +503,19 @@ public class Popups {
 
     }
 
-    public static ObservableList<IdNameType> getExits(HashMap<String, Room> exits){
+    public static ObservableList<IdNameType> getExits(HashMap<String, Room> exits, String ID){
         ArrayList<IdNameType> temp = new ArrayList<>();
         for(String dir : exits.keySet()){
             Room r = exits.get(dir);
-            temp.add(new IdNameType(dir, r.getID(), r.getName()));
+            temp.add(new IdNameType(r.getID(), r.getName(), dir));
+        }
+        if(!ID.equals("Create new Room:")){
+            HashMap<String, String> exitsRoom = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(ID).getExits();
+            for(String dir : exitsRoom.keySet()){
+                String id = exitsRoom.get(dir);
+                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(id);
+                temp.add(new IdNameType(id, r.getName(), dir));
+            }
         }
         return FXCollections.observableArrayList(temp);
     }
