@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
 import com.al0ne.Entities.Items.Behaviours.Drinkable;
@@ -454,7 +455,20 @@ public class EditItem {
                 }
             }
         });
-        listItem.getChildren().addAll(itemList, load);
+
+
+        Button delete = new Button("Delete Item");
+        delete.setOnAction(t->{
+            int selectedIndex = itemList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                IdNameType id = itemList.getSelectionModel().getSelectedItem();
+                itemList.getItems().remove(id);
+                Main.edit.getCurrentEdit().getItems().remove(id.getId());
+                itemList.setItems(getItems());
+            }
+        });
+
+        listItem.getChildren().addAll(itemList, load, delete);
 
 
         temp.getChildren().addAll(itemContent, listItem);

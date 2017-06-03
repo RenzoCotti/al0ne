@@ -142,6 +142,7 @@ public class EditProp {
                     typeDisplay.getSelectionModel().clearSelection();
                     materialDisplay.getSelectionModel().select(materialList.size()-1);
                     create.setText("Create new Prop");
+                    propList.setItems(getProps());
 
 
 
@@ -181,7 +182,19 @@ public class EditProp {
 
         });
 
-        listProps.getChildren().add(load);
+        Button delete = new Button("Delete Item");
+        delete.setOnAction(t->{
+            int selectedIndex = propList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                IdNameType id = propList.getSelectionModel().getSelectedItem();
+                propList.getItems().remove(id);
+                Main.edit.getCurrentEdit().getProps().remove(id.getId());
+                propList.setItems(getProps());
+            }
+        });
+
+
+        listProps.getChildren().addAll(load, delete);
 
         VBox propBox = new VBox();
         propBox.getChildren().addAll(propContent, errorMessage);

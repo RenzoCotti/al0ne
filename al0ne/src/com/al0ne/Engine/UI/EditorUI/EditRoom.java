@@ -184,7 +184,19 @@ public class EditRoom {
                 }
             }
         });
-        listRoom.getChildren().addAll(roomsList, load);
+
+        Button delete = new Button("Delete Room");
+        delete.setOnAction(t->{
+            int selectedIndex = roomsList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                IdName idName = roomsList.getSelectionModel().getSelectedItem();
+                roomsList.getItems().remove(idName);
+                Main.edit.getCurrentEdit().getCurrentWorld().getRooms().remove(idName.getId());
+
+                roomsList.setItems(getRooms());
+            }
+        });
+        listRoom.getChildren().addAll(roomsList, load, delete);
 
 
         temp.getChildren().addAll(createRoomBox, listRoom);
