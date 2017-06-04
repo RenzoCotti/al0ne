@@ -34,8 +34,8 @@ public class Food extends Item {
     @Override
     public int used(Room currentRoom, Player player) {
         if(!player.hasNeeds()){
-            //to review
-            return 0;
+            printToLog("Yum, tasty!");
+            return 1;
         }
         if (player.hasStatus("starving")){
             player.removeStatus("starving");

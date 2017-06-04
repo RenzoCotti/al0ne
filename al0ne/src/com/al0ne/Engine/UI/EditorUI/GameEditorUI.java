@@ -3,7 +3,6 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
-import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,7 +43,7 @@ public class GameEditorUI {
                 String gameName = gameList.getSelectionModel().getSelectedItem();
                 EditingGame eg = Main.edit.getGames().get(gameName);
 
-                GameChanges.save(gameName, null, eg.getCurrentEdit());
+                GameChanges.save(gameName, null, eg.getCurrentEdit(), true);
             }
         });
 

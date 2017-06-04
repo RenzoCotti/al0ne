@@ -3,6 +3,7 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
+import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
@@ -24,18 +25,24 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class GameChanges {
 
-    public static void save(String s, String path, Game g){
+    public static void save(String s, String path, Object g, boolean game){
         FileOutputStream fop = null;
         ObjectOutputStream oos = null;
         File file;
 
-        g.setNotes(Main.notes.getText());
+        if(g instanceof Game){
+            ((Game) g).setNotes(Main.notes.getText());
+        }
 
         try {
-            if (path != null){
+            if (path != null && game){
                 file = new File(path+".save");
-            } else{
+            } else if (game) {
                 file = new File("./"+s+".save");
+            } else if(path != null){
+                file = new File(path+".edtr");
+            } else{
+                file = new File("./"+s+".edtr");
             }
             fop = new FileOutputStream(file);
 
@@ -79,39 +86,43 @@ public class GameChanges {
         }
     }
 
-    public static void load(String s, String path){
-        Game loaded = deserializeGame(s, path);
+    public static boolean load(String s, String path, boolean game){
+        Object loaded = deserializeGame(s, path);
         if (loaded == null){
             printToLog("Failed to load the game.");
-            return;
+            return false;
+        } else if(loaded instanceof Game && game){
+            Game loadedGame = (Game) loaded;
+            Main.game = loadedGame;
+            Main.player = loadedGame.getPlayer();
+            Main.turnCounter = loadedGame.getTurnCount();
+            Main.currentRoom = loadedGame.getRoom();
+            Main.notes.setText(loadedGame.getNotes());
+
+            printToLog("Game loaded successfully.");
+            printToLog();
+            Main.currentRoom.printRoom();
+            Main.currentRoom.printName();
+            return true;
+        } else if(loaded instanceof EditorInfo && !game){
+            Main.edit = (EditorInfo) loaded;
+            return true;
+        } else {
+            System.out.println("error: file loaded not recognised");
+            return false;
         }
-
-        Main.game = loaded;
-        Main.player = loaded.getPlayer();
-        Main.turnCounter = loaded.getTurnCount();
-        Main.currentRoom = loaded.getRoom();
-        Main.notes.setText(loaded.getNotes());
-
-        printToLog("Game loaded successfully.");
-        printToLog();
-        Main.currentRoom.printRoom();
-        Main.currentRoom.printName();
-
-
     }
 
-    private static Game deserializeGame(String filename, String path) {
+    private static Object deserializeGame(String filename, String path) {
 
-        Game game;
+        Object read;
 
         FileInputStream fin = null;
         ObjectInputStream ois = null;
 
         try {
-            Path p;
             String toUse;
             if (path != null){
-                p = FileSystems.getDefault().getPath("", "myFile");
                 fin = new FileInputStream(path);
                 toUse = path;
             } else{
@@ -124,7 +135,8 @@ public class GameChanges {
                     Files.readAllBytes(Paths.get(toUse))));
 
             ois = new ObjectInputStream(arrayIn);
-            game = (Game) ois.readObject();
+            read = ois.readObject();
+
 
         } catch (Exception ex) {
             printToLog("File not found");
@@ -149,7 +161,12 @@ public class GameChanges {
 
         }
 
-        return game;
+        if(read instanceof Game || read instanceof EditorInfo){
+            return read;
+        } else{
+            System.out.println("error loading file");
+            return null;
+        }
 
     }
 

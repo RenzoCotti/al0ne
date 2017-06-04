@@ -48,9 +48,9 @@ public class EditPlayer {
 
         ArrayList<Item> inventory = new ArrayList<>();
 
-        Label createNewProp = new Label("Create the player:");
-        createNewProp.setStyle("-fx-font-weight: bold");
-        itemContent.add(createNewProp, 0, 0);
+        Label createPlayer = new Label("Create the player:");
+        createPlayer.setStyle("-fx-font-weight: bold");
+        itemContent.add(createPlayer, 0, 0);
 
         TextField nameText = new TextField();
         nameText.setPromptText("Bob");
@@ -107,7 +107,7 @@ public class EditPlayer {
         itemContent.add(damage, 1, 9);
 
         Label errorLabel = new Label("");
-        errorLabel.setStyle("-fx-font-weight: bold; -fx-text-inner-color: red;");
+        errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
 
         Button addItem = new Button("Add Item");
         addItem.setOnAction(t->{
@@ -116,6 +116,13 @@ public class EditPlayer {
                 IdNameType id = itemTable.getSelectionModel().getSelectedItem();
                 Item i = Main.edit.getCurrentEdit().getItems().get(id.getId());
                 inventory.add(i);
+                itemTable.setStyle("");
+                errorLabel.setText("");
+
+            } else {
+                errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
+                itemTable.setStyle("-fx-border-color: red");
+                errorLabel.setText("Please select an item to add.");
             }
         });
         itemContent.add(addItem, 0, 10);
@@ -150,7 +157,10 @@ public class EditPlayer {
                 nameText.setStyle("");
                 storyText.setStyle("");
                 create.setText("Save changes");
+                errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: green;");
+                errorLabel.setText("Player created successfully");
             } else{
+                errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
                 if(name.equals("")){
                     errorLabel.setText("Please insert a valid name");
                     nameText.setStyle("-fx-border-color: red;");
@@ -161,7 +171,7 @@ public class EditPlayer {
                 }
 
                 if(Main.edit.getCurrentEdit().getCurrentWorld().getStartingRoom() == null){
-                    errorLabel.setText("Please create and set a room as starting room.");
+                    errorLabel.setText("Please create and \nset a room as starting room.");
                 }
 
             }

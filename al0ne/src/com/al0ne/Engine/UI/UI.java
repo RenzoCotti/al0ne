@@ -7,16 +7,11 @@ import com.al0ne.Engine.*;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -96,7 +91,7 @@ public class UI {
                 } catch (Exception ex){
                     Main.game.setPlayer(player);
                     Main.game.setRoom(currentRoom);
-                    GameChanges.save("autosave", null, Main.game);
+                    GameChanges.save("autosave", null, Main.game, true);
                     Utility.dumpToFile("gameDump", Main.log.getText());
                     Popups.crashPopup(stage);
                     ex.printStackTrace();

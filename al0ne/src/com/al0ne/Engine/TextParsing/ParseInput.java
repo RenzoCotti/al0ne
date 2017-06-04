@@ -43,7 +43,7 @@ public class ParseInput {
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: SAVE path_of_the_save_file");
                 } else {
-                    GameChanges.save(parsedInput[1], null, Main.game);
+                    GameChanges.save(parsedInput[1], null, Main.game, true);
                 }
                 return false;
 
@@ -51,7 +51,7 @@ public class ParseInput {
                 if (parsedInput.length < 2) {
                     printToLog("The syntax is: LOAD path_of_the_save_file");
                 } else {
-                    GameChanges.load(parsedInput[1], null);
+                    GameChanges.load(parsedInput[1], null, true);
                 }
                 return false;
 

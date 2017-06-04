@@ -8,12 +8,13 @@ import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by BMW on 27/05/2017.
  */
-public class EditingGame {
+public class EditingGame implements Serializable{
 
     private Game currentEdit;
 
