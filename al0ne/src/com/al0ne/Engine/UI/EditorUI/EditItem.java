@@ -41,8 +41,6 @@ public class EditItem {
 
 
 
-
-
         GridPane itemContent = new GridPane();
 
         Label createNewItem = new Label("Create new item:");

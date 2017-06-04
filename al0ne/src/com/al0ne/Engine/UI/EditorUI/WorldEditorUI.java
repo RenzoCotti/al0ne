@@ -1,6 +1,7 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Engine.Editing.IdNameType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import static com.al0ne.Engine.UI.EditorUI.EditItem.createItem;
+import static com.al0ne.Engine.UI.EditorUI.EditPlayer.createPlayer;
 import static com.al0ne.Engine.UI.EditorUI.EditProp.createProp;
 import static com.al0ne.Engine.UI.EditorUI.EditRoom.createRoom;
 
@@ -25,18 +27,20 @@ public class WorldEditorUI {
 
         Tab items = createItem();
 
-
         Tab props = createProp();
 
         Tab npc = createNPC();
 
         Tab enemy = createEnemy();
 
+        Tab player = createPlayer();
+        player.setText("Player");
+
         Tab other = new Tab();
         other.setText("Other");
         other.setClosable(false);
 
-        editor.getTabs().addAll(rooms, items, props, npc, enemy, other);
+        editor.getTabs().addAll(rooms, items, props, npc, enemy, player, other);
         VBox temp = new VBox();
         temp.getChildren().add(editor);
         return temp;

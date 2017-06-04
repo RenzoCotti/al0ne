@@ -25,7 +25,7 @@ public class Main extends Application{
 
     public static TextArea notes;
 
-    public static WarpGame game = new WarpGame();
+    public static Game game = new WarpGame();
 
     public static Player player = game.getPlayer();
 

@@ -54,7 +54,6 @@ public class Player extends WorldCharacter {
 
     //various
     private boolean hasNeeds;
-    private String story;
 
     //maps questID to boolean
     private HashMap<String, Boolean> quests;
@@ -70,16 +69,38 @@ public class Player extends WorldCharacter {
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
-    public Player(boolean needs, int maxWeight, Room currentRoom, String story) {
-        super("alpha", "player", "nix", "da",
+    public Player(boolean needs, double maxWeight, Room currentRoom, String story) {
+        super("alpha", "player", story, "da",
         10, 70, 30, 0, 1);
         this.currentRoom = currentRoom;
         this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.wornItems = new HashMap<>();
-        this.story = story;
         this.quests = new HashMap<>();
         this.causeOfDeath = "unknown causes";
+        initialiseWorn();
+        if(needs){
+            putStatus(new Thirst());
+            putStatus(new Hunger());
+        }
+        this.hasNeeds = needs;
+        putStatus(new NaturalHealing());
+    }
+
+    //creates a new Player, sets the current Room to currentRoom
+    //inventory is empty, weight is 0
+    //add thirst and hunger if needs is true
+    public Player( String name, String story, boolean needs, Room currentRoom,
+                  int maxHealth, int attack, int dexterity, int armor, int damage, double maxWeight ) {
+        super("alpha", name, story, "da",
+                maxHealth, attack, dexterity, armor, damage);
+        this.currentRoom = currentRoom;
+        this.maxWeight = maxWeight;
+        this.currentWeight=0;
+        this.wornItems = new HashMap<>();
+        this.quests = new HashMap<>();
+        this.causeOfDeath = "unknown causes";
+        setLongDescription("You are "+name+".\n"+story);
         initialiseWorn();
         if(needs){
             putStatus(new Thirst());
@@ -901,7 +922,7 @@ public class Player extends WorldCharacter {
 
     //returns the story of the player
     public String getStory() {
-        return story;
+        return getLongDescription();
     }
 
     //returns the quests

@@ -86,7 +86,7 @@ public class GameChanges {
             return;
         }
 
-        Main.game = (WarpGame) loaded;
+        Main.game = loaded;
         Main.player = loaded.getPlayer();
         Main.turnCounter = loaded.getTurnCount();
         Main.currentRoom = loaded.getRoom();
@@ -158,8 +158,8 @@ public class GameChanges {
         World oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
         oldWorld.setPlayer(Main.player);
 
-        if (!Main.game.hasWarpstone()){
-            Main.game.setWarpstone();
+        if (Main.game instanceof WarpGame && !((WarpGame) Main.game).hasWarpstone()){
+            ((WarpGame) Main.game).setWarpstone();
 
             for (World w : Main.game.getWorlds().values()){
                 Player p = w.getPlayer();

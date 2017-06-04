@@ -185,6 +185,16 @@ public class EditRoom {
             }
         });
 
+        Button start = new Button("Set as starting room");
+        start.setOnAction(t->{
+            int selectedIndex = roomsList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                IdName idName = roomsList.getSelectionModel().getSelectedItem();
+                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(idName.getId());
+                Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);
+            }
+        });
+
         Button delete = new Button("Delete Room");
         delete.setOnAction(t->{
             int selectedIndex = roomsList.getSelectionModel().getSelectedIndex();
@@ -196,7 +206,7 @@ public class EditRoom {
                 roomsList.setItems(getRooms());
             }
         });
-        listRoom.getChildren().addAll(roomsList, load, delete);
+        listRoom.getChildren().addAll(roomsList, load, start, delete);
 
 
         temp.getChildren().addAll(createRoomBox, listRoom);

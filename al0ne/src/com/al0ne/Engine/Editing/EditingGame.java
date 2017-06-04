@@ -17,8 +17,6 @@ public class EditingGame {
 
     private Game currentEdit;
 
-    private World currentWorld;
-
     private HashMap<String, Item> items;
 
     private HashMap<String, Prop> props;
@@ -48,11 +46,11 @@ public class EditingGame {
     }
 
     public World getCurrentWorld() {
-        return currentWorld;
+        return currentEdit.getWorlds().get(currentEdit.getCurrentWorld());
     }
 
     public void setCurrentWorld(World currentWorld) {
-        this.currentWorld = currentWorld;
+        currentEdit.setCurrentWorld(currentWorld.getWorldName());
     }
 
     public HashMap<String, Item> getItems() {

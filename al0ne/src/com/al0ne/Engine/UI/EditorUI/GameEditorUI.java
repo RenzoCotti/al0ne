@@ -3,6 +3,7 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
+import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +18,37 @@ import javafx.stage.Stage;
 public class GameEditorUI {
     public static HBox createEditor(Stage s){
 
-        VBox gameList = createList(s);
+        VBox listContainer = new VBox();
+
+        ListView<String> gameList = new ListView<>();
+        gameList.setId("gamelist");
+        ObservableList<String> items =FXCollections.observableArrayList (getGameData());
+        gameList.setItems(items);
+
+
+        Button load = new Button("Load Game");
+        load.setOnAction(t -> {
+            int selectedIndex = gameList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                EditingGame current = Main.edit.getGames().get(gameList.getItems().get(selectedIndex));
+                Main.edit.setCurrentEdit(current);
+                Popups.openWorldEditor();
+                s.close();
+            }
+        });
+
+        Button export = new Button("Export game");
+        export.setOnAction(t->{
+            int selectedIndex = gameList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                String gameName = gameList.getSelectionModel().getSelectedItem();
+                EditingGame eg = Main.edit.getGames().get(gameName);
+
+                GameChanges.save(gameName, null, eg.getCurrentEdit());
+            }
+        });
+
+        listContainer.getChildren().addAll(gameList, load, export);
 
         VBox newGameBox = new VBox();
 
@@ -48,12 +79,15 @@ public class GameEditorUI {
                 errorMessage.setText("");
                 EditingGame newGame = new EditingGame(nameText.getText());
                 World newWorld = new World(worldText.getText());
+
                 newGame.getCurrentEdit().addWorld(newWorld);
                 newGame.setCurrentWorld(newWorld);
+
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);
+
                 Popups.openWorldEditor();
-                updateList((ListView<String>) gameList.getChildren().get(0));
+                gameList.setItems(getGameData());
                 s.close();
             } else{
                 if(!nameText.getText().equals("")){
@@ -68,37 +102,15 @@ public class GameEditorUI {
             }
         });
 
+
+
         newGameBox.getChildren().addAll(nameLabel, nameText, worldLabel, worldText, create, errorMessage);
 
 
 
         HBox temp = new HBox();
-        temp.getChildren().addAll(newGameBox, gameList);
+        temp.getChildren().addAll(newGameBox, listContainer);
         return temp;
-    }
-
-    public static VBox createList(Stage s){
-        VBox list = new VBox();
-
-        ListView<String> games = new ListView<>();
-        games.setId("gamelist");
-        ObservableList<String> items =FXCollections.observableArrayList (getGameData());
-        games.setItems(items);
-
-
-        Button load = new Button("Load Game");
-        load.setOnAction(t -> {
-            int selectedIndex = games.getSelectionModel().getSelectedIndex();
-            if(selectedIndex > -1){
-                EditingGame current = Main.edit.getGames().get(games.getItems().get(selectedIndex));
-                Main.edit.setCurrentEdit(current);
-                Popups.openWorldEditor();
-                s.close();
-            }
-        });
-        list.getChildren().addAll(games, load);
-
-        return list;
     }
 
     public static ObservableList<String> getGameData(){
@@ -112,10 +124,6 @@ public class GameEditorUI {
             }
         }
         return data;
-    }
-
-    public static void updateList(ListView<String> list){
-        list.setItems(getGameData());
     }
 
 
