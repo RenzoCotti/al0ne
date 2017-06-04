@@ -312,7 +312,11 @@ public class Room extends Entity {
                 }
             }
         }
-        printToSingleLine(toPrint+".");
+        if(exits.values().size() > 0){
+            printToSingleLine(toPrint+".");
+        } else{
+            printToLog("This room has no exits that you can see.");
+        }
     }
 
     //this function prints every time a room is discovered
