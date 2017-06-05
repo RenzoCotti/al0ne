@@ -55,7 +55,8 @@ public class GameEditorUI {
             if(selectedIndex > -1){
                 String gameName = gameList.getSelectionModel().getSelectedItem();
                 Game g = GameChanges.copyGame(Main.edit.getGames().get(gameName).getCurrentEdit());
-                if(g != null){
+                if(g != null && g.getPlayer() != null &&
+                        g.getWorlds().get(g.getCurrentWorld()).getStartingRoom() != null){
                     Main.game = g;
                     Main.player = g.getPlayer();
                     Main.turnCounter = g.getTurnCount();
@@ -68,7 +69,7 @@ public class GameEditorUI {
                     Main.currentRoom.printName();
                     s.close();
                 } else {
-                    System.out.println("ripperoni");
+                    System.out.println("player is null, room is null or game is broken");
                 }
 
             }
@@ -114,7 +115,6 @@ public class GameEditorUI {
 
                 Popups.openWorldEditor();
                 gameList.setItems(getGameData());
-                s.close();
             } else{
                 if(!nameText.getText().equals("")){
                     errorMessage.setText("Please insert a name.");

@@ -104,14 +104,4 @@ public abstract class Entity implements Serializable, Cloneable{
         this.longDescription = longDescription;
     }
 
-    public Entity getClone(){
-        Entity temp;
-        try{
-            temp = (Entity) this.clone();
-        } catch (Exception ex){
-            temp = null;
-        }
-
-        return temp;
-    }
 }

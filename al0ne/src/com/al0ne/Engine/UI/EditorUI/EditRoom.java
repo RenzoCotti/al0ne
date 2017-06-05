@@ -39,7 +39,7 @@ public class EditRoom {
         GridPane createRoomBox = new GridPane();
 
 
-        ArrayList<Entity> entities = new ArrayList<>();
+        HashMap<String, Pair> entities = new HashMap<>();
         HashMap<String, Room> exits = new HashMap<>();
 
 
@@ -121,8 +121,8 @@ public class EditRoom {
                 }
 
                 if(entities.size() > 0){
-                    for(Entity e: entities){
-                        r.addEntity(e);
+                    for(Pair p: entities.values()){
+                        r.addEntity(p.getEntity(), p.getCount());
                     }
                     entities.clear();
                 }
@@ -146,7 +146,7 @@ public class EditRoom {
                 nameText.clear();
                 descText.clear();
                 customExit.clear();
-
+                Main.edit.getCurrentEdit().setCurrentEntity(null);
 
             }  else {
                 if(name.equals("")){
@@ -171,11 +171,12 @@ public class EditRoom {
             if(selectedIndex > -1){
                 Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(roomsList.getSelectionModel().getSelectedItem().getId());
                 create.setText("Save changes");
+                Main.edit.getCurrentEdit().setCurrentEntity(r);
 //                roomContent.getChildren().remove(idLabel);
                 idLabel.setText(r.getID());
 //                roomContent.add(idLabel, 0, 0);
-                for(Pair p: r.getEntities().values()){
-                    entities.add(p.getEntity());
+                for(String s: r.getEntities().keySet()){
+                    entities.put(s, r.getEntities().get(s));
                 }
                 entities.clear();
                 nameText.setText(r.getName());

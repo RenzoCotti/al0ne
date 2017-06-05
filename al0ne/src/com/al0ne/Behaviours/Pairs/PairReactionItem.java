@@ -1,10 +1,12 @@
 package com.al0ne.Behaviours.Pairs;
 import com.al0ne.Behaviours.Item;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 09/03/2017.
  */
-public class PairReactionItem {
+public class PairReactionItem implements Serializable{
     private String questID;
     private Item reward;
 

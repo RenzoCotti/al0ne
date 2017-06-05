@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Editing.IdName;
+import com.al0ne.Engine.Editing.IdNameTypeQty;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.EditorUI.*;
@@ -278,15 +279,14 @@ public class Popups {
         s.show();
     }
 
-    public static void openAddEntity(ArrayList<Entity> entities){
+    public static void openAddEntity(HashMap<String, Pair> entities){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         HBox totalContainer = new HBox();
         VBox selectionContainer = new VBox();
-        selectionContainer.setMinSize(300, 200);
         selectionContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        TableView<IdNameType> entityList = new TableView<>();
+        TableView<IdNameTypeQty> entityList = new TableView<>();
         entityList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn entityID = new TableColumn("ID");
@@ -301,25 +301,39 @@ public class Popups {
         entityType.setMinWidth(120);
         entityType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
-        entityList.getColumns().addAll(entityID, entityName, entityType);
+        TableColumn entityQty = new TableColumn("Qty");
+        entityQty.setMinWidth(120);
+        entityQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+
+
+        entityList.getColumns().addAll(entityID, entityName, entityType, entityQty);
 
         Entity e = Main.edit.getCurrentEdit().getCurrentEntity();
+        ObservableList<IdNameTypeQty> entityArray;
+
+        //case this is a room we're editing
         if(e != null && e instanceof Room){
-            if(Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(e.getID()) != null){
-                for(Pair p: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(e.getID()).getEntities().values()){
-                    entities.add(p.getEntity());
+            //and it's a room that already exist, fill the HashMap
+            HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getRooms();
+            if(rooms.get(e.getID()) != null){
+                for(String id: rooms.get(e.getID()).getEntities().keySet()){
+                    entities.put(id, rooms.get(e.getID()).getEntities().get(id));
                 }
+                entityArray = FXCollections.observableArrayList(getEntities(entities, e.getID()));
+            } else {
+                entityArray = FXCollections.observableArrayList(getEntities(entities, null));
             }
+        } else {
+            entityArray = FXCollections.observableArrayList(getEntities(entities, null));
         }
 
 
-        ObservableList<IdNameType> entityArray = FXCollections.observableArrayList(getEntities(entities));
 
 
         entityList.setItems(entityArray);
 
 
-        TabPane parent = new TabPane();
+        TabPane entityToAddList = new TabPane();
 
         Tab item = new Tab();
         item.setText("Item");
@@ -340,44 +354,66 @@ public class Popups {
         npcs.setContent(npcList);
 
 
-        parent.getTabs().addAll(item, props, npcs);
+        entityToAddList.getTabs().addAll(item, props, npcs);
 
+        Spinner<Integer> quantity = new Spinner<>();
+        quantity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 1, 1));
+        Label quantityLabel = new Label("How many?:");
 
 
         Button add = new Button("Add Entity");
 
         add.setOnAction(t->{
-            String tab = parent.getSelectionModel().getSelectedItem().getText();
+            String tab = entityToAddList.getSelectionModel().getSelectedItem().getText();
+            int quantityValue = quantity.getValue();
             if(tab.equals("Item")){
-                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
+                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
-                entities.add(Main.edit.getCurrentEdit().getItems().get(temp.getId()));
+                Item currentItem = Main.edit.getCurrentEdit().getItems().get(temp.getId());
+                entities.put(currentItem.getID(), new Pair(currentItem, quantityValue));
             } else if (tab.equals("Props")){
-                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
+                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
-                entities.add(Main.edit.getCurrentEdit().getProps().get(temp.getId()));
+                Prop currentProp = Main.edit.getCurrentEdit().getProps().get(temp.getId());
+                entities.put(currentProp.getID(), new Pair(currentProp, quantityValue));
             } else if (tab.equals("NPCs")){
-                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
+                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
-                entities.add(Main.edit.getCurrentEdit().getNpcs().get(temp.getId()));
+                NPC currentNPC = Main.edit.getCurrentEdit().getNpcs().get(temp.getId());
+                entities.put(currentNPC.getID(), new Pair(currentNPC, quantityValue));
             }
 
-            entityList.setItems(FXCollections.observableArrayList(getEntities(entities)));
+            quantity.getValueFactory().setValue(1);
+
+            if(e != null && e instanceof Room){
+                //and it's a room that already exist, fill the HashMap
+                HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getRooms();
+                if(rooms.get(e.getID()) != null){
+                    System.out.println("here");
+                    entityList.setItems(FXCollections.observableArrayList(getEntities(entities, e.getID())));
+                } else {
+                    System.out.println("here1");
+                    entityList.setItems(FXCollections.observableArrayList(getEntities(entities, null)));
+                }
+            } else {
+                System.out.println("here2");
+                entityList.setItems(FXCollections.observableArrayList(getEntities(entities, null)));
+            }
+
+
 
         });
         Button done = new Button("Done");
         done.setOnAction(t->{
-//            for (Entity e: entities){
-//                System.out.println(e.getName());
-//            }
             s.close();
         });
 
-        HBox temp = new HBox();
-        temp.getChildren().addAll(add, done);
-        selectionContainer.getChildren().addAll(parent, temp);
+        HBox buttonsAlign = new HBox();
+        buttonsAlign.getChildren().addAll(add, done);
+
+        selectionContainer.getChildren().addAll(entityToAddList, quantityLabel, quantity, buttonsAlign);
         totalContainer.getChildren().addAll(selectionContainer, entityList);
-        totalContainer.setPrefSize(600, 600);
+        totalContainer.setPrefSize(700, 600);
         totalContainer.setPadding(new Insets(10, 10, 10, 10));
 
         Scene dialogScene = new Scene(totalContainer);
@@ -502,22 +538,21 @@ public class Popups {
         return FXCollections.observableArrayList(temp);
     }
 
-
-    public static ArrayList<IdNameType> getEntities(ArrayList<Entity> entities){
-        ArrayList<IdNameType> temp = new ArrayList<>();
-        for(Entity e : entities){
+    public static ArrayList<IdNameTypeQty> getEntities(HashMap<String, Pair> entities, String roomID){
+        ArrayList<IdNameTypeQty> temp = new ArrayList<>();
+        for(String id : entities.keySet()){
+            Entity e = entities.get(id).getEntity();
             if(e instanceof Item){
-                temp.add(new IdNameType(e.getID(), e.getName(), "Item"));
+                temp.add(new IdNameTypeQty(e.getID(), e.getName(), "Item", entities.get(id).getCount()));
             } else if(e instanceof Prop){
-                temp.add(new IdNameType(e.getID(), e.getName(), "Prop"));
+                temp.add(new IdNameTypeQty(e.getID(), e.getName(), "Prop", entities.get(id).getCount()));
             } else if(e instanceof NPC){
-                temp.add(new IdNameType(e.getID(), e.getName(), "NPC"));
+                temp.add(new IdNameTypeQty(e.getID(), e.getName(), "NPC", entities.get(id).getCount()));
             } else if(e instanceof Enemy){
-                temp.add(new IdNameType(e.getID(), e.getName(), "Enemy"));
+                temp.add(new IdNameTypeQty(e.getID(), e.getName(), "Enemy", entities.get(id).getCount()));
             }
         }
         return temp;
     }
-
 
 }

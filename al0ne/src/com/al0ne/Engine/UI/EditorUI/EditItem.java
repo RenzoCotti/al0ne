@@ -103,6 +103,9 @@ public class EditItem {
         ObservableList<String> foodOrDrink = FXCollections.observableArrayList("Food", "Drink");
         ComboBox<String> foodDisplay = new ComboBox<>(foodOrDrink);
         foodDisplay.valueProperty().addListener( (ov, t, t1) ->{
+            if(t1 == null){
+                return;
+            }
             if (t1.equals("Food")){
                 itemContent.add(foodLabel, 0, 11);
                 itemContent.add(foodValue, 1, 11);
