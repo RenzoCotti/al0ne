@@ -171,7 +171,7 @@ public class AlphaWorld extends World{
                 null, null, Material.WOOD));
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it."));
         shopRoom.addEntity(new Prop("apple", "A red apple. Probably better not to take it."));
-        Shopkeeper bob = new Shopkeeper("Bob", "a fairly chubby man with a glint in his eyes.", "a clever looking man", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
+        Shopkeeper bob = new Shopkeeper("Bob", "a fairly chubby man with a glint in his eyes.", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
         bob.simpleAddItem(new Dagger(Material.IRON), 5);
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);

@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static com.al0ne.Engine.Main.printToLog;
+
 /**
  * Created by BMW on 17/05/2017.
  */
@@ -47,7 +49,27 @@ public class GameEditorUI {
             }
         });
 
-        listContainer.getChildren().addAll(gameList, load, export);
+        Button play = new Button("Play game");
+        play.setOnAction(t->{
+            int selectedIndex = gameList.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                String gameName = gameList.getSelectionModel().getSelectedItem();
+                Game g = Main.edit.getGames().get(gameName).getCurrentEdit();
+                Main.game = g;
+                Main.player = g.getPlayer();
+                Main.turnCounter = g.getTurnCount();
+                Main.currentRoom = g.getRoom();
+                Main.notes.setText(g.getNotes());
+
+                printToLog("Game loaded successfully.");
+                printToLog();
+                Main.currentRoom.printRoom();
+                Main.currentRoom.printName();
+                s.close();
+            }
+        });
+
+        listContainer.getChildren().addAll(gameList, load, export, play);
 
         VBox newGameBox = new VBox();
 

@@ -16,9 +16,9 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Shopkeeper extends NPC {
     private String list;
 
-    public Shopkeeper(String name, String description, String shortDescription, String intro,
+    public Shopkeeper(String name, String description, String intro,
                       int maxHealth, int attack, int dexterity, int armor, int damage) {
-        super(name, description,shortDescription, intro, maxHealth, attack, dexterity, armor, damage);
+        super(name, description, intro, maxHealth, attack, dexterity, armor, damage);
         inventory = new HashMap<>();
         list="Items: ";
         isShopkeeper=true;
@@ -26,13 +26,6 @@ public class Shopkeeper extends NPC {
 
     public Shopkeeper(String name, String description, String intro) {
         super(name, description, intro);
-        inventory = new HashMap<>();
-        list="I sell these items: \n";
-        isShopkeeper=true;
-    }
-
-    public Shopkeeper(String name, String description, String shortDescription, String intro) {
-        super(name, description, shortDescription, intro);
         inventory = new HashMap<>();
         list="I sell these items: \n";
         isShopkeeper=true;

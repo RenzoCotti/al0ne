@@ -3,6 +3,7 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
+import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
@@ -264,6 +265,88 @@ public class GameChanges {
         printToLog();
         Main.player.getCurrentRoom().printName();
         Main.player.getCurrentRoom().printRoom();
+    }
+
+    public static Game copyGame(Game g){
+
+        ObjectInputStream ois = null;
+        ObjectOutputStream oos = null;
+
+        Game copy = null;
+
+        try {
+
+            ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
+            ByteArrayInputStream arrayIn = new ByteArrayInputStream(arrayOut.toByteArray());
+            ois = new ObjectInputStream(arrayIn);
+
+
+            //we write into an array of bytes
+            oos = new ObjectOutputStream(arrayOut);
+
+
+            oos.writeObject(g);
+            try{
+                copy = (Game) ois.readObject();
+            } catch (Exception ex){
+                copy = null;
+            }
+
+            oos.flush();
+            oos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            if (oos != null) {
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (ois != null) {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return copy;
+        }
+
+//        Game tempGame = new Game(g.getGameName());
+//        for(String worldName : g.getWorlds().keySet()){
+//            World w = g.getWorlds().get(worldName);
+//            World tempWorld = new World(w.getWorldName());
+//            for(String roomName : w.getRooms().keySet()){
+//                Room r = w.getRooms().get(roomName);
+//                Room tempRoom = new Room(r.getName(), r.getLongDescription());
+//                for(String entityName: r.getEntities().keySet()){
+//                    Pair p = r.getEntities().get(entityName);
+//                    Pair tempPair = new Pair(p.getEntity().getClone(), p.getCount());
+//                    if(tempPair.getEntity() != null){
+//                        tempRoom.addEntity(tempPair.getEntity(), p.getCount());
+//                    }
+//                }
+//                for(String exit : r.getExits().keySet()){
+//                    //problem
+//                }
+//
+//                tempWorld.putRoom(tempRoom);
+//                tempWorld.setStartingRoom(tempWorld.getRooms().get(w.getStartingRoom().getID()));
+//                Player p = w.getPlayer();
+//                Player tempPlayer = new Player(p.getName(), p.getStory(), p.hasNeeds(), w.getStartingRoom(),
+//                        p.getMaxHealth(), p.getAttack(), p.getDexterity(), p.getArmorLevel(),
+//                        p.getDamage(), p.getMaxWeight());
+//                tempWorld.setPlayer(tempPlayer);
+//            }
+//        }
+//
+//        return tempGame;
     }
 
 }

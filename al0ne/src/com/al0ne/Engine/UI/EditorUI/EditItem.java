@@ -328,8 +328,11 @@ public class EditItem {
                     nameText.clear();
                     descText.clear();
                     weightText.getValueFactory().setValue(0.0);
-                    materialDisplay.getSelectionModel().clearSelection();
-                    sizeDisplay.getSelectionModel().clearSelection();
+                    materialDisplay.getSelectionModel().select(materialList.size()-1);
+                    sizeDisplay.getSelectionModel().select(sizeList.size()/2);
+                    armorDisplay.getSelectionModel().clearSelection();
+                    damageDisplay.getSelectionModel().clearSelection();
+                    foodDisplay.getSelectionModel().clearSelection();
                     typeDisplay.getSelectionModel().clearSelection();
 
                     itemContent.getChildren().remove(foodLabel);
@@ -491,7 +494,10 @@ public class EditItem {
 
         return FXCollections.observableArrayList (temp);
     }
-
+//todo reset weapon/armor spinners, remove steel steel bar
+    //add prop commands, maybe on game also?
+    //button to run directly edited game?
+    //add default items in menu?
 
     public static boolean checkIfExists(String s){
         for (Item i : Main.edit.getCurrentEdit().getItems().values()){

@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import static com.al0ne.Engine.UI.EditorUI.EditItem.createItem;
+import static com.al0ne.Engine.UI.EditorUI.EditNPC.createNPC;
 import static com.al0ne.Engine.UI.EditorUI.EditPlayer.createPlayer;
 import static com.al0ne.Engine.UI.EditorUI.EditProp.createProp;
 import static com.al0ne.Engine.UI.EditorUI.EditRoom.createRoom;
@@ -44,100 +45,6 @@ public class WorldEditorUI {
         VBox temp = new VBox();
         temp.getChildren().add(editor);
         return temp;
-    }
-
-    public static Tab createNPC(){
-        Tab items = new Tab();
-        items.setText("NPC");
-        items.setClosable(false);
-
-        GridPane itemContent = new GridPane();
-
-        Label createNewProp = new Label("Create new NPC:");
-        createNewProp.setStyle("-fx-font-weight: bold");
-        itemContent.add(createNewProp, 0, 0);
-
-        TextField nameText = new TextField();
-        nameText.setPromptText("Bob");
-        Label nameLabel = new Label("Name:");
-        itemContent.add(nameLabel, 0, 1);
-        itemContent.add(nameText, 1, 1);
-
-        TextField shortDesc = new TextField();
-        shortDesc.setPromptText("a clever-looking man");
-        Label shortDescLabel = new Label("Short Description\n(optional):");
-        itemContent.add(shortDescLabel, 0, 2);
-        itemContent.add(shortDesc, 1, 2);
-
-        TextArea descText = new TextArea();
-        descText.setPrefWidth(100);
-        descText.setPrefHeight(50);
-        Label descLabel = new Label("Description:");
-        descText.setPromptText("A chubby man, wearing a scarf and a silly hat.");
-        itemContent.add(descLabel, 0, 3);
-        itemContent.add(descText, 1, 3);
-
-        TextArea introText = new TextArea();
-        introText.setPrefWidth(100);
-        introText.setPrefHeight(50);
-        Label introLabel = new Label("Intro dialog:");
-        introText.setPromptText("Hi, I'm Bob. How are you?");
-        itemContent.add(introLabel, 0, 4);
-        itemContent.add(introText, 1, 4);
-
-
-        Spinner<Integer> maxHealth = new Spinner<>();
-        maxHealth.setEditable(true);
-        maxHealth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0, 1));
-        Label healthLabel = new Label("Max Health:");
-        itemContent.add(healthLabel, 0, 5);
-        itemContent.add(maxHealth, 1, 5);
-
-        Spinner<Integer> attack = new Spinner<>();
-        attack.setEditable(true);
-        attack.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
-        Label attackLabel = new Label("Attack:");
-        itemContent.add(attackLabel, 0, 6);
-        itemContent.add(attack, 1, 6);
-
-        Spinner<Integer> dex = new Spinner<>();
-        dex.setEditable(true);
-        dex.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
-        Label dexLabel = new Label("Dexterity:");
-        itemContent.add(dexLabel, 0, 7);
-        itemContent.add(dex, 1, 7);
-
-        Spinner<Integer> armor = new Spinner<>();
-        armor.setEditable(true);
-        armor.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 0, 1));
-        Label armorLabel = new Label("Armor:");
-        itemContent.add(armorLabel, 0, 8);
-        itemContent.add(armor, 1, 8);
-
-        Spinner<Integer> damage = new Spinner<>();
-        damage.setEditable(true);
-        damage.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 0, 1));
-        Label damageLabel = new Label("Damage:");
-        itemContent.add(damageLabel, 0, 9);
-        itemContent.add(damage, 1, 9);
-
-        ToggleButton isShopkeeper = new RadioButton("Is shopkeeper?");
-        itemContent.add(isShopkeeper, 1, 10);
-
-        Button addItem = new Button("Add Item");
-        itemContent.add(addItem, 0, 11);
-
-        Button addSubject = new Button("Add Subject");
-        itemContent.add(addSubject, 0, 12);
-
-        Button create = new Button("Create NPC");
-        itemContent.add(create, 0, 15);
-
-        itemContent.setPadding(new Insets(5, 10, 5, 5));
-
-        items.setContent(itemContent);
-
-        return items;
     }
 
 

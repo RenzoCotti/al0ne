@@ -1,9 +1,8 @@
 package com.al0ne.Engine.UI;
 
-import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.World;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Editing.IdName;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.UI.EditorUI.EditNPC.createNPCTable;
 import static com.al0ne.Engine.UI.EditorUI.EditProp.createPropTable;
 
 /**
@@ -286,8 +286,7 @@ public class Popups {
         selectionContainer.setMinSize(300, 200);
         selectionContainer.setPadding(new Insets(10, 10, 10, 10));
 
-        TableView<IdName> entityList = new TableView<>();
-        entityList.setMinSize(300, 200);
+        TableView<IdNameType> entityList = new TableView<>();
         entityList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn entityID = new TableColumn("ID");
@@ -298,7 +297,11 @@ public class Popups {
         entityName.setMinWidth(120);
         entityName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        entityList.getColumns().addAll(entityID, entityName);
+        TableColumn entityType = new TableColumn("Type");
+        entityType.setMinWidth(120);
+        entityType.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        entityList.getColumns().addAll(entityID, entityName, entityType);
 
         Entity e = Main.edit.getCurrentEdit().getCurrentEntity();
         if(e != null && e instanceof Room){
@@ -310,7 +313,7 @@ public class Popups {
         }
 
 
-        ObservableList<IdName> entityArray = FXCollections.observableArrayList(getEntities(entities));
+        ObservableList<IdNameType> entityArray = FXCollections.observableArrayList(getEntities(entities));
 
 
         entityList.setItems(entityArray);
@@ -321,42 +324,23 @@ public class Popups {
         Tab item = new Tab();
         item.setText("Item");
         item.setClosable(false);
-
         TableView<IdNameType> itemList = EditItem.createItemTable();
         item.setContent(itemList);
-        parent.getTabs().add(item);
-
 
         Tab props = new Tab();
         props.setClosable(false);
         props.setText("Props");
-
         TableView<IdNameType> propList = createPropTable();
-
         props.setContent(propList);
 
-        parent.getTabs().add(props);
+        Tab npcs = new Tab();
+        npcs.setClosable(false);
+        npcs.setText("NPCs");
+        TableView<IdNameType> npcList = createNPCTable();
+        npcs.setContent(npcList);
 
 
-//        Tab npc = new Tab();
-//
-//        TableView<IdName> npcList = new TableView<>();
-//        TableColumn npcId = new TableColumn("ID");
-//        npcId.setMinWidth(120);
-//        npcId.setCellValueFactory(new PropertyValueFactory<>("id"));
-//
-//        TableColumn npcName = new TableColumn("Name");
-//        npcName.setMinWidth(120);
-//        npcName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//
-//
-//        npcList.getColumns().addAll(npcId, npcName);
-//
-//        ObservableList<IdName> itemsArray = EditItem.getItems();
-//
-//        itemList.setItems(itemsArray);
-//
-//        item.setContent(itemList);
+        parent.getTabs().addAll(item, props, npcs);
 
 
 
@@ -372,6 +356,10 @@ public class Popups {
                 IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
                         getSelectionModel().getSelectedItem();
                 entities.add(Main.edit.getCurrentEdit().getProps().get(temp.getId()));
+            } else if (tab.equals("NPCs")){
+                IdNameType temp = ((TableView<IdNameType>)parent.getSelectionModel().getSelectedItem().getContent()).
+                        getSelectionModel().getSelectedItem();
+                entities.add(Main.edit.getCurrentEdit().getNpcs().get(temp.getId()));
             }
 
             entityList.setItems(FXCollections.observableArrayList(getEntities(entities)));
@@ -400,13 +388,7 @@ public class Popups {
     }
 
 
-    public static ArrayList<IdName> getEntities(ArrayList<Entity> entities){
-        ArrayList<IdName> temp = new ArrayList<>();
-        for(Entity e : entities){
-            temp.add(new IdName(e.getID(), e.getName()));
-        }
-        return temp;
-    }
+
 
     public static void openAddExit(HashMap<String, Room> exits, String room){
         Stage s = new Stage();
@@ -518,6 +500,23 @@ public class Popups {
             }
         }
         return FXCollections.observableArrayList(temp);
+    }
+
+
+    public static ArrayList<IdNameType> getEntities(ArrayList<Entity> entities){
+        ArrayList<IdNameType> temp = new ArrayList<>();
+        for(Entity e : entities){
+            if(e instanceof Item){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Item"));
+            } else if(e instanceof Prop){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Prop"));
+            } else if(e instanceof NPC){
+                temp.add(new IdNameType(e.getID(), e.getName(), "NPC"));
+            } else if(e instanceof Enemy){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Enemy"));
+            }
+        }
+        return temp;
     }
 
 

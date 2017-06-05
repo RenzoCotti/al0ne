@@ -15,7 +15,7 @@ import static com.al0ne.Engine.Main.printToLog;
  *
  * Item interface
  */
-public abstract class Entity implements Serializable{
+public abstract class Entity implements Serializable, Cloneable{
 
     protected static int entityCounter = 0;
 
@@ -102,5 +102,16 @@ public abstract class Entity implements Serializable{
 
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
+    }
+
+    public Entity getClone(){
+        Entity temp;
+        try{
+            temp = (Entity) this.clone();
+        } catch (Exception ex){
+            temp = null;
+        }
+
+        return temp;
     }
 }

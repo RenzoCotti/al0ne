@@ -27,9 +27,9 @@ public class NPC extends WorldCharacter {
 
     protected boolean isShopkeeper=false;
 
-    public NPC(String name, String description, String shortDescription, String intro,
+    public NPC(String name, String description, String intro,
             int maxHealth, int attack, int dexterity, int armor, int damage) {
-        super("npc"+(entityCounter++), name, description, shortDescription, maxHealth, attack, dexterity, armor, damage);
+        super("npc"+(entityCounter++), name, description, name, maxHealth, attack, dexterity, armor, damage);
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;

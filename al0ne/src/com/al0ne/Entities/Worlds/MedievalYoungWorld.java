@@ -154,8 +154,9 @@ public class MedievalYoungWorld extends World{
         Room  villageMarket = new Room( "Market", "This is the market. " +
                 "There's a mixed smell of sweat and food lingering in the air ");
 
-        Shopkeeper Varra = new Shopkeeper("foodvendor", "Varra",
-                "A fairly tall man, a bit on the chubby side.", "Hi, I'm Varra. Want to see the items i sell?");
+        Shopkeeper Varra = new Shopkeeper("Varra",
+                "A fairly tall man, a bit on the chubby side.",
+                "Hi, I'm Varra. Want to see the items i sell?");
         Varra.simpleAddItem(new Food("eggs",
                 "A pack of six fresh eggs.", 0.3, Size.SMALL, 3), 3);
         villageMarket.addEntity(Varra);
