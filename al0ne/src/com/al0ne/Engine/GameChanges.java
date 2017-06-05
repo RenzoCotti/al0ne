@@ -114,6 +114,17 @@ public class GameChanges {
         }
     }
 
+    public static Game loadAndGetGame(String s, String path){
+        Object loaded = deserializeGame(s, path);
+        if (loaded == null){
+            return null;
+        } else if(loaded instanceof Game){
+            return (Game) loaded;
+        } else {
+            return null;
+        }
+    }
+
     private static Object deserializeGame(String filename, String path) {
 
         Object read;
@@ -267,56 +278,63 @@ public class GameChanges {
         Main.player.getCurrentRoom().printRoom();
     }
 
+
     public static Game copyGame(Game g){
 
-        ObjectInputStream ois = null;
-        ObjectOutputStream oos = null;
+        save("temp123", null, g, true);
+        Game game = loadAndGetGame("temp123.save", null);
+        Utility.removeFile("temp123.save");
 
-        Game copy = null;
+        return game;
 
-        try {
-
-            ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
-            ByteArrayInputStream arrayIn = new ByteArrayInputStream(arrayOut.toByteArray());
-            ois = new ObjectInputStream(arrayIn);
-
-
-            //we write into an array of bytes
-            oos = new ObjectOutputStream(arrayOut);
-
-
-            oos.writeObject(g);
-            try{
-                copy = (Game) ois.readObject();
-            } catch (Exception ex){
-                copy = null;
-            }
-
-            oos.flush();
-            oos.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-
-            if (oos != null) {
-                try {
-                    oos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (ois != null) {
-                try {
-                    ois.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return copy;
-        }
+//        ObjectInputStream ois = null;
+//        ObjectOutputStream oos = null;
+//
+//        Game copy = null;
+//
+//        try {
+//
+//            ByteArrayOutputStream arrayOut = new ByteArrayOutputStream();
+//            ByteArrayInputStream arrayIn = new ByteArrayInputStream(arrayOut.toByteArray());
+//            ois = new ObjectInputStream(arrayIn);
+//
+//
+//            //we write into an array of bytes
+//            oos = new ObjectOutputStream(arrayOut);
+//
+//
+//            oos.writeObject(g);
+//            try{
+//                copy = (Game) ois.readObject();
+//            } catch (Exception ex){
+//                copy = null;
+//            }
+//
+//            oos.flush();
+//            oos.close();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//
+//            if (oos != null) {
+//                try {
+//                    oos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            if (ois != null) {
+//                try {
+//                    ois.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            return copy;
+//        }
 
 //        Game tempGame = new Game(g.getGameName());
 //        for(String worldName : g.getWorlds().keySet()){

@@ -177,6 +177,7 @@ public class EditRoom {
                 for(Pair p: r.getEntities().values()){
                     entities.add(p.getEntity());
                 }
+                entities.clear();
                 nameText.setText(r.getName());
                 descText.setText(r.getLongDescription());
                 if(r.getCustomDirections() != null){

@@ -54,18 +54,23 @@ public class GameEditorUI {
             int selectedIndex = gameList.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
                 String gameName = gameList.getSelectionModel().getSelectedItem();
-                Game g = Main.edit.getGames().get(gameName).getCurrentEdit();
-                Main.game = g;
-                Main.player = g.getPlayer();
-                Main.turnCounter = g.getTurnCount();
-                Main.currentRoom = g.getRoom();
-                Main.notes.setText(g.getNotes());
+                Game g = GameChanges.copyGame(Main.edit.getGames().get(gameName).getCurrentEdit());
+                if(g != null){
+                    Main.game = g;
+                    Main.player = g.getPlayer();
+                    Main.turnCounter = g.getTurnCount();
+                    Main.currentRoom = g.getRoom();
+                    Main.notes.setText(g.getNotes());
 
-                printToLog("Game loaded successfully.");
-                printToLog();
-                Main.currentRoom.printRoom();
-                Main.currentRoom.printName();
-                s.close();
+                    printToLog("Game loaded successfully.");
+                    printToLog();
+                    Main.currentRoom.printRoom();
+                    Main.currentRoom.printName();
+                    s.close();
+                } else {
+                    System.out.println("ripperoni");
+                }
+
             }
         });
 

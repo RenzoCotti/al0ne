@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -75,6 +76,15 @@ public class Utility {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void removeFile(String fileName){
+        try {
+            File f = new File(fileName);
+            f.delete();
+        } catch (Exception x) {
+            System.out.println("Cant remove file");
         }
     }
 
