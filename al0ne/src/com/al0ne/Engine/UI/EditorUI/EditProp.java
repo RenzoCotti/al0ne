@@ -86,8 +86,9 @@ public class EditProp {
 
 
         Label typeLabel = new Label("Type:");
-        ObservableList<String> typeList = FXCollections.observableArrayList("Door", "Locked Door");
+        ObservableList<String> typeList = FXCollections.observableArrayList("Prop", "Door", "Locked Door", "Hide item");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
+        typeDisplay.getSelectionModel().select("Prop");
         propContent.add(typeLabel, 0, 7);
         propContent.add(typeDisplay, 1, 7);
 
@@ -111,7 +112,7 @@ public class EditProp {
             String propType = typeDisplay.getSelectionModel().getSelectedItem();
             if(!name.equals("") && !desc.equals("")){
                 //creating a generic prop
-                if(propType == null){
+                if(propType.equals("Prop")){
                     Entity entity = Main.edit.getCurrentEdit().getCurrentEntity();
                     //we are editing an item
                     if(entity != null && create.getText().equals("Save changes")){
@@ -173,7 +174,6 @@ public class EditProp {
                 create.setText("Save changes");
                 Prop p = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
                 Main.edit.getCurrentEdit().setCurrentEntity(p);
-                System.out.println(p.getName());
                 nameText.setText(p.getName());
                 descText.setText(p.getLongDescription());
                 shortDescText.setText(p.getShortDescription());

@@ -284,25 +284,29 @@ public class Popups {
         s.initModality(Modality.APPLICATION_MODAL);
         HBox totalContainer = new HBox();
         VBox selectionContainer = new VBox();
+        selectionContainer.setMinSize(300, 300);
+
         selectionContainer.setPadding(new Insets(10, 10, 10, 10));
 
         TableView<IdNameTypeQty> entityList = new TableView<>();
+        entityList.setMinSize(400, 300);
+
         entityList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn entityID = new TableColumn("ID");
-        entityID.setMinWidth(120);
+        entityID.setMinWidth(80);
         entityID.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn entityName = new TableColumn("Name");
-        entityName.setMinWidth(120);
+        entityName.setMinWidth(80);
         entityName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn entityType = new TableColumn("Type");
-        entityType.setMinWidth(120);
+        entityType.setMinWidth(80);
         entityType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         TableColumn entityQty = new TableColumn("Qty");
-        entityQty.setMinWidth(120);
+        entityQty.setMinWidth(80);
         entityQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
 
 
@@ -363,25 +367,34 @@ public class Popups {
 
         Button add = new Button("Add Entity");
 
+        Label errorMessage = new Label("");
+        errorMessage.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
+
         add.setOnAction(t->{
             String tab = entityToAddList.getSelectionModel().getSelectedItem().getText();
             int quantityValue = quantity.getValue();
-            if(tab.equals("Item")){
-                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
-                        getSelectionModel().getSelectedItem();
-                Item currentItem = Main.edit.getCurrentEdit().getItems().get(temp.getId());
-                entities.put(currentItem.getID(), new Pair(currentItem, quantityValue));
-            } else if (tab.equals("Props")){
-                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
-                        getSelectionModel().getSelectedItem();
-                Prop currentProp = Main.edit.getCurrentEdit().getProps().get(temp.getId());
-                entities.put(currentProp.getID(), new Pair(currentProp, quantityValue));
-            } else if (tab.equals("NPCs")){
-                IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
-                        getSelectionModel().getSelectedItem();
-                NPC currentNPC = Main.edit.getCurrentEdit().getNpcs().get(temp.getId());
-                entities.put(currentNPC.getID(), new Pair(currentNPC, quantityValue));
+            IdNameType temp = ((TableView<IdNameType>)entityToAddList.getSelectionModel().getSelectedItem().getContent()).
+                    getSelectionModel().getSelectedItem();
+            if(temp != null){
+                if(tab.equals("Item")){
+
+                    Item currentItem = Main.edit.getCurrentEdit().getItems().get(temp.getId());
+                    entities.put(currentItem.getID(), new Pair(currentItem, quantityValue));
+                } else if (tab.equals("Props")){
+                    Prop currentProp = Main.edit.getCurrentEdit().getProps().get(temp.getId());
+                    entities.put(currentProp.getID(), new Pair(currentProp, quantityValue));
+                } else if (tab.equals("NPCs")){
+                    NPC currentNPC = Main.edit.getCurrentEdit().getNpcs().get(temp.getId());
+                    entities.put(currentNPC.getID(), new Pair(currentNPC, quantityValue));
+                }
+                errorMessage.setText("");
+                itemList.setStyle("");
+            } else{
+                errorMessage.setText("Please select the item\nyou'd like to add");
+                itemList.setStyle("-fx-border-color: red");
             }
+
+
 
             quantity.getValueFactory().setValue(1);
 
@@ -389,14 +402,11 @@ public class Popups {
                 //and it's a room that already exist, fill the HashMap
                 HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getRooms();
                 if(rooms.get(e.getID()) != null){
-                    System.out.println("here");
                     entityList.setItems(FXCollections.observableArrayList(getEntities(entities, e.getID())));
                 } else {
-                    System.out.println("here1");
                     entityList.setItems(FXCollections.observableArrayList(getEntities(entities, null)));
                 }
             } else {
-                System.out.println("here2");
                 entityList.setItems(FXCollections.observableArrayList(getEntities(entities, null)));
             }
 
@@ -411,9 +421,9 @@ public class Popups {
         HBox buttonsAlign = new HBox();
         buttonsAlign.getChildren().addAll(add, done);
 
-        selectionContainer.getChildren().addAll(entityToAddList, quantityLabel, quantity, buttonsAlign);
+        selectionContainer.getChildren().addAll(entityToAddList, quantityLabel, quantity, buttonsAlign, errorMessage);
         totalContainer.getChildren().addAll(selectionContainer, entityList);
-        totalContainer.setPrefSize(700, 600);
+        totalContainer.setPrefSize(800, 600);
         totalContainer.setPadding(new Insets(10, 10, 10, 10));
 
         Scene dialogScene = new Scene(totalContainer);
@@ -438,7 +448,7 @@ public class Popups {
 
 
         Label errorMessage = new Label("");
-        errorMessage.setStyle("-fx-font-weight: bold; -fx-color: red;");
+        errorMessage.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
 
         Label chooseTarget = new Label("Choose target:");
         TableView<IdName> roomsList = EditRoom.createRoomTable();
@@ -480,8 +490,6 @@ public class Popups {
                 "West", "NorthWest", "NorthEast", "SouthWest", "SouthEast");
         ComboBox<String> directionDisplay = new ComboBox<>(directionList);
 
-        //TODO: PERSIST EXITS
-
         Button addExitButton = new Button("Add Exit");
         addExitButton.setOnAction(t->{
             String direction = directionDisplay.getSelectionModel().getSelectedItem();
@@ -510,7 +518,7 @@ public class Popups {
         Button doneButton = new Button("Done");
         doneButton.setOnAction(t-> s.close());
 
-        addExit.getChildren().addAll(addExitLabel, directionDisplay, addExitButton, doneButton);
+        addExit.getChildren().addAll(addExitLabel, directionDisplay, addExitButton, doneButton, errorMessage);
         totalContainer.getChildren().addAll(addExit, totalExits);
 
         Scene dialogScene = new Scene(totalContainer);

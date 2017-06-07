@@ -45,6 +45,7 @@ public class EditRoom {
 
         TableView<IdName> roomsList = createRoomTable();
 
+
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
@@ -75,20 +76,62 @@ public class EditRoom {
         createRoomBox.add(customExitLabel, 0, 3);
         createRoomBox.add(customExit, 1, 3);
 
+        Label startingLabel = new Label("Is the starting room?");
+        RadioButton startingRoom = new RadioButton();
+        createRoomBox.add(startingLabel, 0, 5);
+        createRoomBox.add(startingRoom, 1, 5);
+
         Button addEntity = new Button("Add Entity");
         addEntity.setOnAction(t-> Popups.openAddEntity(entities));
-        createRoomBox.add(addEntity, 0, 5);
+        createRoomBox.add(addEntity, 0, 6);
         Button addExit = new Button("Add Exit");
         addExit.setOnAction(t-> Popups.openAddExit(exits, idLabel.getText()));
-        createRoomBox.add(addExit, 1, 5);
+        createRoomBox.add(addExit, 1, 6);
+
 
 
 
         Button create = new Button("Create Room");
+        Button clear = new Button("Clear");
         createRoomBox.add(create, 0, 8);
+        createRoomBox.add(clear, 0, 9);
+
+        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
+
+
 
 
         createRoomBox.setPadding(new Insets(5, 10, 5, 5));
+
+        class LoadRoom{
+            public void loadRoom(Room r){
+                create.setText("Save changes");
+                Main.edit.getCurrentEdit().setCurrentEntity(r);
+                idLabel.setText(r.getID());
+                for(String s: r.getEntities().keySet()){
+                    entities.put(s, r.getEntities().get(s));
+                }
+                nameText.setText(r.getName());
+                descText.setText(r.getLongDescription());
+                if(r.getCustomDirections() != null){
+                    customExit.setText(r.getCustomDirections());
+                }
+            }
+
+            public void clearFields(){
+                nameText.setStyle("");
+                descText.setStyle("");
+                customExit.setStyle("");
+                errorMessage.setText("");
+                create.setText("Create Room");
+                nameText.clear();
+                descText.clear();
+                customExit.clear();
+                entities.clear();
+                exits.clear();
+                Main.edit.getCurrentEdit().setCurrentEntity(null);
+            }
+        }
 
 
 
@@ -96,6 +139,7 @@ public class EditRoom {
             String name = nameText.getText();
             String desc = descText.getText();
             String exit = customExit.getText();
+            boolean isStarting = startingRoom.isSelected();
 
 
             if(checkIfNotEmpty(name) && checkIfNotEmpty(desc) ){
@@ -111,6 +155,7 @@ public class EditRoom {
                     r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(idLabel.getText());
                     idLabel.setText("Create new Room:");
                 }
+
                 nameText.setStyle("");
                 descText.setStyle("");
                 customExit.setStyle("");
@@ -136,17 +181,17 @@ public class EditRoom {
 
                 Main.edit.getCurrentEdit().getCurrentWorld().putRoom(r);
 
+                if(isStarting){
+                    Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);
+                }
+
 
 
                 //we update the item list and reset all the fields
 
                 ((TableView<IdName>)listRoom.getChildren().get(0)).getItems().setAll(getRooms());
-                errorMessage.setText("");
-                create.setText("Create Room");
-                nameText.clear();
-                descText.clear();
-                customExit.clear();
-                Main.edit.getCurrentEdit().setCurrentEntity(null);
+                LoadRoom loadRoom = new LoadRoom();
+                loadRoom.clearFields();
 
             }  else {
                 if(name.equals("")){
@@ -161,6 +206,11 @@ public class EditRoom {
 
         });
 
+        clear.setOnAction(t->{
+            LoadRoom loadRoom = new LoadRoom();
+            loadRoom.clearFields();
+        });
+
 
         createRoomBox.setPadding(new Insets(10, 10, 10, 10));
 
@@ -170,31 +220,23 @@ public class EditRoom {
             int selectedIndex = roomsList.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
                 Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(roomsList.getSelectionModel().getSelectedItem().getId());
-                create.setText("Save changes");
-                Main.edit.getCurrentEdit().setCurrentEntity(r);
-//                roomContent.getChildren().remove(idLabel);
-                idLabel.setText(r.getID());
-//                roomContent.add(idLabel, 0, 0);
-                for(String s: r.getEntities().keySet()){
-                    entities.put(s, r.getEntities().get(s));
-                }
-                entities.clear();
-                nameText.setText(r.getName());
-                descText.setText(r.getLongDescription());
-                if(r.getCustomDirections() != null){
-                    customExit.setText(r.getCustomDirections());
-                }
+                LoadRoom loadRoom = new LoadRoom();
+                loadRoom.loadRoom(r);
             }
         });
 
-        Button start = new Button("Set as starting room");
-        start.setOnAction(t->{
-            int selectedIndex = roomsList.getSelectionModel().getSelectedIndex();
-            if(selectedIndex > -1){
-                IdName idName = roomsList.getSelectionModel().getSelectedItem();
-                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(idName.getId());
-                Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);
-            }
+        roomsList.setRowFactory( tv -> {
+            TableRow<IdName> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    IdName rowData = row.getItem();
+                    Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(rowData.getId());
+
+                    LoadRoom loadRoom = new LoadRoom();
+                    loadRoom.loadRoom(r);
+                }
+            });
+            return row ;
         });
 
         Button delete = new Button("Delete Room");
@@ -208,7 +250,7 @@ public class EditRoom {
                 roomsList.setItems(getRooms());
             }
         });
-        listRoom.getChildren().addAll(roomsList, load, start, delete);
+        listRoom.getChildren().addAll(roomsList, load, delete);
 
 
         temp.getChildren().addAll(createRoomBox, listRoom);

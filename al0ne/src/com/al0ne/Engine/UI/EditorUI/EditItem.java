@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Prop;
+import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameType;
@@ -46,7 +47,6 @@ public class EditItem {
         Label createNewItem = new Label("Create new item:");
         createNewItem.setStyle("-fx-font-weight: bold");
         itemContent.add(createNewItem, 0, 0);
-        //todo: check for existing item in the db having the same (material+name) name
 
         TextField nameText = new TextField();
         nameText.setPromptText("Bread loaf");
@@ -84,8 +84,8 @@ public class EditItem {
         itemContent.add(materialDisplay, 1, 6);
 
 
-        ToggleButton canDrop = new RadioButton("Can be dropped?");
-        ToggleButton isUnique = new RadioButton("Is unique?");
+        RadioButton canDrop = new RadioButton("Can be dropped?");
+        RadioButton isUnique = new RadioButton("Is unique?");
         itemContent.add(canDrop, 1, 7);
         itemContent.add(isUnique, 1, 8);
 
@@ -149,62 +149,150 @@ public class EditItem {
         Label contentLabel = new Label("Content:");
         contentText.setPromptText("Hello, I am writing to you to say hi.");
 
-        typeDisplay.valueProperty().addListener((ov, t, t1) -> {
-            //TODO: ADD SWITCHING FOR DIFFERENT TYPES
-            itemContent.getChildren().remove(foodLabel);
-            itemContent.getChildren().remove(foodValue);
-            itemContent.getChildren().remove(foodType);
-            itemContent.getChildren().remove(foodDisplay);
+        Label errorMessage = new Label("");
 
-            itemContent.getChildren().remove(damageTypeLabel);
-            itemContent.getChildren().remove(damageDisplay);
-            itemContent.getChildren().remove(damageText);
-            itemContent.getChildren().remove(damageLabel);
-            itemContent.getChildren().remove(apText);
-            itemContent.getChildren().remove(apLabel);
+        Button create = new Button("Create Item");
 
-            itemContent.getChildren().remove(armorTypeLabel);
-            itemContent.getChildren().remove(armorDisplay);
-            itemContent.getChildren().remove(armorText);
-            itemContent.getChildren().remove(armorLabel);
-            itemContent.getChildren().remove(encLabel);
-            itemContent.getChildren().remove(encText);
+        Button clear = new Button("Clear");
 
-            itemContent.getChildren().remove(contentText);
-            itemContent.getChildren().remove(contentLabel);
+        class LoadItem{
+            public void loadItem(Item i){
+                Main.edit.getCurrentEdit().setCurrentEntity(i);
 
-            if(t1 == null){
-                return;
-            } else if(t1.toLowerCase().equals("food")){
-                itemContent.add(foodType, 0, 10);
-                itemContent.add(foodDisplay, 1, 10);
-            } else if(t1.toLowerCase().equals("weapon")){
-                itemContent.add(damageTypeLabel, 0, 10);
-                itemContent.add(damageDisplay, 1, 10);
-                itemContent.add(damageLabel, 0, 11);
-                itemContent.add(damageText, 1, 11);
-                itemContent.add(apLabel, 0, 12);
-                itemContent.add(apText, 1, 12);
-            } else if(t1.toLowerCase().equals("armor")){
-                itemContent.add(armorTypeLabel, 0, 10);
-                itemContent.add(armorDisplay, 1, 10);
-                itemContent.add(armorLabel, 0, 11);
-                itemContent.add(armorText, 1, 11);
-                itemContent.add(encLabel, 0, 12);
-                itemContent.add(encText, 1, 12);
-            } else if(t1.toLowerCase().equals("scroll")){
-                itemContent.add(contentLabel, 0, 10);
-                itemContent.add(contentText, 1, 10);
+                create.setText("Save changes");
+
+                clearSelection();
+
+                nameText.setText(i.getRootName());
+                descText.setText(i.getLongDescription());
+                sizeDisplay.setValue(Size.intToString(i.getSize()));
+                materialDisplay.setValue(Material.materialToString(i.getMaterial()));
+                weightText.getValueFactory().setValue(i.getWeight());
+
+                //"Weapon", "Armor", "Food", "Scroll", "Coin", "Key", "Generic");
+
+                if(i instanceof Food){
+                    typeDisplay.getSelectionModel().select("Food");
+
+                    foodDisplay.getSelectionModel().select("Food");
+                    foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
+                } else if(i instanceof Drinkable){
+                    typeDisplay.getSelectionModel().select("Food");
+                    foodDisplay.getSelectionModel().select("Drink");
+                } else if(i instanceof Weapon){
+                    typeDisplay.getSelectionModel().select("Weapon");
+
+                    damageDisplay.setValue(((Weapon) i).getDamageType());
+                    damageText.getValueFactory().setValue(((Weapon) i).getDamage());
+                    apText.getValueFactory().setValue(((Weapon) i).getArmorPenetration());
+                } else if(i instanceof Protective){
+                    typeDisplay.getSelectionModel().select("Armor");
+
+                    armorText.getValueFactory().setValue(((Protective) i).getArmor());
+                    encText.getValueFactory().setValue(((Protective) i).getEncumberment());
+
+                    if(((Protective) i).getPart().equals("body")){
+                        armorDisplay.getSelectionModel().select("Body Armor");
+                    } else if(((Protective) i).getPart().equals("head")){
+                        armorDisplay.getSelectionModel().select("Helmet");
+                    } else if(((Protective) i).getPart().equals("off hand")){
+                        armorDisplay.getSelectionModel().select("Shield");
+                    }
+
+                } else if(i instanceof Readable){
+                    typeDisplay.getSelectionModel().select(3);
+                    itemContent.add(contentLabel, 0, 10);
+                    itemContent.add(contentText, 1, 10);
+                }
             }
+
+            public void clearSelection(){
+                errorMessage.setText("");
+                create.setText("Create Item");
+                nameText.clear();
+                descText.clear();
+                weightText.getValueFactory().setValue(0.0);
+                materialDisplay.getSelectionModel().select(materialList.size()-1);
+                sizeDisplay.getSelectionModel().select(sizeList.size()/2);
+                armorDisplay.getSelectionModel().clearSelection();
+                damageDisplay.getSelectionModel().clearSelection();
+                foodDisplay.getSelectionModel().clearSelection();
+                typeDisplay.getSelectionModel().clearSelection();
+
+                nameText.setStyle("");
+                descText.setStyle("");
+                sizeDisplay.setStyle("");
+                materialDisplay.setStyle("");
+
+                removeFields();
+            }
+
+            public void removeFields(){
+                itemContent.getChildren().remove(foodLabel);
+                itemContent.getChildren().remove(foodValue);
+                itemContent.getChildren().remove(foodDisplay);
+                itemContent.getChildren().remove(foodType);
+
+                itemContent.getChildren().remove(damageTypeLabel);
+                itemContent.getChildren().remove(damageDisplay);
+                itemContent.getChildren().remove(damageText);
+                itemContent.getChildren().remove(damageLabel);
+                itemContent.getChildren().remove(apText);
+                itemContent.getChildren().remove(apLabel);
+
+                itemContent.getChildren().remove(armorTypeLabel);
+                itemContent.getChildren().remove(armorDisplay);
+                itemContent.getChildren().remove(armorText);
+                itemContent.getChildren().remove(armorLabel);
+                itemContent.getChildren().remove(encLabel);
+                itemContent.getChildren().remove(encText);
+
+                itemContent.getChildren().remove(contentText);
+                itemContent.getChildren().remove(contentLabel);
+            }
+
+            public void addProperFields(String s){
+                if(s == null){
+                } else if(s.toLowerCase().equals("food")){
+                    itemContent.add(foodType, 0, 10);
+                    itemContent.add(foodDisplay, 1, 10);
+                } else if(s.toLowerCase().equals("weapon")){
+                    itemContent.add(damageTypeLabel, 0, 10);
+                    itemContent.add(damageDisplay, 1, 10);
+                    itemContent.add(damageLabel, 0, 11);
+                    itemContent.add(damageText, 1, 11);
+                    itemContent.add(apLabel, 0, 12);
+                    itemContent.add(apText, 1, 12);
+                } else if(s.toLowerCase().equals("armor")){
+                    itemContent.add(armorTypeLabel, 0, 10);
+                    itemContent.add(armorDisplay, 1, 10);
+                    itemContent.add(armorLabel, 0, 11);
+                    itemContent.add(armorText, 1, 11);
+                    itemContent.add(encLabel, 0, 12);
+                    itemContent.add(encText, 1, 12);
+                } else if(s.toLowerCase().equals("scroll")){
+                    itemContent.add(contentLabel, 0, 10);
+                    itemContent.add(contentText, 1, 10);
+                }
+            }
+        }
+
+        typeDisplay.valueProperty().addListener((ov, t, t1) -> {
+            LoadItem loadItem = new LoadItem();
+            loadItem.removeFields();
+            loadItem.addProperFields(t1);
         });
 
         itemContent.add(typeLabel, 0, 9);
         itemContent.add(typeDisplay, 1, 9);
 
-        Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
-        Button create = new Button("Create Item");
+        clear.setOnAction(t->{
+            LoadItem loadItem = new LoadItem();
+            loadItem.clearSelection();
+        });
+
         create.setOnAction( t -> {
             String name = nameText.getText();
             String desc = descText.getText();
@@ -326,36 +414,10 @@ public class EditItem {
                     //we update the item list and reset all the fields
 
                     ((TableView<IdNameType>)listItem.getChildren().get(0)).setItems(getItems());
-                    errorMessage.setText("");
-                    create.setText("Create Item");
-                    nameText.clear();
-                    descText.clear();
-                    weightText.getValueFactory().setValue(0.0);
-                    materialDisplay.getSelectionModel().select(materialList.size()-1);
-                    sizeDisplay.getSelectionModel().select(sizeList.size()/2);
-                    armorDisplay.getSelectionModel().clearSelection();
-                    damageDisplay.getSelectionModel().clearSelection();
-                    foodDisplay.getSelectionModel().clearSelection();
-                    typeDisplay.getSelectionModel().clearSelection();
 
-                    itemContent.getChildren().remove(foodLabel);
-                    itemContent.getChildren().remove(foodValue);
-                    itemContent.getChildren().remove(foodType);
-                    itemContent.getChildren().remove(foodDisplay);
-                    itemContent.getChildren().remove(damageTypeLabel);
-                    itemContent.getChildren().remove(damageDisplay);
-                    itemContent.getChildren().remove(damageText);
-                    itemContent.getChildren().remove(damageLabel);
-                    itemContent.getChildren().remove(apText);
-                    itemContent.getChildren().remove(apLabel);
-                    itemContent.getChildren().remove(armorTypeLabel);
-                    itemContent.getChildren().remove(armorDisplay);
-                    itemContent.getChildren().remove(armorText);
-                    itemContent.getChildren().remove(armorLabel);
-                    itemContent.getChildren().remove(encLabel);
-                    itemContent.getChildren().remove(encText);
-                    itemContent.getChildren().remove(contentText);
-                    itemContent.getChildren().remove(contentLabel);
+                    LoadItem loadItem = new LoadItem();
+                    loadItem.clearSelection();
+
                 }
             }  else {
                 if(name.equals("")){
@@ -378,10 +440,13 @@ public class EditItem {
 
         });
         itemContent.add(create, 0, 14);
-        itemContent.add(errorMessage, 0, 15);
+        itemContent.add(clear, 0, 15);
+        itemContent.add(errorMessage, 0, 16);
 
 
         itemContent.setPadding(new Insets(10, 10, 10, 10));
+
+
 
         //LOADING OF ITEM
         Button load = new Button("Edit Item");
@@ -391,73 +456,23 @@ public class EditItem {
                 IdNameType tempItem = itemList.getItems().get(selectedIndex);
                 Item i = Main.edit.getCurrentEdit().getItems().get(tempItem.getId());
 
-                Main.edit.getCurrentEdit().setCurrentEntity(i);
-
-                create.setText("Save changes");
-                itemContent.getChildren().remove(foodLabel);
-                itemContent.getChildren().remove(foodValue);
-                itemContent.getChildren().remove(foodDisplay);
-                itemContent.getChildren().remove(foodType);
-
-                itemContent.getChildren().remove(damageTypeLabel);
-                itemContent.getChildren().remove(damageDisplay);
-                itemContent.getChildren().remove(damageText);
-                itemContent.getChildren().remove(damageLabel);
-                itemContent.getChildren().remove(apText);
-                itemContent.getChildren().remove(apLabel);
-
-                itemContent.getChildren().remove(armorTypeLabel);
-                itemContent.getChildren().remove(armorDisplay);
-                itemContent.getChildren().remove(armorText);
-                itemContent.getChildren().remove(armorLabel);
-                itemContent.getChildren().remove(encLabel);
-                itemContent.getChildren().remove(encText);
-
-                itemContent.getChildren().remove(contentText);
-                itemContent.getChildren().remove(contentLabel);
-
-                nameText.setText(i.getRootName());
-                descText.setText(i.getLongDescription());
-                sizeDisplay.setValue(Size.intToString(i.getSize()));
-                materialDisplay.setValue(Material.materialToString(i.getMaterial()));
-                weightText.getValueFactory().setValue(i.getWeight());
-
-                //"Weapon", "Armor", "Food", "Scroll", "Coin", "Key", "Generic");
-
-                if(i instanceof Food){
-                    typeDisplay.getSelectionModel().select("Food");
-
-                    foodDisplay.getSelectionModel().select("Food");
-                    foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
-                } else if(i instanceof Drinkable){
-                    typeDisplay.getSelectionModel().select("Food");
-                    foodDisplay.getSelectionModel().select("Drink");
-                } else if(i instanceof Weapon){
-                    typeDisplay.getSelectionModel().select("Weapon");
-
-                    damageDisplay.setValue(((Weapon) i).getDamageType());
-                    damageText.getValueFactory().setValue(((Weapon) i).getDamage());
-                    apText.getValueFactory().setValue(((Weapon) i).getArmorPenetration());
-                } else if(i instanceof Protective){
-                    typeDisplay.getSelectionModel().select("Armor");
-
-                    armorText.getValueFactory().setValue(((Protective) i).getArmor());
-                    encText.getValueFactory().setValue(((Protective) i).getEncumberment());
-
-                    if(((Protective) i).getPart().equals("body")){
-                        armorDisplay.getSelectionModel().select("Body Armor");
-                    } else if(((Protective) i).getPart().equals("head")){
-                        armorDisplay.getSelectionModel().select("Helmet");
-                    } else if(((Protective) i).getPart().equals("off hand")){
-                        armorDisplay.getSelectionModel().select("Shield");
-                    }
-
-                } else if(i instanceof Readable){
-                    typeDisplay.getSelectionModel().select(3);
-                    itemContent.add(contentLabel, 0, 10);
-                    itemContent.add(contentText, 1, 10);
-                }
+                LoadItem loadItem = new LoadItem();
+                loadItem.loadItem(i);
             }
+        });
+
+        itemList.setRowFactory( tv -> {
+            TableRow<IdNameType> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    IdNameType rowData = row.getItem();
+                    Item i = Main.edit.getCurrentEdit().getItems().get(rowData.getId());
+
+                    LoadItem loadItem = new LoadItem();
+                    loadItem.loadItem(i);
+                }
+            });
+            return row;
         });
 
 

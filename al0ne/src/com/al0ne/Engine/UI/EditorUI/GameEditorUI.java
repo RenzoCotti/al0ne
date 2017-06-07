@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static com.al0ne.Engine.Main.clearScreen;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -62,6 +63,7 @@ public class GameEditorUI {
                     Main.turnCounter = g.getTurnCount();
                     Main.currentRoom = g.getRoom();
                     Main.notes.setText(g.getNotes());
+                    clearScreen();
 
                     printToLog("Game loaded successfully.");
                     printToLog();
@@ -107,6 +109,9 @@ public class GameEditorUI {
                 EditingGame newGame = new EditingGame(nameText.getText());
                 World newWorld = new World(worldText.getText());
 
+                nameText.setText("");
+                worldText.setText("");
+
                 newGame.getCurrentEdit().addWorld(newWorld);
                 newGame.setCurrentWorld(newWorld);
 
@@ -116,14 +121,14 @@ public class GameEditorUI {
                 Popups.openWorldEditor();
                 gameList.setItems(getGameData());
             } else{
-                if(!nameText.getText().equals("")){
+                if(nameText.getText().equals("")){
                     errorMessage.setText("Please insert a name.");
                     nameText.setStyle("-fx-border-color: red;");
                 }
 
-                if(!worldText.getText().equals("")){
-                    errorMessage.setText("Please insert a name.");
-                    nameText.setStyle("-fx-border-color: red;");
+                if(worldText.getText().equals("")){
+                    errorMessage.setText("Please insert a world name.");
+                    worldText.setStyle("-fx-border-color: red;");
                 }
             }
         });
