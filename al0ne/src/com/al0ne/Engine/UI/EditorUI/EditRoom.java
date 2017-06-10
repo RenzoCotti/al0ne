@@ -81,12 +81,18 @@ public class EditRoom {
         createRoomBox.add(startingLabel, 0, 5);
         createRoomBox.add(startingRoom, 1, 5);
 
+        Label addEntityLabel = new Label("Add Item/Prop/NPC/...");
         Button addEntity = new Button("Add Entity");
         addEntity.setOnAction(t-> Popups.openAddEntity(entities));
-        createRoomBox.add(addEntity, 0, 6);
+        createRoomBox.add(addEntityLabel, 0, 6);
+        createRoomBox.add(addEntity, 1, 6);
+
+        Label exitLabel = new Label("Connect to other room");
         Button addExit = new Button("Add Exit");
         addExit.setOnAction(t-> Popups.openAddExit(exits, idLabel.getText()));
-        createRoomBox.add(addExit, 1, 6);
+        createRoomBox.add(exitLabel, 0, 7);
+        createRoomBox.add(addExit, 1, 7);
+
 
 
 

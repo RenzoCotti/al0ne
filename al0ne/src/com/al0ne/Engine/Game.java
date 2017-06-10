@@ -26,9 +26,7 @@ public class Game implements Serializable {
     protected int worldCount;
     protected boolean debugMode;
     protected CommandMap commands;
-
-
-    private String notes;
+    protected String notes;
 
     public Game(String name) {
         this.gameName = name;
@@ -37,6 +35,7 @@ public class Game implements Serializable {
         this.worldCount = 0;
         this.debugMode=false;
         this.commands = new CommandMap();
+        this.notes = "";
 
     }
 

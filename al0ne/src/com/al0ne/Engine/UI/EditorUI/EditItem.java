@@ -56,7 +56,7 @@ public class EditItem {
 
         TextArea descText = new TextArea();
         descText.setPrefWidth(100);
-        descText.setPrefHeight(50);
+        descText.setPrefHeight(80);
         Label descLabel = new Label("Description:");
         descText.setPromptText("A fresh loaf of bread, looks delicious!");
         itemContent.add(descLabel, 0, 3);
@@ -440,6 +440,8 @@ public class EditItem {
 
         });
         itemContent.add(create, 0, 14);
+        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
+
         itemContent.add(clear, 0, 15);
         itemContent.add(errorMessage, 0, 16);
 

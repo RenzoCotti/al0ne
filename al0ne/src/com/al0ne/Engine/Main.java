@@ -4,12 +4,11 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.TextParsing.ParseInput;
+import com.al0ne.Engine.UI.MainMenu;
+import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
-import com.al0ne.Engine.UI.UI;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -47,13 +46,15 @@ public class Main extends Application{
 
     public static EditorInfo edit = new EditorInfo();
 
+    public static String versionNumber = "Alpha v. 0.7";
+
     public static void main(String[] args) {
         launch(args);
-        runGame();
     }
 
-    private static void runGame(){
+    public static void runGame(){
         started = true;
+        input.requestFocus();
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();
@@ -87,8 +88,8 @@ public class Main extends Application{
             oldCommands.add(currentCommand);
         }
 
-        //we finally update the UI
-        UI.updateUI(scene);
+        //we finally update the PlayUI
+        PlayUI.updateUI(scene);
 
         if (!player.isAlive()){
             printToLog("You have died...");
@@ -133,26 +134,26 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Al0ne AlphaWorld v. 0.4");
-        primaryStage.setScene(UI.createContent());
+        primaryStage.setTitle("Al0ne "+versionNumber);
+//        primaryStage.setScene(PlayUI.createContent());
+        primaryStage.setScene(MainMenu.createMainMenu(primaryStage));
         primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
 
-        input.requestFocus();
 
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        Platform.runLater(Main::runGame);
-                        return null;
-                    }
-                };
-            }
-        };
-        service.restart();
+//        Service<Void> service = new Service<Void>() {
+//            @Override
+//            protected Task<Void> createTask() {
+//                return new Task<Void>() {
+//                    @Override
+//                    protected Void call() throws Exception {
+//                        Platform.runLater(Main::runGame);
+//                        return null;
+//                    }
+//                };
+//            }
+//        };
+//        service.restart();
     }
 
 }

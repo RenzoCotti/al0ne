@@ -22,9 +22,9 @@ import static javafx.scene.input.KeyCode.UP;
 /**
  * Created by BMW on 13/04/2017.
  */
-public class UI {
+public class PlayUI {
 
-    public static Scene createContent(){
+    public static Stage createContent(){
 
         VBox root = new VBox();
         Scene done;
@@ -127,7 +127,7 @@ public class UI {
                 Main.fontSize+=2;
             }
 
-            UI.redrawUI(done);
+            PlayUI.redrawUI(done);
         });
 
         //smaller font
@@ -138,7 +138,7 @@ public class UI {
                 Main.fontSize-=2;
             }
 
-            UI.redrawUI(done);
+            PlayUI.redrawUI(done);
         });
 
         //hide menu
@@ -153,7 +153,9 @@ public class UI {
         });
 
 
-        return done;
+        Stage s = new Stage();
+        s.setScene(done);
+        return s;
     }
 
 

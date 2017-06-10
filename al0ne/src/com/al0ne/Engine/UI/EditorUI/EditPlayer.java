@@ -48,7 +48,7 @@ public class EditPlayer {
 
         ArrayList<Item> inventory = new ArrayList<>();
 
-        Label createPlayer = new Label("Create the player:");
+        Label createPlayer = new Label("Create your character:");
         createPlayer.setStyle("-fx-font-weight: bold");
         itemContent.add(createPlayer, 0, 0);
 
@@ -61,7 +61,7 @@ public class EditPlayer {
         TextArea storyText = new TextArea();
         storyText.setPrefWidth(100);
         storyText.setPrefHeight(50);
-        Label descLabel = new Label("Story:");
+        Label descLabel = new Label("Your story:");
         storyText.setPromptText("You are 20 years old, and very adventurous.");
         itemContent.add(descLabel, 0, 2);
         itemContent.add(storyText, 1, 2);
@@ -158,7 +158,7 @@ public class EditPlayer {
                 storyText.setStyle("");
                 create.setText("Save changes");
                 errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: green;");
-                errorLabel.setText("Player created successfully");
+                errorLabel.setText("Your character was \ncreated successfully.");
             } else{
                 errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
                 if(name.equals("")){
@@ -178,6 +178,8 @@ public class EditPlayer {
 
         });
         itemContent.add(create, 0, 11);
+        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
+
         itemContent.add(errorLabel, 0, 12);
 
         itemContent.setPadding(new Insets(5, 10, 5, 5));

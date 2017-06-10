@@ -3,6 +3,7 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
+import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,6 +59,9 @@ public class GameEditorUI {
                 Game g = GameChanges.copyGame(Main.edit.getGames().get(gameName).getCurrentEdit());
                 if(g != null && g.getPlayer() != null &&
                         g.getWorlds().get(g.getCurrentWorld()).getStartingRoom() != null){
+
+                    Stage game = PlayUI.createContent();
+
                     Main.game = g;
                     Main.player = g.getPlayer();
                     Main.turnCounter = g.getTurnCount();
@@ -70,6 +74,9 @@ public class GameEditorUI {
                     Main.currentRoom.printRoom();
                     Main.currentRoom.printName();
                     s.close();
+
+                    game.show();
+
                 } else {
                     System.out.println("player is null, room is null or game is broken");
                 }

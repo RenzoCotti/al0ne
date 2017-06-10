@@ -137,7 +137,7 @@ public class Utility {
 
     //these functions return the needed string
     //for the given body part
-    //used for UI
+    //used for PlayUI
     public static String getHelmetString(){
         Helmet h = Main.player.getHelmet();
         if(h == null) return "None.";

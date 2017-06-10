@@ -2,7 +2,9 @@ package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.InvisibleProp;
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdName;
@@ -16,6 +18,7 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.Props.Door;
+import com.al0ne.Entities.Items.Props.HideItem;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,21 +89,46 @@ public class EditProp {
 
 
         Label typeLabel = new Label("Type:");
-        ObservableList<String> typeList = FXCollections.observableArrayList("Prop", "Door", "Locked Door", "Hide item");
+        ObservableList<String> typeList = FXCollections.observableArrayList("Prop", "Door", "Locked Door",
+                "Hide item", "Hidden Prop");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
         typeDisplay.getSelectionModel().select("Prop");
         propContent.add(typeLabel, 0, 7);
         propContent.add(typeDisplay, 1, 7);
 
 
-        ToggleButton canDrop = new RadioButton("Is visible immediately?");
-        propContent.add(canDrop, 1, 78);
-
-
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
         Button create = new Button("Create Prop");
+
+
+
+        class LoadProp{
+            public void loadProp(Prop p){
+
+            }
+
+            public void clearSelection(){
+                nameText.setStyle("");
+                descText.setStyle("");
+                nameText.clear();
+                descText.clear();
+                shortDescText.clear();
+                typeDisplay.getSelectionModel().select("Prop");
+                materialDisplay.getSelectionModel().select(materialList.size()-1);
+                create.setText("Create new Prop");
+            }
+
+            public void removeFields(){
+
+            }
+
+            public void addProperFields(){
+
+            }
+        }
+
         create.setOnAction( t -> {
 
             String name = nameText.getText();
@@ -111,45 +139,48 @@ public class EditProp {
 
             String propType = typeDisplay.getSelectionModel().getSelectedItem();
             if(!name.equals("") && !desc.equals("")){
-                //creating a generic prop
-                if(propType.equals("Prop")){
-                    Entity entity = Main.edit.getCurrentEdit().getCurrentEntity();
-                    //we are editing an item
-                    if(entity != null && create.getText().equals("Save changes")){
-                        Prop old;
-                        if(entity.getType() == 'p'){
-                            old = (Prop) entity;
 
-                        } else {
-                            IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
-                            old = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
-                            Main.edit.getCurrentEdit().setCurrentEntity(old);
-                        }
+                Entity entity = Main.edit.getCurrentEdit().getCurrentEntity();
+                //we are editing an item
+                if(entity != null && create.getText().equals("Save changes")){
+                    Prop old;
+                    if(entity.getType() == 'p'){
+                        old = (Prop) entity;
 
-                        old.setName(name);
-                        old.setShortDescription(shortDesc);
-                        old.setLongDescription(desc);
-                        old.setMaterial(Material.strToMaterial(material));
                     } else {
-                        Prop p = new Prop(name, desc, shortDesc, null, Material.strToMaterial(material));
-                        Main.edit.getCurrentEdit().addProp(p);
-                        propList.setItems(getProps());
+                        IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
+                        old = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
+                        Main.edit.getCurrentEdit().setCurrentEntity(old);
                     }
-                    nameText.setStyle("");
-                    descText.setStyle("");
-                    nameText.clear();
-                    descText.clear();
-                    shortDescText.clear();
-                    typeDisplay.getSelectionModel().clearSelection();
-                    materialDisplay.getSelectionModel().select(materialList.size()-1);
-                    create.setText("Create new Prop");
-                    propList.setItems(getProps());
 
-
-
+                    old.setName(name);
+                    old.setShortDescription(shortDesc);
+                    old.setLongDescription(desc);
+                    old.setMaterial(Material.strToMaterial(material));
                 } else{
-                    //todo specific prop types
+                    //creating a generic prop
+                    Prop p;
+                    if(propType.equals("Prop")){
+                        p = new Prop(name, desc, shortDesc, null, Material.strToMaterial(material));
+
+
+                    } else if(propType.toLowerCase().equals("hidden prop")){
+                        p = new InvisibleProp(name, desc, shortDesc, Material.strToMaterial(material));
+                    } else{
+                        //TODO: ADD OTHER TYPES
+                        p = new Prop(name, desc, shortDesc, null, Material.strToMaterial(material));
+                    }
+
+                    Main.edit.getCurrentEdit().addProp(p);
+                    propList.setItems(getProps());
                 }
+
+                LoadProp loadProp = new LoadProp();
+                loadProp.clearSelection();
+
+                propList.setItems(getProps());
+
+
             } else {
                 if(name.equals("")){
                     nameText.setStyle("-fx-border-color: red;");
@@ -165,6 +196,14 @@ public class EditProp {
 
         });
         propContent.add(create, 0, 10);
+        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
+
+        Button clear = new Button("Clear");
+        clear.setOnAction(t->{
+            LoadProp loadProp = new LoadProp();
+            loadProp.clearSelection();
+        });
+        propContent.add(clear, 0, 11);
 
         //LOADING OF PROP
         Button load = new Button("Edit Prop");
@@ -177,12 +216,11 @@ public class EditProp {
                 nameText.setText(p.getName());
                 descText.setText(p.getLongDescription());
                 shortDescText.setText(p.getShortDescription());
-
             }
 
         });
 
-        Button delete = new Button("Delete Item");
+        Button delete = new Button("Delete Prop");
         delete.setOnAction(t->{
             int selectedIndex = propList.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
@@ -200,6 +238,8 @@ public class EditProp {
         propBox.getChildren().addAll(propContent, errorMessage);
         temp.getChildren().addAll(propBox, listProps);
 
+        temp.setPadding(new Insets(10, 10, 10, 10));
+
         props.setContent(temp);
 
         return props;
@@ -212,14 +252,11 @@ public class EditProp {
                 temp.add(new IdNameType(e.getID(), e.getName(), "Locked Door"));
             } else if(e instanceof Door){
                 temp.add(new IdNameType(e.getID(), e.getName(), "Door"));
+            } else if(e instanceof InvisibleProp){
+                temp.add(new IdNameType(e.getID(), e.getName(), "Hidden Prop"));
             } else {
                 temp.add(new IdNameType(e.getID(), e.getName(), "Prop"));
             }
-//            else if(e instanceof Food || e instanceof Drinkable){
-//                temp.add(new IdNameType(e.getID(), e.getName(), "Food"));
-//            } else if(e instanceof Readable){
-//                temp.add(new IdNameType(e.getID(), e.getName(), "Scroll"));
-//            }
         }
 
         return FXCollections.observableArrayList (temp);

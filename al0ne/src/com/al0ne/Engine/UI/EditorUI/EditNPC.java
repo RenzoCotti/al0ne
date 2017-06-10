@@ -1,5 +1,7 @@
 package com.al0ne.Engine.UI.EditorUI;
 
+import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Pairs.Pair;
@@ -9,6 +11,10 @@ import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
+import com.al0ne.Entities.Items.Behaviours.Drinkable;
+import com.al0ne.Entities.Items.Behaviours.Food;
+import com.al0ne.Entities.Items.Behaviours.Protective;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -115,6 +121,37 @@ public class EditNPC {
         itemContent.add(addItem, 0, 11);
 
 
+        class LoadNPC{
+            public void loadNPC(NPC npc){
+
+            }
+
+            public void clearSelection(){
+                nameText.clear();
+                descriptionText.clear();
+                introText.clear();
+                maxHealth.getValueFactory().setValue(30);
+                armor.getValueFactory().setValue(0);
+                damage.getValueFactory().setValue(1);
+                attack.getValueFactory().setValue(30);
+                dex.getValueFactory().setValue(30);
+                isShopkeeper.setSelected(false);
+                nameText.setStyle("");
+                descriptionText.setStyle("");
+                introText.setStyle("");
+            }
+
+            public void removeFields(){
+
+            }
+
+            public void addProperFields(){
+
+            }
+        }
+
+
+
         Button create = new Button("Create NPC");
         create.setOnAction(t->{
             int maxHealthValue = maxHealth.getValue();
@@ -128,7 +165,15 @@ public class EditNPC {
             boolean shopkeeper = isShopkeeper.isSelected();
 
             if(!name.equals("") && !description.equals("") && !intro.equals("")){
-                NPC npc = new NPC(name, description, intro, maxHealthValue, attackValue, dexValue, armorValue, damageValue);
+
+                NPC npc;
+
+                if(shopkeeper){
+                    npc = new Shopkeeper(name, description, intro, maxHealthValue, attackValue, dexValue, armorValue, damageValue);
+                } else{
+                    npc = new NPC(name, description, intro, maxHealthValue, attackValue, dexValue, armorValue, damageValue);
+                }
+
                 if(inventory.size() > 0){
                     for(Item i : inventory){
                         npc.simpleAddItem(i, 1);
@@ -138,10 +183,9 @@ public class EditNPC {
                 Main.edit.getCurrentEdit().addNPC(npc);
                 npcTable.setItems(getNPCs());
 
+                LoadNPC loadNPC = new LoadNPC();
+                loadNPC.clearSelection();
 
-                nameText.setStyle("");
-                descriptionText.setStyle("");
-                introText.setStyle("");
                 errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: green;");
             } else{
                 errorLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
@@ -162,7 +206,16 @@ public class EditNPC {
 
         });
         itemContent.add(create, 0, 12);
-        itemContent.add(errorLabel, 0, 13);
+        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
+
+
+        Button clear = new Button("Clear");
+        clear.setOnAction(t->{
+            LoadNPC loadNPC = new LoadNPC();
+            loadNPC.clearSelection();
+        });
+        itemContent.add(clear, 0, 13);
+        itemContent.add(errorLabel, 0, 14);
 
 
         itemContent.setPadding(new Insets(5, 10, 5, 5));
