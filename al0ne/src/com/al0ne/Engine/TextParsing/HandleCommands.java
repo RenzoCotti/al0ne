@@ -29,7 +29,7 @@ public class HandleCommands {
     //this function handles the command exit
     public static void quit() {
         ParseInput.wrongCommand = 0;
-        if (ParseInput.lastCommand.equals("quit")) {
+        if (ParseInput.lastCommand.equals("quit") || ParseInput.lastCommand.equals("exit")) {
             System.exit(0);
         }
         printToLog("Are you sure you want to quit? (retype \"quit\" to exit)");

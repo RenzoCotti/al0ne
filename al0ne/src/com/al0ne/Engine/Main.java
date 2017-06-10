@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main extends Application{
 
@@ -48,18 +49,39 @@ public class Main extends Application{
 
     public static String versionNumber = "Alpha v. 0.7";
 
+    public static boolean nostalgiaMode = false;
+
     public static void main(String[] args) {
-        launch(args);
+
+        for (String s: args){
+            if(s.toLowerCase().equals("nostalgia")){
+                nostalgiaMode = true;
+                runGame();
+            }
+        }
+        if(!nostalgiaMode){
+            launch(args);
+        }
     }
 
     public static void runGame(){
         started = true;
-        input.requestFocus();
         HandleCommands.printWelcome();
         currentRoom.printRoom();
         printToLog();
         currentRoom.printName();
         game.toggleDebugMode();
+
+        if(!nostalgiaMode){
+            input.requestFocus();
+        } else {
+            Scanner scanner = new Scanner(System.in);
+
+            while(scanner.hasNextLine()){
+                String userInput = scanner.nextLine();
+                hasNextLine(userInput, null);
+            }
+        }
     }
     public static void hasNextLine(String s, Scene scene){
         currentCommand = s;
@@ -81,23 +103,31 @@ public class Main extends Application{
             printToLog("Maybe you need some help? Type \"?\" to have an intro or \"help\" to see a list of all commands");
         }
         if (!(currentCommand.equals("g") || currentCommand.equals("again"))){
-            ParseInput.lastCommand = currentCommand;
+            ParseInput.lastCommand = currentCommand.toLowerCase();
             if(oldCommands.size()+1 == maxHistory){
                 oldCommands.remove(0);
             }
             oldCommands.add(currentCommand);
         }
 
-        //we finally update the PlayUI
-        PlayUI.updateUI(scene);
+        if(!nostalgiaMode){
+            //we finally update the PlayUI
+            PlayUI.updateUI(scene);
+        }
+
 
         if (!player.isAlive()){
             printToLog("You have died...");
             printToLog();
             printToLog("Game over!");
-            input.setDisable(true);
 
-            Popups.deathPopup();
+            if(!nostalgiaMode){
+                input.setDisable(true);
+                Popups.deathPopup();
+            } else{
+                System.exit(0);
+            }
+
             return;
         }
 
@@ -108,19 +138,27 @@ public class Main extends Application{
     }
 
     public static void printToLog(){
-        if(started){
+        if(started && !nostalgiaMode){
             log.appendText("\n");
+        } else if(nostalgiaMode){
+            System.out.println();
         }
     }
 
     public static void printToLog(String s){
-        if(started){
+        if(started && !nostalgiaMode){
             log.appendText(s+"\n");
+        } else if(nostalgiaMode){
+            System.out.println(s);
         }
     }
 
     public static void printToSingleLine(String s){
-        log.appendText(s);
+        if(started && !nostalgiaMode){
+            log.appendText(s);
+        } else if(nostalgiaMode){
+            System.out.print(s);
+        }
     }
 
     //clears the screen by printing 20 new lines
