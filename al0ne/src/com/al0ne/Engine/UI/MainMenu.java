@@ -23,15 +23,26 @@ public class MainMenu {
 
     public static Scene createMainMenu(Stage stage){
         VBox mainContainer = new VBox();
-        mainContainer.setPrefSize(400, 400);
+        mainContainer.setPrefSize(650, 400);
         mainContainer.setPadding(new Insets(50, 10, 10, 10));
 
 
         VBox titleBox = new VBox();
+        Label titleASCII = new Label("      __       _        _______  __     _  ________\n" +
+                "     /  \\     | |      /   _   \\|  \\   | ||  _____/\n" +
+                "    / /\\ \\    | |      |  | |  ||   \\  | || |\n" +
+                "   / /__\\ \\   | |      |  | |  || |\\ \\ | || +--/\n" +
+                "  /  ____  \\  | |      |  | |  || | \\ \\| || +--\\\n" +
+                " /  /    \\  \\ | |_____ |  |_|  || |  \\ ` || |_____        \n" +
+                "/__/      \\__\\|_______\\\\_______/|_|   \\__||_______\\");
+        titleASCII.setStyle("-fx-font-family: monospace");
+
         Label title = new Label("Al0ne");
         title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
+        titleASCII.setMinSize(450, 150);
 
-        titleBox.getChildren().add(title);
+
+        titleBox.getChildren().add(titleASCII);
 
         titleBox.setAlignment(Pos.TOP_CENTER);
 

@@ -691,6 +691,16 @@ public class HandleCommands {
 
 
     public static void printWelcome() {
+        if(Main.nostalgiaMode){
+            printToLog("      __       _        _______  __     _  ________\n" +
+                    "     /  \\     | |      /   _   \\|  \\   | ||  _____/\n" +
+                    "    / /\\ \\    | |      |  | |  ||   \\  | || |\n" +
+                    "   / /__\\ \\   | |      |  | |  || |\\ \\ | || +--/\n" +
+                    "  /  ____  \\  | |      |  | |  || | \\ \\| || +--\\\n" +
+                    " /  /    \\  \\ | |_____ |  |_|  || |  \\ ` || |_____        \n" +
+                    "/__/      \\__\\|_______\\\\_______/|_|   \\__||_______\\\n\n\n");
+        }
+        
         printToLog("Welcome to my textual adventure game!");
         printToLog("I hope you enjoy your time playing");
         printToLog();
