@@ -45,7 +45,7 @@ public class Popups {
         HBox buttonBox = new HBox(20);
 
         Button quitButton = new Button("Yes");
-        quitButton.setOnAction(a -> System.exit(0));
+        quitButton.setOnAction(a -> stage.close());
 
         Button cancel = new Button("No");
         cancel.setOnAction(b -> s.close());

@@ -154,6 +154,11 @@ public class PlayUI {
 
 
         Stage s = new Stage();
+
+        s.setOnCloseRequest(e->{
+            e.consume();
+            Popups.quitDialog(s);
+        });
         s.setScene(done);
         return s;
     }
