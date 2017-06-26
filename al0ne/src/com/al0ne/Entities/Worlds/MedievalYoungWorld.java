@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class MedievalYoungWorld extends World{
     public MedievalYoungWorld() {
-        super("medievaly");
+        super("medievaly", 'l');
 
         Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");

@@ -38,6 +38,15 @@ public class EditingGame implements Serializable{
         this.currentEntity = null;
     }
 
+    public EditingGame(Game g){
+        this.currentEdit = g;
+        this.items = new HashMap<>();
+        this.props = new HashMap<>();
+        this.npcs = new HashMap<>();
+        this.enemies = new HashMap<>();
+        this.currentEntity = null;
+    }
+
     public Game getCurrentEdit() {
         return currentEdit;
     }

@@ -1,5 +1,6 @@
 package com.al0ne.Engine.UI.EditorUI;
 
+import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
@@ -7,7 +8,9 @@ import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -86,15 +89,21 @@ public class GameEditorUI {
 
         listContainer.getChildren().addAll(gameList, load, export, play);
 
-        VBox newGameBox = new VBox();
+        GridPane newGameBox = new GridPane();
+        newGameBox.setPadding(new Insets(10, 10, 10, 10));
 
         TextField nameText = new TextField();
-        Label nameLabel = new Label("Name:");
+        Label nameLabel = new Label("Game name:");
         nameText.setPromptText("Awesome game");
 
         TextField worldText = new TextField();
         nameText.setPromptText("The village of Nir");
         Label worldLabel = new Label("Starting world name:");
+        Label techLabel = new Label("Technology level:");
+        ObservableList<String> techList = FXCollections.observableArrayList("Prehistoric", "Medieval",
+                "Industrial", "Futuristic");
+        ComboBox<String> techDisplay = new ComboBox<>(techList);
+        techDisplay.getSelectionModel().select(0);
         Button create = new Button("Create new Game");
 
         Label errorMessage = new Label("");
@@ -113,8 +122,26 @@ public class GameEditorUI {
                 nameText.setStyle("");
                 worldText.setStyle("");
                 errorMessage.setText("");
+
+                String techString = techDisplay.getSelectionModel().getSelectedItem().toLowerCase();
+                char techLevel = 'b';
+                switch (techString){
+                    case "prehistoric":
+                        techLevel = 'b';
+                        break;
+                    case "medieval":
+                        techLevel = 'l';
+                        break;
+                    case "industrial":
+                        techLevel = 'm';
+                        break;
+                    case "futuristic":
+                        techLevel = 'h';
+                        break;
+                }
+
                 EditingGame newGame = new EditingGame(nameText.getText());
-                World newWorld = new World(worldText.getText());
+                World newWorld = new World(worldText.getText(), techLevel);
 
                 nameText.setText("");
                 worldText.setText("");
@@ -142,7 +169,14 @@ public class GameEditorUI {
 
 
 
-        newGameBox.getChildren().addAll(nameLabel, nameText, worldLabel, worldText, create, errorMessage);
+        newGameBox.add(nameLabel, 0, 0);
+        newGameBox.add(nameText, 1, 0);
+        newGameBox.add(worldLabel, 0, 1);
+        newGameBox.add(worldText, 1, 1);
+        newGameBox.add(techLabel, 0, 2);
+        newGameBox.add(techDisplay, 1, 2);
+        newGameBox.add(create, 0, 3);
+        newGameBox.add(errorMessage, 0, 4);
 
 
 

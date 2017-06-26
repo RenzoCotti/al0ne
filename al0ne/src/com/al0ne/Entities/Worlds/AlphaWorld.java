@@ -35,7 +35,7 @@ import com.al0ne.Entities.Spells.MidasSpell;
 public class AlphaWorld extends World{
 
     public AlphaWorld() {
-        super("alpha");
+        super("alpha", 'l');
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
 

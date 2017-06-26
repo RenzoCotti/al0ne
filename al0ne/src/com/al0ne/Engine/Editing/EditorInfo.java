@@ -1,5 +1,7 @@
 package com.al0ne.Engine.Editing;
 
+import com.al0ne.Engine.Game;
+
 import java.io.Serializable;
 import java.util.HashMap;
 

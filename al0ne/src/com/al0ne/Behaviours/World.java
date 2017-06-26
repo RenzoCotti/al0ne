@@ -15,10 +15,17 @@ public class World implements Serializable{
     protected Player player;
     protected LootTable lootTable;
 
-    public World(String worldName) {
+    //b: base
+    //l: low
+    //m: mid
+    //h: high
+    protected char techLevel;
+
+    public World(String worldName, char techLevel) {
         this.worldName = worldName;
         this.rooms = new HashMap<>();
         this.lootTable = new LootTable();
+        this.techLevel = techLevel;
     }
 
     public Room getStartingRoom() {

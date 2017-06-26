@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.*;
+import com.al0ne.Engine.Editing.EditingGame;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.TextParsing.ParseInput;
@@ -60,6 +61,7 @@ public class Main extends Application{
             }
         }
         if(!nostalgiaMode){
+            edit.addGame(new EditingGame(game));
             launch(args);
         }
     }

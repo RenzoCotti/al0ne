@@ -256,10 +256,10 @@ public class Popups {
     public static void openEditor(){
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
-        HBox dialogVbox = GameEditorUI.createEditor(s);
-        dialogVbox.setPrefSize(300, 300);
+        HBox editor = GameEditorUI.createEditor(s);
+        editor.setPrefSize(600, 300);
 
-        Scene dialogScene = new Scene(dialogVbox);
+        Scene dialogScene = new Scene(editor);
 
         s.setScene(dialogScene);
         s.setTitle("Game Editor");

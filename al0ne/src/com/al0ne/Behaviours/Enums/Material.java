@@ -8,11 +8,21 @@ import java.util.ArrayList;
  * Created by BMW on 02/05/2017.
  */
 public enum Material {
-    IRON(3, 3, 3, 2), BRASS(0, 0, 2, 1), SILVER(2, 2, 1, 6), GOLD(1, 1, 4, 12), STEEL(4, 4, 3, 2),
 
-    WOOD(1, 2, 3, 0), STONE(1, 1, 4, 0), LEATHER(1, 1, 4),
+    //Base Tech materials
+    CLAY(0, 2, 0), STONE(1, 1, 4, 0), WOOD(1, 2, 3, 0), LEATHER(1, 1, 4), FUR(1, 2, 2),
+    FIBRE(0.5, 0),
 
-    GLASS(0.5, 1), PAPER(1, 1), FIBRE(0.5, 0), CLAY(0, 0.5, 0),
+
+    //Low Tech materials
+    IRON(3, 3, 3, 2), BRASS(0, 0, 2, 1), SILVER(2, 2, 1, 6), GOLD(1, 1, 4, 12),
+    GLASS(0.5, 1), PAPER(1, 1),
+
+    //Mid Tech materials
+    PLASTIC(0, 0, 0.5, 0), KEVLAR(6, 2, 10), STEEL(4, 4, 3, 2), COTTON(1, 1),
+
+    //High Tech materials
+    NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10),
 
     UNDEFINED(0, 0);
 
@@ -152,6 +162,47 @@ public enum Material {
         materials.add(STEEL);
         materials.add(BRASS);
         materials.add(SILVER);
+        materials.add(TITANIUM);
+        return materials;
+    }
+
+    public static ArrayList<Material> getBaseTechMaterials(){
+        ArrayList<Material> materials = new ArrayList<>();
+        materials.add(CLAY);
+        materials.add(STONE);
+        materials.add(WOOD);
+        materials.add(LEATHER);
+        materials.add(FUR);
+        materials.add(FIBRE);
+        return materials;
+    }
+
+    public static ArrayList<Material> getLowTechMaterials(){
+        ArrayList<Material> materials = getBaseTechMaterials();
+        materials.add(IRON);
+        materials.add(BRASS);
+        materials.add(SILVER);
+        materials.add(GOLD);
+        materials.add(GLASS);
+        materials.add(PAPER);
+        return materials;
+    }
+
+
+    public static ArrayList<Material> getMidTechMaterials(){
+        ArrayList<Material> materials = getLowTechMaterials();
+        materials.add(PLASTIC);
+        materials.add(KEVLAR);
+        materials.add(STEEL);
+        materials.add(COTTON);
+        materials.add(SILVER);
+        return materials;
+    }
+
+    public static ArrayList<Material> getHighTechMaterials(){
+        ArrayList<Material> materials = getMidTechMaterials();
+        materials.add(NANITE);
+        materials.add(TITANIUM);
         return materials;
     }
 
