@@ -362,7 +362,20 @@ public class Player extends WorldCharacter {
         }
     }
 
-    //this function adds 1 item from pair to the inventory
+    //this function removes 1 item from pair to the inventory
+    public boolean removeOneItem(Item i) {
+        Pair p = getItemPair(i.getID());
+        if(p != null){
+            modifyWeight(-i.getWeight());
+            if(!p.subCount()){
+                inventory.remove(i.getID());
+            }
+        }
+        return true;
+    }
+
+
+            //this function adds 1 item from pair to the inventory
     //returns true if it's successful, else the player can't carry it
     public boolean addOneItem(Pair pair) {
         Item item = (Item) pair.getEntity();
@@ -524,9 +537,9 @@ public class Player extends WorldCharacter {
             return 0;
         }
         if (target.getType() == 'p'){
-            return ((Prop) target).usedWith((Item) item, currentRoom, this);
+            ((Prop) target).usedWith((Item) item, currentRoom, this);
         } else if (target.getType() == 'i' || target.getType() == 'w'){
-            return ((Item) target).usedWith((Item) item, currentRoom, this);
+            ((Item) target).usedWith((Item) item, currentRoom, this);
         }
         return 0;
     }

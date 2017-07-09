@@ -5,15 +5,35 @@ import com.al0ne.Behaviours.abstractEntities.Entity;
 import java.io.Serializable;
 
 /**
- * Created by BMW on 09/03/2017.
+ * This represent a quantity of an item/npc/enemy...
+ * entity represents the object
+ * count the quantity
+ * location represents where it is located:
+ * c: container
+ * r: room
+ * i: inventory
  */
 public class Pair implements Serializable{
     private Entity entity;
     private int count;
+    //r: in room
+    //c: in container
+    //i: in inventory
+    private char location;
+
 
     public Pair(Entity entity, int count) {
         this.entity = entity;
         this.count = count;
+        this.location = 'r';
+    }
+
+    public char getLocation() {
+        return location;
+    }
+
+    public void setLocation(char location) {
+        this.location = location;
     }
 
     public Entity getEntity() {

@@ -22,7 +22,6 @@ public abstract class Enemy extends WorldCharacter {
 
     static final int CHANCE_OF_SPECIAL = 20;
 
-
     protected boolean special;
     protected boolean aggro;
     protected boolean snooze;

@@ -253,10 +253,7 @@ public class HandleCommands {
 
             if (inventoryUse.getItems().size() == 1 && itemUse.getItems().size() == 1) {
 //                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                int result = player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity());
-                if (result == 0) {
-                    printToLog("You can't use it.");
-                }
+                player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity());
 
             } else {
                 printToLog("You can't see such items");
@@ -371,8 +368,10 @@ public class HandleCommands {
 
         if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
 
+            Pair currentPair = possibleItems.get(0);
+
             int count = possibleItems.get(0).getCount();
-            Item currentItem = (Item) possibleItems.get(0).getEntity();
+            Item currentItem = (Item) currentPair.getEntity();
             Container currentContainer = (Container) possibleContainers.get(0).getEntity();
 
             if(all){
@@ -391,12 +390,14 @@ public class HandleCommands {
                 } else {
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
+                currentPair.setLocation('i');
             } else if(result){
                 if (all) {
                     printToLog(count + " x " + currentItem.getName() + " put in " + currentContainer.getName());
                 } else {
                     printToLog(currentItem.getName() + " put in " + currentContainer.getName());
                 }
+                currentPair.setLocation('c');
             }
         } else {
             printToLog("You can't take it.");
@@ -421,6 +422,7 @@ public class HandleCommands {
         }
         ParseInput.wrongCommand = 0;
 
+        //handles taking all items in room
         if(temp.length == 2 && temp[1].equals("all")){
             possibleItems = currentRoom.getItemList();
 
@@ -433,6 +435,7 @@ public class HandleCommands {
                     break;
                 }
                 Item currentItem = (Item) p.getEntity();
+                p.setLocation('i');
                 printToLog("Taken "+currentItem.getName()+".");
             }
             return true;
@@ -443,7 +446,7 @@ public class HandleCommands {
 
         String item;
 
-        //we try to get a number from temp
+        //we try to get a number from temp, eg. take 12 rock
         int amt = 0;
         try{
             Integer.parseInt(temp[1]);
@@ -482,15 +485,18 @@ public class HandleCommands {
             int count = currentPair.getCount();
             if (all) {
                 if (player.pickUpItem(currentPair, count) == 1) {
+                    currentPair.setLocation('i');
                     printToLog(count+" "+currentItem.getName() + " added to your inventory.");
                 }
 
             } else if (amt != 0) {
+                currentPair.setLocation('i');
                 if (player.pickUpItem(items.get(0), amt) == 1) {
                     printToLog(amt+" "+currentItem.getName() + " added to your inventory.");
                 }
             } else {
                 if (player.pickUpItem(items.get(0), 1) == 1) {
+                    currentPair.setLocation('i');
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
             }
@@ -530,6 +536,7 @@ public class HandleCommands {
             for(Pair p : toRemove){
                 if(player.drop(p, p.getCount())==1){
                     Item currentItem = (Item) p.getEntity();
+                    p.setLocation('r');
                     printToLog("Dropped "+currentItem.getName()+".");
                 }
             }
@@ -569,6 +576,7 @@ public class HandleCommands {
             if (all) {
                 int result = player.drop(p, p.getCount());
                 if (result == 1) {
+                    p.setLocation('r');
                     printToLog("You drop all the " + i.getName());
                 } else if(result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -576,6 +584,7 @@ public class HandleCommands {
             } else if (amt != 0) {
                 int result = player.drop(p, amt);
                 if (result == 1) {
+                    p.setLocation('r');
                     printToLog("You drop "+ amt+" "+ i.getName());
                 } else if (result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -583,6 +592,7 @@ public class HandleCommands {
             } else {
                 int result = player.drop(p, 1);
                 if (result == 1) {
+                    p.setLocation('r');
                     printToLog("You drop the " + i.getName());
                 } else if (result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -666,6 +676,7 @@ public class HandleCommands {
         } else if(possibleEntities.size() == 1 && items.getReliability() < entities.getReliability()){
             printToLog("(first taking the "+possibleEntities.get(0).getEntity().getName()+")");
             if(player.pickUpItem(possibleEntities.get(0), 1) == 1){
+                possibleEntities.get(0).setLocation('i');
                 Item item = (Item) player.getItemPair(possibleEntities.get(0).getEntity().getID()).getEntity();
 
                 if (player.wear(item)) {
