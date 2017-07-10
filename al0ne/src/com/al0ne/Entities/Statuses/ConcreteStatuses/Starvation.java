@@ -12,7 +12,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class Starvation extends Status{
 
     public Starvation() {
-        super("starvation", -1, "You need some food, now.", "Your stomach aches in hunger.", "Food! Finally!");
+        super("starvation", -1, "You need some food, now.", "Your stomach aches in hunger.", "FoodBehaviour! Finally!");
     }
 
     @Override

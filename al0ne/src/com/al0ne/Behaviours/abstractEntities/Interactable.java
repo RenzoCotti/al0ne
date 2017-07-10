@@ -64,6 +64,7 @@ public abstract class Interactable extends Entity {
         Behaviour interacted = null;
         for (Behaviour b: properties){
             for(Behaviour b1: item.getProperties()){
+                System.out.println(b+" vs "+b1);
                 result = b.isInteractedWith(b1);
                 if(result != 0){
                     interacted = b1;

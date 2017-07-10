@@ -10,7 +10,6 @@ import com.al0ne.Behaviours.Room;
 public class HealthPotion extends Potion {
         public HealthPotion() {
             super("healthp", "Health Potion", "A potion for dire moments.");
-            addProperty("healing");
         }
 
         @Override

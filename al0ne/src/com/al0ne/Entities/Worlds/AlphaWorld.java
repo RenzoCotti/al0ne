@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Engine.Physics.Iron;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
@@ -140,7 +141,9 @@ public class AlphaWorld extends World{
         putRoom(ladderRoom);
 
         Room daggerRoom = new Room("Empty room", "The room is very barren.");
-        daggerRoom.addEntity(new Dagger(Material.IRON));
+        Dagger d = new Dagger(Material.IRON);
+        d.addProperty(new Iron());
+        daggerRoom.addEntity(d);
         daggerRoom.addEntity(new IronHelmet());
         putRoom(daggerRoom);
 

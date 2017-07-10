@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Engine.Physics.WaterBehaviour;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -15,6 +16,7 @@ public class HolyFountain extends Prop{
         super("Holy Fountain",
                 "The water in this decorated fountain seems so clear and refreshing",
                 "water fountain", null, Material.STONE);
+        addProperty(new WaterBehaviour());
     }
 
     @Override

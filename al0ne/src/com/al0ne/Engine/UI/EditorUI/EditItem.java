@@ -91,7 +91,7 @@ public class EditItem {
 
         Label typeLabel = new Label("Type:");
         ObservableList<String> typeList = FXCollections.observableArrayList("Weapon", "Armor",
-                "Food", "Scroll", "Coin", "Key", "Generic");
+                "FoodBehaviour", "Scroll", "Coin", "Key", "Generic");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
 
         //food
@@ -99,14 +99,14 @@ public class EditItem {
         foodValue.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
         Label foodLabel = new Label("Nutrition:");
 
-        Label foodType = new Label("Food Type");
-        ObservableList<String> foodOrDrink = FXCollections.observableArrayList("Food", "Drink");
+        Label foodType = new Label("FoodBehaviour Type");
+        ObservableList<String> foodOrDrink = FXCollections.observableArrayList("FoodBehaviour", "Drink");
         ComboBox<String> foodDisplay = new ComboBox<>(foodOrDrink);
         foodDisplay.valueProperty().addListener( (ov, t, t1) ->{
             if(t1 == null){
                 return;
             }
-            if (t1.equals("Food")){
+            if (t1.equals("FoodBehaviour")){
                 itemContent.add(foodLabel, 0, 11);
                 itemContent.add(foodValue, 1, 11);
             } else if( t1.equals("Drink")){
@@ -169,15 +169,15 @@ public class EditItem {
                 materialDisplay.setValue(Material.materialToString(i.getMaterial()));
                 weightText.getValueFactory().setValue(i.getWeight());
 
-                //"Weapon", "Armor", "Food", "Scroll", "Coin", "Key", "Generic");
+                //"Weapon", "Armor", "FoodBehaviour", "Scroll", "Coin", "Key", "Generic");
 
                 if(i instanceof Food){
-                    typeDisplay.getSelectionModel().select("Food");
+                    typeDisplay.getSelectionModel().select("FoodBehaviour");
 
-                    foodDisplay.getSelectionModel().select("Food");
+                    foodDisplay.getSelectionModel().select("FoodBehaviour");
                     foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
                 } else if(i instanceof Drinkable){
-                    typeDisplay.getSelectionModel().select("Food");
+                    typeDisplay.getSelectionModel().select("FoodBehaviour");
                     foodDisplay.getSelectionModel().select("Drink");
                 } else if(i instanceof Weapon){
                     typeDisplay.getSelectionModel().select("Weapon");
@@ -384,7 +384,7 @@ public class EditItem {
                             break;
                         case "food":
                             String foodInput = foodDisplay.getSelectionModel().getSelectedItem();
-                            if(foodInput != null && foodInput.equals("Food")){
+                            if(foodInput != null && foodInput.equals("FoodBehaviour")){
                                 int foodVal = foodValue.getValue();
                                 Food food = new Food(name, desc, weight, s, foodVal);
                                 Main.edit.getCurrentEdit().addItem(food);
@@ -394,7 +394,7 @@ public class EditItem {
                                 Main.edit.getCurrentEdit().addItem(drink);
                                 done = true;
                             } else {
-                                errorMessage.setText("Please select a value for Food type");
+                                errorMessage.setText("Please select a value for FoodBehaviour type");
                             }
 
                             break;
@@ -506,7 +506,7 @@ public class EditItem {
             } else if(e instanceof Weapon){
                 temp.add(new IdNameType(e.getID(), e.getName(), "Weapon"));
             } else if(e instanceof Food || e instanceof Drinkable){
-                temp.add(new IdNameType(e.getID(), e.getName(), "Food"));
+                temp.add(new IdNameType(e.getID(), e.getName(), "FoodBehaviour"));
             } else if(e instanceof Readable){
                 temp.add(new IdNameType(e.getID(), e.getName(), "Scroll"));
             }

@@ -22,16 +22,16 @@ public class MoneyTree extends Prop{
     }
 
 
-    @Override
-    public int usedWith(Item item, Room currentRoom, Player player) {
-
-        if(item.hasProperty("sharp")){
-            printToLog(usedMessage);
-            currentRoom.addItem(new SilverCoin(), 100);
-            return 1;
-        }
-        return 0;
-    }
+//    @Override
+//    public int usedWith(Item item, Room currentRoom, Player player) {
+//
+//        if(item.hasProperty("sharp")){
+//            printToLog(usedMessage);
+//            currentRoom.addItem(new SilverCoin(), 100);
+//            return 1;
+//        }
+//        return 0;
+//    }
 
     @Override
     public int used(Room currentRoom, Player player){

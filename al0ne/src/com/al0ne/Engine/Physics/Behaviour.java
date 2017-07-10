@@ -2,10 +2,12 @@ package com.al0ne.Engine.Physics;
 
 import com.al0ne.Behaviours.abstractEntities.Entity;
 
+import java.io.Serializable;
+
 /**
  * Created by BMW on 09/07/2017.
  */
-public abstract class Behaviour {
+public abstract class Behaviour implements Serializable{
     public String name;
     public Entity toAdd;
     public int count;

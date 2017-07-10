@@ -220,8 +220,8 @@ public class HandleCommands {
         String firstItem;
         String secondItem;
 
-        PotentialItems inventoryUse;
-        PotentialItems itemUse;
+        PotentialItems inventoryItems;
+        PotentialItems roomItems;
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
             if (temp.length < 2) {
@@ -232,28 +232,44 @@ public class HandleCommands {
             ParseInput.wrongCommand = 0;
 
 
+            //case use x with y
             firstItem = Utility.stitchFromTo(temp, 1, tokenPosition);
             secondItem = Utility.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
-            inventoryUse = getPotentialItem(firstItem, player, 0);
+            //we try to get all potential items from inv
+            inventoryItems = getPotentialItem(firstItem, player, 0);
+            //and from the room
             PotentialItems possibleEntities = getPotentialItem(firstItem, player, 1);
-            if(inventoryUse.getReliability() < possibleEntities.getReliability()){
-                inventoryUse = possibleEntities;
+            if(inventoryItems.getReliability() < possibleEntities.getReliability()){
+                inventoryItems = possibleEntities;
             }
             //prop from room
-            itemUse = getPotentialItem(secondItem, player, 1);
-            if(itemUse.getReliability() < possibleEntities.getReliability()){
-                itemUse = possibleEntities;
+            roomItems = getPotentialItem(secondItem, player, 0);
+            possibleEntities = getPotentialItem(secondItem, player, 1);
+            if(roomItems.getReliability() < possibleEntities.getReliability()){
+                roomItems = possibleEntities;
             }
 
-            if (inventoryUse.getItems().size() > 1 || itemUse.getItems().size() > 1) {
+            if (inventoryItems.getItems().size() > 1 || roomItems.getItems().size() > 1) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-            if (inventoryUse.getItems().size() == 1 && itemUse.getItems().size() == 1) {
+//            System.out.println("candidate inv items: "+inventoryItems.getItems().size()+", item: "+firstItem);
+//            System.out.println("candidate room items: "+roomItems.getItems().size()+", item: "+secondItem);
+
+            if (inventoryItems.getItems().size() == 1 && roomItems.getItems().size() == 1) {
+//                System.out.println("using: ");
+//                for(Pair p : roomItems.getItems()){
+//                    System.out.println(p.getEntity().getName());
+//                }
+//
+//                System.out.println("on: ");
+//                for(Pair p : inventoryItems.getItems()){
+//                    System.out.println(p.getEntity().getName());
+//                }
 //                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                player.interactOnWith(itemUse.getItems().get(0).getEntity(), inventoryUse.getItems().get(0).getEntity());
+                player.interactOnWith(roomItems.getItems().get(0).getEntity(), inventoryItems.getItems().get(0).getEntity());
 
             } else {
                 printToLog("You can't see such items");
@@ -274,30 +290,30 @@ public class HandleCommands {
 
             firstItem = Utility.stitchFromTo(temp, 1, temp.length);
 
-            inventoryUse = getPotentialItem(firstItem, player, 0);
-            itemUse = getPotentialItem(firstItem, player, 1);
+            inventoryItems = getPotentialItem(firstItem, player, 0);
+            roomItems = getPotentialItem(firstItem, player, 1);
 
             //there are more possibilities from the items fetched
-            if ((inventoryUse.getItems().size() + itemUse.getItems().size() == 0)) {
+            if ((inventoryItems.getItems().size() + roomItems.getItems().size() == 0)) {
                 printToLog("You can't see that.");
                 return false;
             }
 
             //there are more possibilities from the items fetched
-            if (!(inventoryUse.getItems().size() + itemUse.getItems().size() == 1)) {
+            if (!(inventoryItems.getItems().size() + roomItems.getItems().size() == 1)) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-            if (inventoryUse.getItems().size() == 1) {
+            if (inventoryItems.getItems().size() == 1) {
 
-                int result = player.simpleUse(inventoryUse.getItems().get(0).getEntity());
+                int result = player.simpleUse(inventoryItems.getItems().get(0).getEntity());
 
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }
-            } else if (itemUse.getItems().size() == 1) {
-                int result = player.simpleUse(itemUse.getItems().get(0).getEntity());
+            } else if (roomItems.getItems().size() == 1) {
+                int result = player.simpleUse(roomItems.getItems().get(0).getEntity());
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }

@@ -6,6 +6,8 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Engine.Physics.FoodBehaviour;
+import com.al0ne.Engine.Physics.WaterBehaviour;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -17,7 +19,8 @@ public class Drinkable extends Item{
     public Drinkable(String name, String description, double weight, Size size) {
         super(name, name, description, weight, size, Material.GLASS, null);
         addCommand(Command.DRINK);
-        addProperty("food");
+        addProperty(new FoodBehaviour());
+        addProperty(new WaterBehaviour());
     }
 
     @Override

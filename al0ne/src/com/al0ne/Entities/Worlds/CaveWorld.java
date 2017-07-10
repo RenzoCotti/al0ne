@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Engine.Physics.WaterBehaviour;
 import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Mace;
 import com.al0ne.Entities.Items.ConcreteItems.Canteen;
@@ -32,7 +33,7 @@ public class CaveWorld extends World{
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
         Prop river = new Prop("River", "a watery river");
-        river.addProperty("water");
+        river.addProperty(new WaterBehaviour());
         cave1.addEntity(river);
         cave1.addEntity(new Canteen());
         cave1.lockDirection("east", "cave1door");

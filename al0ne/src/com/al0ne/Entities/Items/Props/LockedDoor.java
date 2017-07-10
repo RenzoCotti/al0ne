@@ -23,7 +23,7 @@ public class LockedDoor extends Door {
     }
 
     @Override
-    public int usedWith(Item item, Room currentRoom, Player player){
+    public void usedWith(Item item, Room currentRoom, Player player){
         if(item.hasProperty("key")){
 //            printToLog(requiresItem);
             if (item.getID().equals(requiresItem)){
@@ -45,7 +45,6 @@ public class LockedDoor extends Door {
         else{
             printToLog("The "+ item.getName()+" doesn't seem to fit in the keyhole.");
         }
-        return 2;
     }
 
     @Override

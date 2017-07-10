@@ -207,7 +207,7 @@ public class MedievalYoungWorld extends World{
                 "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FIBRE);
         p.simpleAddItem(bc, 1);
         p.wear(bc);
-//        p.simpleAddItem(new Food("eggs", "asd", 0, Size.NORMAL, 0), 1);
+//        p.simpleAddItem(new FoodBehaviour("eggs", "asd", 0, Size.NORMAL, 0), 1);
         setPlayer(p);
     }
 }

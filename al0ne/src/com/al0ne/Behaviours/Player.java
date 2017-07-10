@@ -533,14 +533,30 @@ public class Player extends WorldCharacter {
     //one can't use an enemy or an NPC
 
     public int interactOnWith(Entity target, Entity item){
+        System.out.println("Using "+target.getName()+" with "+ item.getName());
         if (target.getType() == 'n' || item.getType() == 'e'){
             return 0;
         }
-        if (target.getType() == 'p'){
-            ((Prop) target).usedWith((Item) item, currentRoom, this);
-        } else if (target.getType() == 'i' || target.getType() == 'w'){
-            ((Item) target).usedWith((Item) item, currentRoom, this);
+        if(target.getType() == 'p' && item.getType() == 'p'){
+            printToLog("At least one of the items must be from your inventory.");
+            return 0;
         }
+        System.out.println("1");
+
+        if (item instanceof Item){
+            System.out.println("2");
+            ((Interactable) target).usedWith((Item) item, currentRoom, this);
+        } else if (target instanceof Item){
+            System.out.println("3");
+            ((Interactable) item).usedWith((Item) target, currentRoom, this);
+        }
+//        else if ((target.getType() == 'i' || target.getType() == 'w')&&(item.getType() == 'i')){
+//            System.out.println("3");
+//            ((Item) target).usedWith((Item) item, currentRoom, this);
+//        } else if((item.getType() == 'i' || item.getType() == 'w')&&(target.getType() == 'i')){
+//            System.out.println("4");
+//            ((Item) item).usedWith((Item) target, currentRoom, this);
+//        }
         return 0;
     }
 

@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Engine.Physics.KeyBehaviour;
 
 /**
  * Created by BMW on 02/02/2017.
@@ -12,12 +13,12 @@ import com.al0ne.Behaviours.Enums.Material;
 public class Key extends Item{
     public Key(String id, String name, String description) {
         super(id, name, description, 0.1, Size.VSMALL, Material.IRON, null);
-        addProperty("key");
+        addProperty(new KeyBehaviour());
     }
 
     public Key(String id, String name) {
         super(id, name, "A plain looking key.", 0.1, Size.VSMALL, Material.IRON, null);
-        addProperty("key");
+        addProperty(new KeyBehaviour());
     }
 
     @Override
