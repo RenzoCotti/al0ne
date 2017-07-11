@@ -4,7 +4,7 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Engine.Physics.PotionBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.PotionBehaviour;
 
 /**
  * Created by BMW on 02/02/2017.

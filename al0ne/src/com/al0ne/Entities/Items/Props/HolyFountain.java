@@ -4,7 +4,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Engine.Physics.WaterBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 
 import static com.al0ne.Engine.Main.printToLog;
 

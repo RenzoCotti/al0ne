@@ -6,8 +6,8 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Engine.Physics.FoodBehaviour;
-import com.al0ne.Engine.Physics.WaterBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.FoodBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Thirst;
 
 import static com.al0ne.Engine.Main.printToLog;

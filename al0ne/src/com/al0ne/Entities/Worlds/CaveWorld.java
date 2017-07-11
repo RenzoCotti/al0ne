@@ -5,7 +5,7 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Physics.WaterBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Weapon.Mace;
 import com.al0ne.Entities.Items.ConcreteItems.Canteen;

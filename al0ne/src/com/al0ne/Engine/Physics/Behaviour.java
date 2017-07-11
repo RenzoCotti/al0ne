@@ -10,8 +10,9 @@ import java.io.Serializable;
 public abstract class Behaviour implements Serializable{
     public String name;
     public Entity toAdd;
-    public int count;
-    public String lock;
+    public int count = 0;
+    public String lock = "none";
+    public int modifier = 0;
 
 
     public Behaviour(String s){
@@ -26,10 +27,11 @@ public abstract class Behaviour implements Serializable{
     * 4: remove this from where it was
     * 5: remove other from where it was
     * 6: unlock door
-    * 7: ...
-    *
+    * 7: refill charge
+    * 8: modify health
+    * 9: ...
     * */
-    public abstract int isInteractedWith(Behaviour b);
+    public abstract String isInteractedWith(Behaviour b);
 
     public String getName() {
         return name;
@@ -58,5 +60,13 @@ public abstract class Behaviour implements Serializable{
 
     public void setLock(String lock) {
         this.lock = lock;
+    }
+
+    public int getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(int modifier) {
+        this.modifier = modifier;
     }
 }

@@ -72,7 +72,7 @@ public class Main extends Application{
         currentRoom.printRoom();
         printToLog();
         currentRoom.printName();
-        game.toggleDebugMode();
+//        game.toggleDebugMode();
 
         if(!nostalgiaMode){
             input.requestFocus();

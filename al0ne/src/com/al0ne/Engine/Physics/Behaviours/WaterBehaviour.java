@@ -1,11 +1,13 @@
-package com.al0ne.Engine.Physics;
+package com.al0ne.Engine.Physics.Behaviours;
+
+import com.al0ne.Engine.Physics.Behaviour;
 
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * Created by BMW on 09/07/2017.
  */
-public class WaterBehaviour extends Behaviour{
+public class WaterBehaviour extends Behaviour {
 
 
     public WaterBehaviour() {
@@ -13,12 +15,12 @@ public class WaterBehaviour extends Behaviour{
     }
 
     @Override
-    public int isInteractedWith(Behaviour b) {
+    public String isInteractedWith(Behaviour b) {
 
         if(b.getName().equals("iron")){
             printToLog("The iron gets corroded!");
-            return 5;
+            return "45";
         }
-        return 0;
+        return "0";
     }
 }

@@ -5,7 +5,7 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Engine.Physics.KeyBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
 
 /**
  * Created by BMW on 02/02/2017.
