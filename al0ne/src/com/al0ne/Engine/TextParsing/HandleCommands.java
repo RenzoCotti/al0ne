@@ -43,7 +43,7 @@ public class HandleCommands {
             return false;
         } else {
             ParseInput.wrongCommand = 0;
-            if (player.moveToRoom(direction, rooms)) {
+            if (PlayerActions.moveToRoom(player, direction, rooms)) {
                 Main.clearScreen();
                 if (player.getCurrentRoom().isFirstVisit()) {
                     player.getCurrentRoom().printRoom();
@@ -80,7 +80,7 @@ public class HandleCommands {
 //            return false;
 //        }
         if (possibleItems.size() == 1) {
-            int result = player.customAction(action, possibleItems.get(0).getEntity());
+            int result = PlayerActions.customAction(player, action, possibleItems.get(0).getEntity());
             if(result == 1){
                 printToLog("You " + s + " the " + possibleItems.get(0).getEntity().getName());
             } else if(result == 0){
@@ -88,7 +88,7 @@ public class HandleCommands {
             }
             return true;
         } else if (possibleEntities.size() == 1) {
-            int result = player.customAction(action, possibleEntities.get(0).getEntity());
+            int result = PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity());
             if(result == 1){
                 printToLog("You " + s + " the " + possibleEntities.get(0).getEntity().getName());
             } else if(result == 0){
@@ -269,7 +269,7 @@ public class HandleCommands {
 //                    System.out.println(p.getEntity().getName());
 //                }
 //                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                player.interactOnWith(roomItems.getItems().get(0).getEntity(), inventoryItems.getItems().get(0).getEntity());
+                PlayerActions.interactOnWith(player, roomItems.getItems().get(0).getEntity(), inventoryItems.getItems().get(0).getEntity());
 
             } else {
                 printToLog("You can't see such items");
@@ -307,13 +307,13 @@ public class HandleCommands {
 
             if (inventoryItems.getItems().size() == 1) {
 
-                int result = player.simpleUse(inventoryItems.getItems().get(0).getEntity());
+                int result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
 
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }
             } else if (roomItems.getItems().size() == 1) {
-                int result = player.simpleUse(roomItems.getItems().get(0).getEntity());
+                int result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
                 if (result == 0) {
                     printToLog("You can't use it.");
                 }
@@ -396,9 +396,9 @@ public class HandleCommands {
 
             boolean result;
             if(take){
-                result = player.takeFrom(possibleItems.get(0), currentContainer, amount);
+                result = PlayerActions.takeFrom(player, possibleItems.get(0), currentContainer, amount);
             } else{
-                result = player.putIn(possibleItems.get(0), currentContainer, amount);
+                result = PlayerActions.putIn(player, possibleItems.get(0), currentContainer, amount);
             }
             if (result && take) {
                 if (all) {
@@ -447,7 +447,7 @@ public class HandleCommands {
                 return false;
             }
             for(Pair p : possibleItems){
-                if(player.pickUpItem(p, p.getCount()) == 0){
+                if(PlayerActions.pickUpItem(player, p, p.getCount()) == 0){
                     break;
                 }
                 Item currentItem = (Item) p.getEntity();
@@ -500,18 +500,18 @@ public class HandleCommands {
             Interactable currentItem = (Interactable) currentPair.getEntity();
             int count = currentPair.getCount();
             if (all) {
-                if (player.pickUpItem(currentPair, count) == 1) {
+                if (PlayerActions.pickUpItem(player, currentPair, count) == 1) {
                     currentPair.setLocation('i');
                     printToLog(count+" "+currentItem.getName() + " added to your inventory.");
                 }
 
             } else if (amt != 0) {
                 currentPair.setLocation('i');
-                if (player.pickUpItem(items.get(0), amt) == 1) {
+                if (PlayerActions.pickUpItem(player, items.get(0), amt) == 1) {
                     printToLog(amt+" "+currentItem.getName() + " added to your inventory.");
                 }
             } else {
-                if (player.pickUpItem(items.get(0), 1) == 1) {
+                if (PlayerActions.pickUpItem(player, items.get(0), 1) == 1) {
                     currentPair.setLocation('i');
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
@@ -550,7 +550,7 @@ public class HandleCommands {
                 }
             }
             for(Pair p : toRemove){
-                if(player.drop(p, p.getCount())==1){
+                if(PlayerActions.drop(player, p, p.getCount())==1){
                     Item currentItem = (Item) p.getEntity();
                     p.setLocation('r');
                     printToLog("Dropped "+currentItem.getName()+".");
@@ -590,7 +590,7 @@ public class HandleCommands {
             Item i = (Item)possibleItems.get(0).getEntity();
             Pair p = possibleItems.get(0);
             if (all) {
-                int result = player.drop(p, p.getCount());
+                int result = PlayerActions.drop(player, p, p.getCount());
                 if (result == 1) {
                     p.setLocation('r');
                     printToLog("You drop all the " + i.getName());
@@ -598,7 +598,7 @@ public class HandleCommands {
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
                 }
             } else if (amt != 0) {
-                int result = player.drop(p, amt);
+                int result = PlayerActions.drop(player, p, amt);
                 if (result == 1) {
                     p.setLocation('r');
                     printToLog("You drop "+ amt+" "+ i.getName());
@@ -606,7 +606,7 @@ public class HandleCommands {
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
                 }
             } else {
-                int result = player.drop(p, 1);
+                int result = PlayerActions.drop(player, p, 1);
                 if (result == 1) {
                     p.setLocation('r');
                     printToLog("You drop the " + i.getName());
@@ -654,7 +654,7 @@ public class HandleCommands {
             printToLog("You can't see such an item");
             return false;
         }
-        player.examine(items.get(0).getEntity());
+        PlayerActions.examine(player, items.get(0).getEntity());
 
         return false;
     }
@@ -691,7 +691,7 @@ public class HandleCommands {
             return false;
         } else if(possibleEntities.size() == 1 && items.getReliability() < entities.getReliability()){
             printToLog("(first taking the "+possibleEntities.get(0).getEntity().getName()+")");
-            if(player.pickUpItem(possibleEntities.get(0), 1) == 1){
+            if(PlayerActions.pickUpItem(player, possibleEntities.get(0), 1) == 1){
                 possibleEntities.get(0).setLocation('i');
                 Item item = (Item) player.getItemPair(possibleEntities.get(0).getEntity().getID()).getEntity();
 
@@ -782,7 +782,7 @@ public class HandleCommands {
 
             HandleCommands.isNPC(character, player, npc);
 
-            if (player.talkToNPC(npc, subject)) {
+            if (PlayerActions.talkToNPC(player, npc, subject)) {
                 return true;
             } else {
                 printToLog("\"Sorry, I don't know anything about it.\"");
@@ -850,7 +850,7 @@ public class HandleCommands {
                     return false;
                 }
 
-                if (player.give(character, possibleItemFromInventory.get(0).getEntity())) {
+                if (PlayerActions.give(player, character, possibleItemFromInventory.get(0).getEntity())) {
                     return true;
                 } else {
                     return false;
@@ -872,7 +872,7 @@ public class HandleCommands {
         String enemy = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
         ArrayList<Pair> entities = getPotentialItem(enemy, player, 1).getItems();
         if (entities.size() == 1 && !execute) {
-            return player.attack(entities.get(0).getEntity());
+            return PlayerActions.attack(player, entities.get(0).getEntity());
         } else if (entities.size() == 1 && execute) {
             if(entities.get(0).getEntity().getType() == 'n'){
                 ((Enemy)entities.get(0).getEntity()).handleLoot(currentRoom);

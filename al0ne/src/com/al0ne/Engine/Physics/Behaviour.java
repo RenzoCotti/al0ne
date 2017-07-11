@@ -12,7 +12,7 @@ public abstract class Behaviour implements Serializable{
     public Entity toAdd;
     public int count = 0;
     public String lock = "none";
-    public int modifier = 0;
+    public int healthModifier = 0;
 
 
     public Behaviour(String s){
@@ -62,11 +62,11 @@ public abstract class Behaviour implements Serializable{
         this.lock = lock;
     }
 
-    public int getModifier() {
-        return modifier;
+    public int getHealthModifier() {
+        return healthModifier;
     }
 
-    public void setModifier(int modifier) {
-        this.modifier = modifier;
+    public void setHealthModifier(int modifier) {
+        this.healthModifier = modifier;
     }
 }

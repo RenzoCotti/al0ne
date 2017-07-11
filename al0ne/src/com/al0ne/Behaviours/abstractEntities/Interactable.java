@@ -126,7 +126,7 @@ public abstract class Interactable extends Entity {
                     break;
                 case '8':
                     //modify health
-                    player.modifyHealth(interacted.getModifier());
+                    player.modifyHealth(interacted.getHealthModifier());
                     break;
 
             }
