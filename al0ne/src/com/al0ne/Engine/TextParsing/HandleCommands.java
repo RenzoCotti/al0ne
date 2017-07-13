@@ -992,51 +992,7 @@ public class HandleCommands {
 
             String spellName = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-            if (player.hasItemInInventory("spellbook")) {
-                Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-
-                ArrayList<Spell> potentialSpells = getPotentialSpell(spellName, spellbook);
-
-                if(potentialSpells.size() > 1){
-                    printToLog("Be more specific.");
-                    return false;
-                }else if (potentialSpells.size() == 0){
-                    printToLog("Your spellbook doesn't seem to have the spell "+spellName);
-                    return false;
-                }
-
-                if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
-                    SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
-
-
-                    if(spell.getCount() <= 0){
-                        printToLog("You don't have any castings left.");
-                        return false;
-                    }
-                    Spell s = spell.getSpell();
-                    char castOn = s.getTarget();
-
-                    switch (castOn) {
-                        case 's':
-                            SelfSpell ss = (SelfSpell) s;
-                            if(ss.isCasted(player)){
-                                spell.modifyCount(-1);
-                                return true;
-                            }
-                            return false;
-                        case 'w':
-                            WorldSpell ws = (WorldSpell) s;
-                            if(ws.isCasted(player, currentRoom)){
-                                spell.modifyCount(-1);
-                                return true;
-                            }
-                            return false;
-                    }
-                }
-            } else{
-                printToLog("You need a spellbook to cast spells.");
-                return false;
-            }
+            PlayerActions.castSpell(player, spellName);
 
 
 
@@ -1046,85 +1002,8 @@ public class HandleCommands {
 
             String spellName = Utility.stitchFromTo(parsedInput, 1, tokenAt);
             String target = Utility.stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
-            if (player.hasItemInInventory("spellbook")) {
 
-                Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-
-
-                ArrayList<Spell> potentialSpells = getPotentialSpell(spellName, spellbook);
-
-                if(potentialSpells.size() > 1){
-                    printToLog("Be more specific.");
-                    return false;
-                } else if (potentialSpells.size() == 0){
-                    printToLog("Your spellbook doesn't seem to have such a spell.");
-                    return false;
-                }
-
-
-                if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
-
-                    SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
-
-                    if(spell.getCount() <= 0){
-                        printToLog("You don't have any castings left.");
-                        return false;
-                    }
-                    Spell s = spell.getSpell();
-                    char castOn = s.getTarget();
-
-                    switch (castOn) {
-                        case 'w':
-                        case 'i':
-                            PotentialItems inventoryItems = getPotentialItem(target, player, 0);
-                            ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
-                            PotentialItems items = getPotentialItem(target, player, 1);
-                            ArrayList<Pair> possibleItems = items.getItems();
-
-                            if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
-                                printToLog("Be more specific.");
-                                return false;
-                            } else if(possibleItems.size() != 0){
-                                printToLog("You need to be holding that item.");
-                                return false;
-                            } else if (possibleItemsFromInventory.size() == 0){
-                                printToLog("You can't see a "+target);
-                                return false;
-                            }
-
-                            TargetSpell ts = (TargetSpell) s;
-
-                            if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
-                                spell.modifyCount(-1);
-                                return true;
-                            }
-                            return false;
-
-
-                        case 'e':
-                            DamagingSpell ds = (DamagingSpell) s;
-                            ArrayList<Enemy> enemies = getPotentialEnemy(target, player);
-                            if(enemies.size() == 0){
-                                printToLog("You can't see that enemy");
-                                return false;
-                            } else if(enemies.size()>1){
-                                printToLog("Be more specific");
-                                return false;
-                            } else {
-                                if (ds.isCasted(player, enemies.get(0))) {
-                                    spell.modifyCount(-1);
-                                    return true;
-                                }
-                                return false;
-                            }
-                    }
-                    return false;
-
-                }
-            } else{
-                printToLog("You need a spellbook to cast spells.");
-                return false;
-            }
+            PlayerActions.castAtTarget(player, spellName, target);
         }
         return false;
     }

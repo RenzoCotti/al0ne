@@ -2,12 +2,18 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Pairs.PotentialItems;
+import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
+import com.al0ne.Entities.Spells.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -403,6 +409,147 @@ public class PlayerActions {
         }
         printToLog("You can't figure out how to go " + direction);
         return false;
+    }
+
+
+    public static boolean castSpell(Player player, String spellName){
+        Room currentRoom = player.getCurrentRoom();
+        if (player.hasItemInInventory("spellbook")) {
+            Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
+
+            ArrayList<Spell> potentialSpells = HandleCommands.getPotentialSpell(spellName, spellbook);
+
+            if(potentialSpells.size() > 1){
+                printToLog("Be more specific.");
+                return false;
+            }else if (potentialSpells.size() == 0){
+                printToLog("Your spellbook doesn't seem to have the spell "+spellName);
+                return false;
+            }
+
+            if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
+                SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
+
+
+                if(spell.getCount() <= 0){
+                    printToLog("You don't have any castings left.");
+                    return false;
+                }
+                Spell s = spell.getSpell();
+                char castOn = s.getTarget();
+
+                switch (castOn) {
+                    case 's':
+                        SelfSpell ss = (SelfSpell) s;
+                        if(ss.isCasted(player)){
+                            spell.modifyCount(-1);
+                            return true;
+                        }
+                        return false;
+                    case 'w':
+                        WorldSpell ws = (WorldSpell) s;
+                        if(ws.isCasted(player, currentRoom)){
+                            spell.modifyCount(-1);
+                            return true;
+                        }
+                        return false;
+                }
+                //TODO: TO REVISE this
+                return false;
+            } else {
+                printToLog("Your spellbook doesn't seem to have such a spell.");
+                return false;
+            }
+        } else{
+            printToLog("You need a spellbook to cast spells.");
+            return false;
+        }
+    }
+
+    public static boolean castAtTarget(Player player, String spellName, String target){
+
+        if (player.hasItemInInventory("spellbook")) {
+
+            Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
+
+
+            ArrayList<Spell> potentialSpells = HandleCommands.getPotentialSpell(spellName, spellbook);
+
+            if(potentialSpells.size() > 1){
+                printToLog("Be more specific.");
+                return false;
+            } else if (potentialSpells.size() == 0){
+                printToLog("Your spellbook doesn't seem to have such a spell.");
+                return false;
+            }
+
+
+            if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
+
+                SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
+
+                if(spell.getCount() <= 0){
+                    printToLog("You don't have any castings left.");
+                    return false;
+                }
+                Spell s = spell.getSpell();
+                char castOn = s.getTarget();
+
+                switch (castOn) {
+                    case 'w':
+                    case 'i':
+                        PotentialItems inventoryItems = HandleCommands.getPotentialItem(target, player, 0);
+                        ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
+                        PotentialItems items = HandleCommands.getPotentialItem(target, player, 1);
+                        ArrayList<Pair> possibleItems = items.getItems();
+
+                        if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
+                            printToLog("Be more specific.");
+                            return false;
+                        } else if(possibleItems.size() != 0){
+                            printToLog("You need to be holding that item.");
+                            return false;
+                        } else if (possibleItemsFromInventory.size() == 0){
+                            printToLog("You can't see a "+target);
+                            return false;
+                        }
+
+                        TargetSpell ts = (TargetSpell) s;
+
+                        if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
+                            spell.modifyCount(-1);
+                            return true;
+                        }
+                        return false;
+
+
+                    case 'e':
+                        DamagingSpell ds = (DamagingSpell) s;
+                        ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
+                        if(enemies.size() == 0){
+                            printToLog("You can't see that enemy");
+                            return false;
+                        } else if(enemies.size()>1){
+                            printToLog("Be more specific");
+                            return false;
+                        } else {
+                            if (ds.isCasted(player, enemies.get(0))) {
+                                spell.modifyCount(-1);
+                                return true;
+                            }
+                            return false;
+                        }
+                }
+                return false;
+
+            } else {
+                printToLog("Your spellbook doesn't seem to have such a spell.");
+                return false;
+            }
+        } else{
+            printToLog("You need a spellbook to cast spells.");
+            return false;
+        }
     }
 
 

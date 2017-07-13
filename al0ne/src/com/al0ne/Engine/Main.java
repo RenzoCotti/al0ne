@@ -98,6 +98,8 @@ public class Main extends Application{
             player.handleStatuses();
 
             currentRoom.handleQuestRoom(player);
+
+            player.removeIfDestroyed();
         }
 
 

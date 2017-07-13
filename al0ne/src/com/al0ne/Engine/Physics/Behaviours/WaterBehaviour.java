@@ -15,15 +15,16 @@ public class WaterBehaviour extends Behaviour {
 
 
     public WaterBehaviour() {
-        super("water", new AddEntity(new Dagger(Material.BRASS), 1));
+        super("water", null);
+        setIntegrityModifier(-50);
     }
 
     @Override
     public String isInteractedWith(Behaviour b) {
 
         if(b.getName().equals("iron")){
-            printToLog("The iron turns into food!");
-            return "3";
+            printToLog("The iron rusts!");
+            return "9";
         }
         return "0";
     }

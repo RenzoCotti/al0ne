@@ -579,6 +579,27 @@ public class Player extends WorldCharacter {
         this.maxWeight = maxWeight;
     }
 
+    public void removeIfDestroyed(){
+        ArrayList<Item> toRemove = new ArrayList<>();
+        for(Pair p : inventory.values()){
+            Item i = (Item) p.getEntity();
+//            System.out.println("Item: "+i.getName()+" "+i.getIntegrity()+"%");
+            if(i.getIntegrity() <= 0 ){
+                toRemove.add(i);
+            }
+        }
+//        System.out.println("N. items to remove: "+toRemove.size());
+
+        //removes all items, even if there are multiple copies of different integrity
+        for(Item i : toRemove){
+            if(isWearingItem(i.getID())){
+                unequipItem(i.getID());
+            }
+            printToLog("Your "+ i.getName()+ " is destroyed!");
+            inventory.remove(i.getID());
+        }
+    }
+
 
 
     //returns the story of the player

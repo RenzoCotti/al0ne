@@ -12,6 +12,7 @@ public abstract class Behaviour implements Serializable{
     protected AddEntity entity;
     public String lock = "none";
     public int healthModifier = 0;
+    protected int integrityModifier;
 
 
     public Behaviour(String s, AddEntity entity){
@@ -33,7 +34,7 @@ public abstract class Behaviour implements Serializable{
     * 6: unlock door
     * 7: refill charge
     * 8: modify health
-    * 9: ...
+    * 9: modify integrity
     * */
     public abstract String isInteractedWith(Behaviour b);
 
@@ -63,5 +64,13 @@ public abstract class Behaviour implements Serializable{
 
     public void setEntity(AddEntity entity) {
         this.entity = entity;
+    }
+
+    public int getIntegrityModifier() {
+        return integrityModifier;
+    }
+
+    public void setIntegrityModifier(int integrityModifier) {
+        this.integrityModifier = integrityModifier;
     }
 }

@@ -23,12 +23,12 @@ public abstract class Interactable extends Entity {
 
 
     protected boolean canDrop;
-    public boolean canTake;
+    protected boolean canTake;
 
-    public int integrity;
+    protected int integrity;
 
     protected Material material;
-    public boolean customName=false;
+    protected boolean customName=false;
 
 
     public Interactable(String id, String name, String description, String shortDescription, Material m) {
@@ -90,7 +90,6 @@ public abstract class Interactable extends Entity {
                 case '3':
                     //tries to add to inventory, if can't add to room
                     Pair pair = interacted.getEntity().getPair();
-                    System.out.println(interacted.getName());
                     if(player.addAllItem(pair)){
                         break;
                     }
@@ -127,6 +126,15 @@ public abstract class Interactable extends Entity {
                 case '8':
                     //modify health
                     player.modifyHealth(interacted.getHealthModifier());
+                    break;
+                case '9':
+                    //modify integrity
+                    inter.modifyIntegrity(interacted.getIntegrityModifier());
+
+                    break;
+
+                default:
+                    System.out.println("ERROR: no behaviour code found");
                     break;
 
             }
@@ -193,18 +201,15 @@ public abstract class Interactable extends Entity {
     }
 
     public int getIntegrity() {
-        return integrity;
+        return this.integrity;
     }
 
     //returns false if the item gets destroyed
-    public boolean modifyIntegrity(int amount) {
-        if(this.integrity + amount <= 0){
-            return false;
-        } if(this.integrity + amount > 100){
+    public void modifyIntegrity(int amount) {
+        if(this.integrity + amount >= 100){
             this.integrity = 100;
         } else{
-            this.integrity += integrity;
+            this.integrity += amount;
         }
-        return true;
     }
 }
