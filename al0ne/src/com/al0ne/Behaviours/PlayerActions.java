@@ -7,8 +7,6 @@ import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
-import javafx.application.Platform;
-import sun.jvm.hotspot.utilities.RobustOopDeterminator;
 
 import java.util.HashMap;
 
@@ -339,23 +337,24 @@ public class PlayerActions {
 
     public static int interactOnWith(Player player, Entity target, Entity item){
         Room currentRoom = player.getCurrentRoom();
-        System.out.println("Using "+target.getName()+" with "+ item.getName());
-        if (target.getType() == 'n' || item.getType() == 'e'){
+        if (item.getType() == 'e'){
+            return 0;
+        } else if(target.getType() == 'n'){
+            PlayerActions.give(player, (NPC) target, item);
             return 0;
         }
         if(target.getType() == 'p' && item.getType() == 'p'){
             printToLog("At least one of the items must be from your inventory.");
             return 0;
         }
-        System.out.println("1");
+        System.out.println("Using "+item.getName()+"(i) with "+ target.getName());
 
-        if (item instanceof Item){
-            System.out.println("2");
-            ((Interactable) target).usedWith((Item) item, currentRoom, player);
-        } else if (target instanceof Item){
-            System.out.println("3");
-            ((Interactable) item).usedWith((Item) target, currentRoom, player);
-        }
+
+//        if (item instanceof Item){
+            ((Interactable) item).usedWith((Interactable) target, currentRoom, player);
+//        } else if (target instanceof Item){
+//            ((Interactable) item).usedWith((Interactable) target, currentRoom, player);
+//        }
 //        else if ((target.getType() == 'i' || target.getType() == 'w')&&(item.getType() == 'i')){
 //            System.out.println("3");
 //            ((Item) target).usedWith((Item) item, currentRoom, this);

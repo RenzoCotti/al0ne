@@ -9,13 +9,17 @@ import java.io.Serializable;
  */
 public abstract class Behaviour implements Serializable{
     public String name;
-    public Entity toAdd;
-    public int count = 0;
+    protected AddEntity entity;
     public String lock = "none";
     public int healthModifier = 0;
 
 
-    public Behaviour(String s){
+    public Behaviour(String s, AddEntity entity){
+        if(entity == null){
+            this.entity = new AddEntity();
+        } else{
+            this.entity = entity;
+        }
         this.name = s;
     }
 
@@ -37,23 +41,6 @@ public abstract class Behaviour implements Serializable{
         return name;
     }
 
-    public Entity getToAdd() {
-        return toAdd;
-    }
-
-    public void setToAdd(Entity toAdd, int count) {
-        this.toAdd = toAdd;
-        this.count = count;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public String getLock() {
         return lock;
     }
@@ -68,5 +55,13 @@ public abstract class Behaviour implements Serializable{
 
     public void setHealthModifier(int modifier) {
         this.healthModifier = modifier;
+    }
+
+    public AddEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(AddEntity entity) {
+        this.entity = entity;
     }
 }

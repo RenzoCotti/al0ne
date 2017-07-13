@@ -10,6 +10,6 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Ration extends Food {
     public Ration() {
-        super("FoodBehaviour ration", "Very nourishing", 0.5, Size.SMALL, 8);
+        super("ration", "Very nourishing", 0.5, Size.SMALL, 8);
     }
 }

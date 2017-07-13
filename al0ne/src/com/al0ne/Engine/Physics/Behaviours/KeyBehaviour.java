@@ -7,7 +7,7 @@ import com.al0ne.Engine.Physics.Behaviour;
  */
 public class KeyBehaviour extends Behaviour {
     public KeyBehaviour() {
-        super("key");
+        super("key", null);
     }
 
     @Override

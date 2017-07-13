@@ -2,6 +2,7 @@ package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
@@ -23,7 +24,7 @@ public class LockedDoor extends Door {
     }
 
     @Override
-    public void usedWith(Item item, Room currentRoom, Player player){
+    public void usedWith(Interactable item, Room currentRoom, Player player){
         if(item.hasProperty("key")){
 //            printToLog(requiresItem);
             if (item.getID().equals(requiresItem)){

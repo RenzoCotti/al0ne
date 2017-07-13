@@ -7,7 +7,7 @@ import com.al0ne.Engine.Physics.Behaviour;
  */
 public class PotionBehaviour extends Behaviour {
     public PotionBehaviour() {
-        super("potion");
+        super("potion", null);
     }
 
     @Override

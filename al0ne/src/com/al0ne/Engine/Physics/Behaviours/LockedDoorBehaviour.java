@@ -7,7 +7,7 @@ import com.al0ne.Engine.Physics.Behaviour;
  */
 public class LockedDoorBehaviour extends Behaviour {
     public LockedDoorBehaviour() {
-        super("lockeddoor");
+        super("lockeddoor", null);
     }
 
     @Override

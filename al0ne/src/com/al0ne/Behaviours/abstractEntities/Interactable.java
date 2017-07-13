@@ -58,15 +58,14 @@ public abstract class Interactable extends Entity {
     public abstract int used(Room currentRoom, Player player);
 
 
-    public void usedWith(Item item, Room currentRoom, Player player) {
+    public void usedWith(Interactable inter, Room currentRoom, Player player) {
         String result = "0";
         Behaviour interacted = null;
         for (Behaviour b: properties){
-            for(Behaviour b1: item.getProperties()){
-                System.out.println(b+" vs "+b1);
+            for(Behaviour b1: inter.getProperties()){
                 result = b.isInteractedWith(b1);
                 if(!result.equals("0")){
-                    interacted = b1;
+                    interacted = b;
                     break;
                 }
             }
@@ -76,7 +75,8 @@ public abstract class Interactable extends Entity {
         }
 
         if(interacted == null){
-            printToLog("The "+item.getName()+" isn't effective");
+            printToLog("The "+inter.getName()+" isn't effective");
+            return;
         }
 
         char [] temp = result.toCharArray();
@@ -89,16 +89,16 @@ public abstract class Interactable extends Entity {
                     break;
                 case '3':
                     //tries to add to inventory, if can't add to room
-                    Entity entity1 = interacted.getToAdd();
-                    int count1 = interacted.getCount();
-                    Pair p = new Pair(entity1, count1);
-                    if(player.addAllItem(p)){
+                    Pair pair = interacted.getEntity().getPair();
+                    System.out.println(interacted.getName());
+                    if(player.addAllItem(pair)){
                         break;
                     }
                 case '2':
                     //add to room
-                    Entity entity = interacted.getToAdd();
-                    int count = interacted.getCount();
+                    Pair pair1 = interacted.getEntity().getPair();
+                    Entity entity = pair1.getEntity();
+                    int count = pair1.getCount();
                     currentRoom.addEntity(entity, count);
                     break;
                 case '4':
@@ -111,10 +111,10 @@ public abstract class Interactable extends Entity {
                     break;
                 case '5':
                     //remove other
-                    if(player.hasItemInInventory(item.getID())){
-                        player.removeOneItem(item);
+                    if(player.hasItemInInventory(inter.getID())){
+                        player.removeOneItem((Item) inter);
                     } else{
-                        currentRoom.getEntities().remove(item.getID());
+                        currentRoom.getEntities().remove(inter.getID());
                     }
                     break;
                 case '6':
@@ -122,7 +122,7 @@ public abstract class Interactable extends Entity {
                     break;
                 case '7':
                     //refill
-                    ((ChargeItem) this).refill(player, item);
+                    ((ChargeItem) this).refill(player, inter);
                     break;
                 case '8':
                     //modify health
