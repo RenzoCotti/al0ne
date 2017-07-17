@@ -270,7 +270,7 @@ public class Room extends Entity {
         printToLog(name);
     }
 
-    public void addCustomDirection(String s){
+    public void setCustomDirection(String s){
         customDirections=s;
     }
 

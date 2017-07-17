@@ -34,57 +34,38 @@ import java.util.ArrayList;
 /**
  * Created by BMW on 27/05/2017.
  */
-public class EditProp {
+public class EditProp extends EditTab{
 
-    public static Tab createProp(){
-        Tab props = new Tab();
-        props.setText("Props");
-        props.setClosable(false);
-
-        HBox temp = new HBox();
-
-        VBox listProps = new VBox();
-
-        TableView<IdNameType> propList = createPropTable();
-
-        listProps.getChildren().add(propList);
-
-
-        GridPane propContent = new GridPane();
+    public EditProp() {
+        super("Prop", "Placeholder for prop help");
 
         Label createNewProp = new Label("Create new prop:");
         createNewProp.setStyle("-fx-font-weight: bold");
-        propContent.add(createNewProp, 0, 0);
         //todo: check for existing item in the db having the same (material+name) name
 
         TextField nameText = new TextField();
         nameText.setPromptText("Lever");
         Label nameLabel = new Label("Name:");
-        propContent.add(nameLabel, 0, 1);
-        propContent.add(nameText, 1, 1);
+
 
         TextArea descText = new TextArea();
         descText.setPrefWidth(100);
         descText.setPrefHeight(50);
         Label descLabel = new Label("Description:");
         descText.setPromptText("A lever that probably activates something somewhere.");
-        propContent.add(descLabel, 0, 3);
-        propContent.add(descText, 1, 3);
+
 
         TextArea shortDescText = new TextArea();
         shortDescText.setPrefWidth(100);
         shortDescText.setPrefHeight(50);
         Label shortDescLabel = new Label("Short Description:");
         shortDescText.setPromptText("a rusty lever");
-        propContent.add(shortDescLabel, 0, 4);
-        propContent.add(shortDescText, 1, 4);
+
 
         Label materialLabel = new Label("Material:");
         ObservableList<String> materialList = FXCollections.observableArrayList(Material.getAllMaterialString());
         ComboBox<String> materialDisplay = new ComboBox<>(materialList);
         materialDisplay.getSelectionModel().select(materialList.size()-1);
-        propContent.add(materialLabel, 0, 6);
-        propContent.add(materialDisplay, 1, 6);
 
 
 
@@ -93,14 +74,12 @@ public class EditProp {
                 "Hide item", "Hidden Prop");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
         typeDisplay.getSelectionModel().select("Prop");
-        propContent.add(typeLabel, 0, 7);
-        propContent.add(typeDisplay, 1, 7);
+
 
 
         Label errorMessage = new Label("");
         errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
-        Button create = new Button("Create Prop");
 
 
 
@@ -148,7 +127,7 @@ public class EditProp {
                         old = (Prop) entity;
 
                     } else {
-                        IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
+                        IdNameType tempProp = list.getSelectionModel().getSelectedItem();
                         old = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
                         Main.edit.getCurrentEdit().setCurrentEntity(old);
                     }
@@ -172,13 +151,13 @@ public class EditProp {
                     }
 
                     Main.edit.getCurrentEdit().addProp(p);
-                    propList.setItems(getProps());
+                    list.setItems(getTableItems());
                 }
 
                 LoadProp loadProp = new LoadProp();
                 loadProp.clearSelection();
 
-                propList.setItems(getProps());
+                list.setItems(getTableItems());
 
 
             } else {
@@ -195,20 +174,17 @@ public class EditProp {
 
 
         });
-        propContent.add(create, 0, 10);
-        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
 
-        Button clear = new Button("Clear");
         clear.setOnAction(t->{
             LoadProp loadProp = new LoadProp();
             loadProp.clearSelection();
         });
-        propContent.add(clear, 0, 11);
+
+
 
         //LOADING OF PROP
-        Button load = new Button("Edit Prop");
-        load.setOnAction(t -> {
-            IdNameType tempProp = propList.getSelectionModel().getSelectedItem();
+        edit.setOnAction(t -> {
+            IdNameType tempProp = list.getSelectionModel().getSelectedItem();
             if(tempProp != null){
                 create.setText("Save changes");
                 Prop p = Main.edit.getCurrentEdit().getProps().get(tempProp.getId());
@@ -220,32 +196,32 @@ public class EditProp {
 
         });
 
-        Button delete = new Button("Delete Prop");
         delete.setOnAction(t->{
-            int selectedIndex = propList.getSelectionModel().getSelectedIndex();
+            int selectedIndex = list.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                IdNameType id = propList.getSelectionModel().getSelectedItem();
-                propList.getItems().remove(id);
+                IdNameType id = list.getSelectionModel().getSelectedItem();
+                list.getItems().remove(id);
                 Main.edit.getCurrentEdit().getProps().remove(id.getId());
-                propList.setItems(getProps());
+                list.setItems(getTableItems());
             }
         });
 
+        creationPane.add(createNewProp, 0, 0);
+        creationPane.add(nameLabel, 0, 1);
+        creationPane.add(nameText, 1, 1);
+        creationPane.add(descLabel, 0, 3);
+        creationPane.add(descText, 1, 3);
+        creationPane.add(shortDescLabel, 0, 4);
+        creationPane.add(shortDescText, 1, 4);
+        creationPane.add(materialLabel, 0, 6);
+        creationPane.add(materialDisplay, 1, 6);
+        creationPane.add(typeLabel, 0, 7);
+        creationPane.add(typeDisplay, 1, 7);
 
-        listProps.getChildren().addAll(load, delete);
-
-        VBox propBox = new VBox();
-        propBox.getChildren().addAll(propContent, errorMessage);
-        temp.getChildren().addAll(propBox, listProps);
-
-        temp.setPadding(new Insets(10, 10, 10, 10));
-
-        props.setContent(temp);
-
-        return props;
     }
 
-    public static ObservableList<IdNameType> getProps(){
+    @Override
+    public ObservableList<IdNameType> getTableItems() {
         ArrayList<IdNameType> temp = new ArrayList<>();
         for(Entity e: Main.edit.getCurrentEdit().getProps().values()){
             if(e instanceof LockedDoor){
@@ -260,33 +236,6 @@ public class EditProp {
         }
 
         return FXCollections.observableArrayList (temp);
-    }
-
-    public static TableView<IdNameType> createPropTable(){
-        TableView<IdNameType> propList = new TableView<>();
-        propList.setPlaceholder(new Label("No props created."));
-        propList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setMinWidth(120);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        propList.getColumns().addAll(idColumn, nameColumn, typeColumn);
-
-
-        ObservableList<IdNameType> propArray = getProps();
-
-        propList.setItems(propArray);
-        return propList;
     }
 
 }

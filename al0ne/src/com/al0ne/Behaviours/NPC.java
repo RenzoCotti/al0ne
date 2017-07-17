@@ -112,6 +112,10 @@ public class NPC extends WorldCharacter {
         return false;
     }
 
+    public String getIntro() {
+        return intro;
+    }
+
     @Override
     public String getName() {
         return name;

@@ -113,7 +113,7 @@ public class MedievalYoungWorld extends World{
         putRoom(neighbourHouse);
 
         Room square = new Room("Square", "The village square, quite deserted at this time of day.");
-        square.addCustomDirection("To the east you see your town's church, to the north the village hall, " +
+        square.setCustomDirection("To the east you see your town's church, to the north the village hall, " +
                 "to the west the market and to the south your neighbourhood.");
 
         square.addEntity(new Prop("Fountain", "A fountain made of stone"));

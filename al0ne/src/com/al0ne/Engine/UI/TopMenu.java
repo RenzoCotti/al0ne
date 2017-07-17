@@ -65,7 +65,7 @@ public class TopMenu {
 
         MenuItem creditsButton = new MenuItem("Credits");
         creditsButton.setOnAction(t -> {
-            Popups.creditsPopup(stage);
+            Popups.creditsPopup();
         });
 
         helpMenu.getItems().addAll(questionButton, creditsButton);
@@ -112,7 +112,7 @@ public class TopMenu {
 
         MenuItem restart = new MenuItem("Restart");
         restart.setOnAction(t -> {
-            Popups.restartPopup(stage);
+            Popups.restartPopup();
         });
 
 

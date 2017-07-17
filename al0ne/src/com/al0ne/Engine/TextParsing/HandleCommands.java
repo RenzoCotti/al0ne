@@ -765,7 +765,7 @@ public class HandleCommands {
 
             NPC character = player.getCurrentRoom().getNPC(npc);
 
-            if (!HandleCommands.isNPC(character, player, npc)) {
+            if (!HandleCommands.isNPC(player, npc)) {
                 return false;
             }
 
@@ -778,9 +778,9 @@ public class HandleCommands {
             String subject = Utility.stitchFromTo(parsedInput, 2, b);
             String npc = Utility.stitchFromTo(parsedInput, b + 1, parsedInput.length);
 
-            NPC character = player.getCurrentRoom().getNPC(npc);
+//            NPC character = player.getCurrentRoom().getNPC(npc);
 
-            HandleCommands.isNPC(character, player, npc);
+            HandleCommands.isNPC(player, npc);
 
             if (PlayerActions.talkToNPC(player, npc, subject)) {
                 return true;
@@ -806,7 +806,7 @@ public class HandleCommands {
             NPC character = player.getCurrentRoom().getNPC(npc);
 
 
-            if (!HandleCommands.isNPC(character, player, npc)) {
+            if (!HandleCommands.isNPC(player, npc)) {
                 return false;
             }
 
@@ -846,7 +846,7 @@ public class HandleCommands {
 
                 NPC character = player.getCurrentRoom().getNPC(npc);
 
-                if (!HandleCommands.isNPC(character, player, npc)) {
+                if (!HandleCommands.isNPC(player, npc)) {
                     return false;
                 }
 
@@ -890,13 +890,13 @@ public class HandleCommands {
         }
     }
 
-    public static boolean isNPC(NPC character, Player player, String npc) {
+    public static boolean isNPC(Player player, String npc) {
         Entity entity = player.getCurrentRoom().getEntity(npc);
 
-        if ((character == null) && entity == null) {
+        if (entity == null) {
             printToLog("You can't see " + npc + " here.");
             return false;
-        } else if (entity != null && entity.getType() != 'n') {
+        } else if (entity.getType() != 'n') {
             printToLog("You can't talk to it. ");
             return false;
         }

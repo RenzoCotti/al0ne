@@ -93,7 +93,7 @@ public class PlayUI {
                     Main.game.setRoom(currentRoom);
                     GameChanges.save("autosave", null, Main.game, true);
                     Utility.dumpToFile("gameDump", Main.log.getText());
-                    Popups.crashPopup(stage);
+                    Popups.crashPopup();
                     ex.printStackTrace();
                 }
             } else if(event.getCode().equals(UP)){

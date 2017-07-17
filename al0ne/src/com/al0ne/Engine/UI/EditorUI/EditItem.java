@@ -3,95 +3,70 @@ package com.al0ne.Engine.UI.EditorUI;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
 import com.al0ne.Entities.Items.Behaviours.Drinkable;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
 /**
- * Created by BMW on 27/05/2017.
+ * Created by BMW on 17/07/2017.
  */
-public class EditItem {
-
-    public static Tab createItem(){
-        Tab items = new Tab();
-        items.setText("Items");
-        items.setClosable(false);
-
-        HBox temp = new HBox();
-
-        VBox listItem = new VBox();
-
-        TableView<IdNameType> itemList = createItemTable();
-
-
-
-        GridPane itemContent = new GridPane();
+public class EditItem extends EditTab{
+    public EditItem() {
+        super("Items", "this is a placeholder for a help menu");
 
         Label createNewItem = new Label("Create new item:");
         createNewItem.setStyle("-fx-font-weight: bold");
-        itemContent.add(createNewItem, 0, 0);
 
         TextField nameText = new TextField();
         nameText.setPromptText("Bread loaf");
         Label nameLabel = new Label("Name:");
-        itemContent.add(nameLabel, 0, 1);
-        itemContent.add(nameText, 1, 1);
+
 
         TextArea descText = new TextArea();
         descText.setPrefWidth(100);
         descText.setPrefHeight(80);
         Label descLabel = new Label("Description:");
         descText.setPromptText("A fresh loaf of bread, looks delicious!");
-        itemContent.add(descLabel, 0, 3);
-        itemContent.add(descText, 1, 3);
+
 
         Spinner<Double> weightText = new Spinner<>();
         weightText.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 100, 0, 0.5));
         Label weightLabel = new Label("Weight:");
-        itemContent.add(weightLabel, 0, 4);
-        itemContent.add(weightText, 1, 4);
+
 
         Label sizeLabel = new Label("Size:");
         ObservableList<String> sizeList = FXCollections.observableArrayList(
                 Size.getSizeStrings());
         ComboBox<String> sizeDisplay = new ComboBox<>(sizeList);
         sizeDisplay.getSelectionModel().select(sizeList.size()/2);
-        itemContent.add(sizeLabel, 0, 5);
-        itemContent.add(sizeDisplay, 1, 5);
+
 
         Label materialLabel = new Label("Material:");
         ObservableList<String> materialList = FXCollections.observableArrayList(Material.getAllMaterialString());
         ComboBox<String> materialDisplay = new ComboBox<>(materialList);
         materialDisplay.getSelectionModel().select(materialList.size()-1);
-        itemContent.add(materialLabel, 0, 6);
-        itemContent.add(materialDisplay, 1, 6);
+
 
 
         RadioButton canDrop = new RadioButton("Can be dropped?");
         RadioButton isUnique = new RadioButton("Is unique?");
-        itemContent.add(canDrop, 1, 7);
-        itemContent.add(isUnique, 1, 8);
+
 
         Label typeLabel = new Label("Type:");
         ObservableList<String> typeList = FXCollections.observableArrayList("Weapon", "Armor",
-                "FoodBehaviour", "Scroll", "Coin", "Key", "Generic");
+                "Food", "Scroll", "Coin", "Key", "Generic");
         ComboBox<String> typeDisplay = new ComboBox<>(typeList);
 
         //food
@@ -99,19 +74,19 @@ public class EditItem {
         foodValue.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0, 1));
         Label foodLabel = new Label("Nutrition:");
 
-        Label foodType = new Label("FoodBehaviour Type");
-        ObservableList<String> foodOrDrink = FXCollections.observableArrayList("FoodBehaviour", "Drink");
+        Label foodType = new Label("Type");
+        ObservableList<String> foodOrDrink = FXCollections.observableArrayList("Food", "Drink");
         ComboBox<String> foodDisplay = new ComboBox<>(foodOrDrink);
         foodDisplay.valueProperty().addListener( (ov, t, t1) ->{
             if(t1 == null){
                 return;
             }
-            if (t1.equals("FoodBehaviour")){
-                itemContent.add(foodLabel, 0, 11);
-                itemContent.add(foodValue, 1, 11);
+            if (t1.equals("Food")){
+                creationPane.add(foodLabel, 0, 11);
+                creationPane.add(foodValue, 1, 11);
             } else if( t1.equals("Drink")){
-                itemContent.getChildren().remove(foodLabel);
-                itemContent.getChildren().remove(foodValue);
+                creationPane.getChildren().remove(foodLabel);
+                creationPane.getChildren().remove(foodValue);
             }
         });
 
@@ -149,11 +124,6 @@ public class EditItem {
         Label contentLabel = new Label("Content:");
         contentText.setPromptText("Hello, I am writing to you to say hi.");
 
-        Label errorMessage = new Label("");
-
-        Button create = new Button("Create Item");
-
-        Button clear = new Button("Clear");
 
         class LoadItem{
             public void loadItem(Item i){
@@ -169,15 +139,15 @@ public class EditItem {
                 materialDisplay.setValue(Material.materialToString(i.getMaterial()));
                 weightText.getValueFactory().setValue(i.getWeight());
 
-                //"Weapon", "Armor", "FoodBehaviour", "Scroll", "Coin", "Key", "Generic");
+                //"Weapon", "Armor", "Food", "Scroll", "Coin", "Key", "Generic");
 
                 if(i instanceof Food){
-                    typeDisplay.getSelectionModel().select("FoodBehaviour");
+                    typeDisplay.getSelectionModel().select("Food");
 
-                    foodDisplay.getSelectionModel().select("FoodBehaviour");
+                    foodDisplay.getSelectionModel().select("Food");
                     foodValue.getValueFactory().setValue(((Food) i).getFoodValue());
                 } else if(i instanceof Drinkable){
-                    typeDisplay.getSelectionModel().select("FoodBehaviour");
+                    typeDisplay.getSelectionModel().select("Food");
                     foodDisplay.getSelectionModel().select("Drink");
                 } else if(i instanceof Weapon){
                     typeDisplay.getSelectionModel().select("Weapon");
@@ -201,8 +171,8 @@ public class EditItem {
 
                 } else if(i instanceof Readable){
                     typeDisplay.getSelectionModel().select(3);
-                    itemContent.add(contentLabel, 0, 10);
-                    itemContent.add(contentText, 1, 10);
+                    creationPane.add(contentLabel, 0, 10);
+                    creationPane.add(contentText, 1, 10);
                 }
             }
 
@@ -228,54 +198,55 @@ public class EditItem {
             }
 
             public void removeFields(){
-                itemContent.getChildren().remove(foodLabel);
-                itemContent.getChildren().remove(foodValue);
-                itemContent.getChildren().remove(foodDisplay);
-                itemContent.getChildren().remove(foodType);
+                creationPane.getChildren().remove(foodLabel);
+                creationPane.getChildren().remove(foodValue);
+                creationPane.getChildren().remove(foodDisplay);
+                creationPane.getChildren().remove(foodType);
 
-                itemContent.getChildren().remove(damageTypeLabel);
-                itemContent.getChildren().remove(damageDisplay);
-                itemContent.getChildren().remove(damageText);
-                itemContent.getChildren().remove(damageLabel);
-                itemContent.getChildren().remove(apText);
-                itemContent.getChildren().remove(apLabel);
+                creationPane.getChildren().remove(damageTypeLabel);
+                creationPane.getChildren().remove(damageDisplay);
+                creationPane.getChildren().remove(damageText);
+                creationPane.getChildren().remove(damageLabel);
+                creationPane.getChildren().remove(apText);
+                creationPane.getChildren().remove(apLabel);
 
-                itemContent.getChildren().remove(armorTypeLabel);
-                itemContent.getChildren().remove(armorDisplay);
-                itemContent.getChildren().remove(armorText);
-                itemContent.getChildren().remove(armorLabel);
-                itemContent.getChildren().remove(encLabel);
-                itemContent.getChildren().remove(encText);
+                creationPane.getChildren().remove(armorTypeLabel);
+                creationPane.getChildren().remove(armorDisplay);
+                creationPane.getChildren().remove(armorText);
+                creationPane.getChildren().remove(armorLabel);
+                creationPane.getChildren().remove(encLabel);
+                creationPane.getChildren().remove(encText);
 
-                itemContent.getChildren().remove(contentText);
-                itemContent.getChildren().remove(contentLabel);
+                creationPane.getChildren().remove(contentText);
+                creationPane.getChildren().remove(contentLabel);
             }
 
             public void addProperFields(String s){
                 if(s == null){
                 } else if(s.toLowerCase().equals("food")){
-                    itemContent.add(foodType, 0, 10);
-                    itemContent.add(foodDisplay, 1, 10);
+                    creationPane.add(foodType, 0, 10);
+                    creationPane.add(foodDisplay, 1, 10);
                 } else if(s.toLowerCase().equals("weapon")){
-                    itemContent.add(damageTypeLabel, 0, 10);
-                    itemContent.add(damageDisplay, 1, 10);
-                    itemContent.add(damageLabel, 0, 11);
-                    itemContent.add(damageText, 1, 11);
-                    itemContent.add(apLabel, 0, 12);
-                    itemContent.add(apText, 1, 12);
+                    creationPane.add(damageTypeLabel, 0, 10);
+                    creationPane.add(damageDisplay, 1, 10);
+                    creationPane.add(damageLabel, 0, 11);
+                    creationPane.add(damageText, 1, 11);
+                    creationPane.add(apLabel, 0, 12);
+                    creationPane.add(apText, 1, 12);
                 } else if(s.toLowerCase().equals("armor")){
-                    itemContent.add(armorTypeLabel, 0, 10);
-                    itemContent.add(armorDisplay, 1, 10);
-                    itemContent.add(armorLabel, 0, 11);
-                    itemContent.add(armorText, 1, 11);
-                    itemContent.add(encLabel, 0, 12);
-                    itemContent.add(encText, 1, 12);
+                    creationPane.add(armorTypeLabel, 0, 10);
+                    creationPane.add(armorDisplay, 1, 10);
+                    creationPane.add(armorLabel, 0, 11);
+                    creationPane.add(armorText, 1, 11);
+                    creationPane.add(encLabel, 0, 12);
+                    creationPane.add(encText, 1, 12);
                 } else if(s.toLowerCase().equals("scroll")){
-                    itemContent.add(contentLabel, 0, 10);
-                    itemContent.add(contentText, 1, 10);
+                    creationPane.add(contentLabel, 0, 10);
+                    creationPane.add(contentText, 1, 10);
                 }
             }
         }
+
 
         typeDisplay.valueProperty().addListener((ov, t, t1) -> {
             LoadItem loadItem = new LoadItem();
@@ -283,10 +254,8 @@ public class EditItem {
             loadItem.addProperFields(t1);
         });
 
-        itemContent.add(typeLabel, 0, 9);
-        itemContent.add(typeDisplay, 1, 9);
 
-        errorMessage.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
 
         clear.setOnAction(t->{
             LoadItem loadItem = new LoadItem();
@@ -303,7 +272,7 @@ public class EditItem {
 
 
             boolean done = false;
-            if(checkIfNotEmpty(name) && checkIfNotEmpty(desc) && material != null && size != null){
+            if(!name.equals("") && !desc.equals("") && material != null && size != null){
                 if(checkIfExists(name) && !(create.getText().equals("Save changes"))){
                     nameText.setStyle("-fx-border-color: red ;");
                     errorMessage.setText("That name already exists.");
@@ -384,7 +353,7 @@ public class EditItem {
                             break;
                         case "food":
                             String foodInput = foodDisplay.getSelectionModel().getSelectedItem();
-                            if(foodInput != null && foodInput.equals("FoodBehaviour")){
+                            if(foodInput != null && foodInput.equals("Food")){
                                 int foodVal = foodValue.getValue();
                                 Food food = new Food(name, desc, weight, s, foodVal);
                                 Main.edit.getCurrentEdit().addItem(food);
@@ -394,7 +363,7 @@ public class EditItem {
                                 Main.edit.getCurrentEdit().addItem(drink);
                                 done = true;
                             } else {
-                                errorMessage.setText("Please select a value for FoodBehaviour type");
+                                errorMessage.setText("Please select a value for Food type");
                             }
 
                             break;
@@ -413,7 +382,7 @@ public class EditItem {
 
                     //we update the item list and reset all the fields
 
-                    ((TableView<IdNameType>)listItem.getChildren().get(0)).setItems(getItems());
+                    list.setItems(getTableItems());
 
                     LoadItem loadItem = new LoadItem();
                     loadItem.clearSelection();
@@ -439,23 +408,11 @@ public class EditItem {
             }
 
         });
-        itemContent.add(create, 0, 14);
-        GridPane.setMargin(create, new Insets(20, 0, 10, 0));
 
-        itemContent.add(clear, 0, 15);
-        itemContent.add(errorMessage, 0, 16);
-
-
-        itemContent.setPadding(new Insets(10, 10, 10, 10));
-
-
-
-        //LOADING OF ITEM
-        Button load = new Button("Edit Item");
-        load.setOnAction(t -> {
-            int selectedIndex = itemList.getSelectionModel().getSelectedIndex();
+        edit.setOnAction(t -> {
+            int selectedIndex = list.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                IdNameType tempItem = itemList.getItems().get(selectedIndex);
+                IdNameType tempItem = list.getItems().get(selectedIndex);
                 Item i = Main.edit.getCurrentEdit().getItems().get(tempItem.getId());
 
                 LoadItem loadItem = new LoadItem();
@@ -463,7 +420,17 @@ public class EditItem {
             }
         });
 
-        itemList.setRowFactory( tv -> {
+        delete.setOnAction(t->{
+            int selectedIndex = list.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > -1){
+                IdNameType id = list.getSelectionModel().getSelectedItem();
+                list.getItems().remove(id);
+                Main.edit.getCurrentEdit().getItems().remove(id.getId());
+                list.setItems(getTableItems());
+            }
+        });
+
+        list.setRowFactory( tv -> {
             TableRow<IdNameType> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
@@ -477,28 +444,27 @@ public class EditItem {
             return row;
         });
 
+        creationPane.add(createNewItem, 0, 0);
+        creationPane.add(nameLabel, 0, 1);
+        creationPane.add(nameText, 1, 1);
+        creationPane.add(descLabel, 0, 3);
+        creationPane.add(descText, 1, 3);
+        creationPane.add(weightLabel, 0, 4);
+        creationPane.add(weightText, 1, 4);
+        creationPane.add(sizeLabel, 0, 5);
+        creationPane.add(sizeDisplay, 1, 5);
+        creationPane.add(materialLabel, 0, 6);
+        creationPane.add(materialDisplay, 1, 6);
+        creationPane.add(canDrop, 1, 7);
+        creationPane.add(isUnique, 1, 8);
+        creationPane.add(typeLabel, 0, 9);
+        creationPane.add(typeDisplay, 1, 9);
 
-        Button delete = new Button("Delete Item");
-        delete.setOnAction(t->{
-            int selectedIndex = itemList.getSelectionModel().getSelectedIndex();
-            if(selectedIndex > -1){
-                IdNameType id = itemList.getSelectionModel().getSelectedItem();
-                itemList.getItems().remove(id);
-                Main.edit.getCurrentEdit().getItems().remove(id.getId());
-                itemList.setItems(getItems());
-            }
-        });
 
-        listItem.getChildren().addAll(itemList, load, delete);
-
-
-        temp.getChildren().addAll(itemContent, listItem);
-        items.setContent(temp);
-
-        return items;
     }
 
-    public static ObservableList<IdNameType> getItems(){
+    @Override
+    public ObservableList<IdNameType> getTableItems() {
         ArrayList<IdNameType> temp = new ArrayList<>();
         for(Entity e: Main.edit.getCurrentEdit().getItems().values()){
             if(e instanceof Armor){
@@ -506,7 +472,7 @@ public class EditItem {
             } else if(e instanceof Weapon){
                 temp.add(new IdNameType(e.getID(), e.getName(), "Weapon"));
             } else if(e instanceof Food || e instanceof Drinkable){
-                temp.add(new IdNameType(e.getID(), e.getName(), "FoodBehaviour"));
+                temp.add(new IdNameType(e.getID(), e.getName(), "Food"));
             } else if(e instanceof Readable){
                 temp.add(new IdNameType(e.getID(), e.getName(), "Scroll"));
             }
@@ -514,10 +480,6 @@ public class EditItem {
 
         return FXCollections.observableArrayList (temp);
     }
-//todo reset weapon/armor spinners, remove steel steel bar
-    //add prop commands, maybe on game also?
-    //button to run directly edited game?
-    //add default items in menu?
 
     public static boolean checkIfExists(String s){
         for (Item i : Main.edit.getCurrentEdit().getItems().values()){
@@ -527,36 +489,4 @@ public class EditItem {
         }
         return false;
     }
-
-    public static boolean checkIfNotEmpty(String s){
-        return !s.equals((""));
-    }
-
-    public static TableView<IdNameType> createItemTable(){
-        TableView<IdNameType> itemList = new TableView<>();
-        itemList.setPlaceholder(new Label("No items created."));
-        itemList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-
-        TableColumn idColumn = new TableColumn("ID");
-        idColumn.setMinWidth(120);
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn nameColumn = new TableColumn("Name");
-        nameColumn.setMinWidth(120);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn typeColumn = new TableColumn("Type");
-        typeColumn.setMinWidth(120);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        itemList.getColumns().addAll(idColumn, nameColumn, typeColumn);
-
-
-        ObservableList<IdNameType> itemsArray = getItems();
-
-        itemList.setItems(itemsArray);
-        return itemList;
-    }
-
 }

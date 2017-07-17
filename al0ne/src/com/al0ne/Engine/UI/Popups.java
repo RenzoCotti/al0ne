@@ -29,150 +29,78 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
-import static com.al0ne.Engine.UI.EditorUI.EditNPC.createNPCTable;
-import static com.al0ne.Engine.UI.EditorUI.EditProp.createPropTable;
 
 /**
  * Created by BMW on 24/04/2017.
  */
-public class Popups {
-    public static void quitDialog(Stage stage){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-        s.initOwner(stage);
-        VBox dialogVbox = new VBox(20);
+public class Popups{
+
+    public static void quitDialog(Stage s){
 
         HBox buttonBox = new HBox(20);
+
+
+        Popup quitPopup = new Popup(null, null, "Quit?", buttonBox, "Are you sure you want to quit?");
+
+
 
         Button quitButton = new Button("Yes");
-        quitButton.setOnAction(a -> stage.close());
+        quitButton.setOnAction(a -> {
+            s.close();
+            quitPopup.stage.close();
+        });
 
         Button cancel = new Button("No");
-        cancel.setOnAction(b -> s.close());
-
-        Text text = new Text("Are you sure you want to quit?");
+        cancel.setOnAction(b -> quitPopup.stage.close());
 
         buttonBox.getChildren().addAll(quitButton, cancel);
-        dialogVbox.getChildren().addAll(text, buttonBox);
-        dialogVbox.setPadding(new Insets(20));
-
-        Scene dialogScene = new Scene(dialogVbox, 250, 100);
-        s.setScene(dialogScene);
-        s.setTitle("Quit?");
-
-        s.show();
 
     }
 
-    public static void creditsPopup(Stage stage){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-        s.initOwner(stage);
-        VBox dialogVbox = new VBox(20);
-
-        HBox buttonBox = new HBox(20);
-
-        Button cancel = new Button("Close");
-        cancel.setOnAction(b -> s.close());
-
-        Text text = new Text("Thanks for trying out my game!\nSpecial thanks to: Valerie Burgener, " +
-                "Lara Bruseghini, Dario Cotti, Giovanni Campana, Luca Hofer for being my beta testers :D");
-
-        text.maxWidth(400);
-        text.setWrappingWidth(400);
-
-        buttonBox.getChildren().addAll(cancel);
-        dialogVbox.getChildren().addAll(text, buttonBox);
-        dialogVbox.setPadding(new Insets(20));
-        dialogVbox.setMaxSize(200, 500);
-
-        Scene dialogScene = new Scene(dialogVbox);
-
-        s.setScene(dialogScene);
-
-        s.setTitle("Credits");
-
-        s.show();
-
+    public static void creditsPopup(){
+        new Popup(400, 100, "Credits", "Close", "Thanks for trying out " +
+                "my game!\nSpecial thanks to: \nValerie Burgener, " +
+                "Lara Bruseghini, Dario Cotti, \nGiovanni Campana, Luca Hofer for being my beta testers :D");
     }
 
 
-    public static void restartPopup(Stage stage){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-        s.initOwner(stage);
-        VBox dialogVbox = new VBox(20);
+    public static void restartPopup(){
 
         HBox buttonBox = new HBox(20);
-
         Button restart = new Button("Restart");
-        //maybe set initial world somewhere
+        Button cancel = new Button("Cancel");
+        buttonBox.getChildren().addAll(restart, cancel);
+
+
+        Popup restartPopup = new Popup(200, 100, "Restart?",
+                buttonBox, "Are you sure you want to restart?");
+
         restart.setOnAction(b -> {
             GameChanges.restartGame();
-            s.close();
+            restartPopup.stage.close();
         });
-
-        Button cancel = new Button("Cancel");
-        cancel.setOnAction(b -> s.close());
-
-        Text text = new Text("Are you sure you want to restart?");
-
-        buttonBox.getChildren().addAll(restart, cancel);
-        dialogVbox.getChildren().addAll(text, buttonBox);
-        dialogVbox.setPadding(new Insets(20));
-        dialogVbox.setMaxSize(200, 500);
-
-        Scene dialogScene = new Scene(dialogVbox);
-
-        s.setScene(dialogScene);
-        s.setTitle("Restart?");
-
-        s.show();
-
+        cancel.setOnAction(b -> restartPopup.stage.close());
     }
 
-    public static void crashPopup(Stage stage){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-        s.initOwner(stage);
-        VBox dialogVbox = new VBox(20);
+    public static void crashPopup(){
 
-        Button quit = new Button("Quit");
-        quit.setOnAction(b -> {
-            System.exit(1);
-        });
+        HBox buttonBox = new HBox(20);
 
-        Text text = new Text("Uh oh...\nIt appears I just crashed :/\n" +
+
+        Button quitButton = new Button("Quit");
+        quitButton.setOnAction(a -> System.exit(1));
+
+        buttonBox.getChildren().addAll(quitButton);
+
+        new Popup(500, 200, "Crash :/", buttonBox, "Uh oh...\nIt appears I just crashed :/\n" +
                 "Please send Mr. C the dumpGame.txt that has been created.\nYour game has been saved, BTW.");
-
-        dialogVbox.getChildren().addAll(text, quit);
-        dialogVbox.setPadding(new Insets(20));
-        dialogVbox.setMaxSize(200, 500);
-
-        Scene dialogScene = new Scene(dialogVbox);
-
-        s.setScene(dialogScene);
-        s.setTitle("Crash :/");
-
-        s.show();
     }
 
     public static void deathPopup(){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-        VBox dialogVbox = new VBox(20);
-        dialogVbox.setPrefSize(200, 100);
 
         Button restart = new Button("Restart");
-        restart.setOnAction(b -> {
-            GameChanges.restartGame();
-            s.close();
-        });
-
         Button quit = new Button("Quit");
-        quit.setOnAction(b -> {
-            System.exit(0);
-        });
+
 
         HBox buttons = new HBox();
         buttons.setSpacing(10);
@@ -207,50 +135,25 @@ public class Popups {
 
         endString+="\nWant to restart?";
 
-        Text text = new Text(endString);
+        Popup deathPopup = new Popup(300, 200, "R.I.P.", buttons, endString);
 
-        dialogVbox.getChildren().addAll(text, buttons);
-        dialogVbox.setPadding(new Insets(20));
+        quit.setOnAction(b -> {
+            System.exit(0);
+        });
+        restart.setOnAction(b -> {
+            GameChanges.restartGame();
+            deathPopup.stage.close();
+        });
 
-        Scene dialogScene = new Scene(dialogVbox);
-
-        s.setScene(dialogScene);
-        s.setTitle("R.I.P.");
-        s.show();
     }
 
 
 
     public static void helpPopup(){
-        Stage s = new Stage();
-        s.initModality(Modality.APPLICATION_MODAL);
-//        s.initOwner(stage);
-        VBox dialogVbox = new VBox(20);
-        dialogVbox.setPrefSize(200, 100);
-
-        Button close = new Button("Close");
-        close.setOnAction(b -> {
-            GameChanges.restartGame();
-            s.close();
-        });
-
-        HBox buttons = new HBox();
-        buttons.setSpacing(10);
-        buttons.getChildren().addAll(close);
-
-        Text text = new Text("You can type \"north\" to go north, \"east\" to go east,... (shortcut: \"n\" for north, \"s\" " +
-                "for south,...)\n\n"+
-                "Useful commands: \n \"examine a\", where a is an object you can see (shortcut: \"x a\")\n"+
+        Popup helpPopup = new Popup(600, 300, "Help", "Close", "You can type " +
+                "\"north\" to go north, \"east\" to go east,... (shortcut: \"n\" for north, \"s\" " +
+                "for south,...)\n\nUseful commands: \n \"examine a\", where a is an object you can see (shortcut: \"x a\")\n"+
                 "\"use x on y\", \"use x\", \n\"talk to x\", \n\"attack x\", \n\"take x\", \n\"inventory\" (shortcut: \"i\")\n");
-
-        dialogVbox.getChildren().addAll(text, buttons);
-        dialogVbox.setPadding(new Insets(20));
-
-        Scene dialogScene = new Scene(dialogVbox);
-
-        s.setScene(dialogScene);
-        s.setTitle("Help");
-        s.show();
     }
 
     public static void openEditor(){
@@ -270,7 +173,7 @@ public class Popups {
         Stage s = new Stage();
         s.initModality(Modality.APPLICATION_MODAL);
         VBox dialogVbox = WorldEditorUI.createEditor();
-        dialogVbox.setPrefSize(800, 500);
+        dialogVbox.setPrefSize(800, 600);
 
         Scene dialogScene = new Scene(dialogVbox);
 
@@ -342,19 +245,19 @@ public class Popups {
         Tab item = new Tab();
         item.setText("Item");
         item.setClosable(false);
-        TableView<IdNameType> itemList = EditItem.createItemTable();
+        TableView<IdNameType> itemList = EditTab.createTable();
         item.setContent(itemList);
 
         Tab props = new Tab();
         props.setClosable(false);
         props.setText("Props");
-        TableView<IdNameType> propList = createPropTable();
+        TableView<IdNameType> propList = EditTab.createTable();
         props.setContent(propList);
 
         Tab npcs = new Tab();
         npcs.setClosable(false);
         npcs.setText("NPCs");
-        TableView<IdNameType> npcList = createNPCTable();
+        TableView<IdNameType> npcList = EditNPC.createTable();
         npcs.setContent(npcList);
 
 
@@ -451,7 +354,8 @@ public class Popups {
         errorMessage.setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
 
         Label chooseTarget = new Label("Choose target:");
-        TableView<IdName> roomsList = EditRoom.createRoomTable();
+        TableView<IdNameType> roomsList = EditTab.createTable();
+        roomsList.setItems(EditRoom.getRooms());
 
         addExit.getChildren().addAll(chooseTarget, roomsList);
 

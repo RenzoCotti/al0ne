@@ -135,7 +135,7 @@ public class AlphaWorld extends World{
         Room ladderRoom = new Room( "Dusty Room", "It's very dusty in here.");
         ladderRoom.addEntity(new Prop("Ladder", "a wooden ladder heading in the ceiling",
                 "a wooden ladder", null, Material.WOOD));
-        ladderRoom.addCustomDirection("You can see a ladder going up. You see an opening to the east.");
+        ladderRoom.setCustomDirection("You can see a ladder going up. You see an opening to the east.");
 
         ladderRoom.addEntity(new WarpStone());
         putRoom(ladderRoom);
@@ -242,7 +242,7 @@ public class AlphaWorld extends World{
         putRoom(gateRoom);
 
         Room bossRoom = new Room("Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
-        bossRoom.addCustomDirection("You sense a magical barrier east.");
+        bossRoom.setCustomDirection("You sense a magical barrier east.");
         bossRoom.addEntity(new LeatherArmour());
         bossRoom.lockDirection("east", "boss");
         bossRoom.addEntity(new Demon());

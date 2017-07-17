@@ -18,11 +18,11 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 13/03/2017.
  */
-public abstract class Enemy extends WorldCharacter {
+public class Enemy extends WorldCharacter {
 
     static final int CHANCE_OF_SPECIAL = 20;
 
-    protected boolean special;
+    protected boolean elite;
     protected boolean aggro;
     protected boolean snooze;
 
@@ -30,6 +30,7 @@ public abstract class Enemy extends WorldCharacter {
     //maps status to percentage of applying
     protected HashMap<Status, Integer> inflictStatuses;
 
+    //special: 0 means not at all, 1 random, 2 assured
 
     public Enemy(String name, String description, String shortDescription,
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
@@ -38,11 +39,25 @@ public abstract class Enemy extends WorldCharacter {
         this.inflictStatuses = new HashMap<>();
         this.alive = true;
         this.type='e';
-        this.special=false;
+        this.elite=false;
         this.aggro = false;
         this.snooze = false;
 
-        initialisePrefix();
+//        if(special == 0){
+//            return;
+//        } else if(special == 1){
+//
+//            int chance = Utility.randomNumber(100);
+//
+//            if(chance < 100 - CHANCE_OF_SPECIAL){
+//                return;
+//            }
+//
+//            initialisePrefix();
+//        } else if(special == 2){
+//            initialisePrefix();
+//        }
+
     }
 
     public void addInflictedStatus(Status status, Integer chanceToApply){
@@ -57,13 +72,7 @@ public abstract class Enemy extends WorldCharacter {
         printHealthDescription();
     }
 
-    private void initialisePrefix(){
-
-        int chance = Utility.randomNumber(100);
-
-        if(chance < 100 - CHANCE_OF_SPECIAL){
-            return;
-        }
+    public void setElite(){
 
 
         ArrayList<String> prefixes = new ArrayList<>();
@@ -121,7 +130,7 @@ public abstract class Enemy extends WorldCharacter {
                 break;
         }
 
-        special=true;
+        elite=true;
     }
 
     public void printHealthDescription(){
@@ -175,7 +184,7 @@ public abstract class Enemy extends WorldCharacter {
         boolean dropped = false;
         for (PairDrop pair : getLoot()){
             int rolled = Utility.randomNumber(100);
-            if(((100 - pair.getProbability()) - rolled <= 0) || special){
+            if(((100 - pair.getProbability()) - rolled <= 0) || elite){
                 Item currentLoot = (Item) pair.getEntity();
 
                 if(pair.getCount() > 5){
@@ -260,4 +269,9 @@ public abstract class Enemy extends WorldCharacter {
         }
         return false;
     }
+
+    public boolean isElite() {
+        return elite;
+    }
+
 }
