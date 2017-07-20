@@ -11,7 +11,6 @@ public abstract class Behaviour implements Serializable{
     public String name;
     protected AddEntity entity;
     public String lock = "none";
-    public int healthModifier = 0;
     protected int integrityModifier;
 
 
@@ -36,7 +35,6 @@ public abstract class Behaviour implements Serializable{
     * 8: modify health
     * 9: modify integrity
     * */
-    public abstract String isInteractedWith(Behaviour b);
 
     public String getName() {
         return name;
@@ -48,14 +46,6 @@ public abstract class Behaviour implements Serializable{
 
     public void setLock(String lock) {
         this.lock = lock;
-    }
-
-    public int getHealthModifier() {
-        return healthModifier;
-    }
-
-    public void setHealthModifier(int modifier) {
-        this.healthModifier = modifier;
     }
 
     public AddEntity getEntity() {

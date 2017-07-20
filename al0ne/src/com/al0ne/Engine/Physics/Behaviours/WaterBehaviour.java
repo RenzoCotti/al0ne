@@ -19,13 +19,4 @@ public class WaterBehaviour extends Behaviour {
         setIntegrityModifier(-50);
     }
 
-    @Override
-    public String isInteractedWith(Behaviour b) {
-
-        if(b.getName().equals("iron")){
-            printToLog("The iron rusts!");
-            return "9";
-        }
-        return "0";
-    }
 }

@@ -10,8 +10,4 @@ public class KeyBehaviour extends Behaviour {
         super("key", null);
     }
 
-    @Override
-    public String isInteractedWith(Behaviour b) {
-        return "0";
-    }
 }

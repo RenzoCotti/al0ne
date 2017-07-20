@@ -4,7 +4,7 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Physics.Behaviours.IronBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;

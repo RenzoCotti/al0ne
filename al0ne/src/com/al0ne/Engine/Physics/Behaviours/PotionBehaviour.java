@@ -9,9 +9,4 @@ public class PotionBehaviour extends Behaviour {
     public PotionBehaviour() {
         super("potion", null);
     }
-
-    @Override
-    public String isInteractedWith(Behaviour b) {
-        return "0";
-    }
 }

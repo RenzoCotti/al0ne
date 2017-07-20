@@ -65,11 +65,13 @@ public class PlayerActions {
             Enemy enemy = (Enemy) entity;
             String type;
             int armorPen;
+            int condition = 100;
             if(player.getWeapon()==null){
                 type="fists";
                 armorPen=0;
             } else{
                 type=player.getWeapon().getDamageType();
+                condition = player.getWeapon().getIntegrity();
                 armorPen=player.getWeapon().getArmorPenetration();
             }
 
@@ -81,6 +83,7 @@ public class PlayerActions {
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
                     int inflictedDamage = player.getDamage() - Math.max(enemy.getArmorLevel()-armorPen, 0);
+
                     System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
                     if(inflictedDamage <= 0){
                         printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
@@ -98,13 +101,16 @@ public class PlayerActions {
                 } else if(enemy.isWeakAgainst(type) ){
 
                     int inflictedDamage = player.getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
+                    int damageAfterIntegrity = (inflictedDamage*condition)/100;
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
-                    } else{
+                    } else if( damageAfterIntegrity <= 0 ){
+                        printToLog("Your weapon is too worn to hurt the enemy.");
+                    }else{
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
                         System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
-                        if(!enemy.modifyHealth(-(inflictedDamage))){
+                        if(!enemy.modifyHealth(-(damageAfterIntegrity))){
                             enemy.handleLoot(currentRoom);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;

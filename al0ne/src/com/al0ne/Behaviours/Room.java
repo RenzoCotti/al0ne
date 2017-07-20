@@ -388,8 +388,8 @@ public class Room extends Entity {
         lockedDirections.put(idDoor, direction);
     }
 
-    public void unlockDirection(String nameDoor){
-        lockedDirections.remove(nameDoor);
+    public void unlockDirection(String idDoor){
+        lockedDirections.remove(idDoor);
     }
 
     //checks if the current direction is locked

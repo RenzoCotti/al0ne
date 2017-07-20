@@ -9,9 +9,4 @@ public class FoodBehaviour extends Behaviour {
     public FoodBehaviour() {
         super("food", null);
     }
-
-    @Override
-    public String isInteractedWith(Behaviour b) {
-        return "0";
-    }
 }
