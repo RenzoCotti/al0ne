@@ -7,9 +7,11 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Physics.Behaviour;
+import com.al0ne.Engine.Physics.Behaviours.Physics;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -59,48 +61,47 @@ public abstract class Interactable extends Entity {
 
 
     public void usedWith(Interactable inter, Room currentRoom, Player player) {
-        String result = "0";
+        HashMap<Integer, Integer> result = null;
         Behaviour interacted = null;
         for (Behaviour b: properties){
             for(Behaviour b1: inter.getProperties()){
-                result = b.isInteractedWith(b1);
-                if(!result.equals("0")){
+//                result = b.isInteractedWith(b1);
+                result = Physics.isInteractedWith(b.getName(), b1.getName());
+                if(result != null){
                     interacted = b;
                     break;
                 }
             }
-            if(!result.equals("0")){
+            if(result != null){
                 break;
             }
         }
 
-        if(interacted == null){
+        if(result == null){
             printToLog("The "+inter.getName()+" isn't effective");
             return;
         }
 
-        char [] temp = result.toCharArray();
+        for(Integer i : result.keySet()){
+            switch (i){
 
-        for(char c : temp){
-            switch (c){
-
-                case '1':
+                case 1:
                     //success, no need to print
                     break;
-                case '3':
+                case 3:
                     //tries to add to inventory, if can't add to room
                     Pair pair = interacted.getEntity().getPair();
                     if(player.addAllItem(pair)){
                         break;
                     }
-                case '2':
+                case 2:
                     //add to room
                     Pair pair1 = interacted.getEntity().getPair();
                     Entity entity = pair1.getEntity();
                     int count = pair1.getCount();
                     currentRoom.addEntity(entity, count);
                     break;
-                case '4':
+                case 4:
                     //remove this
                     if(player.hasItemInInventory(this.getID())){
                         player.removeOneItem((Item) this);
@@ -108,7 +109,7 @@ public abstract class Interactable extends Entity {
                         currentRoom.getEntities().remove(this.getID());
                     }
                     break;
-                case '5':
+                case 5:
                     //remove other
                     if(player.hasItemInInventory(inter.getID())){
                         player.removeOneItem((Item) inter);
@@ -116,21 +117,20 @@ public abstract class Interactable extends Entity {
                         currentRoom.getEntities().remove(inter.getID());
                     }
                     break;
-                case '6':
+                case 6:
                     currentRoom.unlockDirection(interacted.getLock());
                     break;
-                case '7':
+                case 7:
                     //refill
                     ((ChargeItem) this).refill(player, inter);
                     break;
-                case '8':
+                case 8:
                     //modify health
-                    player.modifyHealth(interacted.getHealthModifier());
+                    player.modifyHealth(result.get(i));
                     break;
-                case '9':
+                case 9:
                     //modify integrity
-                    inter.modifyIntegrity(interacted.getIntegrityModifier());
-
+                    this.modifyIntegrity(result.get(i));
                     break;
 
                 default:
