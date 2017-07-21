@@ -206,6 +206,20 @@ public class EditProp extends EditTab{
             }
         });
 
+        list.setRowFactory( tv -> {
+            TableRow<IdNameType> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    IdNameType rowData = row.getItem();
+                    Prop p = Main.edit.getCurrentEdit().getProps().get(rowData.getId());
+
+                    LoadProp loadProp = new LoadProp();
+                    loadProp.loadProp(p);
+                }
+            });
+            return row;
+        });
+
         creationPane.add(createNewProp, 0, 0);
         creationPane.add(nameLabel, 0, 1);
         creationPane.add(nameText, 1, 1);

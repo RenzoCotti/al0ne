@@ -12,40 +12,53 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Physics implements Serializable{
 
-    public static HashMap<Integer, Object> isInteractedWith(Behaviour first, Behaviour second) {
+    public static HashMap<Integer, Object> isInteractedWith(String name, Behaviour first, Behaviour second) {
 
-        HashMap<Integer, Object> result = propertyCheck(first, second);
+        HashMap<Integer, Object> result = propertyCheck(name, first, second);
 
         if(result == null){
-            result = propertyCheck(second, first);
+            result = propertyCheck(name, second, first);
         }
 
         return result;
     }
 
-    private static HashMap<Integer, Object> propertyCheck(Behaviour first, Behaviour second){
+    private static HashMap<Integer, Object> propertyCheck(String name, Behaviour first, Behaviour second){
 
         String firstName = first.getName();
         String secondName = second.getName();
         HashMap<Integer, Object> result = new HashMap<>();
 
+
+    /*return codes:
+    * 0: didn't work
+    * 1: it worked, no print
+    * 2: add entity to room
+    * 3: add item to inventory
+    * 4: remove this from where it was
+    * 5: remove other from where it was
+    * 6: unlock door
+    * 7: refill charge
+    * 8: modify health
+    * 9: modify integrity
+    * */
         switch (firstName){
             //case iron
             case "iron":
                 switch (secondName){
                     case "water":
-                        printToLog("It rusts a bit");
+                        printToLog("The "+name+" rusts a bit");
                         result.put(9, -15);
                         return result;
                     case "acid":
-                        printToLog("It corrodes greatly!");
+                        printToLog("The "+name+" corrodes greatly!");
                         result.put(9, -40);
                         return result;
-                    case "food":
-                        printToLog("Debug!");
-                        result.put(4, 0);
-                        result.put(9, -40);
-                        return result;
+//                    case "food":
+//                        printToLog("Debug!");
+//                        result.put(4, 0);
+//                        result.put(9, -40);
+//                        return result;
                 }
             case "water":
                 switch (secondName){
@@ -58,7 +71,7 @@ public class Physics implements Serializable{
             case "paper":
                 switch (secondName){
                     case "fire":
-                        printToLog("The paper catches fire!");
+                        printToLog("The "+name+" catches fire!");
                         result.put(4, 0);
                         return result;
                 }
@@ -75,7 +88,7 @@ public class Physics implements Serializable{
                         String doorUnlocked = key.getDoorUnlocked();
 
                         if(doorName.equals(doorUnlocked)){
-                            printToLog("You unlock it.");
+                            printToLog("You unlock the "+name);
                             result.put(6, doorName);
                             return result;
                         }

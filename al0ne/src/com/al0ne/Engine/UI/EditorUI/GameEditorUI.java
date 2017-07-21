@@ -1,21 +1,28 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
+import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import java.awt.event.MouseEvent;
 
 import static com.al0ne.Engine.Main.clearScreen;
+import static com.al0ne.Engine.Main.game;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -28,6 +35,19 @@ public class GameEditorUI {
 
         ListView<String> gameList = new ListView<>();
         gameList.setId("gamelist");
+
+        gameList.setOnMouseClicked(t-> {
+            String gameName = gameList.getSelectionModel().getSelectedItem();
+            if (t.getClickCount() == 2 && gameName != null) {
+                EditingGame current = Main.edit.getGames().get(gameName);
+                Main.edit.setCurrentEdit(current);
+                Popups.openWorldEditor();
+                s.close();
+            }
+
+        });
+
+
         ObservableList<String> items =FXCollections.observableArrayList (getGameData());
         gameList.setItems(items);
 
@@ -166,6 +186,8 @@ public class GameEditorUI {
                 }
             }
         });
+
+
 
 
 

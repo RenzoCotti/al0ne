@@ -66,7 +66,7 @@ public abstract class Interactable extends Entity {
         for (Behaviour b: properties){
             for(Behaviour b1: inter.getProperties()){
 //                result = b.isInteractedWith(b1);
-                result = Physics.isInteractedWith(b, b1);
+                result = Physics.isInteractedWith(getName(), b, b1);
                 if(result != null){
                     interacted = b;
                     break;
