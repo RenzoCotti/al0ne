@@ -61,12 +61,12 @@ public abstract class Interactable extends Entity {
 
 
     public void usedWith(Interactable inter, Room currentRoom, Player player) {
-        HashMap<Integer, Integer> result = null;
+        HashMap<Integer, Object> result = null;
         Behaviour interacted = null;
         for (Behaviour b: properties){
             for(Behaviour b1: inter.getProperties()){
 //                result = b.isInteractedWith(b1);
-                result = Physics.isInteractedWith(b.getName(), b1.getName());
+                result = Physics.isInteractedWith(b, b1);
                 if(result != null){
                     interacted = b;
                     break;
@@ -118,7 +118,7 @@ public abstract class Interactable extends Entity {
                     }
                     break;
                 case 6:
-                    currentRoom.unlockDirection(interacted.getLock());
+                    currentRoom.unlockDirection((String)result.get(i));
                     break;
                 case 7:
                     //refill
@@ -126,11 +126,11 @@ public abstract class Interactable extends Entity {
                     break;
                 case 8:
                     //modify health
-                    player.modifyHealth(result.get(i));
+                    player.modifyHealth((Integer)result.get(i));
                     break;
                 case 9:
                     //modify integrity
-                    this.modifyIntegrity(result.get(i));
+                    this.modifyIntegrity((Integer) result.get(i));
                     break;
 
                 default:

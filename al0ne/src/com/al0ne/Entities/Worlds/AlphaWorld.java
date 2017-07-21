@@ -6,12 +6,10 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Entities.Enemies.Snake;
-import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Scroll;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Barbute;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.IronHelmet;
@@ -40,11 +38,14 @@ public class AlphaWorld extends World{
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
 
-        Container chest = new Chest();
-        chest.addItem(new SilverCoin(), 100);
-        chest.addItem(new Dagger(Material.IRON), 1);
-        startRoom.addEntity(chest);
-        startRoom.addEntity(new Snake());
+//        Container chest = new Chest();
+//        chest.addItem(new SilverCoin(), 100);
+//        chest.addItem(new Dagger(Material.IRON), 1);
+//        startRoom.addEntity(chest);
+//        startRoom.addEntity(new Snake());
+        LockedDoor ld = new LockedDoor("wooden door", "a wooden door", "an opened wooden door", Material.WOOD, startRoom, "west");
+        startRoom.addEntity(ld.generateKey("generic key"));
+        startRoom.addEntity(ld);
         putRoom(startRoom);
 
         Room lootRoom = new Room("Looty room", "A room full of loot! yay!");
@@ -152,7 +153,6 @@ public class AlphaWorld extends World{
                 "handy man","Hi, I'm Emon. My job is fixing small keys. Just give me one and I'll fix it.");
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
-        emon.addReactionItem("brokenkey", new Key("bosskey", "Big key", "A key, the biggest, let me tell you."));
         emonRoom.addEntity(emon);
         putRoom(emonRoom);
 
@@ -237,8 +237,12 @@ public class AlphaWorld extends World{
         putRoom(brokenKeyRoom);
 
         Room gateRoom = new Room("Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
-        gateRoom.addEntity(new LockedDoor("bossgate", "Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON,"bosskey"));
-        gateRoom.lockDirection("east", "bossgate");
+        LockedDoor bossgate = new LockedDoor("Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON, gateRoom, "east");
+        Key bosskey = bossgate.generateKey("Shiny key");
+        emon.addReactionItem("brokenkey", bosskey);
+
+        gateRoom.addEntity(bossgate);
+        //        gateRoom.lockDirection("east", "bossgate");
         putRoom(gateRoom);
 
         Room bossRoom = new Room("Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");

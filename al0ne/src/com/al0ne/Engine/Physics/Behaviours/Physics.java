@@ -12,9 +12,9 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Physics implements Serializable{
 
-    public static HashMap<Integer, Integer> isInteractedWith(Behaviour first, Behaviour second) {
+    public static HashMap<Integer, Object> isInteractedWith(Behaviour first, Behaviour second) {
 
-        HashMap<Integer, Integer> result = propertyCheck(first, second);
+        HashMap<Integer, Object> result = propertyCheck(first, second);
 
         if(result == null){
             result = propertyCheck(second, first);
@@ -23,11 +23,11 @@ public class Physics implements Serializable{
         return result;
     }
 
-    private static HashMap<Integer, Integer> propertyCheck(Behaviour first, Behaviour second){
+    private static HashMap<Integer, Object> propertyCheck(Behaviour first, Behaviour second){
 
         String firstName = first.getName();
         String secondName = second.getName();
-        HashMap<Integer, Integer> result = new HashMap<>();
+        HashMap<Integer, Object> result = new HashMap<>();
 
         switch (firstName){
             //case iron
@@ -68,11 +68,17 @@ public class Physics implements Serializable{
                     case "key":
                         LockedDoorBehaviour door = (LockedDoorBehaviour) first;
                         String doorName = door.getDoorName();
-                        String direction = door.getDirection();
+//                        String direction = door.getDirection();
 
                         KeyBehaviour key = (KeyBehaviour) second;
 
-                        return result;
+                        String doorUnlocked = key.getDoorUnlocked();
+
+                        if(doorName.equals(doorUnlocked)){
+                            printToLog("You unlock it.");
+                            result.put(6, doorName);
+                            return result;
+                        }
                 }
         }
         return null;

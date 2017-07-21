@@ -9,13 +9,13 @@ import com.al0ne.Behaviours.Room;
 
 public class Door extends Prop {
 
-    public Door(String id, String name) {
-        super(id, name, "a sturdy door", "a sturdy door", "The door is now open.", Material.WOOD);
+    public Door(String name) {
+        super(name, "a sturdy door", "a sturdy door", "The door is now open.", Material.WOOD);
         addCommand(Command.OPEN);
     }
 
-    public Door(String id, String name, String description, String shortDescription, Material m) {
-        super(id, name, description, shortDescription, "The "+name+" is now open.", m);
+    public Door(String name, String description, String shortDescription, Material m) {
+        super(name, description, shortDescription, "The "+name+" is now open.", m);
         addCommand(Command.OPEN);
     }
 

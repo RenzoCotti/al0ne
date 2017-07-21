@@ -29,7 +29,7 @@ public class CaveWorld extends World{
 //        cave1.addOneItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addOneItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.addEntity(new Door("cave1door", "Generic Door"));
+        cave1.addEntity(new Door("Generic Door"));
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
         Prop river = new Prop("River", "a watery river");
@@ -49,7 +49,7 @@ public class CaveWorld extends World{
         putRoom(cave2);
 
         Room cave3 = new Room("Cave 3", "Nothing worth of notice here.");
-        Door trapdoor1 = new Door("trapdoor", "Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor", Material.WOOD);
+        Door trapdoor1 = new Door("Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor", Material.WOOD);
         HideItem rug = new HideItem("Rug", "A ragged rug. Ruggity rug.", "a dusty rug",
                 "The rug is now out of the way.", Material.FIBRE, trapdoor1);
         rug.addCommand(Command.MOVE);

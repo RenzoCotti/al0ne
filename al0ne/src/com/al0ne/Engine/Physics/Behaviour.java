@@ -10,8 +10,6 @@ import java.io.Serializable;
 public abstract class Behaviour implements Serializable{
     public String name;
     protected AddEntity entity;
-    public String lock = "none";
-    protected int integrityModifier;
 
 
     public Behaviour(String s, AddEntity entity){
@@ -40,27 +38,11 @@ public abstract class Behaviour implements Serializable{
         return name;
     }
 
-    public String getLock() {
-        return lock;
-    }
-
-    public void setLock(String lock) {
-        this.lock = lock;
-    }
-
     public AddEntity getEntity() {
         return entity;
     }
 
     public void setEntity(AddEntity entity) {
         this.entity = entity;
-    }
-
-    public int getIntegrityModifier() {
-        return integrityModifier;
-    }
-
-    public void setIntegrityModifier(int integrityModifier) {
-        this.integrityModifier = integrityModifier;
     }
 }
