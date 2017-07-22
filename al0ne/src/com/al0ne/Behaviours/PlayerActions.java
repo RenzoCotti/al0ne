@@ -49,19 +49,20 @@ public class PlayerActions {
             if(rweapon.needsReloading()){
                 if(player.hasItemInInventory(rweapon.getAmmoID())){
                     Pair ammo = player.getItemPair(rweapon.getAmmoID());
-                    if(ammo.getCount() > rweapon.getMagazineSize()){
+                    int toReload = rweapon.getMagazineSize()-rweapon.getInMagazine();
+                    if(ammo.getCount() >= toReload){
                         rweapon.fullReload();
-                        player.removeXItem((Item) ammo.getEntity(), rweapon.getMagazineSize());
+                        player.removeXItem((Item) ammo.getEntity(), toReload);
                         printToLog("You reload your "+rweapon.getName()+".");
                         return true;
                     } else {
-                        rweapon.setInMagazine(ammo.getCount());
+                        rweapon.setInMagazine(ammo.getCount()+rweapon.getInMagazine());
                         player.removeXItem((Item) ammo.getEntity(), ammo.getCount());
                         printToLog("You partially reload your "+rweapon.getName()+".");
                         return true;
                     }
                 } else {
-                    printToLog("You have run out of ammunition for the "+rweapon.getName());
+                    printToLog("You have run out of ammunition for your "+rweapon.getName());
                     return true;
                 }
             } else{
