@@ -11,10 +11,12 @@ import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -861,12 +863,44 @@ public class HandleCommands {
 
     }
 
+    public static boolean handleReload(String[] parsedInput, Player player){
+
+        if (parsedInput.length == 1) {
+            ParseInput.wrongCommand++;
+            printToLog("The syntax is RELOAD x.");
+            return false;
+        }
+
+        ParseInput.wrongCommand = 0;
+
+        String weaponString = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
+
+        PotentialItems possibleItems = getPotentialItem(weaponString, player, 0);
+
+        if(possibleItems.getItems().size() > 1){
+            printToLog("Be more specific.");
+        } else if(possibleItems.getItems().size() == 0){
+            printToLog("You can't see that item.");
+        } else {
+            if(possibleItems.getItems().get(0).getEntity() instanceof Weapon){
+                return PlayerActions.reload(player, (Weapon) possibleItems.getItems().get(0).getEntity());
+            } else {
+                printToLog("That's not a weapon.");
+            }
+        }
+        return false;
+    }
+
     public static boolean handleAttack(String[] parsedInput, Player player, boolean execute) {
         if (parsedInput.length == 1) {
             ParseInput.wrongCommand++;
             printToLog("The syntax is ATTACK x or KILL x");
             return false;
         }
+
+        //        int d = Utility.checkForToken(parsedInput, "at");
+        //shoot at
+
         ParseInput.wrongCommand = 0;
 
         String enemy = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);

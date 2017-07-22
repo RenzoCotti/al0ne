@@ -68,8 +68,11 @@ public class ParseInput {
                 String s = game.getCommands().stringify(c);
                 return HandleCommands.customAction(parsedInput, player, c, s);
 
+            case SHOOT:
             case ATTACK:
                 return HandleCommands.handleAttack(parsedInput, player, false);
+            case RELOAD:
+                return HandleCommands.handleReload(parsedInput, player);
             case GIVE:
                 return HandleCommands.handleGive(parsedInput, player);
 

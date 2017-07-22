@@ -20,6 +20,7 @@ public class  Weapon extends Wearable {
         this.armorPenetration=armorPen;
         this.damage=damage;
         this.part = "main hand";
+
     }
 
 

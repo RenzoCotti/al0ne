@@ -10,8 +10,11 @@ import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.Spells.*;
+import org.w3c.dom.ranges.Range;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +43,39 @@ public class PlayerActions {
         }
     }
 
-    //this function handles attacking an entity
+    public static boolean reload(Player player, Weapon weapon){
+        if(weapon instanceof RangedWeapon){
+            RangedWeapon rweapon = (RangedWeapon) weapon;
+            if(rweapon.needsReloading()){
+                if(player.hasItemInInventory(rweapon.getAmmoID())){
+                    Pair ammo = player.getItemPair(rweapon.getAmmoID());
+                    if(ammo.getCount() > rweapon.getMagazineSize()){
+                        rweapon.fullReload();
+                        player.removeXItem((Item) ammo.getEntity(), rweapon.getMagazineSize());
+                        printToLog("You reload your "+rweapon.getName()+".");
+                        return true;
+                    } else {
+                        rweapon.setInMagazine(ammo.getCount());
+                        player.removeXItem((Item) ammo.getEntity(), ammo.getCount());
+                        printToLog("You partially reload your "+rweapon.getName()+".");
+                        return true;
+                    }
+                } else {
+                    printToLog("You have run out of ammunition for the "+rweapon.getName());
+                    return true;
+                }
+            } else{
+                printToLog("The "+rweapon.getName()+" doesn't need reloading.");
+                return false;
+            }
+        } else{
+            printToLog("You can't reload the "+weapon.getName()+".");
+            return false;
+        }
+    }
+
+
+        //this function handles attacking an entity
     //if it is an enemy, we roll 1d100, we sum attack,
     //and we check if its bigger than the dodge roll
     //if it is, we roll for damage, subtract the armor
@@ -66,13 +101,33 @@ public class PlayerActions {
             String type;
             int armorPen;
             int condition = 100;
-            if(player.getWeapon()==null){
+            Weapon weapon = player.getWeapon();
+
+            if(weapon==null){
                 type="fists";
                 armorPen=0;
             } else{
-                type=player.getWeapon().getDamageType();
-                condition = player.getWeapon().getIntegrity();
-                armorPen=player.getWeapon().getArmorPenetration();
+                type=weapon.getDamageType();
+                condition = weapon.getIntegrity();
+                armorPen=weapon.getArmorPenetration();
+
+                if(weapon instanceof RangedWeapon){
+                    RangedWeapon rweapon = (RangedWeapon) weapon;
+                    int inMagazine = rweapon.getInMagazine();
+
+                    if(rweapon.needsReloading() && inMagazine == 0){
+                        if(player.hasItemInInventory(rweapon.getAmmoID())){
+                            printToLog("You need to reload your "+rweapon.getName());
+                        } else{
+                            printToLog("You're out of ammunition.");
+                        }
+
+                        return true;
+                    } else if (!rweapon.needsReloading() && !player.hasItemInInventory(rweapon.getAmmoID())){
+                        printToLog("You're out of ammunition.");
+                        return true;
+                    }
+                }
             }
 
 
@@ -108,9 +163,14 @@ public class PlayerActions {
                     } else if( damageAfterIntegrity <= 0 ){
                         printToLog("Your weapon is too worn to hurt the enemy.");
                     }else{
-                        printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
+                        if(weapon instanceof RangedWeapon){
+                            printToLog("You shoot and hit the "+enemy.getName().toLowerCase()+".");
+                        } else {
+                            printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
+                        }
                         System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
                         if(!enemy.modifyHealth(-(damageAfterIntegrity))){
+                            handleAmmo(weapon, player);
                             enemy.handleLoot(currentRoom);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;
@@ -120,12 +180,19 @@ public class PlayerActions {
                     printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
                 }
 
+                handleAmmo(weapon, player);
+
                 enemy.isAttacked(player, currentRoom);
 
                 enemy.setSnooze(true);
                 return true;
             } else{
-                printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
+                if(weapon instanceof RangedWeapon){
+                    printToLog("You shoot, but the "+enemy.getName().toLowerCase()+" dodges.");
+                    handleAmmo(weapon, player);
+                } else {
+                    printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
+                }
                 enemy.isAttacked(player, currentRoom);
                 enemy.setSnooze(true);
                 return true;
@@ -135,6 +202,15 @@ public class PlayerActions {
             printToLog("The "+p.getEntity().getName().toLowerCase() +" isn't threatening.");
         }
         return false;
+    }
+
+    public static void handleAmmo(Weapon weapon, Player player){
+        if( weapon instanceof RangedWeapon && ((RangedWeapon) weapon).needsReloading() ){
+            ((RangedWeapon) weapon).shoot();
+        } else if(weapon instanceof RangedWeapon && player.hasItemInInventory(((RangedWeapon) weapon).getAmmoID())){
+            Item ammo = (Item) player.getItemPair(((RangedWeapon) weapon).getAmmoID()).getEntity();
+            player.removeOneItem(ammo);
+        }
     }
 
 

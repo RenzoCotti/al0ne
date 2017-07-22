@@ -374,6 +374,18 @@ public class Player extends WorldCharacter {
         return true;
     }
 
+    //this function removes 1 item from pair to the inventory
+    public boolean removeXItem(Item i, int count) {
+        Pair p = getItemPair(i.getID());
+        if(p != null){
+            modifyWeight(-i.getWeight() * count);
+            if(!p.modifyCount(-count)){
+                inventory.remove(i.getID());
+            }
+        }
+        return true;
+    }
+
 
             //this function adds 1 item from pair to the inventory
     //returns true if it's successful, else the player can't carry it

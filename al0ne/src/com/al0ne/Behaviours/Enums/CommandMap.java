@@ -64,6 +64,8 @@ public class CommandMap implements Serializable{
         commands.put("wait", Command.WAIT);
         commands.put("press", Command.PRESS);
         commands.put("ls", Command.LINUX);
+        commands.put("shoot", Command.SHOOT);
+        commands.put("reload", Command.RELOAD);
 
 
 
@@ -100,6 +102,9 @@ public class CommandMap implements Serializable{
         aliases.put("mv", Command.LINUX);
         aliases.put("rm", Command.LINUX);
         aliases.put("cd", Command.LINUX);
+        aliases.put("fire", Command.SHOOT);
+        aliases.put("load", Command.RELOAD);
+
 
     }
 
