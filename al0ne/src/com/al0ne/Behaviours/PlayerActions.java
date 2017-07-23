@@ -14,7 +14,6 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.Spells.*;
-import org.w3c.dom.ranges.Range;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,133 +83,154 @@ public class PlayerActions {
     // to the type of damage).
     //at this point, we make the enemy attack, if its still alive
     //and we snooze him this turn (all aggrod enemies in the room attack at EOT)
-    public static boolean attack(Player player, Entity name){
+    public static boolean attack(Player player, Enemy enemy){
         Room currentRoom = player.getCurrentRoom();
-        Pair p = currentRoom.getEntityPair(name.getID());
-        Entity entity;
-        if (p == null) {
-            printToLog("You can't see "+name.getName()+".");
-            return false;
-        } else {
-            entity = p.getEntity();
-        }
-        if(entity.getType() == 'n'){
-            printToLog("It's best not to attack "+ name.getName()+".");
-            return false;
-        } else if (entity.getType() == 'e'){
-            Enemy enemy = (Enemy) entity;
+        Pair p = currentRoom.getEntityPair(enemy.getID());
             String type;
             int armorPen;
             int condition = 100;
             Weapon weapon = player.getWeapon();
+            boolean ranged = false;
 
             if(weapon==null){
                 type="fists";
                 armorPen=0;
+            } else if(weapon instanceof RangedWeapon){
+                RangedWeapon rweapon = (RangedWeapon) weapon;
+                int inMagazine = rweapon.getInMagazine();
+                type=weapon.getDamageType();
+                condition = weapon.getIntegrity();
+                armorPen=weapon.getArmorPenetration();
+                ranged = true;
+
+                if(rweapon.needsReloading() && inMagazine == 0){
+                    if(player.hasItemInInventory(rweapon.getAmmoID())){
+                        printToLog("You need to reload your "+rweapon.getName());
+                    } else{
+                        printToLog("You're out of ammunition.");
+                    }
+                    return true;
+                } else if (!rweapon.needsReloading() && !player.hasItemInInventory(rweapon.getAmmoID())){
+                    printToLog("You're out of ammunition.");
+                    return true;
+                }
             } else{
                 type=weapon.getDamageType();
                 condition = weapon.getIntegrity();
                 armorPen=weapon.getArmorPenetration();
-
-                if(weapon instanceof RangedWeapon){
-                    RangedWeapon rweapon = (RangedWeapon) weapon;
-                    int inMagazine = rweapon.getInMagazine();
-
-                    if(rweapon.needsReloading() && inMagazine == 0){
-                        if(player.hasItemInInventory(rweapon.getAmmoID())){
-                            printToLog("You need to reload your "+rweapon.getName());
-                        } else{
-                            printToLog("You're out of ammunition.");
-                        }
-
-                        return true;
-                    } else if (!rweapon.needsReloading() && !player.hasItemInInventory(rweapon.getAmmoID())){
-                        printToLog("You're out of ammunition.");
-                        return true;
-                    }
-                }
             }
 
 
             int attackRoll = Utility.randomNumber(100)+player.getAttack();
             int dodgeRoll = Utility.randomNumber(100)+enemy.getDexterity();
+
+        int inflictedDamage = player.getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
+
 //            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
             if(attackRoll > dodgeRoll){
 
                 if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    int inflictedDamage = player.getDamage() - Math.max(enemy.getArmorLevel()-armorPen, 0);
+                    return handToHand(player, enemy);
 
-                    System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
-                    if(inflictedDamage <= 0){
-                        printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
-                    } else{
-                        boolean attackResult = enemy.modifyHealth(-inflictedDamage);
-                        if(!attackResult){
+                } else if(enemy.isWeakAgainst(type) && ranged){
+                    int jamRoll = Utility.randomNumber(100);
+                    if(jamRoll > condition){
+                        //weapon jammed, no shooting
+                        printToLog("Your weapon malfunctions and you aren't able to shoot.");
+                    } else {
+                        printToLog("You shoot and hit the "+enemy.getName().toLowerCase()+".");
+                        if(!enemy.modifyHealth(-(inflictedDamage))){
+                            handleWeaponWearing(weapon, player);
                             enemy.handleLoot(currentRoom);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;
-                        } else {
-                            printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
                         }
                     }
-
-                } else if(enemy.isWeakAgainst(type) ){
-
-                    int inflictedDamage = player.getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
+                } else if(enemy.isWeakAgainst(type)){
+                    //melee attack
                     int damageAfterIntegrity = (inflictedDamage*condition)/100;
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
                     } else if( damageAfterIntegrity <= 0 ){
                         printToLog("Your weapon is too worn to hurt the enemy.");
-                    }else{
-                        if(weapon instanceof RangedWeapon){
-                            printToLog("You shoot and hit the "+enemy.getName().toLowerCase()+".");
-                        } else {
-                            printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
-                        }
-                        System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
+                    } else {
+                        printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
                         if(!enemy.modifyHealth(-(damageAfterIntegrity))){
-                            handleAmmo(weapon, player);
                             enemy.handleLoot(currentRoom);
+                            handleWeaponWearing(weapon, player);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;
                         }
                     }
+
                 } else{
                     printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
                 }
 
-                handleAmmo(weapon, player);
+                System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
 
-                enemy.isAttacked(player, currentRoom);
 
-                enemy.setSnooze(true);
-                return true;
             } else{
                 if(weapon instanceof RangedWeapon){
                     printToLog("You shoot, but the "+enemy.getName().toLowerCase()+" dodges.");
-                    handleAmmo(weapon, player);
                 } else {
                     printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
                 }
-                enemy.isAttacked(player, currentRoom);
-                enemy.setSnooze(true);
-                return true;
             }
 
-        } else {
-            printToLog("The "+p.getEntity().getName().toLowerCase() +" isn't threatening.");
-        }
-        return false;
+        handleWeaponWearing(weapon, player);
+        enemy.isAttacked(player, currentRoom);
+        enemy.setSnooze(true);
+
+        return true;
     }
 
-    public static void handleAmmo(Weapon weapon, Player player){
+    public static void handleWeaponWearing(Weapon weapon, Player player){
+        if(weapon == null) return;
+
+        int wearNumber = Utility.randomNumber(100);
+
         if( weapon instanceof RangedWeapon && ((RangedWeapon) weapon).needsReloading() ){
             ((RangedWeapon) weapon).shoot();
+            if(wearNumber > 70){
+                weapon.modifyIntegrity(-1);
+            }
         } else if(weapon instanceof RangedWeapon && player.hasItemInInventory(((RangedWeapon) weapon).getAmmoID())){
             Item ammo = (Item) player.getItemPair(((RangedWeapon) weapon).getAmmoID()).getEntity();
             player.removeOneItem(ammo);
+            if(wearNumber > 70){
+                weapon.modifyIntegrity(-1);
+            }
+        } else {
+            if(wearNumber > 60){
+                weapon.modifyIntegrity(-2);
+            }
+        }
+    }
+
+
+
+    public static boolean handToHand(Player player, Enemy enemy){
+        Room currentRoom = player.getCurrentRoom();
+        int inflictedDamage = player.getDamage() - Math.max(enemy.getArmorLevel(), 0);
+
+        System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
+        if(inflictedDamage <= 0){
+            printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
+            return false;
+        } else{
+            boolean attackResult = enemy.modifyHealth(-inflictedDamage);
+            if(!attackResult){
+                //enemy is dead
+                enemy.handleLoot(currentRoom);
+                currentRoom.getEntities().remove(enemy.getID());
+                return true;
+            } else {
+                //enemy is alive
+                printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
+                return true;
+            }
         }
     }
 

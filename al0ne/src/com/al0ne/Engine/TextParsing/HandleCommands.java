@@ -11,10 +11,12 @@ import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -449,12 +451,19 @@ public class HandleCommands {
                 return false;
             }
             for(Pair p : possibleItems){
+                int oldCount = p.getCount();
                 if(PlayerActions.pickUpItem(player, p, p.getCount()) == 0){
                     break;
                 }
-                Item currentItem = (Item) p.getEntity();
+                Pair pair = player.getItemPair(p.getEntity().getID());
+
+                Item currentItem = (Item) pair.getEntity();
                 p.setLocation('i');
-                printToLog("Taken "+currentItem.getName()+".");
+                if(oldCount > 1){
+                    printToLog("Taken "+oldCount+"x "+currentItem.getName()+".");
+                } else{
+                    printToLog("Taken "+currentItem.getName()+".");
+                }
             }
             return true;
         }
@@ -504,13 +513,13 @@ public class HandleCommands {
             if (all) {
                 if (PlayerActions.pickUpItem(player, currentPair, count) == 1) {
                     currentPair.setLocation('i');
-                    printToLog(count+" "+currentItem.getName() + " added to your inventory.");
+                    printToLog(count+"x "+currentItem.getName() + " added to your inventory.");
                 }
 
             } else if (amt != 0) {
                 currentPair.setLocation('i');
                 if (PlayerActions.pickUpItem(player, items.get(0), amt) == 1) {
-                    printToLog(amt+" "+currentItem.getName() + " added to your inventory.");
+                    printToLog(amt+"x "+currentItem.getName() + " added to your inventory.");
                 }
             } else {
                 if (PlayerActions.pickUpItem(player, items.get(0), 1) == 1) {
@@ -894,21 +903,46 @@ public class HandleCommands {
     public static boolean handleAttack(String[] parsedInput, Player player, boolean execute) {
         if (parsedInput.length == 1) {
             ParseInput.wrongCommand++;
-            printToLog("The syntax is ATTACK x or KILL x");
+            printToLog("The syntax is SHOOT AT/ATTACK/KILL x.");
             return false;
         }
 
         Room currentRoom = player.getCurrentRoom();
 
-        //        int d = Utility.checkForToken(parsedInput, "at");
-        //shoot at
+        String enemyName;
+        String toCheck = parsedInput[0]+" at";
+        if(toCheck.equals("shoot at") || toCheck.equals("fire at")){
+            enemyName = Utility.stitchFromTo(parsedInput, 2, parsedInput.length);
+
+            Weapon weapon = player.getWeapon();
+            if( weapon != null && !(weapon instanceof RangedWeapon) ){
+                printToLog("You can't shoot with your "+ weapon.getName()+".");
+                return false;
+            } else if(weapon == null){
+                printToLog("You can't shoot with your fists.");
+                return false;
+            }
+        } else {
+            enemyName = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
+        }
+
+
 
         ParseInput.wrongCommand = 0;
 
-        String enemy = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
-        ArrayList<Pair> entities = getPotentialItem(enemy, player, 1).getItems();
+        //we get all entities similar to that name
+        ArrayList<Pair> entities = getPotentialItem(enemyName, player, 1).getItems();
         if (entities.size() == 1 && !execute) {
-            return PlayerActions.attack(player, entities.get(0).getEntity());
+            Entity enemy = entities.get(0).getEntity();
+            if( enemy instanceof NPC){
+                printToLog("It's best not to attack "+ enemy.getName()+".");
+                return false;
+            } else if(enemy instanceof Enemy){
+                return PlayerActions.attack(player, (Enemy) entities.get(0).getEntity());
+            } else {
+                printToLog("The "+enemy.getName().toLowerCase() +" isn't threatening.");
+            }
+            return false;
         } else if (entities.size() == 1 && execute) {
             if(entities.get(0).getEntity().getType() == 'n'){
                 ((Enemy)entities.get(0).getEntity()).handleLoot(currentRoom);
@@ -921,7 +955,7 @@ public class HandleCommands {
             printToLog("Be more specific");
             return false;
         } else {
-            printToLog("You can't see a " + enemy);
+            printToLog("You can't see a " + enemyName);
             return false;
         }
     }

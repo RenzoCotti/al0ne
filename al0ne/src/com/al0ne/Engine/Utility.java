@@ -36,11 +36,7 @@ public class Utility {
         Main.game.setNotes(Main.notes.getText());
 
         try {
-            if (fileName != null){
-                file = new File(fileName+".txt");
-            } else{
-                file = new File("./"+fileName+".save");
-            }
+            file = new File(fileName+".txt");
             fop = new FileOutputStream(file);
             oos = new ObjectOutputStream(fop);
 

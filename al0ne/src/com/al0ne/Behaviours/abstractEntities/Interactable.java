@@ -170,13 +170,13 @@ public abstract class Interactable extends Entity {
     }
 
 
-    @Override
-    public String getName() {
-        if(customName || Material.stringify(material).equals("undefined")){
-            return name.toLowerCase();
-        }
-        return Material.stringify(this.material)+" "+name.toLowerCase();
-    }
+//    @Override
+//    public String getName() {
+//        if(customName || Material.stringify(material).equals("undefined")){
+//            return name.toLowerCase();
+//        }
+//        return Material.stringify(this.material)+" "+name.toLowerCase();
+//    }
 
     public String getRootName() {
         return name.toLowerCase();
