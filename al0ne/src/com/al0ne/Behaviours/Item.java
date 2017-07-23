@@ -29,13 +29,7 @@ public abstract class Item extends Interactable {
         this.unique = false;
         this.canDrop = true;
         this.canTake=true;
-
-        if(material != null){
-            this.shortDescription = Utility.getArticle(Material.stringify(material))+
-                    " "+Material.stringify(material)+" "+name.toLowerCase();
-        } else {
-            this.shortDescription = Utility.getArticle(name)+" "+name.toLowerCase();
-        }
+        this.shortDescription = Utility.getArticle(name)+" "+name.toLowerCase();
 
 
         if(price == null && material != null){
