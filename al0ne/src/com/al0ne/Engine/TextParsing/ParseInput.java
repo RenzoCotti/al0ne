@@ -18,6 +18,7 @@ public class ParseInput {
     public static boolean parse(String input, Game game, boolean again) {
 
         Player player = game.getPlayer();
+        Room currentRoom = player.getCurrentRoom();
 
         HashMap<String, Room> rooms = game.getRooms();
 
@@ -81,7 +82,7 @@ public class ParseInput {
                 return HandleCommands.handleBuy(parsedInput, player);
 
             case CAST:
-                return HandleCommands.handleCast(parsedInput, player, currentRoom);
+                return HandleCommands.handleCast(parsedInput, player);
             //we check if it's a simple use, e.g. use potion or a complex one, e.g. use x on y
             case USE:
 

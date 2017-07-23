@@ -30,7 +30,7 @@ public class WarpStone extends Item{
         int chosen = Utility.randomNumber(Main.game.getWorldCount()*2);
         int i = 1;
         for (String s : Main.game.getWorlds().keySet()){
-            if(i == chosen && !Main.game.getCurrentWorld().equals(Main.game.getWorld(s).getWorldName())){
+            if(i == chosen && !Main.game.getCurrentWorldName().equals(Main.game.getWorld(s).getWorldName())){
                 GameChanges.changeWorld(s);
                 printToLog("Your vision fades to black for a moment.\nWhen you can see again, you are someplace completely different.");
                 return 2;

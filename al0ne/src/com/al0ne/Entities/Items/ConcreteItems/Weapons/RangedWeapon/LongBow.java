@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.ConcreteItems.Weapon;
+package com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;

@@ -30,8 +30,6 @@ public class Main extends Application{
 
     public static Player player = game.getPlayer();
 
-    public static Room currentRoom = player.getCurrentRoom();
-
     public static int turnCounter = game.getTurnCount();
 
     public static boolean started = false;
@@ -48,7 +46,7 @@ public class Main extends Application{
 
     public static EditorInfo edit = new EditorInfo();
 
-    public static String versionNumber = "Alpha v. 0.7";
+    public static String versionNumber = "Alpha v. 0.71";
 
     public static boolean nostalgiaMode = false;
 
@@ -69,9 +67,11 @@ public class Main extends Application{
     public static void runGame(){
         started = true;
         HandleCommands.printWelcome();
-        currentRoom.printRoom();
+        Main.player.getCurrentRoom().printRoom();
         printToLog();
-        currentRoom.printName();
+        Main.player.getCurrentRoom().printName();
+
+
 //        game.toggleDebugMode();
 
         if(!nostalgiaMode){
@@ -88,11 +88,12 @@ public class Main extends Application{
     public static void hasNextLine(String s, Scene scene){
         currentCommand = s;
         if(ParseInput.parse(currentCommand, game, false)){
+            Room currentRoom = player.getCurrentRoom();
             //we add a turn
             game.addTurn();
 
             //we make every aggro enemy attack
-            GameChanges.attackIfAggro(player, currentRoom);
+            GameChanges.attackIfAggro(player);
 
             //we make the statuses tick
             player.handleStatuses();
@@ -177,25 +178,9 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Al0ne "+versionNumber);
-//        primaryStage.setScene(PlayUI.createContent());
         primaryStage.setScene(MainMenu.createMainMenu(primaryStage));
         primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
-
-
-//        Service<Void> service = new Service<Void>() {
-//            @Override
-//            protected Task<Void> createTask() {
-//                return new Task<Void>() {
-//                    @Override
-//                    protected Void call() throws Exception {
-//                        Platform.runLater(Main::runGame);
-//                        return null;
-//                    }
-//                };
-//            }
-//        };
-//        service.restart();
     }
 
 }

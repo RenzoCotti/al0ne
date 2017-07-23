@@ -3,22 +3,19 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
-import com.al0ne.Entities.Items.ConcreteItems.WarpStone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.*;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -97,13 +94,13 @@ public class GameChanges {
             Main.game = loadedGame;
             Main.player = loadedGame.getPlayer();
             Main.turnCounter = loadedGame.getTurnCount();
-            Main.currentRoom = loadedGame.getRoom();
             Main.notes.setText(loadedGame.getNotes());
 
             printToLog("Game loaded successfully.");
             printToLog();
-            Main.currentRoom.printRoom();
-            Main.currentRoom.printName();
+            Room currentRoom = player.getCurrentRoom();
+            currentRoom.printRoom();
+            currentRoom.printName();
             return true;
         } else if(loaded instanceof EditorInfo && !game){
             Main.edit = (EditorInfo) loaded;
@@ -184,38 +181,26 @@ public class GameChanges {
 
     public static boolean changeWorld(String s){
         //save old state
-        World oldWorld = Main.game.getWorld(Main.game.getCurrentWorld());
+        World oldWorld = Main.game.getWorld(Main.game.getCurrentWorldName());
         oldWorld.setPlayer(Main.player);
 
-        if (Main.game instanceof WarpGame && !((WarpGame) Main.game).hasWarpstone()){
-            ((WarpGame) Main.game).setWarpstone();
-
-            for (World w : Main.game.getWorlds().values()){
-                Player p = w.getPlayer();
-
-                if(!p.hasItemInInventory("warpstone")){
-                    p.addOneItem(new Pair(new WarpStone(), 1));
-                }
+        for(World w : Main.game.getWorlds().values()){
+            if(s.equals(w.getWorldName())){
+                Main.game.setCurrentWorld(s);
+                Main.player = Main.game.getPlayer();
+                Main.clearScreen();
+                printToLog("Your see black and feel very cold for a moment, and suddenly you are somewhere else.");
+                player.getCurrentRoom().visit();
+                return true;
             }
         }
 
-        switch (s){
-            case "alpha":
-            case "medievaly":
-            case "cave":
-                Main.game.setCurrentWorld(s);
-                Main.player = Main.game.getPlayer();
-                Main.currentRoom = Main.player.getCurrentRoom();
-                Main.clearScreen();
-                Main.currentRoom.visit();
-                return true;
-            default:
-                printToLog("404: world not found\nAvailable worlds:");
-                for(World w : Main.game.getWorlds().values()){
-                    printToLog("- "+w.getWorldName());
-                }
-                return false;
+        System.out.println("404: world not found\nAvailable worlds:");
+        for(World w : Main.game.getWorlds().values()){
+            printToLog("- "+w.getWorldName());
         }
+        return false;
+
     }
 
     public static ObservableList<SimpleItem> getInventoryData(){
@@ -250,7 +235,8 @@ public class GameChanges {
         return data;
     }
 
-    public static void attackIfAggro(Player player, Room currentRoom){
+    public static void attackIfAggro(Player player){
+        Room currentRoom = player.getCurrentRoom();
         if(currentRoom.hasEnemies()){
             for (Enemy e : currentRoom.getEnemyList()){
                 if(e.isAggro() && !e.isSnooze()){
@@ -270,7 +256,7 @@ public class GameChanges {
         Main.input.setDisable(false);
         Main.game = new WarpGame();
         Main.player = Main.game.getPlayer();
-        Main.currentRoom = Main.game.getRoom();
+//        Main.currentRoom = Main.game.getRoom();
         Main.log.setText("");
         printToLog("Game restarted.");
         printToLog();

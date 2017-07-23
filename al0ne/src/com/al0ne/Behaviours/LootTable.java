@@ -8,7 +8,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Barbute;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Sallet;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.*;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;

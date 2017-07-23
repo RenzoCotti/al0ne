@@ -94,8 +94,12 @@ public class Game implements Serializable {
         return notes;
     }
 
-    public String getCurrentWorld() {
+    public String getCurrentWorldName() {
         return currentWorld;
+    }
+
+    public World getCurrentWorld() {
+        return worlds.get(currentWorld);
     }
 
     public void setCurrentWorld(String currentWorld) {

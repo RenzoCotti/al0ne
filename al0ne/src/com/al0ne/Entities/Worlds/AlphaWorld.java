@@ -7,8 +7,7 @@ import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
-import com.al0ne.Entities.Items.ConcreteItems.Ammunition.Arrow;
-import com.al0ne.Entities.Items.ConcreteItems.Ammunition.Bullet9mm;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.Ammunition.Bullet9mm;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Scroll;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
@@ -17,7 +16,10 @@ import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.IronHelmet;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Sallet;
 import com.al0ne.Entities.Items.ConcreteItems.Shield.*;
-import com.al0ne.Entities.Items.ConcreteItems.Weapon.*;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.*;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon.Pistol;
+import com.al0ne.Entities.Items.Props.TeleportProp;
+import com.al0ne.Entities.Items.Props.WorldSwitch;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
@@ -44,6 +46,7 @@ public class AlphaWorld extends World{
 //        chest.addItem(new SilverCoin(), 100);
 //        chest.addItem(new Dagger(Material.IRON), 1);
 //        startRoom.addEntity(chest);
+//        startRoom.addEntity(new WorldSwitch("suspicious rock", "Very suspicios, let me tell you.", "medievaly"));
         startRoom.addEntity(new Snake());
         startRoom.addEntity(new Pistol(5, "9mm", 7));
         startRoom.addEntity(new Bullet9mm(), 10);
@@ -64,6 +67,9 @@ public class AlphaWorld extends World{
 
         Room shieldRoom = new Room("Shieldery", "A room full of shields");
 
+
+        startRoom.addEntity(new TeleportProp("rock", "another suspicious rock. ha!", shieldRoom));
+        shieldRoom.addEntity(new TeleportProp("rock", "another suspicious rock. ha!", startRoom));
 
 
         for(Material m : Material.getMetals()){

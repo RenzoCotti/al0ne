@@ -56,7 +56,7 @@ public class EditingGame implements Serializable{
     }
 
     public World getCurrentWorld() {
-        return currentEdit.getWorlds().get(currentEdit.getCurrentWorld());
+        return currentEdit.getWorlds().get(currentEdit.getCurrentWorldName());
     }
 
     public void setCurrentWorld(World currentWorld) {

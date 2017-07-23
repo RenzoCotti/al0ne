@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static com.al0ne.Engine.Main.currentRoom;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -432,6 +431,7 @@ public class HandleCommands {
 
         //TODO: FIX GET POSSIBLE ITEMS, ADD RELIABILITY OF GUESS, ADD ONLY IF BIG ENOUGH
         ArrayList<Pair> possibleItems;
+        Room currentRoom = player.getCurrentRoom();
 
         if (temp.length == 1) {
             ParseInput.wrongCommand++;
@@ -898,6 +898,8 @@ public class HandleCommands {
             return false;
         }
 
+        Room currentRoom = player.getCurrentRoom();
+
         //        int d = Utility.checkForToken(parsedInput, "at");
         //shoot at
 
@@ -1012,7 +1014,8 @@ public class HandleCommands {
         return potentialSpells;
     }
 
-    public static boolean handleCast(String[] parsedInput, Player player, Room currentRoom){
+    public static boolean handleCast(String[] parsedInput, Player player){
+        Room currentRoom = player.getCurrentRoom();
         if(parsedInput.length == 1){
             printToLog("The syntax is CAST spell (AT/ON target)");
             return false;

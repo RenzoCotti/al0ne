@@ -84,7 +84,7 @@ public class PlayUI {
             if (event.getCode().equals(ENTER)){
                 Main.historyCounter=0;
                 Player player = Main.player;
-                Room currentRoom = Main.currentRoom;
+                Room currentRoom = player.getCurrentRoom();
                 try{
                     Main.hasNextLine(Main.input.getText(), done);
                     Main.input.clear();

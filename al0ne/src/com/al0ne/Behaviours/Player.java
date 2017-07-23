@@ -481,7 +481,6 @@ public class Player extends WorldCharacter {
     //setter for currentRoom
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
-        Main.currentRoom = currentRoom;
     }
 
 
