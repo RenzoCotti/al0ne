@@ -6,7 +6,10 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Entities.Enemies.Snake;
+import com.al0ne.Entities.Items.Behaviours.Container;
 import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.Ammunition.Arrow;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.Ammunition.Bullet9mm;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Scroll;
@@ -17,6 +20,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Helmet.IronHelmet;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Sallet;
 import com.al0ne.Entities.Items.ConcreteItems.Shield.*;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.*;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon.LongBow;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon.Pistol;
 import com.al0ne.Entities.Items.Props.TeleportProp;
 import com.al0ne.Entities.Items.Props.WorldSwitch;
@@ -30,7 +34,9 @@ import com.al0ne.Entities.Items.Props.HolyFountain;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;
+import com.al0ne.Entities.Spells.ConcreteSpells.TeleportSpell;
 import com.al0ne.Entities.Spells.MidasSpell;
+import com.al0ne.Entities.Spells.Spell;
 
 /**
  * Created by BMW on 14/03/2017.
@@ -42,20 +48,34 @@ public class AlphaWorld extends World{
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
 
-//        Container chest = new Chest();
-//        chest.addItem(new SilverCoin(), 100);
-//        chest.addItem(new Dagger(Material.IRON), 1);
-//        startRoom.addEntity(chest);
-//        startRoom.addEntity(new WorldSwitch("suspicious rock", "Very suspicios, let me tell you.", "medievaly"));
+        Container chest = new Chest();
+        chest.addItem(new SilverCoin(), 100);
+        chest.addItem(new Dagger(Material.IRON), 1);
+        startRoom.addEntity(chest);
         startRoom.addEntity(new Snake());
         startRoom.addEntity(new Pistol(5, "9mm", 7));
         startRoom.addEntity(new Bullet9mm(), 10);
-//        startRoom.addEntity(new LongBow());
-//        startRoom.addEntity(new Arrow(Material.IRON), 33);
+
         LockedDoor ld = new LockedDoor("wooden door", "a wooden door", "an opened wooden door", Material.WOOD, startRoom, "west");
         startRoom.addEntity(ld.generateKey("generic key"));
         startRoom.addEntity(ld);
+
         putRoom(startRoom);
+
+
+        Room attic = new Room("Attic", "An empty attic.");
+        Spellbook sb = new Spellbook();
+        sb.addSpell(new Fireball(), 10);
+        sb.addSpell(new LightHeal(), 5);
+        sb.addSpell(new TeleportSpell(), 10);
+        attic.addEntity(new WorldSwitch("suspicious rock", "Very suspicios, let me tell you.", "medievaly"));
+
+
+        attic.addEntity(new LongBow());
+        attic.addEntity(new Arrow(Material.IRON), 3);
+        attic.addEntity(sb);
+
+        putRoom(attic);
 
         Room lootRoom = new Room("Looty room", "A room full of loot! yay!");
 
@@ -235,10 +255,10 @@ public class AlphaWorld extends World{
 
         Room miniBossRoom = new Room( "Skeleton Room", "Everything in this room is of a very white colour. Upon further examination, you realise it's because everything is made of bones. Human ones.");
         //add miniboss
-        Spellbook sb = new Spellbook();
-        sb.addSpell(new Fireball(), 5);
-        sb.addSpell(new LightHeal(), 3);
-        sb.addSpell(new MidasSpell(), 5);
+        Spellbook spellbook = new Spellbook();
+        spellbook.addSpell(new Fireball(), 5);
+        spellbook.addSpell(new LightHeal(), 3);
+        spellbook.addSpell(new MidasSpell(), 5);
         miniBossRoom.addEntity(sb, 1);
         putRoom(miniBossRoom);
 
@@ -310,6 +330,8 @@ public class AlphaWorld extends World{
         startRoom.addExit("west",ladderRoom);
         startRoom.addExit("northwest", shieldRoom);
         startRoom.addExit("northeast", lootRoom);
+        startRoom.addExit("up", attic);
+        attic.addExit("down", startRoom);
         bossRoom.addExit("west", gateRoom);
         bossRoom.addExit("east", princessRoom);
         gateRoom.addExit("east", bossRoom);
