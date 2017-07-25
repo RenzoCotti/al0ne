@@ -6,6 +6,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.Physics.Behaviours.Physics;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
@@ -82,66 +83,72 @@ public abstract class Interactable extends Entity {
             return;
         }
 
-        for(Integer i : result.keySet()){
-            switch (i){
-
-                case 1:
-                    //success, no need to print
-                    break;
-                case 3:
-                    //tries to add to inventory, if can't add to room
-                    Pair pair = interacted.getEntity().getPair();
-                    if(player.addAllItem(pair)){
-                        break;
-                    }
-                case 2:
-                    //add to room
-                    Pair pair1 = interacted.getEntity().getPair();
-                    Entity entity = pair1.getEntity();
-                    int count = pair1.getCount();
-                    currentRoom.addEntity(entity, count);
-                    break;
-                case 4:
-                    //remove this
-                    if(player.hasItemInInventory(this.getID())){
-                        player.removeOneItem((Item) this);
-                    } else{
-                        currentRoom.getEntities().remove(this.getID());
-                    }
-                    break;
-                case 5:
-                    //remove other
-                    if(player.hasItemInInventory(inter.getID())){
-                        player.removeOneItem((Item) inter);
-                    } else{
-                        currentRoom.getEntities().remove(inter.getID());
-                    }
-                    break;
-                case 6:
-                    currentRoom.unlockDirection((String)result.get(i));
-                    break;
-                case 7:
-                    //refill
-                    ((ChargeItem) this).refill(player, inter);
-                    break;
-                case 8:
-                    //modify health
-                    player.modifyHealth((Integer)result.get(i));
-                    break;
-                case 9:
-                    //modify integrity
-                    this.modifyIntegrity((Integer) result.get(i));
-                    break;
-
-                default:
-                    System.out.println("ERROR: no behaviour code found");
-                    break;
-
-            }
-        }
+        GameChanges.useResult(result, player, interacted.getToAdd(), inter, this);
 
 
     }
+
+//    public void useResult(HashMap<Integer, Object> result, Player player, Behaviour interacted, Interactable inter){
+//
+//        Room currentRoom = player.getCurrentRoom();
+//        for(Integer i : result.keySet()){
+//            switch (i){
+//
+//                case 1:
+//                    //success, no need to print
+//                    break;
+//                case 3:
+//                    //tries to add to inventory, if can't add to room
+//                    Pair pair = interacted.getEntity().getPair();
+//                    if(player.addAllItem(pair)){
+//                        break;
+//                    }
+//                case 2:
+//                    //add to room
+//                    Pair pair1 = interacted.getEntity().getPair();
+//                    Entity entity = pair1.getEntity();
+//                    int count = pair1.getCount();
+//                    currentRoom.addEntity(entity, count);
+//                    break;
+//                case 4:
+//                    //remove this
+//                    if(player.hasItemInInventory(this.getID())){
+//                        player.removeOneItem((Item) this);
+//                    } else{
+//                        currentRoom.getEntities().remove(this.getID());
+//                    }
+//                    break;
+//                case 5:
+//                    //remove other
+//                    if(player.hasItemInInventory(inter.getID())){
+//                        player.removeOneItem((Item) inter);
+//                    } else{
+//                        currentRoom.getEntities().remove(inter.getID());
+//                    }
+//                    break;
+//                case 6:
+//                    currentRoom.unlockDirection((String)result.get(i));
+//                    break;
+//                case 7:
+//                    //refill
+//                    ((ChargeItem) this).refill(player, inter);
+//                    break;
+//                case 8:
+//                    //modify health
+//                    player.modifyHealth((Integer)result.get(i));
+//                    break;
+//                case 9:
+//                    //modify integrity
+//                    this.modifyIntegrity((Integer) result.get(i));
+//                    break;
+//
+//                default:
+//                    System.out.println("ERROR: no behaviour code found");
+//                    break;
+//
+//            }
+//        }
+//    }
 
     public void addProperty(Behaviour behaviour){
         properties.add(behaviour);

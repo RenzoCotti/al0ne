@@ -3,8 +3,12 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
+import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Editing.EditorInfo;
+import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.UI.SimpleItem;
+import com.al0ne.Entities.Items.Behaviours.ChargeItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import javafx.collections.FXCollections;
@@ -13,7 +17,9 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
@@ -328,5 +334,73 @@ public class GameChanges {
 //        return game;
 
     }
+
+
+    public static void useResult(HashMap<Integer, Object> result, Player player, ArrayList<Pair> toAdd,
+                                 Interactable obj, Interactable subj){
+
+        Room currentRoom = player.getCurrentRoom();
+        for(Integer i : result.keySet()){
+            switch (i){
+
+                case 1:
+                    //success, no need to print
+                    break;
+                case 3:
+                    //tries to add to inventory, if can't add to room
+                    for (Pair p: toAdd){
+                        if(!player.addAllItem(p)){
+                            currentRoom.addEntity(p.getEntity(), p.getCount());
+                        }
+                    }
+                    break;
+
+//                case 2:
+//                    //add to room
+//                    Pair pair1 = interacted.getEntity().getPair();
+//                    Entity entity = pair1.getEntity();
+//                    int count = pair1.getCount();
+//                    currentRoom.addEntity(entity, count);
+//                    break;
+                case 4:
+                    //remove this
+                    if(player.hasItemInInventory(subj.getID())){
+                        player.removeOneItem((Item) subj);
+                    } else{
+                        currentRoom.getEntities().remove(subj.getID());
+                    }
+                    break;
+                case 5:
+                    //remove other
+                    if(player.hasItemInInventory(obj.getID())){
+                        player.removeOneItem((Item) obj);
+                    } else{
+                        currentRoom.getEntities().remove(obj.getID());
+                    }
+                    break;
+                case 6:
+                    currentRoom.unlockDirection((String)result.get(i));
+                    break;
+                case 7:
+                    //refill
+                    ((ChargeItem) subj).refill(player, obj);
+                    break;
+                case 8:
+                    //modify health
+                    player.modifyHealth((Integer)result.get(i));
+                    break;
+                case 9:
+                    //modify integrity
+                    subj.modifyIntegrity((Integer) result.get(i));
+                    break;
+
+                default:
+                    System.out.println("ERROR: no behaviour code found");
+                    break;
+
+            }
+        }
+    }
+
 
 }

@@ -1,23 +1,21 @@
 package com.al0ne.Engine.Physics;
 
+import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by BMW on 09/07/2017.
  */
 public abstract class Behaviour implements Serializable{
     public String name;
-    protected AddEntity entity;
+    protected ArrayList<Pair> toAdd;
 
 
-    public Behaviour(String s, AddEntity entity){
-        if(entity == null){
-            this.entity = new AddEntity();
-        } else{
-            this.entity = entity;
-        }
+    public Behaviour(String s){
+        this.toAdd = new ArrayList<>();
         this.name = s;
     }
 
@@ -26,11 +24,11 @@ public abstract class Behaviour implements Serializable{
         return name;
     }
 
-    public AddEntity getEntity() {
-        return entity;
+    public ArrayList<Pair> getToAdd() {
+        return toAdd;
     }
 
-    public void setEntity(AddEntity entity) {
-        this.entity = entity;
+    public void addEntity(Entity entity, int count) {
+        this.toAdd.add(new Pair(entity, count));
     }
 }
