@@ -769,36 +769,63 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
 
 
-        int b = Utility.checkForToken(parsedInput, "with");
+
+
+        int with = Utility.checkForToken(parsedInput, "with");
         int to = Utility.checkForToken(parsedInput, "to");
+
+        String npcName;
+        NPC character;
+
+        if(parsedInput[0].equals("ask")){
+            int about = Utility.checkForToken(parsedInput, "about");
+            if(about == -1){
+                printToLog("The syntax is: ASK x ABOUT y.");
+                return false;
+            }
+
+            npcName = Utility.stitchFromTo(parsedInput, 1, about);
+            String subject = Utility.stitchFromTo(parsedInput, about+1, parsedInput.length);
+
+            character = player.getCurrentRoom().getNPC(npcName);
+
+            if(character != null){
+                PlayerActions.talkToNPC(player, npcName, subject);
+            }
+            return true;
+        }
+
+        //case generic talk
         if (parsedInput[1].equals("to")) {
-            String npc = Utility.stitchFromTo(parsedInput, to + 1, parsedInput.length);
+            npcName = Utility.stitchFromTo(parsedInput, to + 1, parsedInput.length);
 
-            NPC character = player.getCurrentRoom().getNPC(npc);
+            character = player.getCurrentRoom().getNPC(npcName);
 
-            if (!HandleCommands.isNPC(player, npc)) {
+            if (!HandleCommands.isNPC(player, npcName)) {
                 return false;
             }
 
             character.printIntro();
             return true;
-        } else if (b == -1 || !(parsedInput[1].equals("about"))) {
+        } else if (with == -1 || !(parsedInput[1].equals("about"))) {
             printToLog("The syntax is: TALK ABOUT x WITH y");
             return false;
         } else {
-            String subject = Utility.stitchFromTo(parsedInput, 2, b);
-            String npc = Utility.stitchFromTo(parsedInput, b + 1, parsedInput.length);
+            //case complex talk
+            String subject = Utility.stitchFromTo(parsedInput, 2, with);
+            npcName = Utility.stitchFromTo(parsedInput, with + 1, parsedInput.length);
 
 //            NPC character = player.getCurrentRoom().getNPC(npc);
 
-            HandleCommands.isNPC(player, npc);
-
-            if (PlayerActions.talkToNPC(player, npc, subject)) {
-                return true;
-            } else {
-                printToLog("\"Sorry, I don't know anything about it.\"");
-                return true;
+            if(HandleCommands.isNPC(player, npcName)){
+                if (PlayerActions.talkToNPC(player, npcName, subject)) {
+                    return true;
+                } else {
+                    printToLog("\"Sorry, I don't know anything about it.\"");
+                    return true;
+                }
             }
+            return false;
         }
     }
 
@@ -945,7 +972,7 @@ public class HandleCommands {
             return false;
         } else if (entities.size() == 1 && execute) {
             if(entities.get(0).getEntity().getType() == 'n'){
-                ((Enemy)entities.get(0).getEntity()).handleLoot(currentRoom);
+                ((Enemy)entities.get(0).getEntity()).handleLoot(player);
                 currentRoom.getEntities().remove(entities.get(0).getEntity().getID());
                 printToLog("You executed the "+entities.get(0).getEntity().getName());
                 return true;

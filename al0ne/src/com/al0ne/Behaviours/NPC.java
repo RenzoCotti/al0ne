@@ -2,6 +2,7 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Pairs.PairReactionItem;
 import com.al0ne.Behaviours.Pairs.Subject;
+import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class NPC extends WorldCharacter {
             if (s.equals(subject)){
                 Subject temp = subjects.get(s);
                 if(temp.addsQuest()){
-                    player.addQuest(temp.getQuestID());
+                    player.addQuest(temp.getQuest());
                 }
                 if(temp.givesItem()){
                     if(!player.addAmountItem(temp.getItem(), temp.getItem().getCount())){
@@ -90,26 +91,37 @@ public class NPC extends WorldCharacter {
     }
 
     public boolean isGiven(Item item, Player player){
-        if(reactionItems.get(item.getID()) != null){
-                Item currentItem = reactionItems.get(item.getID()).getReward();
-                printToLog("\"Thank you, i really needed a "+item.getName()+".\"");
-                printToLog("\"Here's a "+currentItem.getName()+" as a reward.\"");
-                //removes *all* items of that type
-                player.getInventory().remove(item.getID());
-                player.modifyWeight(-item.getWeight());
-                if (!player.simpleAddItem(currentItem, 1)){
-                    player.getCurrentRoom().addEntity(currentItem, 1);
-                }
-                if(reactionItems.get(item.getID()).getQuestID() != null){
-//                    System.out.println("completing: "+reactionItems.get(item.getID()).getQuestID());
-                    player.completeQuest(reactionItems.get(item.getID()).getQuestID());
-                }
 
-                reactionItems.remove(item.getID());
-                return true;
+        boolean completed = false;
+        for(Quest q: player.getQuests().values()){
+            if(q.checkCompletion(player)){
+                completed = true;
+            }
         }
+        if(completed){
+            return true;
+        }
+
         printToLog("\"Sorry, I don't need it.\"");
         return false;
+//        if(reactionItems.get(item.getID()) != null){
+//                Item currentItem = reactionItems.get(item.getID()).getReward();
+//                printToLog("\"Thank you, i really needed a "+item.getName()+".\"");
+//                printToLog("\"Here's a "+currentItem.getName()+" as a reward.\"");
+//                //removes *all* items of that type
+//                player.getInventory().remove(item.getID());
+//                player.modifyWeight(-item.getWeight());
+//                if (!player.simpleAddItem(currentItem, 1)){
+//                    player.getCurrentRoom().addEntity(currentItem, 1);
+//                }
+////                if(reactionItems.get(item.getID()).getQuestID() != null){
+//////                    System.out.println("completing: "+reactionItems.get(item.getID()).getQuestID());
+////                    player.completeQuest(reactionItems.get(item.getID()).getQuestID());
+////                }
+//
+//                reactionItems.remove(item.getID());
+//                return true;
+//        }
     }
 
     public String getIntro() {

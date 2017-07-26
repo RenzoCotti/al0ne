@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Quests.Quest;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -55,4 +57,6 @@ public class World implements Serializable{
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+
 }

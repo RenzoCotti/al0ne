@@ -11,7 +11,7 @@ public class WaterBehaviour extends Behaviour {
 
 
     public WaterBehaviour() {
-        super("water", null);
+        super("water");
     }
 
 }

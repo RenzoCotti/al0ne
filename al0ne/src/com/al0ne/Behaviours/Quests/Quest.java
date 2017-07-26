@@ -3,10 +3,13 @@ package com.al0ne.Behaviours.Quests;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Engine.GameChanges;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * A Quest consists of 1 of:
@@ -28,34 +31,47 @@ import java.util.HashMap;
  * - ...
  */
 public abstract class Quest implements Serializable{
+    public static int questCounter = 0;
+
     protected String questID;
+    protected String questName;
     protected boolean completed;
     protected ArrayList<Pair> toAdd;
     protected String requiredQuest;
     protected HashMap<Integer, Object> rewards;
 
-    public Quest(String questID){
-        this.questID = questID;
+    public Quest(String questName){
+        this.questID = "quest"+(++questCounter);
+        this.questName = questName;
         this.completed = false;
         this.toAdd = new ArrayList<>();
         this.rewards = new HashMap<>();
     }
 
     //to implement in different kind of quests
-    public abstract void checkCompletion(Player player);
+    public abstract boolean checkCompletion(Player player);
 
-    public abstract void questReward();
+    public void questReward(Player player){
+        printToLog("- - - Quest completed: "+getQuestName()+" - - -");
+        GameChanges.useResult(rewards, player, toAdd, null, null);
+    }
 
     public String getQuestID() {
         return questID;
     }
 
+    public String getQuestName() {
+        return questName;
+    }
+
+
+
     public boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setCompleted() {
+        this.completed = true;
     }
 
     public ArrayList<Pair> getToAdd() {

@@ -6,6 +6,8 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.Quests.FetchQuest;
+import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
@@ -71,7 +73,7 @@ public class MedievalYoungWorld extends World{
         mainHouse.addEntity(new Prop("chairs",
                 "Three chairs: one for mom, one for dad, one for you.",
                 "some chairs", null, null));
-        NPC mom = new NPC("mom", "mom", "Your mom. She looks a bit tired today.",
+        NPC mom = new NPC("Mom", "mom", "Your mom. She looks a bit tired today.",
                 "Hey sweetie, I'd need a favour.");
         NPC dad = new NPC("dad", "dad", "Your dad. He's a bit flushed, he must've just run.",
                 "Son, we have to talk about the woods");
@@ -79,13 +81,18 @@ public class MedievalYoungWorld extends World{
         mainHouse.setQuestRoom("geteggs", "At this very moment," +
                 " the door opens: your dad has come home", dad);
 
+        Food eggs = new Food("eggs", "A pack of six fresh eggs.", 0.3, Size.SMALL, 3);
+
+        Quest getEggs = new FetchQuest("geteggs", eggs, 1);
+        getEggs.addRewards(3, new SliceOfCake());
+
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
-                true, new Pair(new BrassCoin(), 3), true, "geteggs"));
+                true, new Pair(new BrassCoin(), 3), true, getEggs));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
-        mom.addReactionItem("eggs", "geteggs", new SliceOfCake());
+//        mom.addReactionItem("eggs", "geteggs", );
         mainHouse.addEntity(mom);
 
         putRoom(mainHouse);
@@ -157,8 +164,7 @@ public class MedievalYoungWorld extends World{
         Shopkeeper Varra = new Shopkeeper("Varra",
                 "A fairly tall man, a bit on the chubby side.",
                 "Hi, I'm Varra. Want to see the items i sell?");
-        Varra.simpleAddItem(new Food("eggs",
-                "A pack of six fresh eggs.", 0.3, Size.SMALL, 3), 3);
+        Varra.simpleAddItem(eggs, 3);
         villageMarket.addEntity(Varra);
         putRoom(villageMarket);
 

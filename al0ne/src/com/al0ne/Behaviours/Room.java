@@ -156,7 +156,12 @@ public class Room extends Entity {
         if(entities.size() > 0){
             printToSingleLine(begin);
             for (int i=0; i<entities.size(); i++) {
-                printToSingleLine(((Entity)entities.get(i)).getShortDescription());
+                Entity currentEntity = ((Entity)entities.get(i));
+                if(currentEntity instanceof NPC){
+                    printToSingleLine(currentEntity.getName());
+                } else{
+                    printToSingleLine(currentEntity.getShortDescription().toLowerCase());
+                }
                 if(i==entities.size()-2){
                     printToSingleLine(" and ");
                 } else if(i!=entities.size()-1){

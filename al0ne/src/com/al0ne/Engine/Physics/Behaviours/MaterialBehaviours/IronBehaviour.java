@@ -10,6 +10,6 @@ import static com.al0ne.Engine.Main.printToLog;
 public class IronBehaviour extends Behaviour {
 
     public IronBehaviour() {
-        super("iron", null);
+        super("iron");
     }
 }

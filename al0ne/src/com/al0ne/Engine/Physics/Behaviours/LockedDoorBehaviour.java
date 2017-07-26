@@ -10,7 +10,7 @@ public class LockedDoorBehaviour extends Behaviour {
     private String doorName;
     private String direction;
     public LockedDoorBehaviour(String doorName, String direction) {
-        super("lockeddoor", null);
+        super("lockeddoor");
         this.doorName = doorName;
         this.direction = direction;
     }

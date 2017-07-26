@@ -2,6 +2,7 @@ package com.al0ne.Behaviours;
 
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
+import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
@@ -55,14 +56,14 @@ public class Player extends WorldCharacter {
     //various
     private boolean hasNeeds;
 
-    //maps questID to boolean
-    private HashMap<String, Boolean> quests;
-
     //maps BodyPart to Item
     private HashMap<String, Wearable> wornItems;
 
     private String causeOfDeath;
-    
+
+    protected HashMap<String, Quest> quests;
+
+
     // add also money pouch?
 
 
@@ -618,29 +619,6 @@ public class Player extends WorldCharacter {
         return getLongDescription();
     }
 
-    //returns the quests
-    public HashMap<String, Boolean> getQuests() {
-        return quests;
-    }
-
-    //this adds a quest to the quest log
-    public void addQuest(String s) {
-        this.quests.put(s, false);
-    }
-
-    public void completeQuest(String s) {
-        if(this.quests.get(s) != null){
-            this.quests.put(s, true);
-        }
-    }
-
-    //returns true if the player has finished the quest
-    public boolean hasDoneQuest(String s) {
-        if(this.quests.get(s) != null){
-            return this.quests.get(s);
-        }
-        return false;
-    }
 
     public String getCauseOfDeath() {
         return causeOfDeath;
@@ -648,5 +626,49 @@ public class Player extends WorldCharacter {
 
     public void setCauseOfDeath(String causeOfDeath) {
         this.causeOfDeath = causeOfDeath;
+    }
+
+
+    public HashMap<String, Quest> getQuests() {
+        return quests;
+    }
+
+    public void setQuests(HashMap<String, Quest> quests) {
+        this.quests = quests;
+    }
+
+    public void addQuest(Quest quest){
+        printToLog("- - - New quest: "+quest.getQuestName()+" - - -");
+        quests.putIfAbsent(quest.getQuestID(), quest);
+    }
+
+
+    //returns true if the player has finished the quest
+    public boolean hasDoneQuest(String id) {
+        if(this.quests.get(id) != null){
+            return this.quests.get(id).isCompleted();
+        }
+        return false;
+    }
+
+    //prints the quests
+    public void printQuests(){
+        if (quests.size()==0){
+            printToLog("You have no quests currently.");
+        } else {
+
+            boolean first = true;
+
+            for (Quest q : quests.values()) {
+                if(!q.isCompleted() && first){
+                    first = false;
+                    printToLog("You have these quests:");
+                    printToLog("- "+q.getQuestName());
+                } else if(!q.isCompleted()){
+                    printToLog("- "+q.getQuestName());
+                }
+            }
+
+        }
     }
 }

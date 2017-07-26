@@ -4,9 +4,12 @@ import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PairDrop;
 import com.al0ne.Behaviours.Player;
+import com.al0ne.Behaviours.Quests.KillQuest;
+import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Status;
 import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
+import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class Enemy extends WorldCharacter {
 
     public Enemy(String name, String description, String shortDescription,
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
-        super("enemy"+(entityCounter++), name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
+        super(name, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
         this.resistances = new ArrayList<>();
         this.inflictStatuses = new HashMap<>();
         this.alive = true;
@@ -258,11 +261,21 @@ public class Enemy extends WorldCharacter {
         this.snooze = snooze;
     }
 
-    public boolean handleLoot(Room room){
+    public boolean handleLoot(Player player){
         if(!alive){
+            Room room = player.getCurrentRoom();
             printToLog("You defeated the "+ name.toLowerCase());
             if(addLoot(room)){
                 printToLog("The "+name.toLowerCase()+" drops some items.");
+            }
+            for (String s : player.getQuests().keySet()){
+                Quest q = player.getQuests().get(s);
+                if(q instanceof KillQuest){
+                    if(getID().equals(((KillQuest) q).getToKillID())){
+                        ((KillQuest) q).addCurrentCount();
+                        q.checkCompletion(player);
+                    }
+                }
             }
             room.getEntities().remove(ID);
             return true;

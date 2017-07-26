@@ -16,11 +16,11 @@ public class WarpGame extends Game{
         super("warpgame");
         this.warpstone = false;
 
-        World startingWorld = new AlphaWorld();
-        World alphaWorld = new MedievalYoungWorld();
+//        World startingWorld = new AlphaWorld();
+//        World alphaWorld = new MedievalYoungWorld();
 
-//        World startingWorld = new MedievalYoungWorld();
-//        World alphaWorld = new AlphaWorld();
+        World startingWorld = new MedievalYoungWorld();
+        World alphaWorld = new AlphaWorld();
 
 
         World caveWorld = new CaveWorld();

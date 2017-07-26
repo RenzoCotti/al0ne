@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours.Enums;
 
+import javafx.scene.control.ComboBox;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -66,6 +68,7 @@ public class CommandMap implements Serializable{
         commands.put("ls", Command.LINUX);
         commands.put("shoot", Command.SHOOT);
         commands.put("reload", Command.RELOAD);
+        commands.put("quests", Command.QUEST);
 
 
 
@@ -104,6 +107,10 @@ public class CommandMap implements Serializable{
         aliases.put("cd", Command.LINUX);
         aliases.put("fire", Command.SHOOT);
         aliases.put("load", Command.RELOAD);
+        aliases.put("journal", Command.QUEST);
+        aliases.put("ask", Command.TALK);
+
+
 
 
     }

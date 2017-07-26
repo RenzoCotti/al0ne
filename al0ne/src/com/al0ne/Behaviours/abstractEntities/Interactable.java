@@ -1,15 +1,11 @@
 package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Physics.Behaviour;
-import com.al0ne.Engine.Physics.Behaviours.Physics;
-import com.al0ne.Entities.Items.Behaviours.ChargeItem;
+import com.al0ne.Engine.Physics.Physics;
 
 import java.util.ArrayList;
 import java.util.HashMap;

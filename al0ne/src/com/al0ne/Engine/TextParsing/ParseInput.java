@@ -18,7 +18,6 @@ public class ParseInput {
     public static boolean parse(String input, Game game, boolean again) {
 
         Player player = game.getPlayer();
-        Room currentRoom = player.getCurrentRoom();
 
         HashMap<String, Room> rooms = game.getRooms();
 
@@ -189,6 +188,9 @@ public class ParseInput {
 //                player.printHealth();
                 player.printHealthStatus();
                 return false;
+            case QUEST:
+                player.printQuests();
+                return false;
             case WAIT:
                 printToLog("You wait.");
                 return true;
@@ -239,7 +241,8 @@ public class ParseInput {
                     } else {
                         if (GameChanges.changeWorld(Utility.stitchFromTo(parsedInput, 1, parsedInput.length))) {
                             printToLog();
-                            currentRoom.printRoom();
+//                            player.getCurrentRoom().printRoom();
+                            System.out.println(player.getCurrentRoom().getID());
                         }
 
                     }

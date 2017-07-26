@@ -1,6 +1,8 @@
-package com.al0ne.Engine.Physics.Behaviours;
+package com.al0ne.Engine.Physics;
 
 import com.al0ne.Engine.Physics.Behaviour;
+import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -33,7 +35,7 @@ public class Physics implements Serializable{
     /*return codes:
     * 0: didn't work
     * 1: it worked, no print
-    * 2: add entity to room
+    * ------------------------------2: add entity to room
     * 3: add item to inventory
     * 4: remove this from where it was
     * 5: remove other from where it was

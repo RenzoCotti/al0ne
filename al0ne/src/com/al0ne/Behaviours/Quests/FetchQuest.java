@@ -12,26 +12,23 @@ public class FetchQuest extends Quest{
 
     protected Pair entityRequired;
 
-    public FetchQuest(String questID, Entity entity, int amount) {
-        super(questID);
+    public FetchQuest(String questName, Entity entity, int amount) {
+        super(questName);
         this.entityRequired = new Pair(entity, amount);
     }
 
     @Override
-    public void checkCompletion(Player player) {
+    public boolean checkCompletion(Player player) {
         if(player.hasItemInInventory(getEntityRequired().getEntity().getID())){
             Pair pair = player.getItemPair(getEntityRequired().getEntity().getID());
             if(pair.getCount() >= entityRequired.getCount()){
                 player.removeXItem((Item) pair.getEntity(), entityRequired.getCount());
-                questReward();
-                setCompleted(true);
+                questReward(player);
+                setCompleted();
+                return true;
             }
         }
-    }
-
-    @Override
-    public void questReward() {
-
+        return false;
     }
 
     public Pair getEntityRequired() {

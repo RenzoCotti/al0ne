@@ -9,7 +9,7 @@ public class KeyBehaviour extends Behaviour {
 
     private String doorUnlocked;
     public KeyBehaviour(String s) {
-        super("key", null);
+        super("key");
         this.doorUnlocked = s;
     }
 

@@ -24,6 +24,7 @@ public enum Command {
 
     //player related
     LOOK, HEALTH, INVENTORY,  EQUIPMENT, STORY, CAST,
+    QUEST,
 
     //npc
     TALK, ATTACK, BUY, GIVE, SHOOT, RELOAD,

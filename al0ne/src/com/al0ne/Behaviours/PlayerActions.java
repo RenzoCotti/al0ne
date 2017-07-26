@@ -141,7 +141,7 @@ public class PlayerActions {
                         printToLog("You shoot and hit the "+enemy.getName().toLowerCase()+".");
                         if(!enemy.modifyHealth(-(inflictedDamage))){
                             handleWeaponWearing(weapon, player);
-                            enemy.handleLoot(currentRoom);
+                            enemy.handleLoot(player);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;
                         }
@@ -157,7 +157,7 @@ public class PlayerActions {
                     } else {
                         printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
                         if(!enemy.modifyHealth(-(damageAfterIntegrity))){
-                            enemy.handleLoot(currentRoom);
+                            enemy.handleLoot(player);
                             handleWeaponWearing(weapon, player);
                             currentRoom.getEntities().remove(enemy.getID());
                             return true;
@@ -223,7 +223,7 @@ public class PlayerActions {
             boolean attackResult = enemy.modifyHealth(-inflictedDamage);
             if(!attackResult){
                 //enemy is dead
-                enemy.handleLoot(currentRoom);
+                enemy.handleLoot(player);
                 currentRoom.getEntities().remove(enemy.getID());
                 return true;
             } else {
@@ -291,9 +291,9 @@ public class PlayerActions {
 
 
     //this function handles talking with an NPC
-    public static boolean talkToNPC(Player player, String name, String subject){
+    public static boolean talkToNPC(Player player, String npcName, String subject){
         Room currentRoom = player.getCurrentRoom();
-        NPC npc = currentRoom.getNPC(name);
+        NPC npc = currentRoom.getNPC(npcName);
         if (npc != null && npc.talkAbout(subject, player)){
             return true;
         }

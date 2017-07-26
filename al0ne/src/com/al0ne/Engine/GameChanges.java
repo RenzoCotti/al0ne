@@ -196,6 +196,8 @@ public class GameChanges {
                 Main.player = Main.game.getPlayer();
                 Main.clearScreen();
                 printToLog("Your see black and feel very cold for a moment, and suddenly you are somewhere else.");
+                printToLog();
+                player.getCurrentRoom().printRoom();
                 player.getCurrentRoom().visit();
                 return true;
             }
@@ -339,6 +341,8 @@ public class GameChanges {
     public static void useResult(HashMap<Integer, Object> result, Player player, ArrayList<Pair> toAdd,
                                  Interactable obj, Interactable subj){
 
+
+
         Room currentRoom = player.getCurrentRoom();
         for(Integer i : result.keySet()){
             switch (i){
@@ -371,6 +375,10 @@ public class GameChanges {
                     }
                     break;
                 case 5:
+                    if(obj == null){
+                        System.out.println("probably a quest tried to remove an item ");
+                        break;
+                    }
                     //remove other
                     if(player.hasItemInInventory(obj.getID())){
                         player.removeOneItem((Item) obj);
@@ -382,6 +390,10 @@ public class GameChanges {
                     currentRoom.unlockDirection((String)result.get(i));
                     break;
                 case 7:
+                    if(obj == null || subj == null){
+                        System.out.println("probably a quest tried to refill an object");
+                        break;
+                    }
                     //refill
                     ((ChargeItem) subj).refill(player, obj);
                     break;
@@ -390,6 +402,10 @@ public class GameChanges {
                     player.modifyHealth((Integer)result.get(i));
                     break;
                 case 9:
+                    if(subj == null){
+                        System.out.println("probably a quest tried to change an object's integrity");
+                        break;
+                    }
                     //modify integrity
                     subj.modifyIntegrity((Integer) result.get(i));
                     break;

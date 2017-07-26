@@ -7,6 +7,6 @@ import com.al0ne.Engine.Physics.Behaviour;
  */
 public class FoodBehaviour extends Behaviour {
     public FoodBehaviour() {
-        super("food", null);
+        super("food");
     }
 }

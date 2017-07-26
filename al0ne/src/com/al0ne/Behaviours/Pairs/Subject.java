@@ -1,6 +1,7 @@
 package com.al0ne.Behaviours.Pairs;
 
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Quests.Quest;
 
 import java.io.Serializable;
 
@@ -12,14 +13,14 @@ public class Subject implements Serializable{
     private boolean givesItem;
     private Pair item;
     private boolean addsQuest;
-    private String questID;
+    private Quest quest;
 
-    public Subject(String answer, boolean givesItem, Pair item, boolean addsQuest, String questID) {
+    public Subject(String answer, boolean givesItem, Pair item, boolean addsQuest, Quest quest) {
         this.answer = answer;
         this.givesItem = givesItem;
         this.item = item;
         this.addsQuest = addsQuest;
-        this.questID = questID;
+        this.quest = quest;
     }
 
     public Subject(String answer) {
@@ -27,7 +28,7 @@ public class Subject implements Serializable{
         this.givesItem = false;
         this.item = null;
         this.addsQuest = false;
-        this.questID = null;
+        this.quest = null;
     }
 
     public Subject(String answer, boolean givesItem, Pair item) {
@@ -35,15 +36,15 @@ public class Subject implements Serializable{
         this.givesItem = givesItem;
         this.item = item;
         this.addsQuest = false;
-        this.questID = null;
+        this.quest = null;
     }
 
-    public Subject(String answer, boolean addsQuest, String questID) {
+    public Subject(String answer, boolean addsQuest, Quest quest) {
         this.answer = answer;
         this.givesItem = false;
         this.item = null;
         this.addsQuest = addsQuest;
-        this.questID = questID;
+        this.quest = quest;
     }
 
     public String getAnswer() {
@@ -62,7 +63,7 @@ public class Subject implements Serializable{
         return addsQuest;
     }
 
-    public String getQuestID() {
-        return questID;
+    public Quest getQuest() {
+        return quest;
     }
 }
