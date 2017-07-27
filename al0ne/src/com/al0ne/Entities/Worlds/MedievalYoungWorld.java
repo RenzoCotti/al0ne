@@ -9,6 +9,7 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Quests.FetchQuest;
 import com.al0ne.Behaviours.Quests.KillQuest;
 import com.al0ne.Behaviours.Quests.Quest;
+import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Entities.Enemies.Wolf;
@@ -86,10 +87,8 @@ public class MedievalYoungWorld extends World{
         NPC dad = new NPC("dad", "Your dad. He's a bit flushed, he must've just run.", "your dad",
                 "Son, we have to talk about the woods");
 
-        Enemy wolf = new Wolf();
-        dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
-                true, new Pair(new Sword(Material.IRON), 1),
-                true, new KillQuest("killwolves", wolf, 3)));
+
+
 //        mainHouse.setQuestRoom("geteggs", "At this very moment," +
 //                " the door opens: your dad has come home", dad);
 
@@ -114,19 +113,28 @@ public class MedievalYoungWorld extends World{
         putRoom(neighbourhood);
 
         Room forest1 = new Room("Forest path", "This is a thin path through the woods.");
-        forest1.addEntity(wolf);
+        forest1.addEntity(new Wolf());
         forest1.addEntity(new Helmet(Material.IRON));
         putRoom(forest1);
 
         Room forest2 = new Room("Clearing", "The woods open up in this area," +
                 " the sun's light shines through the leaves.");
-        forest2.addEntity(wolf);
+        forest2.addEntity(new Wolf());
         putRoom(forest2);
 
         Room forest3 = new Room("Temple ruins", "These are the ruins of an old temple.");
-        forest3.addEntity(wolf);
+        forest3.addEntity(new Wolf());
         forest3.addEntity(new Shield(Material.WOOD));
         putRoom(forest3);
+
+        dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
+                true, new Pair(new Sword(Material.IRON), 1),
+//                true, new TravelQuest("gotemple", forest3)));
+                true, new KillQuest("killwolves", new Wolf(), 3)));
+
+        mom.addSubject("dad", new Subject("go to the temple",
+                true, new TravelQuest("gotemple", forest3)));
+//                true, new KillQuest("killwolves", wolf, 3)));
 
 
         Room neighbourPorch = new Room("Neighbour's porch",

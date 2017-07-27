@@ -4,6 +4,8 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.PotentialItems;
 import com.al0ne.Behaviours.Pairs.SpellPair;
+import com.al0ne.Behaviours.Quests.Quest;
+import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
@@ -506,6 +508,12 @@ public class PlayerActions {
 
                 //set next room
                 player.setCurrentRoom(rooms.get(nextRoomId));
+
+                for(Quest q : player.getQuests().values()){
+                    if(q instanceof TravelQuest){
+                        q.checkCompletion(player);
+                    }
+                }
 
                 return true;
             }
