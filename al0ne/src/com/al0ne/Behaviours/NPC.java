@@ -90,6 +90,7 @@ public class NPC extends WorldCharacter {
         return false;
     }
 
+    //need todo revise what's in this, npcs can receive items without there being a qeust related to it
     public boolean isGiven(Item item, Player player){
 
         boolean completed = false;

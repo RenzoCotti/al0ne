@@ -12,9 +12,14 @@ public class FetchQuest extends Quest{
 
     protected Pair entityRequired;
 
-    public FetchQuest(String questName, Entity entity, int amount) {
-        super(questName);
+    public FetchQuest(Entity entity, int amount) {
+        super("Get");
         this.entityRequired = new Pair(entity, amount);
+        if(amount == 1){
+            setQuestName("Get "+entity.getName());
+        } else{
+            setQuestName("Get "+amount+" "+entity.getName());
+        }
     }
 
     @Override

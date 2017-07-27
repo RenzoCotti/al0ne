@@ -39,6 +39,7 @@ public abstract class Quest implements Serializable{
     protected ArrayList<Pair> toAdd;
     protected String requiredQuest;
     protected HashMap<Integer, Object> rewards;
+    //TODO QUEST GIVER? ON COMPLETION MESSAGE?
 
     public Quest(String questName){
         this.questID = "quest"+(++questCounter);
@@ -64,7 +65,9 @@ public abstract class Quest implements Serializable{
         return questName;
     }
 
-
+    public void setQuestName(String questName) {
+        this.questName = questName;
+    }
 
     public boolean isCompleted() {
         return completed;

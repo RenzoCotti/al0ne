@@ -12,11 +12,16 @@ public class KillQuest extends Quest{
     protected int currentCount;
     protected int targetCount;
 
-    public KillQuest(String questName, WorldCharacter wc, int count) {
-        super(questName);
+    public KillQuest(WorldCharacter wc, int count) {
+        super("Kill");
         this.toKillID = wc.getID();
         this.targetCount = count;
         this.currentCount = 0;
+        if(count == 1){
+            setQuestName("Kill "+wc.getName());
+        } else {
+            setQuestName("Kill " + count + " " + wc.getName());
+        }
     }
 
     @Override

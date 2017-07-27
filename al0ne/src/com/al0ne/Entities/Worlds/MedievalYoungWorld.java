@@ -94,7 +94,7 @@ public class MedievalYoungWorld extends World{
 
         Food eggs = new Food("eggs", "A pack of six fresh eggs.", 0.3, Size.SMALL, 3);
 
-        Quest getEggs = new FetchQuest("geteggs", eggs, 1);
+        Quest getEggs = new FetchQuest(eggs, 1);
         getEggs.addEntity(dad, 1);
 
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
@@ -130,10 +130,10 @@ public class MedievalYoungWorld extends World{
         dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
                 true, new Pair(new Sword(Material.IRON), 1),
 //                true, new TravelQuest("gotemple", forest3)));
-                true, new KillQuest("killwolves", new Wolf(), 3)));
+                true, new KillQuest(new Wolf(), 3)));
 
         mom.addSubject("dad", new Subject("go to the temple",
-                true, new TravelQuest("gotemple", forest3)));
+                true, new TravelQuest(forest3)));
 //                true, new KillQuest("killwolves", wolf, 3)));
 
 

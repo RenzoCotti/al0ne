@@ -11,14 +11,15 @@ public class TravelQuest extends Quest{
 
     public String targetRoom;
 
-    public TravelQuest(String questName, Room r) {
-        super(questName);
+    public TravelQuest(Room r) {
+        super("Go to "+r.getName());
         this.targetRoom = r.getID();
     }
 
     @Override
     public boolean checkCompletion(Player player) {
         if (player.getCurrentRoom().getID().equals(targetRoom)){
+            setCompleted();
             questReward(player);
             return true;
         }
