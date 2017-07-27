@@ -669,6 +669,11 @@ public class Player extends WorldCharacter {
                 }
             }
 
+            if(first){
+                printToLog("You completed all your quests for now.");
+
+            }
+
         }
     }
 }

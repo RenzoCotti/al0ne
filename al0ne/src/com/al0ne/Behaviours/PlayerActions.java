@@ -148,7 +148,7 @@ public class PlayerActions {
                     }
                 } else if(enemy.isWeakAgainst(type)){
                     //melee attack
-                    int damageAfterIntegrity = (inflictedDamage*condition)/100;
+                    int damageAfterIntegrity = Math.round((inflictedDamage*condition)/100);
 
                     if(inflictedDamage <= 0){
                         printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
@@ -174,12 +174,12 @@ public class PlayerActions {
             } else{
                 if(weapon instanceof RangedWeapon){
                     printToLog("You shoot, but the "+enemy.getName().toLowerCase()+" dodges.");
+                    handleWeaponWearing(weapon, player);
                 } else {
                     printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
                 }
             }
 
-        handleWeaponWearing(weapon, player);
         enemy.isAttacked(player, currentRoom);
         enemy.setSnooze(true);
 

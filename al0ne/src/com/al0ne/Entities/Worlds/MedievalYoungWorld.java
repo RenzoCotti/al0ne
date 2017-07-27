@@ -7,13 +7,21 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Quests.FetchQuest;
+import com.al0ne.Behaviours.Quests.KillQuest;
 import com.al0ne.Behaviours.Quests.Quest;
+import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
+import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
+import com.al0ne.Entities.Items.ConcreteItems.Armor.ScaleArmor;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Note;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Dagger;
+import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Sword;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
 import java.util.ArrayList;
@@ -75,16 +83,20 @@ public class MedievalYoungWorld extends World{
                 "some chairs", null, null));
         NPC mom = new NPC("Mom", "mom", "Your mom. She looks a bit tired today.",
                 "Hey sweetie, I'd need a favour.");
-        NPC dad = new NPC("dad", "dad", "Your dad. He's a bit flushed, he must've just run.",
+        NPC dad = new NPC("dad", "Your dad. He's a bit flushed, he must've just run.", "your dad",
                 "Son, we have to talk about the woods");
-        dad.addSubject("woods", new Subject("They are pretty nice huh?"));
-        mainHouse.setQuestRoom("geteggs", "At this very moment," +
-                " the door opens: your dad has come home", dad);
+
+        Enemy wolf = new Wolf();
+        dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
+                true, new Pair(new Sword(Material.IRON), 1),
+                true, new KillQuest("killwolves", wolf, 3)));
+//        mainHouse.setQuestRoom("geteggs", "At this very moment," +
+//                " the door opens: your dad has come home", dad);
 
         Food eggs = new Food("eggs", "A pack of six fresh eggs.", 0.3, Size.SMALL, 3);
 
         Quest getEggs = new FetchQuest("geteggs", eggs, 1);
-        getEggs.addRewards(3, new SliceOfCake());
+        getEggs.addEntity(dad, 1);
 
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
@@ -100,6 +112,22 @@ public class MedievalYoungWorld extends World{
         Room neighbourhood = new Room("Neighbourhood",
                 "There are several houses in this area, most of them are not terribly run down.");
         putRoom(neighbourhood);
+
+        Room forest1 = new Room("Forest path", "This is a thin path through the woods.");
+        forest1.addEntity(wolf);
+        forest1.addEntity(new Helmet(Material.IRON));
+        putRoom(forest1);
+
+        Room forest2 = new Room("Clearing", "The woods open up in this area," +
+                " the sun's light shines through the leaves.");
+        forest2.addEntity(wolf);
+        putRoom(forest2);
+
+        Room forest3 = new Room("Temple ruins", "These are the ruins of an old temple.");
+        forest3.addEntity(wolf);
+        forest3.addEntity(new Shield(Material.WOOD));
+        putRoom(forest3);
+
 
         Room neighbourPorch = new Room("Neighbour's porch",
                 "You are on your neighbour's porch. He doesn't seem to be at home right now.");
@@ -170,14 +198,12 @@ public class MedievalYoungWorld extends World{
 
 
 
-        //TODO
-        Room pathForest = new Room("Path to the forest",
-                "A path towards the village's forest. Dad forbids you from going there without his consent.");
 
-        putRoom(pathForest);
-
-
-        pathForest.addExit("north", neighbourhood);
+        forest1.addExit("north", neighbourhood);
+        forest1.addExit("south", forest2);
+        forest2.addExit("north", forest1);
+        forest2.addExit("south", forest3);
+        forest3.addExit("north", forest2);
         villageMarket.addExit("east", square);
         villageHall.addExit("south", square);
         villageGraveyard.addExit("west", villageChurch);
@@ -192,7 +218,7 @@ public class MedievalYoungWorld extends World{
         neighbourPorch.addExit("west", neighbourHouse);
         neighbourhood.addExit("east", mainHouse);
         neighbourhood.addExit("north", square);
-        neighbourhood.addExit("south", pathForest);
+        neighbourhood.addExit("south", forest1);
         neighbourhood.addExit("west", neighbourPorch);
         mainHouse.addExit("south", mainHouse);
         mainHouse.addExit("west", neighbourhood);

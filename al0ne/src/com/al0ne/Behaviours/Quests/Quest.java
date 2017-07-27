@@ -80,6 +80,7 @@ public abstract class Quest implements Serializable{
 
     public void addEntity(Entity entity, int count){
         toAdd.add(new Pair(entity, count));
+        this.rewards.put(3, toAdd);
     }
 
     public String getRequiredQuest() {

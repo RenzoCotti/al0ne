@@ -353,9 +353,7 @@ public class GameChanges {
                 case 3:
                     //tries to add to inventory, if can't add to room
                     for (Pair p: toAdd){
-                        if(!player.addAllItem(p)){
-                            currentRoom.addEntity(p.getEntity(), p.getCount());
-                        }
+                        currentRoom.addEntity(p.getEntity(), p.getCount());
                     }
                     break;
 
