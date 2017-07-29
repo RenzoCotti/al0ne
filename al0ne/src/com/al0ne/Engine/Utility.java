@@ -1,11 +1,11 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
+import com.al0ne.Entities.Items.Types.Wearable.Armor;
+import com.al0ne.Entities.Items.Types.Wearable.Helmet;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -153,7 +152,7 @@ public class Utility {
     }
 
     public static String getOffHandString(){
-        Wearable s = Main.player.getOffHand();
+        Item s = Main.player.getOffHand();
         if(s == null) return "None.";
         return s.getName();
     }

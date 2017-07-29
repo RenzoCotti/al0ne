@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Entities.Items.Behaviours.Potion;
+import com.al0ne.Entities.Items.Types.Potion;
 import com.al0ne.Behaviours.Room;
 
 /**

@@ -3,12 +3,10 @@ package com.al0ne.Behaviours.abstractEntities;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.Physics.Physics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -18,7 +16,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public abstract class Interactable extends Entity {
     //todo: add plural?
 
-    protected ArrayList<Behaviour> properties;
+    protected ArrayList<Behaviour> behaviours;
 
 
     protected boolean canDrop;
@@ -32,7 +30,7 @@ public abstract class Interactable extends Entity {
 
     public Interactable(String id, String name, String description, String shortDescription, Material m) {
         super(id, name, description, shortDescription);
-        this.properties = new ArrayList<>();
+        this.behaviours = new ArrayList<>();
 
         this.integrity = 100;
         if (m == null){
@@ -57,30 +55,9 @@ public abstract class Interactable extends Entity {
     public abstract int used(Room currentRoom, Player player);
 
 
-    public void usedWith(Interactable inter, Room currentRoom, Player player) {
-        HashMap<Integer, Object> result = null;
-        Behaviour interacted = null;
-        for (Behaviour b: properties){
-            for(Behaviour b1: inter.getProperties()){
-//                result = b.isInteractedWith(b1);
-                result = Physics.isInteractedWith(getName(), b, b1);
-                if(result != null){
-                    interacted = b;
-                    break;
-                }
-            }
-            if(result != null){
-                break;
-            }
-        }
+    public void usedWith(Interactable inter, Player player) {
 
-        if(result == null){
-            printToLog("The "+inter.getName()+" isn't effective");
-            return;
-        }
-
-        GameChanges.useResult(result, player, interacted.getToAdd(), inter, this);
-
+        Physics.interactionBetween(player, this, inter);
 
     }
 
@@ -147,11 +124,11 @@ public abstract class Interactable extends Entity {
 //    }
 
     public void addProperty(Behaviour behaviour){
-        properties.add(behaviour);
+        behaviours.add(behaviour);
     }
 
     public boolean hasProperty(String property){
-        for (Behaviour b : properties){
+        for (Behaviour b : behaviours){
             if (b.getName().equals(property)){
                 return true;
             }
@@ -159,8 +136,8 @@ public abstract class Interactable extends Entity {
         return false;
     }
 
-    public ArrayList<Behaviour> getProperties() {
-        return properties;
+    public ArrayList<Behaviour> getBehaviours() {
+        return behaviours;
     }
 
 

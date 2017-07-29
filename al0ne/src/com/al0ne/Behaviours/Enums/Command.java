@@ -13,7 +13,7 @@ public enum Command {
     STATUS,
 
     //custom actions
-    DRINK, EAT, OPEN, MOVE, READ, TIDY, PRESS,
+    DRINK, EAT, OPEN, MOVE, READ, TIDY, PRESS, LIGHT,
 
     //item related
     USE, EXAMINE, TAKE, EQUIP, PUT, DROP,

@@ -1,10 +1,9 @@
-package com.al0ne.Entities.Items.Behaviours.Wearable;
+package com.al0ne.Entities.Items.Types.Wearable;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
 
 /**
  * Created by BMW on 02/02/2017.

@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Food;
 
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Food;
+import com.al0ne.Entities.Items.Types.Food;
 
 public class Apple extends Food {
     public Apple() {

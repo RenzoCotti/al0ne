@@ -1,10 +1,10 @@
-package com.al0ne.Entities.Items.Behaviours;
+package com.al0ne.Entities.Items.Types;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Wearable;
+import com.al0ne.Entities.Items.Types.Wearable.Wearable;
 
 import static com.al0ne.Engine.Main.printToLog;
 

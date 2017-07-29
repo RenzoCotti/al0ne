@@ -3,10 +3,12 @@ package com.al0ne.Behaviours.abstractEntities;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Status;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Entities.Items.Types.Wearable.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * placeholder class for attackable npcs
@@ -31,6 +33,9 @@ public abstract class WorldCharacter extends Entity {
     protected int armor;
     protected int damage;
 
+    //maps BodyPart to Item
+    protected HashMap<String, Item> wornItems;
+
     //statuses
     protected HashMap<String, Status> status;
 
@@ -41,6 +46,8 @@ public abstract class WorldCharacter extends Entity {
                           Integer maxHealth, Integer attack, Integer dexterity, Integer armor, Integer damage) {
         super(id, name, longDescription, shortDescription);
         this.inventory = new HashMap<>();
+        this.wornItems = new HashMap<>();
+        initialiseWorn();
 
         this.alive = true;
         if(maxHealth == null){
@@ -76,6 +83,89 @@ public abstract class WorldCharacter extends Entity {
         }
 
         this.status = new HashMap<>();
+    }
+
+    //this function initialises the HashMap with all the body parts
+    public void initialiseWorn(){
+        wornItems.put("main hand", null);
+        wornItems.put("off hand", null);
+        wornItems.put("body", null);
+        wornItems.put("head", null);
+    }
+
+
+    //returns the currently equipped X or null
+    public Weapon getWeapon(){
+        return (Weapon) wornItems.get("main hand");
+    }
+    public Armor getArmor(){
+        return (Armor) wornItems.get("body");
+    }
+    public Helmet getHelmet(){
+        return (Helmet) wornItems.get("head");
+    }
+    public Item getOffHand(){
+        return wornItems.get("off hand");
+    }
+
+
+    //returns true if the player is wearing the current item
+    public boolean isWearingItem(String id){
+        for (String part : wornItems.keySet()){
+            Item currentItem = wornItems.get(part);
+            if(currentItem != null) {
+                if(id.equals(currentItem.getID())){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public HashMap<String, Pair> getInventory() {
+        return inventory;
+    }
+
+    public HashMap<String, Item> getWornItems() {
+        return wornItems;
+    }
+
+    //this function unequips the given item, if it's equipped
+    public void unequipItem(String id){
+        for (String part : wornItems.keySet()){
+            Item currentItem = wornItems.get(part);
+            if(currentItem != null) {
+                if(id.equals(currentItem.getID())){
+                    wornItems.put(part, null);
+                }
+            }
+
+        }
+    }
+
+
+    //this function equips an item to the correct slot, if it's a wearable
+    public boolean wear(Item wearable){
+//        for (Pair pair : inventory.values()){
+//            Item currentItem = (Item) pair.getEntity();
+        if (wearable instanceof Armor || wearable instanceof Helmet || wearable instanceof Shield){
+            String part = ((Wearable) wearable).getPart();
+            if(part.equals("head")){
+                wornItems.put(part, wearable);
+            } else if(part.equals("body")){
+                wornItems.put(part, wearable);
+            }
+            return true;
+        } else {
+            if (wearable instanceof Weapon){
+                wornItems.put("main hand", wearable);
+            } else {
+                wornItems.put("off hand", wearable);
+            }
+            return true;
+        }
+//        }
     }
 
 
@@ -129,12 +219,33 @@ public abstract class WorldCharacter extends Entity {
         }
     }
 
-    public int getDamage() {
-        return damage;
+    //this function computes the total level of protection given by armor
+    public int getArmorLevel(){
+        Armor armor = getArmor();
+        Helmet helmet = getHelmet();
+        Item offHand = getOffHand();
+
+        int armorLevel=this.armor;
+        if(armor != null){
+            armorLevel += armor.getArmor();
+        }
+        if(helmet != null){
+            armorLevel += helmet.getArmor();
+        }
+        if(offHand != null && offHand instanceof Shield){
+            armorLevel += ((Shield) offHand).getArmor();
+        }
+
+        return armorLevel;
     }
 
-    public int getArmorLevel(){
-        return armor;
+    public int getDamage(){
+        int damage = this.damage;
+        Wearable weapon = getWeapon();
+        if(weapon != null){
+            damage += ((Weapon) weapon).getDamage();
+        }
+        return damage;
     }
 
 

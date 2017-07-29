@@ -58,6 +58,7 @@ public class ParseInput {
             case TALK:
                 return HandleCommands.handleTalk(parsedInput, player);
 
+            case LIGHT:
             case PRESS:
             case TIDY:
             case DRINK:

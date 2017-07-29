@@ -1,17 +1,11 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Quests.Quest;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
-import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
-import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
+import com.al0ne.Entities.Items.Types.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.GoldCoin;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
@@ -56,8 +50,6 @@ public class Player extends WorldCharacter {
     //various
     private boolean hasNeeds;
 
-    //maps BodyPart to Item
-    private HashMap<String, Wearable> wornItems;
 
     private String causeOfDeath;
 
@@ -76,10 +68,8 @@ public class Player extends WorldCharacter {
         this.currentRoom = currentRoom;
         this.maxWeight = maxWeight;
         this.currentWeight=0;
-        this.wornItems = new HashMap<>();
         this.quests = new HashMap<>();
         this.causeOfDeath = "unknown causes";
-        initialiseWorn();
         if(needs){
             putStatus(new Thirst());
             putStatus(new Hunger());
@@ -98,11 +88,9 @@ public class Player extends WorldCharacter {
         this.currentRoom = currentRoom;
         this.maxWeight = maxWeight;
         this.currentWeight=0;
-        this.wornItems = new HashMap<>();
         this.quests = new HashMap<>();
         this.causeOfDeath = "unknown causes";
         setLongDescription("You are "+name+".\n"+story);
-        initialiseWorn();
         if(needs){
             putStatus(new Thirst());
             putStatus(new Hunger());
@@ -111,13 +99,7 @@ public class Player extends WorldCharacter {
         putStatus(new NaturalHealing());
     }
 
-    //this function initialises the HashMap with all the body parts
-    public void initialiseWorn(){
-        wornItems.put("main hand", null);
-        wornItems.put("off hand", null);
-        wornItems.put("body", null);
-        wornItems.put("head", null);
-    }
+
 
     //returns true if the player has basic needs
     public boolean hasNeeds() {
@@ -129,76 +111,16 @@ public class Player extends WorldCharacter {
         this.alive = false;
     }
 
-    //returns the currently equipped X or null
-    public Weapon getWeapon(){
-        return (Weapon) wornItems.get("main hand");
-    }
-    public Armor getArmor(){
-        return (Armor) wornItems.get("body");
-    }
-    public Helmet getHelmet(){
-        return (Helmet) wornItems.get("head");
-    }
-    public Wearable getOffHand(){
-        return wornItems.get("off hand");
-    }
-
-
-    //returns true if the player is wearing the current item
-    public boolean isWearingItem(String id){
-        for (String part : wornItems.keySet()){
-            Wearable currentItem = wornItems.get(part);
-            if(currentItem != null) {
-                if(id.equals(currentItem.getID())){
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
-
-    //this function unequips the given item, if it's equipped
-    public void unequipItem(String id){
-        for (String part : wornItems.keySet()){
-            Wearable currentItem = wornItems.get(part);
-            if(currentItem != null) {
-                if(id.equals(currentItem.getID())){
-                    wornItems.put(part, null);
-                }
-            }
-
-        }
-    }
-
-    //this function sets currentWeight to the given weight
-    public void setCurrentWeight(double currentWeight) {
-        this.currentWeight = currentWeight;
-    }
 
     //this function equips an item to the correct slot, if it's a wearable
+    @Override
     public boolean wear(Item wearable){
-//        for (Pair pair : inventory.values()){
-//            Item currentItem = (Item) pair.getEntity();
-            if (wearable.getType() == 'w'){
-                String part = ((Wearable) wearable).getPart();
-                if (part.equals("main hand")){
-                    wornItems.put(part, (Weapon) wearable);
-                    printToLog("You now wield the "+wearable.getName());
-                } else if(part.equals("off hand")){
-                    wornItems.put(part, (Wearable) wearable);
-                    printToLog("You now wear the "+wearable.getName());
-                } else if(part.equals("head")){
-                    wornItems.put(part, (Helmet) wearable);
-                    printToLog("You now wear the "+wearable.getName());
-                } else if(part.equals("body")){
-                    wornItems.put(part, (Armor) wearable);
-                    printToLog("You now wear the "+wearable.getName());
-                }
-                return true;
-            }
-//        }
-        return false;
+        if(super.wear(wearable)){
+            printToLog("You equipped the "+wearable.getName());
+            return true;
+        } else{
+            return false;
+        }
 
     }
 
@@ -215,7 +137,7 @@ public class Player extends WorldCharacter {
     public void printArmor(){
 
         boolean first=true;
-        for (Wearable w : wornItems.values()){
+        for (Item w : wornItems.values()){
             if (w != null && !(w instanceof Weapon)){
                 if(first){
                     printToSingleLine("You're wearing "+w.getShortDescription());
@@ -232,41 +154,11 @@ public class Player extends WorldCharacter {
         }
     }
 
-    //this function computes the total level of protection given by armor
-    @Override
-    public int getArmorLevel(){
-        Armor armor = getArmor();
-        Helmet helmet = getHelmet();
-        Wearable offHand = getOffHand();
-
-        int armorLevel=this.armor;
-        if(armor != null){
-            armorLevel= armor.getArmor();
-        }
-        if(helmet != null){
-            armorLevel= helmet.getArmor();
-        }
-        if(offHand != null && offHand instanceof Shield){
-            armorLevel= ((Shield) offHand).getArmor();
-        }
-
-        return armorLevel;
-    }
-
-    @Override
-    public int getDamage(){
-        int damage = this.damage;
-        Wearable weapon = getWeapon();
-        if(weapon != null){
-            damage+=((Weapon) weapon).getDamage();
-        }
-        return damage;
-    }
 
     public int getEncumberment(){
         Armor armor = getArmor();
         Helmet helmet = getHelmet();
-        Wearable offHand = getOffHand();
+        Item offHand = getOffHand();
 
         int encumberment=0;
         if(armor != null){
@@ -315,6 +207,12 @@ public class Player extends WorldCharacter {
     }
     public double getCurrentWeight() {
         return currentWeight;
+    }
+
+
+    //this function sets currentWeight to the given weight
+    public void setCurrentWeight(double currentWeight) {
+        this.currentWeight = currentWeight;
     }
 
     //debug function, prints the current weight.

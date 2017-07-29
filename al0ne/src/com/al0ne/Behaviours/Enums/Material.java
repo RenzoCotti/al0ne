@@ -18,6 +18,7 @@ public enum Material {
 
     //Mid Tech materials
     PLASTIC(0, 0, 0.5, 0), KEVLAR(6, 2, 10), STEEL(4, 4, 3, 2), COTTON(1, 1),
+    ALUMINIUM(1, 1, 1, 2),
 
     //High Tech materials
     NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10),

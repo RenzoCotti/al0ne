@@ -69,6 +69,7 @@ public class CommandMap implements Serializable{
         commands.put("shoot", Command.SHOOT);
         commands.put("reload", Command.RELOAD);
         commands.put("quests", Command.QUEST);
+        commands.put("light", Command.LIGHT);
 
 
 

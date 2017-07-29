@@ -101,6 +101,8 @@ public class Main extends Application{
             currentRoom.handleQuestRoom(player);
 
             player.removeIfDestroyed();
+
+            GameChanges.consumeItems(player);
         }
 
 

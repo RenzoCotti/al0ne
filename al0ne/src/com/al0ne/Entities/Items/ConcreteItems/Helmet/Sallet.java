@@ -5,8 +5,7 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
+import com.al0ne.Entities.Items.Types.Wearable.Helmet;
 
 import static java.lang.Math.max;
 

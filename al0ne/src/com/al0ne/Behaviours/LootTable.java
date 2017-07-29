@@ -3,7 +3,7 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Wearable.*;
+import com.al0ne.Entities.Items.Types.Wearable.*;
 import com.al0ne.Entities.Items.ConcreteItems.Armor.*;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.Barbute;
 import com.al0ne.Entities.Items.ConcreteItems.Helmet.GreatHelm;

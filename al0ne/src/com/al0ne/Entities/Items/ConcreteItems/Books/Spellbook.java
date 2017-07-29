@@ -5,7 +5,7 @@ import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Spells.Spell;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Readable;
+import com.al0ne.Entities.Items.Types.Readable;
 
 import java.util.HashMap;
 

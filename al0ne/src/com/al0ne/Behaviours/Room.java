@@ -3,7 +3,7 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Entities.Items.Behaviours.Container;
+import com.al0ne.Entities.Items.Types.Container;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -10,15 +10,13 @@ import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Types.Container;
+import com.al0ne.Entities.Items.Types.Wearable.RangedWeapon;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Spells.*;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

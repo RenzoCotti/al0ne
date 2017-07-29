@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Food;
 
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Drinkable;
+import com.al0ne.Entities.Items.Types.Drinkable;
 
 
 public class Beer extends Drinkable {

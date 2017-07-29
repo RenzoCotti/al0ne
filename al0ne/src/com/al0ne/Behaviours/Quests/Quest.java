@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.GameChanges;
+import com.al0ne.Engine.Physics.Physics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public abstract class Quest implements Serializable{
 
     public void questReward(Player player){
         printToLog("- - - Quest completed: "+getQuestName()+" - - -");
-        GameChanges.useResult(rewards, player, toAdd, null, null);
+        Physics.useResult(rewards, player, toAdd, null, null);
     }
 
     public String getQuestID() {

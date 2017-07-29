@@ -9,7 +9,7 @@ import com.al0ne.Behaviours.Room;
  */
 public class Credit extends Coin{
     public Credit() {
-        super("credit", "A chip containing some credits.",
+        super("credit", "Credit","A chip containing some credits.",
                 0.00, Material.PLASTIC);
         this.value = 1;
     }

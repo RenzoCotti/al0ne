@@ -2,10 +2,7 @@ package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
-import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Items.ConcreteItems.Key;
 

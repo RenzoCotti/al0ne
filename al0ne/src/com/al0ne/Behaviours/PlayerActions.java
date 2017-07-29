@@ -11,9 +11,9 @@ import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Container;
-import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Types.Container;
+import com.al0ne.Entities.Items.Types.Wearable.RangedWeapon;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.Entities.Spells.*;
 
@@ -462,7 +462,7 @@ public class PlayerActions {
 
 
 //        if (item instanceof Item){
-            ((Interactable) item).usedWith((Interactable) target, currentRoom, player);
+            ((Interactable) item).usedWith((Interactable) target, player);
 //        } else if (target instanceof Item){
 //            ((Interactable) item).usedWith((Interactable) target, currentRoom, player);
 //        }

@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Books;
 
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Readable;
+import com.al0ne.Entities.Items.Types.Readable;
 
 import static com.al0ne.Engine.Main.printToLog;
 

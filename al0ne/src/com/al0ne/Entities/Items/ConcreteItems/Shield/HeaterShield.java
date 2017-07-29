@@ -2,10 +2,8 @@ package com.al0ne.Entities.Items.ConcreteItems.Shield;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
+import com.al0ne.Entities.Items.Types.Wearable.Shield;
 
 import static java.lang.Math.max;
 

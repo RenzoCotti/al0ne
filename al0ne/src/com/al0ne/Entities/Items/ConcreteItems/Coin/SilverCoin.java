@@ -9,7 +9,7 @@ import com.al0ne.Behaviours.Enums.Material;
  */
 public class SilverCoin extends Coin{
     public SilverCoin() {
-        super("scoin", "A very polished coin.",
+        super("scoin", "Silver coin","A very polished coin.",
                  0.01, Material.SILVER);
         this.value = 10;
     }

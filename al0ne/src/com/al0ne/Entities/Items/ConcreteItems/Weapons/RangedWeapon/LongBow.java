@@ -2,7 +2,7 @@ package com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
-import com.al0ne.Entities.Items.Behaviours.Wearable.RangedWeapon;
+import com.al0ne.Entities.Items.Types.Wearable.RangedWeapon;
 
 /**
  * Created by BMW on 22/07/2017.

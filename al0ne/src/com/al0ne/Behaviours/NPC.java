@@ -24,6 +24,7 @@ public class NPC extends WorldCharacter {
     protected HashMap<String, Subject> subjects;
     protected HashMap<String, PairReactionItem> reactionItems;
     protected String intro;
+    protected boolean knowName;
 
 
     protected boolean isShopkeeper=false;
@@ -35,6 +36,7 @@ public class NPC extends WorldCharacter {
         this.reactionItems = new HashMap<>();
         this.intro=intro;
         this.type='n';
+        this.knowName = false;
     }
 
     public NPC(String name, String description, String intro) {
@@ -136,6 +138,7 @@ public class NPC extends WorldCharacter {
 
     public void printIntro(){
         printToLog("\""+intro+"\"");
+        this.knowName = true;
     }
 
 }

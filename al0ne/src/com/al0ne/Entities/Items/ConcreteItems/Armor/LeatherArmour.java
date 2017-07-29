@@ -1,7 +1,7 @@
 package com.al0ne.Entities.Items.ConcreteItems.Armor;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
+import com.al0ne.Entities.Items.Types.Wearable.Armor;
 
 /**
  * Created by BMW on 23/03/2017.

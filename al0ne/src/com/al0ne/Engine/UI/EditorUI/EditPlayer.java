@@ -8,16 +8,14 @@ import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.Items.Behaviours.Drinkable;
-import com.al0ne.Entities.Items.Behaviours.Food;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
+import com.al0ne.Entities.Items.Types.Drinkable;
+import com.al0ne.Entities.Items.Types.Food;
+import com.al0ne.Entities.Items.Types.Wearable.Armor;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+
 import java.util.ArrayList;
 
 /**

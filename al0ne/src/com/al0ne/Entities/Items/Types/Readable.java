@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.Behaviours;
+package com.al0ne.Entities.Items.Types;
 
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;

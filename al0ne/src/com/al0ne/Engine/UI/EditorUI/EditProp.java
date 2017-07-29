@@ -1,33 +1,16 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.InvisibleProp;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.Items.Behaviours.Drinkable;
-import com.al0ne.Entities.Items.Behaviours.Food;
-import com.al0ne.Entities.Items.Behaviours.Protective;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Armor;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
-import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
 import com.al0ne.Entities.Items.Props.Door;
-import com.al0ne.Entities.Items.Props.HideItem;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 

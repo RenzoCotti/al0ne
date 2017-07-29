@@ -9,7 +9,7 @@ import com.al0ne.Behaviours.Enums.Material;
  */
 public class BrassCoin extends Coin {
     public BrassCoin() {
-        super("bcoin", "A fairly opaque coin.",
+        super("bcoin", "Brass coin", "A fairly opaque coin.",
                 0.01, Material.BRASS);
         this.value = 1;
     }

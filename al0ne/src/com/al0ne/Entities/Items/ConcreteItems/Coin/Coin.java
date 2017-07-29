@@ -9,7 +9,7 @@ import com.al0ne.Behaviours.Enums.Material;
  */
 public abstract class Coin extends Item{
     protected int value;
-    public Coin(String id, String description, double weight, Material material) {
-        super(id, "Coin", description, weight, Size.MICRO, material, 0);
+    public Coin(String id, String name, String description, double weight, Material material) {
+        super(id, name, description, weight, Size.MICRO, material, 0);
     }
 }

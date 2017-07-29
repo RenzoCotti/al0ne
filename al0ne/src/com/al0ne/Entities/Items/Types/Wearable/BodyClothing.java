@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Items.Behaviours.Wearable;
+package com.al0ne.Entities.Items.Types.Wearable;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
