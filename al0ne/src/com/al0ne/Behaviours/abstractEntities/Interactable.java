@@ -215,4 +215,8 @@ public abstract class Interactable extends Entity {
             this.integrity += amount;
         }
     }
+
+    public void setIntegrity(int integrity) {
+        this.integrity = integrity;
+    }
 }

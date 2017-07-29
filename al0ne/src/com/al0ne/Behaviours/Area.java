@@ -1,33 +1,26 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Quests.Quest;
-
 import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by BMW on 05/04/2017.
  */
-public class World implements Serializable{
+public class Area implements Serializable{
 
 
-    protected String worldName;
+    protected String areaName;
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
     protected Player player;
     protected LootTable lootTable;
 
-    //b: base
-    //l: low
-    //m: mid
-    //h: high
-    protected char techLevel;
 
-    public World(String worldName, char techLevel) {
-        this.worldName = worldName;
+
+    public Area(String worldName) {
+        this.areaName = worldName;
         this.rooms = new HashMap<>();
         this.lootTable = new LootTable();
-        this.techLevel = techLevel;
     }
 
     public Room getStartingRoom() {
@@ -46,8 +39,8 @@ public class World implements Serializable{
         rooms.put(room.getID(), room);
     }
 
-    public String getWorldName() {
-        return worldName;
+    public String getAreaName() {
+        return areaName;
     }
 
     public Player getPlayer() {

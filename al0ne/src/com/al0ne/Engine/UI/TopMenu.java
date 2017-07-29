@@ -76,8 +76,13 @@ public class TopMenu {
         MenuItem biggerFont = new MenuItem("Bigger font");
         MenuItem smallerFont = new MenuItem("Smaller font");
         MenuItem disableSideMenu = new MenuItem("Toggle Side Menu");
+        MenuItem dumpGameState = new MenuItem("Save debug log");
 
-        fileOptions.getItems().addAll(biggerFont, smallerFont, disableSideMenu);
+        fileOptions.getItems().addAll(biggerFont, smallerFont, disableSideMenu, dumpGameState);
+
+        dumpGameState.setOnAction(t->{
+            Utility.dumpToFile("debuglog", Main.log.getText());
+        });
 
 
 

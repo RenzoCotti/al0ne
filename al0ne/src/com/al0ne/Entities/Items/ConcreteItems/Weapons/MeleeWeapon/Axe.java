@@ -9,14 +9,21 @@ import com.al0ne.Entities.Items.Behaviours.Wearable.Weapon;
  * Created by BMW on 07/05/2017.
  */
 public class Axe extends Weapon {
-    public Axe(String name, String description, String damageType, int armorPen,
-                int damage, double weight, Size size, Material material) {
-        super(name, name, description, damageType, armorPen, damage, weight, size, material);
-    }
 
     public Axe(Material m) {
         super(Material.stringify(m)+"axe", "Axe", Utility.getArticle(Material.stringify(m))+" "
                         +Material.stringify(m)+" axe.", "sharp", 1, Math.max(m.getDamage()-1, 1),
                 Math.max(m.getWeight()-1.7, 1.1), Size.NORMAL, m);
+    }
+
+    public Axe(String name, String description, Material m) {
+        super(Material.stringify(m)+name, name, description, "sharp",
+                1, Math.max(m.getDamage()-1, 1),
+                Math.max(m.getWeight()-1.7, 1.1), Size.NORMAL, m);
+    }
+
+    public Axe(String name, String description, int pen, int damage, double weight, Material m) {
+        super(Material.stringify(m)+name, name, description, "sharp", pen, damage,
+                weight, Size.NORMAL, m);
     }
 }

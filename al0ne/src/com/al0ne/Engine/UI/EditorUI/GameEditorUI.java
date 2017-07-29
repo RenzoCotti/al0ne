@@ -1,7 +1,7 @@
 package com.al0ne.Engine.UI.EditorUI;
 
+import com.al0ne.Behaviours.Area;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
 import com.al0ne.Engine.UI.PlayUI;
@@ -154,14 +154,14 @@ public class GameEditorUI {
                         break;
                 }
 
-                EditingGame newGame = new EditingGame(nameText.getText());
-                World newWorld = new World(worldText.getText(), techLevel);
+                EditingGame newGame = new EditingGame(nameText.getText(), techLevel);
+                Area newArea = new Area(worldText.getText());
 
                 nameText.setText("");
                 worldText.setText("");
 
-                newGame.getCurrentEdit().addWorld(newWorld);
-                newGame.setCurrentWorld(newWorld);
+                newGame.getCurrentEdit().addWorld(newArea);
+                newGame.setCurrentWorld(newArea);
 
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);

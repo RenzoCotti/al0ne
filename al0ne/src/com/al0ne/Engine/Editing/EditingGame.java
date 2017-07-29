@@ -1,9 +1,9 @@
 package com.al0ne.Engine.Editing;
 
+import com.al0ne.Behaviours.Area;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.World;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Game;
@@ -29,8 +29,8 @@ public class EditingGame implements Serializable{
     private Entity currentEntity;
 
 
-    public EditingGame(String s) {
-        this.currentEdit = new Game(s);
+    public EditingGame(String s, char tech) {
+        this.currentEdit = new Game(s, tech);
         this.items = new HashMap<>();
         this.props = new HashMap<>();
         this.npcs = new HashMap<>();
@@ -55,12 +55,12 @@ public class EditingGame implements Serializable{
         this.currentEdit = currentEdit;
     }
 
-    public World getCurrentWorld() {
+    public Area getCurrentWorld() {
         return currentEdit.getWorlds().get(currentEdit.getCurrentWorldName());
     }
 
-    public void setCurrentWorld(World currentWorld) {
-        currentEdit.setCurrentWorld(currentWorld.getWorldName());
+    public void setCurrentWorld(Area currentArea) {
+        currentEdit.setCurrentWorld(currentArea.getAreaName());
     }
 
     public HashMap<String, Item> getItems() {

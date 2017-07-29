@@ -3,10 +3,7 @@ package com.al0ne.Entities.Items.Props;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.World;
 import com.al0ne.Engine.GameChanges;
-import com.al0ne.Engine.Main;
-import com.al0ne.Engine.TextParsing.HandleCommands;
 
 /**
  * Created by BMW on 23/07/2017.

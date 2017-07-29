@@ -10,18 +10,14 @@ import com.al0ne.Behaviours.Quests.FetchQuest;
 import com.al0ne.Behaviours.Quests.KillQuest;
 import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.Quests.TravelQuest;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Entities.Items.Behaviours.Food;
 import com.al0ne.Entities.Items.Behaviours.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Helmet;
 import com.al0ne.Entities.Items.Behaviours.Wearable.Shield;
-import com.al0ne.Entities.Items.ConcreteItems.Armor.ScaleArmor;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.BrassCoin;
-import com.al0ne.Entities.Items.ConcreteItems.Food.SliceOfCake;
 import com.al0ne.Entities.Items.ConcreteItems.Books.Note;
-import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Dagger;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Sword;
 import com.al0ne.Entities.NPCs.Shopkeeper;
 
@@ -30,9 +26,9 @@ import java.util.ArrayList;
 /**
  * Created by BMW on 30/04/2017.
  */
-public class MedievalYoungWorld extends World{
-    public MedievalYoungWorld() {
-        super("medievaly", 'l');
+public class VillageArea extends Area {
+    public VillageArea() {
+        super("medievaly");
 
         Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");
@@ -244,7 +240,7 @@ public class MedievalYoungWorld extends World{
                 "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
                         "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet.");
         BodyClothing bc = new BodyClothing("roughclothes", "clothes",
-                "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FIBRE);
+                "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FABRIC);
         p.simpleAddItem(bc, 1);
         p.wear(bc);
 //        p.simpleAddItem(new FoodBehaviour("eggs", "asd", 0, Size.NORMAL, 0), 1);

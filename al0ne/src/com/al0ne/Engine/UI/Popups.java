@@ -5,13 +5,11 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
-import com.al0ne.Engine.Editing.IdName;
 import com.al0ne.Engine.Editing.IdNameTypeQty;
 import com.al0ne.Engine.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.EditorUI.*;
 import com.al0ne.Engine.Utility;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -20,11 +18,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.net.IDN;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -40,7 +36,7 @@ public class Popups{
         HBox buttonBox = new HBox(20);
 
 
-        Popup quitPopup = new Popup(null, null, "Quit?", buttonBox, "Are you sure you want to quit?");
+        Popup quitPopup = new Popup(100, 100, "Quit?", buttonBox, "Are you sure you want to quit?");
 
 
 
@@ -58,9 +54,18 @@ public class Popups{
     }
 
     public static void creditsPopup(){
-        new Popup(400, 100, "Credits", "Close", "Thanks for trying out " +
-                "my game!\nSpecial thanks to: \nValerie Burgener, " +
-                "Lara Bruseghini, Dario Cotti, \nGiovanni Campana, Luca Hofer for being my beta testers :D");
+        new Popup(100, 300, "Credits", "Close", "Thanks for trying out " +
+                "my game!\n\nSpecial thanks to: \n" +
+                "Valerie, \n" +
+                "Lara, \n" +
+                "Dario, \n" +
+                "Giovanni, \n" +
+                "Luca, \n" +
+                "JP,\n " +
+                "Numa,\n " +
+                "Lustro and \n" +
+                "Aron\n " +
+                "for being my beta testers :D");
     }
 
 
@@ -108,7 +113,7 @@ public class Popups{
 
         int total = 0;
         int visited = 0;
-        for(World w : Main.game.getWorlds().values()){
+        for(Area w : Main.game.getWorlds().values()){
             total += w.getRooms().values().size();
             for(Room r : w.getRooms().values()){
                 if (!r.isFirstVisit()){
@@ -178,7 +183,7 @@ public class Popups{
         Scene dialogScene = new Scene(dialogVbox);
 
         s.setScene(dialogScene);
-        s.setTitle("World Editor");
+        s.setTitle("Area Editor");
         s.show();
     }
 

@@ -11,14 +11,22 @@ import static java.lang.Math.max;
  * Created by BMW on 07/05/2017.
  */
 public class Sword extends Weapon {
-    public Sword(String name, String description, String damageType,
-                 int damage, int armorPen, double weight, Size size, Material material) {
-        super(name, name, description, damageType, armorPen, damage, weight, size, material);
-    }
 
     public Sword(Material m) {
         super(Material.stringify(m)+"sword", "Sword", Utility.getArticle(Material.stringify(m))+" "
-                +Material.stringify(m)+" sword.", "sharp", 0, Math.max(m.getDamage(), 1),
+                        +Material.stringify(m)+" sword.", "sharp", 0, Math.max(m.getDamage(), 1),
+                Math.max(m.getWeight()-1.3, 1.3), Size.LARGE, m);
+    }
+
+    public Sword(String name, String description, int damage, int pen, double weight, Material m) {
+        super(Material.stringify(m)+name, name, description, "sharp",
+                pen, damage,
+                weight, Size.LARGE, m);
+    }
+
+    public Sword(String name, String description, Material m) {
+        super(Material.stringify(m)+name, name, description, "sharp",
+                0, Math.max(m.getDamage(), 1),
                 Math.max(m.getWeight()-1.3, 1.3), Size.LARGE, m);
     }
 }

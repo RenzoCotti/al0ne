@@ -48,7 +48,7 @@ public class LootTable implements Serializable{
             loot.add(new Sword(m));
             loot.add(new Mace(m));
             loot.add(new Spear(m));
-            loot.add(new Dagger(m));
+            loot.add(new Knife(m));
             loot.add(new Axe(m));
         }
 

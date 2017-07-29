@@ -1,7 +1,5 @@
 package com.al0ne.Behaviours.Enums;
 
-import com.al0ne.Engine.Utility;
-
 import java.util.ArrayList;
 
 /**
@@ -11,7 +9,7 @@ public enum Material {
 
     //Base Tech materials
     CLAY(0, 2, 0), STONE(1, 1, 4, 0), WOOD(1, 2, 3, 0), LEATHER(1, 1, 4), FUR(1, 2, 2),
-    FIBRE(0.5, 0),
+    FABRIC(0.5, 0),
 
 
     //Low Tech materials
@@ -107,7 +105,7 @@ public enum Material {
         materials.add(LEATHER);
         materials.add(STONE);
         materials.add(CLAY);
-        materials.add(FIBRE);
+        materials.add(FABRIC);
         materials.add(GLASS);
         materials.add(PAPER);
         materials.add(UNDEFINED);
@@ -173,7 +171,7 @@ public enum Material {
         materials.add(WOOD);
         materials.add(LEATHER);
         materials.add(FUR);
-        materials.add(FIBRE);
+        materials.add(FABRIC);
         return materials;
     }
 

@@ -1,7 +1,7 @@
 package com.al0ne.Behaviours.Pairs;
 
+import com.al0ne.Behaviours.Area;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.World;
 
 import java.io.Serializable;
 
@@ -10,11 +10,11 @@ import java.io.Serializable;
  */
 public class PairWorld implements Serializable {
     private Player player;
-    private World world;
+    private Area area;
 
-    public PairWorld(Player player, World world) {
+    public PairWorld(Player player, Area area) {
         this.player = player;
-        this.world = world;
+        this.area = area;
     }
 
     public Player getPlayer() {
@@ -25,11 +25,11 @@ public class PairWorld implements Serializable {
         this.player = player;
     }
 
-    public World getWorld() {
-        return world;
+    public Area getArea() {
+        return area;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setArea(Area area) {
+        this.area = area;
     }
 }

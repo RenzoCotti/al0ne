@@ -3,10 +3,8 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Editing.EditorInfo;
-import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.UI.SimpleItem;
 import com.al0ne.Entities.Items.Behaviours.ChargeItem;
 import com.al0ne.Entities.Items.Behaviours.Protective;
@@ -187,11 +185,11 @@ public class GameChanges {
 
     public static boolean changeWorld(String s){
         //save old state
-        World oldWorld = Main.game.getWorld(Main.game.getCurrentWorldName());
-        oldWorld.setPlayer(Main.player);
+        Area oldArea = Main.game.getWorld(Main.game.getCurrentWorldName());
+        oldArea.setPlayer(Main.player);
 
-        for(World w : Main.game.getWorlds().values()){
-            if(s.equals(w.getWorldName())){
+        for(Area w : Main.game.getWorlds().values()){
+            if(s.equals(w.getAreaName())){
                 Main.game.setCurrentWorld(s);
                 Main.player = Main.game.getPlayer();
                 Main.clearScreen();
@@ -204,8 +202,8 @@ public class GameChanges {
         }
 
         System.out.println("404: world not found\nAvailable worlds:");
-        for(World w : Main.game.getWorlds().values()){
-            printToLog("- "+w.getWorldName());
+        for(Area w : Main.game.getWorlds().values()){
+            printToLog("- "+w.getAreaName());
         }
         return false;
 

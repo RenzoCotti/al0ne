@@ -1,9 +1,8 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Behaviours.Pairs.PairWorld;
+import com.al0ne.Behaviours.Area;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.World;
 import com.al0ne.Behaviours.Enums.CommandMap;
 
 import java.io.Serializable;
@@ -21,14 +20,20 @@ public class Game implements Serializable {
     protected String gameName;
     protected String startingWorld;
     protected String currentWorld;
-    protected HashMap<String, World> worlds;
+    protected HashMap<String, Area> worlds;
     protected int turnCounter;
     protected int worldCount;
     protected boolean debugMode;
     protected CommandMap commands;
     protected String notes;
 
-    public Game(String name) {
+    //b: base
+    //l: low
+    //m: mid
+    //h: high
+    protected char techLevel;
+
+    public Game(String name, char techLevel) {
         this.gameName = name;
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
@@ -36,6 +41,8 @@ public class Game implements Serializable {
         this.debugMode=false;
         this.commands = new CommandMap();
         this.notes = "";
+        this.techLevel = techLevel;
+
 
     }
 
@@ -48,20 +55,20 @@ public class Game implements Serializable {
     }
 
     public void setPlayer(Player p) {
-        World pw = worlds.get(currentWorld);
+        Area pw = worlds.get(currentWorld);
         pw.setPlayer(p);
 //        worlds.put(currentWorld, pw);
     }
 
     public void setRoom(Room r) {
-        World pw = worlds.get(currentWorld);
+        Area pw = worlds.get(currentWorld);
         Player p = getPlayer();
         p.setCurrentRoom(r);
         pw.setPlayer(p);
 //        worlds.put(currentWorld, pw);
     }
 
-    public HashMap<String, World> getWorlds() {
+    public HashMap<String, Area> getWorlds() {
         return worlds;
     }
 
@@ -81,9 +88,9 @@ public class Game implements Serializable {
                 .append(this.notes).toString();
     }
 
-    public void addWorld(World world) {
+    public void addWorld(Area area) {
         this.worldCount++;
-        this.worlds.put(world.getWorldName(), world);
+        this.worlds.put(area.getAreaName(), area);
     }
 
     public void setNotes(String s) {
@@ -98,7 +105,7 @@ public class Game implements Serializable {
         return currentWorld;
     }
 
-    public World getCurrentWorld() {
+    public Area getCurrentWorld() {
         return worlds.get(currentWorld);
     }
 
@@ -106,7 +113,7 @@ public class Game implements Serializable {
         this.currentWorld = currentWorld;
     }
 
-    public World getWorld(String worldID){
+    public Area getWorld(String worldID){
         return worlds.get(worldID);
     }
 

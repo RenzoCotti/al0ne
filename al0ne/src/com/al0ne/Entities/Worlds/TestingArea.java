@@ -36,21 +36,20 @@ import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Entities.Spells.ConcreteSpells.TeleportSpell;
 import com.al0ne.Entities.Spells.MidasSpell;
-import com.al0ne.Entities.Spells.Spell;
 
 /**
  * Created by BMW on 14/03/2017.
  */
-public class AlphaWorld extends World{
+public class TestingArea extends Area {
 
-    public AlphaWorld() {
-        super("alpha", 'l');
+    public TestingArea() {
+        super("test");
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
 
         Container chest = new Chest();
         chest.addItem(new SilverCoin(), 100);
-        chest.addItem(new Dagger(Material.IRON), 1);
+        chest.addItem(new Knife(Material.IRON), 1);
         startRoom.addEntity(chest);
         startRoom.addEntity(new Snake());
         startRoom.addEntity(new Pistol(5, "9mm", 7));
@@ -153,7 +152,7 @@ public class AlphaWorld extends World{
 
         Room weaponRoom = new Room("Weaponry", "A room full of weapons");
         for(Material m : Material.getMaterials(1)){
-            weaponRoom.addEntity(new Dagger(m));
+            weaponRoom.addEntity(new Knife(m));
             weaponRoom.addEntity(new Spear(m));
             weaponRoom.addEntity(new Sword(m));
             weaponRoom.addEntity(new Mace(m));
@@ -174,7 +173,7 @@ public class AlphaWorld extends World{
         putRoom(ladderRoom);
 
         Room daggerRoom = new Room("Empty room", "The room is very barren.");
-        Dagger d = new Dagger(Material.IRON);
+        Knife d = new Knife(Material.IRON);
         d.addProperty(new IronBehaviour());
         daggerRoom.addEntity(d);
         daggerRoom.addEntity(new IronHelmet());
@@ -207,7 +206,7 @@ public class AlphaWorld extends World{
         shopRoom.addEntity(new Prop("knife", "A knife. Probably better not to take it."));
         shopRoom.addEntity(new Prop("apple", "A red apple. Probably better not to take it."));
         Shopkeeper bob = new Shopkeeper("Bob", "a fairly chubby man with a glint in his eyes.", "Hi, I'm Bob, a shop keeper. Are you interested in some of my items?");
-        bob.simpleAddItem(new Dagger(Material.IRON), 5);
+        bob.simpleAddItem(new Knife(Material.IRON), 5);
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);
