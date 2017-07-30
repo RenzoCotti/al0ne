@@ -135,6 +135,10 @@ public class Physics implements Serializable{
         HashMap<Integer, Object> result = ir.getResult();
         ArrayList<Pair> toAdd = ir.getToAdd();
 
+        Interactable first = ir.getFirst();
+        Interactable second = ir.getSecond();
+
+
         for(Integer i : result.keySet()){
             switch (i){
 
@@ -168,15 +172,19 @@ public class Physics implements Serializable{
                     currentRoom.unlockDirection((String)result.get(i));
                     break;
                 case 7:
+                    if(second == null || first == null){
+                        System.out.println("probably a quest tried to recharge an item");
+                        break;
+                    }
                     //refill
-                    ((ChargeItem) ir.getFirst()).refill(player, ir.getSecond());
+                    ((ChargeItem) first).refill(player, second);
                     break;
                 case 8:
                     //modify health
                     player.modifyHealth((Integer)result.get(i));
                     break;
                 case 9:
-                    if(ir.getSecond() == null){
+                    if(second == null){
                         System.out.println("probably a quest tried to change an object's integrity");
                         break;
                     }

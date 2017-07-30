@@ -123,7 +123,7 @@ public abstract class Interactable extends Entity {
 //        }
 //    }
 
-    public void addProperty(Behaviour behaviour){
+    public void addBehaviour(Behaviour behaviour){
         behaviours.add(behaviour);
     }
 

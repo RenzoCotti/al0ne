@@ -13,12 +13,12 @@ import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
 public class Key extends Item{
     public Key(String name, String description, String door) {
         super(name, name, description, 0.1, Size.VSMALL, Material.IRON, null);
-        addProperty(new KeyBehaviour(door));
+        addBehaviour(new KeyBehaviour(door));
     }
 
     public Key(String name, String door) {
         super(name, name, "A plain looking key.", 0.1, Size.VSMALL, Material.IRON, null);
-        addProperty(new KeyBehaviour(door));
+        addBehaviour(new KeyBehaviour(door));
     }
 
     @Override

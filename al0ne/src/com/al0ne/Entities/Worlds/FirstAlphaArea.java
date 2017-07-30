@@ -3,7 +3,6 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Entities.Enemies.GiantRat;
@@ -33,7 +32,7 @@ public class FirstAlphaArea extends Area {
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
         Prop river = new Prop("River", "a watery river");
-        river.addProperty(new WaterBehaviour());
+        river.addBehaviour(new WaterBehaviour());
         cave1.addEntity(river);
         cave1.addEntity(new Canteen());
         cave1.lockDirection("east", "cave1door");

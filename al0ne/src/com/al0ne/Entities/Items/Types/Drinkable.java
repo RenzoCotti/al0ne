@@ -19,8 +19,8 @@ public class Drinkable extends Item{
     public Drinkable(String name, String description, double weight, Size size) {
         super(name, name, description, weight, size, Material.GLASS, null);
         addCommand(Command.DRINK);
-        addProperty(new FoodBehaviour());
-        addProperty(new WaterBehaviour());
+        addBehaviour(new FoodBehaviour());
+        addBehaviour(new WaterBehaviour());
     }
 
     @Override

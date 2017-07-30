@@ -13,14 +13,15 @@ public class Area implements Serializable{
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
     protected Player player;
-    protected LootTable lootTable;
+//    protected LootTable lootTable;
+    //todo add random events with chance, for both rooms and areas
 
 
 
     public Area(String worldName) {
         this.areaName = worldName;
         this.rooms = new HashMap<>();
-        this.lootTable = new LootTable();
+//        this.lootTable = new LootTable();
     }
 
     public Room getStartingRoom() {

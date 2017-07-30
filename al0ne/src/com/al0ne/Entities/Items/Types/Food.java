@@ -19,7 +19,7 @@ public class Food extends Item {
     public Food(String name, String description, double weight, Size size, int foodValue) {
         super(name, name, description, weight, size, null, null);
         addCommand(Command.EAT);
-        addProperty(new FoodBehaviour());
+        addBehaviour(new FoodBehaviour());
         this.foodValue = foodValue;
     }
 

@@ -12,8 +12,8 @@ import com.al0ne.Behaviours.Enums.Material;
 public class Rope extends Item{
     public Rope() {
         super("rope", "Rope", "11m of sturdy rope.", 1.0, Size.NORMAL, Material.FABRIC, null);
-//        addProperty("cuttable");
-//        addProperty("climb");
+//        addBehaviour("cuttable");
+//        addBehaviour("climb");
     }
 
     @Override

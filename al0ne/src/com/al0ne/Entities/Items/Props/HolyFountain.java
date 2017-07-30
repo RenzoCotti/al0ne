@@ -16,7 +16,7 @@ public class HolyFountain extends Prop{
         super("Holy Fountain",
                 "The water in this decorated fountain seems so clear and refreshing",
                 "water fountain", null, Material.STONE);
-        addProperty(new WaterBehaviour());
+        addBehaviour(new WaterBehaviour());
     }
 
     @Override

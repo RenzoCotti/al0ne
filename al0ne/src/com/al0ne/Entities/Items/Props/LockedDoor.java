@@ -14,7 +14,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class LockedDoor extends Door {
     public LockedDoor(String name, String description, String after, Material m, Room r, String direction) {
         super(name, description, after, m);
-        addProperty(new LockedDoorBehaviour(getID(), direction));
+        addBehaviour(new LockedDoorBehaviour(getID(), direction));
         r.lockDirection(direction, getID());
 //        this.requiresItem=key;
     }

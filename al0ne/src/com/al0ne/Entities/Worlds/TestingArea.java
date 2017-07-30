@@ -174,7 +174,7 @@ public class TestingArea extends Area {
 
         Room daggerRoom = new Room("Empty room", "The room is very barren.");
         Knife d = new Knife(Material.IRON);
-        d.addProperty(new IronBehaviour());
+        d.addBehaviour(new IronBehaviour());
         daggerRoom.addEntity(d);
         daggerRoom.addEntity(new IronHelmet());
         putRoom(daggerRoom);

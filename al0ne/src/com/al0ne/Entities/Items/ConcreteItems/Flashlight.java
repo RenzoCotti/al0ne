@@ -7,8 +7,8 @@ import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.RequiresBatteryBeh
 public class Flashlight extends LightItem{
     public Flashlight() {
         super("flashlight", "Flashlight", "A fairly bright flashlight. It uses AA batteries.",
-                0.3, Size.VSMALL, Material.ALUMINIUM, 5);
-        addProperty(new RequiresBatteryBehaviour("aabattery"));
+                0.3, Size.VSMALL, Material.ALUMINIUM, 50);
+        addBehaviour(new RequiresBatteryBehaviour("aabattery"));
         setRefillable("aabattery", "You change the battery.");
     }
 }

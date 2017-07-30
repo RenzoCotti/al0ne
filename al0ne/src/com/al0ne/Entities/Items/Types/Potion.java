@@ -12,7 +12,7 @@ import com.al0ne.Engine.Physics.Behaviours.PotionBehaviour;
 public abstract class Potion extends Item {
     public Potion(String id, String name, String longDescription) {
         super(id, name, longDescription, 0.3, Size.SMALL, Material.GLASS, null);
-        addProperty(new PotionBehaviour());
+        addBehaviour(new PotionBehaviour());
         addCommand(Command.DRINK);
     }
 

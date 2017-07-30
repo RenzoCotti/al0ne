@@ -6,7 +6,7 @@ import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
-import com.al0ne.Entities.Items.ConcreteItems.AAbattery;
+import com.al0ne.Entities.Items.ConcreteItems.Battery;
 import com.al0ne.Entities.Items.ConcreteItems.Coin.Credit;
 import com.al0ne.Entities.Items.ConcreteItems.Flashlight;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
@@ -39,7 +39,7 @@ public class DeltaBlock extends Area {
         player.addOneItem(new Pair(jeansAndTShirt, 1));
         player.wear(jeansAndTShirt);
         player.simpleAddItem(new Flashlight(), 1);
-        player.simpleAddItem(new AAbattery(), 2);
+//        player.simpleAddItem(new Battery("aabattery"), 2);
         setPlayer(player);
         setStartingRoom(alley);
     }
