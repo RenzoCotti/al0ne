@@ -50,6 +50,7 @@ public class Area implements Serializable{
 
     public void setPlayer(Player player) {
         this.player = player;
+        this.startingRoom = player.getCurrentRoom().getID();
     }
 
 

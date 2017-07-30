@@ -78,9 +78,9 @@ public class TestingArea extends Area {
 
         Room lootRoom = new Room("Looty room", "A room full of loot! yay!");
 
-        for(Pair p: lootTable.getLoot(123)){
-            lootRoom.addEntity(p.getEntity(), p.getCount());
-        }
+//        for(Pair p: lootTable.getLoot(123)){
+//            lootRoom.addEntity(p.getEntity(), p.getCount());
+//        }
         putRoom(lootRoom);
 
 

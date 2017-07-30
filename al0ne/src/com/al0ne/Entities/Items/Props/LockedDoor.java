@@ -54,8 +54,8 @@ public class LockedDoor extends Door {
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
         printToLog("The door is locked.");
-        return 2;
+        return "";
     }
 }

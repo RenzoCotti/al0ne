@@ -2,7 +2,6 @@ package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.Physics.Physics;
 
@@ -49,10 +48,12 @@ public abstract class Interactable extends Entity {
         return canDrop;
     }
 
-    //returns 0 if false
-    //1 if true
-    //2 if doesn't require a print afterwards
-    public abstract int used(Room currentRoom, Player player);
+    //returns null if can't use
+    //String if needs printing
+    //"" if no need for print
+    public String used(Player player){
+        return null;
+    }
 
 
     public void usedWith(Interactable inter, Player player) {

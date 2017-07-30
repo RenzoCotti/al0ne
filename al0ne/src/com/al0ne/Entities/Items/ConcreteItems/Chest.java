@@ -1,7 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Types.Container;
 import com.al0ne.Behaviours.Enums.Material;
@@ -15,8 +14,4 @@ public class Chest extends Container {
                 10, Size.VLARGE, Material.WOOD, true);
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

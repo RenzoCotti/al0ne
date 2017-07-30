@@ -3,7 +3,6 @@ package com.al0ne.Entities.Items.Types;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Physics.Behaviours.FoodBehaviour;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
@@ -32,10 +31,10 @@ public class Food extends Item {
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
         if(!player.hasNeeds()){
             printToLog("Yum, tasty!");
-            return 1;
+            return "";
         }
         if (player.hasStatus("starving")){
             player.removeStatus("starving");
@@ -44,6 +43,6 @@ public class Food extends Item {
             Hunger hunger = (Hunger) player.getStatus().get("hunger");
             hunger.modifyDuration(+foodValue*20);
         }
-        return 1;
+        return "";
     }
 }

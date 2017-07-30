@@ -5,7 +5,6 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Types.Protective;
-import com.al0ne.Behaviours.Room;
 
 import static java.lang.Math.max;
 
@@ -31,10 +30,5 @@ public class Helmet extends Protective {
                         +Material.stringify(m)+" helmet.", Math.max(m.getWeight()-2, 0.5),
                 max(m.getToughness()-2, 1), (int)m.getWeight(), Size.SMALL, m);
         this.part = "head";
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 }

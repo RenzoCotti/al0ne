@@ -2,7 +2,6 @@ package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.GameChanges;
 
 /**
@@ -17,8 +16,8 @@ public class WorldSwitch extends Prop{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
         GameChanges.changeWorld(nextWorld);
-        return 2;
+        return "";
     }
 }

@@ -3,7 +3,6 @@ package com.al0ne.Entities.Items.Props;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Prop;
 import com.al0ne.Behaviours.Room;
 
@@ -21,10 +20,11 @@ public class Door extends Prop {
 
 
     @Override
-    public int used(Room currentRoom, Player player){
+    public String used(Player player){
+        Room currentRoom = player.getCurrentRoom();
         currentRoom.unlockDirection(ID);
 
         active=true;
-        return 1;
+        return "";
     }
 }

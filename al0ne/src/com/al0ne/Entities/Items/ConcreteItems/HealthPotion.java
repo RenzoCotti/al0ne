@@ -2,7 +2,6 @@ package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Entities.Items.Types.Potion;
-import com.al0ne.Behaviours.Room;
 
 /**
  * Created by BMW on 23/03/2017.
@@ -13,9 +12,9 @@ public class HealthPotion extends Potion {
         }
 
         @Override
-        public int used(Room currentRoom, Player player){
+        public String used(Player player){
             player.modifyHealth(+20);
-            return 1;
+            return "The potion heals you!";
         }
 
 }

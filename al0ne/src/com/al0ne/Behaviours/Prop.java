@@ -72,12 +72,12 @@ public class Prop extends Interactable {
 
 
     @Override
-    public int used(Room currentRoom, Player player){
+    public String used(Player player){
         if (requiresItem.equals("none")){
             active=true;
-            return 1;
+            return "";
         } else{
-            return 0;
+            return null;
         }
     }
 

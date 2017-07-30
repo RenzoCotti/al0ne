@@ -5,7 +5,6 @@ import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Entities.Items.Types.Protective;
-import com.al0ne.Behaviours.Room;
 
 import static java.lang.Math.max;
 
@@ -34,8 +33,4 @@ public class Shield extends Protective{
         this.part = "off hand";
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

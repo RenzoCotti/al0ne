@@ -17,8 +17,9 @@ public class DoorUnlocker extends Prop{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
+        Room currentRoom = player.getCurrentRoom();
         currentRoom.unlockDirection(doorToUnlock);
-        return 1;
+        return "";
     }
 }

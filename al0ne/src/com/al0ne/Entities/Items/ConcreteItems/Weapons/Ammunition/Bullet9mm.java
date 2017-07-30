@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 
 /**
  * Created by BMW on 22/07/2017.
@@ -19,8 +18,4 @@ public class Bullet9mm extends Item{
                 0.01, Size.MICRO, Material.BRASS, null);
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

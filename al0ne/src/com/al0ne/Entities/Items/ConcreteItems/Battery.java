@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Physics.Behaviours.BatteryBehaviour;
 
 public class Battery extends Item{
@@ -30,8 +29,4 @@ public class Battery extends Item{
         addBehaviour(new BatteryBehaviour(type));
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 
 import static java.lang.Math.max;
 
@@ -19,10 +18,5 @@ public class Arrow extends Item{
     public Arrow(Material material) {
         super("arrow", "Arrow", "An arrow made of "+Material.stringify(material)+".",
                 0.02*material.getWeight(), Size.SMALL, material, null);
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 }

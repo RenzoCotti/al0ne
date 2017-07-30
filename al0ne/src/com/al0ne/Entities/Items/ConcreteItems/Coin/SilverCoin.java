@@ -1,7 +1,6 @@
 package com.al0ne.Entities.Items.ConcreteItems.Coin;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Material;
 
 /**
@@ -14,8 +13,4 @@ public class SilverCoin extends Coin{
         this.value = 10;
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }

@@ -25,11 +25,11 @@ public class Canteen extends ChargeItem{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
 
         if(currentCharges <= 0){
             printToLog("It's empty.");
-            return 0;
+            return "";
         }
         if (player.hasStatus("dehydrated")){
             player.removeStatus("dehydrated");
@@ -41,7 +41,7 @@ public class Canteen extends ChargeItem{
         currentCharges--;
         modifyWeight(-0.1);
         player.recalculateWeight();
-        return 1;
+        return "";
     }
 
     @Override

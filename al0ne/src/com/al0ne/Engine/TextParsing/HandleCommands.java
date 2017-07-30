@@ -80,19 +80,23 @@ public class HandleCommands {
 //            printToLog("Be more specific.");
 //            return false;
 //        }
-        if (possibleItems.size() == 1) {
-            int result = PlayerActions.customAction(player, action, possibleItems.get(0).getEntity());
-            if(result == 1){
-                printToLog("You " + s + " the " + possibleItems.get(0).getEntity().getName());
-            } else if(result == 0){
-                printToLog("You can't " + s + " it.");
+        if (possibleItems.size() == 1 || possibleEntities.size() == 1) {
+            String result = null;
+            ArrayList<Pair> toUse;
+            if(possibleItems.size() == 1){
+                toUse = possibleItems;
+                result = PlayerActions.customAction(player, action, possibleItems.get(0).getEntity());
+            } else{
+                result = PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity());
+                toUse = possibleEntities;
             }
-            return true;
-        } else if (possibleEntities.size() == 1) {
-            int result = PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity());
-            if(result == 1){
-                printToLog("You " + s + " the " + possibleEntities.get(0).getEntity().getName());
-            } else if(result == 0){
+
+            if(result != null && result.equals("")){
+                printToLog("You " + s + " the " + toUse.get(0).getEntity().getName());
+            } else if(result != null){
+                printToLog("You " + s + " the " + toUse.get(0).getEntity().getName());
+                printToLog(result);
+            } else{
                 printToLog("You can't " + s + " it.");
             }
             return true;
@@ -308,14 +312,14 @@ public class HandleCommands {
 
             if (inventoryItems.getItems().size() == 1) {
 
-                int result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
+                String result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
 
-                if (result == 0) {
+                if (result == null) {
                     printToLog("You can't use it.");
                 }
             } else if (roomItems.getItems().size() == 1) {
-                int result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
-                if (result == 0) {
+                String result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
+                if (result == null) {
                     printToLog("You can't use it.");
                 }
             } else {

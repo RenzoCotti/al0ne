@@ -37,15 +37,16 @@ public class InvisibleProp extends Prop{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
+        Room currentRoom = player.getCurrentRoom();
         if(!addsItem){
-            return super.used(currentRoom, player);
+            return super.used(player);
         } else{
             printToLog(onToggle);
             for(Interactable i : items){
                 currentRoom.addEntity(i);
             }
-            return 2;
+            return "";
         }
     }
 }

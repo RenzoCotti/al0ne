@@ -3,11 +3,13 @@ package com.al0ne.Behaviours;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.Entities.Items.ConcreteItems.LightItem;
 import com.al0ne.Entities.Items.Types.Container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.Main.printToSingleLine;
 
@@ -39,6 +41,8 @@ public class Room extends Entity {
 
     protected boolean questRoom;
 
+    protected boolean isLit;
+
     private String questID;
     private String onQuestCompletion;
 
@@ -55,6 +59,7 @@ public class Room extends Entity {
         this.entities = new HashMap<>();
         this.firstVisit = true;
         this.questRoom = false;
+        this.isLit = true;
     }
 
     public boolean isFirstVisit(){
@@ -326,14 +331,21 @@ public class Room extends Entity {
 
     //this function prints every time a room is discovered
     public void printRoom(){
-        printLongDescription(null, null);
-        printItems();
-        printProps();
-        printNPCs();
-        printEnemy();
-        printDirections();
-        printToLog();
+        Item item = player.getOffHand();
+        if(isLit || (item != null && item instanceof LightItem && ((LightItem) item).isLit())){
+            printLongDescription(null, null);
+            printItems();
+            printProps();
+            printNPCs();
+            printEnemy();
+            printDirections();
+            printToLog();
+        } else {
+            printToLog("Too dark to see anything.");
+            printToLog();
+        }
     }
+
 
     public void addItem(Item item) {
         if (hasItem(item.getID())){
@@ -437,4 +449,12 @@ public class Room extends Entity {
         return customDirections;
     }
 
+
+    public boolean isLit() {
+        return isLit;
+    }
+
+    public void setLit(boolean lit) {
+        isLit = lit;
+    }
 }

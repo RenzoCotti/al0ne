@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Engine.Physics.Behaviours.FoodBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
@@ -24,9 +23,9 @@ public class Drinkable extends Item{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
 
-        if(player.hasNeeds()) return 0;
+        if(player.hasNeeds()) return "";
 
         if (player.hasStatus("dehydrated")){
             player.removeStatus("dehydrated");
@@ -35,6 +34,6 @@ public class Drinkable extends Item{
             Thirst thirst = (Thirst) player.getStatus().get("thirst");
             thirst.setDuration(Thirst.THIRST_CLOCK);
         }
-        return 1;
+        return "";
     }
 }

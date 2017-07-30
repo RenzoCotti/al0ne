@@ -2,7 +2,6 @@ package com.al0ne.Entities.Items.ConcreteItems;
 
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Enums.Material;
 
@@ -14,10 +13,5 @@ public class Rope extends Item{
         super("rope", "Rope", "11m of sturdy rope.", 1.0, Size.NORMAL, Material.FABRIC, null);
 //        addBehaviour("cuttable");
 //        addBehaviour("climb");
-    }
-
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
     }
 }

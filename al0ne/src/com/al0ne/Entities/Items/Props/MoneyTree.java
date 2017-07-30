@@ -2,10 +2,7 @@ package com.al0ne.Entities.Items.Props;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -32,10 +29,5 @@ public class MoneyTree extends Prop{
 //        }
 //        return 0;
 //    }
-
-    @Override
-    public int used(Room currentRoom, Player player){
-        return 0;
-    }
 
 }

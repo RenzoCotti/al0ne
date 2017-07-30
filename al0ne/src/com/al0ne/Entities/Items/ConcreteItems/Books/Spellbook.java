@@ -2,7 +2,6 @@ package com.al0ne.Entities.Items.ConcreteItems.Books;
 
 import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Spells.Spell;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Entities.Items.Types.Readable;
@@ -51,13 +50,13 @@ public class Spellbook extends Readable{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
         printToLog("Your spellbook contains these spells:");
         for(SpellPair sp : spells.values()){
             Spell s = sp.getSpell();
             printToLog("- "+s.getName()+": "+sp.getCount()+" castings.");
         }
-        return 2;
+        return "";
     }
 
     public HashMap<String, SpellPair> getSpells() {

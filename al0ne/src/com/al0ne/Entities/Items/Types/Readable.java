@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -21,9 +20,9 @@ public abstract class Readable extends Item {
     }
 
     @Override
-    public int used(Room currentRoom, Player player){
+    public String used(Player player){
         printToLog("\""+content+"\"");
-        return 2;
+        return "";
     }
 
 

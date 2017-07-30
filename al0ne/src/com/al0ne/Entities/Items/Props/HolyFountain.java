@@ -3,7 +3,6 @@ package com.al0ne.Entities.Items.Props;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -20,9 +19,9 @@ public class HolyFountain extends Prop{
     }
 
     @Override
-    public int used(Room currentRoom, Player player) {
+    public String used(Player player) {
         printToLog("You are fully healed!");
         player.setHealth(player.getMaxHealth());
-        return 1;
+        return "";
     }
 }

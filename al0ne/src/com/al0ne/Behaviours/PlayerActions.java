@@ -240,7 +240,7 @@ public class PlayerActions {
 
     //this function handles custom action entities
     //atm supports props and items
-    public static int customAction(Player player, Command action, Entity entity){
+    public static String customAction(Player player, Command action, Entity entity){
 
         Room currentRoom = player.getCurrentRoom();
         if(entity.getType()=='i'){
@@ -251,18 +251,18 @@ public class PlayerActions {
                 pair = currentRoom.getEntityPair(entity.getID());
             }
             if (pair == null){
-                return 0;
+                return null;
             }
             Item item = (Item) pair.getEntity();
 
             if (item == null){
-                return 0;
+                return null;
             }
 
             for (Command command : entity.getRequiredCommand()){
                 if (command.equals(action)){
-                    int result = item.used(currentRoom, player);
-                    if(result == 1 || result == 2){
+                    String result = item.used(player);
+                    if(result != null){
                         if (item.hasProperty("consumable")){
 
                             if(!inRoom && !player.getItemPair(entity.getID()).modifyCount(-1)){
@@ -276,7 +276,7 @@ public class PlayerActions {
                         }
                         return result;
                     }
-                    return 0;
+                    return null;
                 }
             }
 
@@ -284,11 +284,11 @@ public class PlayerActions {
             Prop prop = (Prop) entity;
             for (Command command : prop.getRequiredCommand()){
                 if(command.equals(action)){
-                    return prop.used(currentRoom, player);
+                    return prop.used(player);
                 }
             }
         }
-        return 0;
+        return null;
     }
 
 
@@ -418,18 +418,18 @@ public class PlayerActions {
     //returns 0 if the item can't be used
     //returns 1 if the item was used successfully
     //returns 2 if the item was used successfully and it doesn't need to print anything
-    public static int simpleUse(Player player, Entity target){
+    public static String simpleUse(Player player, Entity target){
 
         Room currentRoom = player.getCurrentRoom();
         if (target.getType() == 'p'){
             Prop prop = (Prop) target;
-            return prop.used(currentRoom, player);
+            return prop.used(player);
 
         } else if (target.getType() == 'i'){
             Pair pair = player.getInventory().get(target.getID());
             Item item = (Item) pair.getEntity();
-            int result = item.used(currentRoom, player);
-            if(result == 1 || result == 2){
+            String result = item.used(player);
+            if(result != null){
                 //if the item is consumable, we subtract 1 from the inventory
                 if (item.hasProperty("consumable")){
                     if(!player.getItemPair(item.getID()).modifyCount(-1)){
@@ -439,7 +439,7 @@ public class PlayerActions {
                 return result;
             }
         }
-        return 0;
+        return null;
     }
 
 

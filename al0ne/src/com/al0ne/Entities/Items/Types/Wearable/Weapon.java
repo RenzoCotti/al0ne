@@ -1,7 +1,6 @@
 package com.al0ne.Entities.Items.Types.Wearable;
 
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Enums.Material;
 
@@ -43,8 +42,4 @@ public class  Weapon extends Wearable {
         this.damage = damage;
     }
 
-    @Override
-    public int used(Room currentRoom, Player player) {
-        return 0;
-    }
 }
