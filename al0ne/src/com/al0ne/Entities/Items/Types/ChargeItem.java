@@ -15,8 +15,7 @@ public abstract class ChargeItem extends Item{
     protected int maxCharges;
     protected int currentCharges;
     protected boolean canRecharge;
-    protected boolean requiresProperty;
-    protected String property;
+    protected String propertyRequired;
     protected String onRefill;
 
     public ChargeItem(String id, String name, String description,
@@ -27,27 +26,19 @@ public abstract class ChargeItem extends Item{
         this.canRecharge = false;
     }
 
-    public ChargeItem(String id, String name, String description,
-                      double weight, Size size, Material material, int maxCharges, String property, String onRefill) {
-        super(id, name, description, weight, size, material, null);
-        this.maxCharges = maxCharges;
-        this.currentCharges = maxCharges;
+    public void setRefillable(String property, String onRefill){
         this.canRecharge = true;
-        this.property = property;
         this.onRefill = onRefill;
+        this.propertyRequired = property;
     }
 
     public int refill(Player player, Entity entity){
-        System.out.println("here");
-        if(canRecharge && !requiresProperty){
-            System.out.println("here1");
-            printToLog(onRefill);
-            currentCharges = maxCharges;
-            return 1;
-        } else if (canRecharge && (entity.getType() == 'i' || entity.getType() == 'p')){
+        if(!canRecharge){
+            return 0;
+        } else if (entity.getType() == 'i' || entity.getType() == 'p'){
             if(entity.getType() == 'i'){
                 Item item = (Item) entity;
-                if (item.hasProperty(property)){
+                if (item.hasProperty(propertyRequired)){
                     currentCharges = maxCharges;
                     printToLog(onRefill);
                     return 1;
@@ -55,7 +46,7 @@ public abstract class ChargeItem extends Item{
                 return 0;
             } else{
                 Prop item = (Prop) entity;
-                if (item.hasProperty(property)){
+                if (item.hasProperty(propertyRequired)){
                     currentCharges = maxCharges;
                     printToLog(onRefill);
                     return 1;

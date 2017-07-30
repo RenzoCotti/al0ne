@@ -3,10 +3,8 @@ package com.al0ne.Engine;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.UI.SimpleItem;
-import com.al0ne.Entities.Items.Types.ChargeItem;
 import com.al0ne.Entities.Items.Types.Protective;
 import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import com.al0ne.Entities.Items.ConcreteItems.LightItem;
@@ -16,9 +14,7 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
@@ -344,14 +340,14 @@ public class GameChanges {
 
     public static void consumeItems(Player player){
         for(Item i: player.getWornItems().values()){
-            if(i instanceof LightItem && ((LightItem) i).isTurnedOn()){
+            if(i instanceof LightItem && ((LightItem) i).isLit()){
 
                 if(Utility.randomNumber(3) == 1){
                     i.modifyIntegrity(-1);
                 }
 
                 if(((LightItem) i).removeOneCharge()){
-                    ((LightItem) i).setTurnedOn(false);
+                    ((LightItem) i).setLit(false);
                     printToLog("The "+i.getName()+" stops emitting light.");
                 }
             }

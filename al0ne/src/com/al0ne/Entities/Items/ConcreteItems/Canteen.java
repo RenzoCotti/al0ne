@@ -18,9 +18,9 @@ public class Canteen extends ChargeItem{
     public Canteen() {
         super("canteen", "Canteen",
                 "A canteeen made with the bladder of an animal.",
-                0.6, Size.SMALL, Material.LEATHER, 5,
-                "water", "You refill your canteen.");
+                0.6, Size.SMALL, Material.LEATHER, 5);
         this.addCommand(Command.DRINK);
+        setRefillable("water", "You refill your canteen.");
         setUnique();
     }
 

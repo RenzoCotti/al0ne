@@ -1,5 +1,6 @@
 package com.al0ne.Behaviours.Quests;
 
+import com.al0ne.Behaviours.Pairs.InteractionResult;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.abstractEntities.Entity;
@@ -55,7 +56,7 @@ public abstract class Quest implements Serializable{
 
     public void questReward(Player player){
         printToLog("- - - Quest completed: "+getQuestName()+" - - -");
-        Physics.useResult(rewards, player, toAdd, null, null);
+        Physics.useResult(new InteractionResult(rewards, null, null, toAdd), player);
     }
 
     public String getQuestID() {

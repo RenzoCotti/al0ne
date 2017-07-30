@@ -1,12 +1,14 @@
 package com.al0ne.Engine.Physics;
 
 import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.Pairs.InteractionResult;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
+import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.RequiresBatteryBehaviour;
 import com.al0ne.Entities.Items.Types.ChargeItem;
 
 import java.io.Serializable;
@@ -23,14 +25,20 @@ public class Physics implements Serializable{
     public static boolean interactionBetween(Player player, Interactable first, Interactable second) {
 
         HashMap<Integer, Object> result = null;
-        Behaviour interacted = null;
+        InteractionResult ir = null;
         for (Behaviour b: first.getBehaviours()){
             for(Behaviour b1: second.getBehaviours()){
-//                result = b.interactionBetween(b1);
                 result = Physics.propertyCheck(first, b, second, b1);
 
-                if(result != null){
-                    interacted = b;
+                if(result == null){
+                    result = Physics.propertyCheck(second, b1, first, b);
+                } else {
+                    ir = new InteractionResult(result, first, second, b.toAdd);
+                    break;
+                }
+
+                if(result != null) {
+                    ir = new InteractionResult(result, second, first, b1.toAdd);
                     break;
                 }
             }
@@ -44,7 +52,7 @@ public class Physics implements Serializable{
             return true;
         }
 
-        Physics.useResult(result, player, interacted.getToAdd(), first, second);
+        Physics.useResult(ir, player);
 
         return true;
     }
@@ -80,18 +88,6 @@ public class Physics implements Serializable{
                         printToLog("The "+first.getName()+" corrodes greatly!");
                         result.put(9, -40);
                         return result;
-//                    case "food":
-//                        printToLog("Debug!");
-//                        result.put(4, 0);
-//                        result.put(9, -40);
-//                        return result;
-                }
-            case "water":
-                switch (secondName){
-//                    case "iron":
-//                        printToLog("It rusts a bit");
-//                        result.put(4, 0);
-//                        return result;
                 }
 
             case "paper":
@@ -119,12 +115,12 @@ public class Physics implements Serializable{
                             return result;
                         }
                 }
-            case "flashlight":
-                switch (secondName){
-                    case "aabattery":
-                        result.put(4, second.getID());
-                        result.put(7, first.getID());
-                        return result;
+            case "requiresbattery":
+                String batteryType = ((RequiresBatteryBehaviour) b).getBatteryType();
+                if(batteryType.equals(secondName)){
+                    result.put(4, second.getID());
+                    result.put(7, first.getID());
+                    return result;
                 }
         }
         return null;
@@ -132,13 +128,13 @@ public class Physics implements Serializable{
 
 
 
-    public static void useResult(HashMap<Integer, Object> result, Player player, ArrayList<Pair> toAdd,
-                                 Interactable obj, Interactable subj){
-
-        System.out.println("wtf");
+    public static void useResult(InteractionResult ir, Player player){
 
 
         Room currentRoom = player.getCurrentRoom();
+        HashMap<Integer, Object> result = ir.getResult();
+        ArrayList<Pair> toAdd = ir.getToAdd();
+
         for(Integer i : result.keySet()){
             switch (i){
 
@@ -162,45 +158,30 @@ public class Physics implements Serializable{
                 case 4:
                     //remove this
                     if(player.hasItemInInventory((String)result.get(i))){
-                        player.removeOneItem((Item)player.getItemPair((String)result.get(i)).getEntity());
+                        Item item = (Item) player.getInventory().get(result.get(i)).getEntity();
+                        player.removeOneItem(item);
                     } else{
                         currentRoom.getEntities().remove(result.get(i));
-                    }
-                    break;
-                case 5:
-                    if(obj == null){
-                        System.out.println("probably a quest tried to remove an item ");
-                        break;
-                    }
-                    //remove other
-                    if(player.hasItemInInventory(obj.getID())){
-                        player.removeOneItem((Item) obj);
-                    } else{
-                        currentRoom.getEntities().remove(obj.getID());
                     }
                     break;
                 case 6:
                     currentRoom.unlockDirection((String)result.get(i));
                     break;
                 case 7:
-                    if(obj == null || subj == null){
-                        System.out.println("probably a quest tried to refill an object");
-                        break;
-                    }
                     //refill
-                    ((ChargeItem) obj).refill(player, subj);
+                    ((ChargeItem) ir.getFirst()).refill(player, ir.getSecond());
                     break;
                 case 8:
                     //modify health
                     player.modifyHealth((Integer)result.get(i));
                     break;
                 case 9:
-                    if(subj == null){
+                    if(ir.getSecond() == null){
                         System.out.println("probably a quest tried to change an object's integrity");
                         break;
                     }
                     //modify integrity
-                    subj.modifyIntegrity((Integer) result.get(i));
+                    ir.getFirst().modifyIntegrity((Integer) result.get(i));
                     break;
 
                 default:

@@ -11,45 +11,38 @@ import static com.al0ne.Engine.Main.printToLog;
 
 public class LightItem extends ChargeItem{
 
-    protected boolean turnedOn;
+    protected boolean isLit;
 
     public LightItem(String id, String name, String description,
                      double weight, Size size, Material material, int maxCharges) {
         super(id, name, description, weight, size, material, maxCharges);
-        this.turnedOn = false;
-        this.addCommand(Command.LIGHT);
-    }
-
-    public LightItem(String id, String name, String description,
-                     double weight, Size size, Material material, int maxCharges, String property, String onRefill) {
-        super(id, name, description, weight, size, material, maxCharges, property, onRefill);
-        this.turnedOn = false;
+        this.isLit = false;
         this.addCommand(Command.LIGHT);
     }
 
     @Override
     public int used(Room currentRoom, Player player) {
-        if(this.currentCharges > 0 && !this.turnedOn){
-            this.turnedOn = true;
+        if(this.currentCharges > 0 && !this.isLit){
+            this.isLit = true;
             return 1;
         } else {
-            this.turnedOn = false;
+            this.isLit = false;
             return 0;
         }
     }
 
-    public boolean isTurnedOn() {
-        return turnedOn;
+    public boolean isLit() {
+        return isLit;
     }
 
-    public void setTurnedOn(boolean turnedOn) {
-        this.turnedOn = turnedOn;
+    public void setLit(boolean lit) {
+        this.isLit = lit;
     }
 
     @Override
     public void printLongDescription(Player player, Room room) {
         super.printLongDescription(player, room);
-        if(turnedOn){
+        if(isLit){
             printToLog("It is lighted.");
         } else{
             printToLog("It isn't lighted.");
