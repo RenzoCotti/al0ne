@@ -155,7 +155,7 @@ public class EditRoom extends EditTab{
                     exits.clear();
                 }
 
-                Main.edit.getCurrentEdit().getCurrentWorld().putRoom(r);
+                Main.edit.getCurrentEdit().getCurrentWorld().addRoom(r);
 
                 if(isStarting){
                     Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);

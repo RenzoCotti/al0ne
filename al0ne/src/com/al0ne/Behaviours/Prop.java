@@ -47,8 +47,22 @@ public class Prop extends Interactable {
 
 
     //quick, for descriptive props
+    public Prop(String name, String description, Material m) {
+        super("prop"+(entityCounter++), name, description,
+                Utility.getArticle(name)+" "+name.toLowerCase(), m);
+        this.afterDescription = description;
+        this.requiresItem="none";
+        this.active=false;
+        this.type='p';
+        this.canTake=false;
+        this.invisible=false;
+
+    }
+
+    //quick, for descriptive props
     public Prop(String name, String description) {
-        super("prop"+(entityCounter++), name, description, Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
+        super("prop"+(entityCounter++), name, description,
+                Utility.getArticle(name)+" "+name.toLowerCase(), Material.UNDEFINED);
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
@@ -82,7 +96,7 @@ public class Prop extends Interactable {
     }
 
     @Override
-    public void printLongDescription(Player player, Room room){
+    public void printLongDescription(Player player){
         if(!active){
             printToLog(longDescription);
         } else {

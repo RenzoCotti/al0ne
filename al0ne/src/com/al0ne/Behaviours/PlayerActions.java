@@ -480,7 +480,7 @@ public class PlayerActions {
     public static boolean examine(Player player, Entity target){
         Room currentRoom = player.getCurrentRoom();
         if(target != null){
-            target.printLongDescription(player, currentRoom);
+            target.printLongDescription(player);
             return true;
         }
         return false;

@@ -42,6 +42,9 @@ public abstract class WorldCharacter extends Entity {
     //various
     protected boolean alive;
 
+    private String causeOfDeath;
+
+
     public WorldCharacter(String id, String name, String longDescription, String shortDescription,
                           Integer maxHealth, Integer attack, Integer dexterity, Integer armor, Integer damage) {
         super(id, name, longDescription, shortDescription);
@@ -83,6 +86,8 @@ public abstract class WorldCharacter extends Entity {
         }
 
         this.status = new HashMap<>();
+        this.causeOfDeath = "unknown causes";
+
     }
 
     //this function initialises the HashMap with all the body parts
@@ -176,6 +181,10 @@ public abstract class WorldCharacter extends Entity {
     //this returns true if the character is alive
     public boolean isAlive(){
         return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     //this functions return the required value
@@ -277,7 +286,7 @@ public abstract class WorldCharacter extends Entity {
     }
 
     //adds a status to the statuses, it refreshes the duration
-    public boolean putStatus(Status s) {
+    public boolean addStatus(Status s) {
         for (Status st : status.values()){
             if(s.getName().equals(st.getName())){
                 //refresh on reapply of status
@@ -346,6 +355,14 @@ public abstract class WorldCharacter extends Entity {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public String getCauseOfDeath() {
+        return causeOfDeath;
+    }
+
+    public void setCauseOfDeath(String causeOfDeath) {
+        this.causeOfDeath = causeOfDeath;
     }
 
 }

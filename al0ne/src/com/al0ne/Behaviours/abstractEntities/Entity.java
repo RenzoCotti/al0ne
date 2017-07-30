@@ -2,7 +2,6 @@ package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.Utility;
 
 import java.io.Serializable;
@@ -80,7 +79,7 @@ public abstract class Entity implements Serializable, Cloneable{
         return shortDescription;
     }
 
-    public void printLongDescription(Player player, Room room) {
+    public void printLongDescription(Player player) {
         printToLog(longDescription);
     }
 

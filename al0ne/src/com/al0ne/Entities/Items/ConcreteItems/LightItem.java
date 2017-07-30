@@ -4,7 +4,6 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Entities.Items.Types.ChargeItem;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -40,8 +39,8 @@ public class LightItem extends ChargeItem{
     }
 
     @Override
-    public void printLongDescription(Player player, Room room) {
-        super.printLongDescription(player, room);
+    public void printLongDescription(Player player) {
+        super.printLongDescription(player);
         if(isLit){
             printToLog("It is lighted.");
         } else{

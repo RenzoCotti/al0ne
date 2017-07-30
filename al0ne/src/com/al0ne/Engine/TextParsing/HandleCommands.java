@@ -655,7 +655,7 @@ public class HandleCommands {
         NPC npc = player.getCurrentRoom().getNPC(toExamine);
 
         if (npc != null) {
-            npc.printLongDescription(null, null);
+            npc.printLongDescription(null);
             return false;
         }
 

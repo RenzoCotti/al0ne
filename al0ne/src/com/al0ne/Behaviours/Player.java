@@ -51,7 +51,6 @@ public class Player extends WorldCharacter {
     private boolean hasNeeds;
 
 
-    private String causeOfDeath;
 
     protected HashMap<String, Quest> quests;
 
@@ -69,13 +68,12 @@ public class Player extends WorldCharacter {
         this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.quests = new HashMap<>();
-        this.causeOfDeath = "unknown causes";
         if(needs){
-            putStatus(new Thirst());
-            putStatus(new Hunger());
+            addStatus(new Thirst());
+            addStatus(new Hunger());
         }
         this.hasNeeds = needs;
-        putStatus(new NaturalHealing());
+        addStatus(new NaturalHealing());
     }
 
     //creates a new Player, sets the current Room to currentRoom
@@ -89,14 +87,13 @@ public class Player extends WorldCharacter {
         this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.quests = new HashMap<>();
-        this.causeOfDeath = "unknown causes";
         setLongDescription("You are "+name+".\n"+story);
         if(needs){
-            putStatus(new Thirst());
-            putStatus(new Hunger());
+            addStatus(new Thirst());
+            addStatus(new Hunger());
         }
         this.hasNeeds = needs;
-        putStatus(new NaturalHealing());
+        addStatus(new NaturalHealing());
     }
 
 
@@ -517,14 +514,6 @@ public class Player extends WorldCharacter {
         return getLongDescription();
     }
 
-
-    public String getCauseOfDeath() {
-        return causeOfDeath;
-    }
-
-    public void setCauseOfDeath(String causeOfDeath) {
-        this.causeOfDeath = causeOfDeath;
-    }
 
 
     public HashMap<String, Quest> getQuests() {

@@ -45,6 +45,7 @@ public abstract class Status implements Serializable{
         this.toApply = new ArrayList<>();
     }
 
+    //returns true if it is to be removed
     public abstract boolean resolveStatus(WorldCharacter character);
 
     public String getName(){

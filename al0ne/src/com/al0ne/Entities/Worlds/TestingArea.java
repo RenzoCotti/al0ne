@@ -2,7 +2,6 @@ package com.al0ne.Entities.Worlds;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Entities.Enemies.Snake;
@@ -59,7 +58,7 @@ public class TestingArea extends Area {
         startRoom.addEntity(ld.generateKey("generic key"));
         startRoom.addEntity(ld);
 
-        putRoom(startRoom);
+        addRoom(startRoom);
 
 
         Room attic = new Room("Attic", "An empty attic.");
@@ -74,14 +73,14 @@ public class TestingArea extends Area {
         attic.addEntity(new Arrow(Material.IRON), 3);
         attic.addEntity(sb);
 
-        putRoom(attic);
+        addRoom(attic);
 
         Room lootRoom = new Room("Looty room", "A room full of loot! yay!");
 
 //        for(Pair p: lootTable.getLoot(123)){
 //            lootRoom.addEntity(p.getEntity(), p.getCount());
 //        }
-        putRoom(lootRoom);
+        addRoom(lootRoom);
 
 
         Room shieldRoom = new Room("Shieldery", "A room full of shields");
@@ -109,7 +108,7 @@ public class TestingArea extends Area {
 
 
 
-        putRoom(shieldRoom);
+        addRoom(shieldRoom);
 
         Room armorRoom = new Room("Armory", "A room full of armor");
 
@@ -130,7 +129,7 @@ public class TestingArea extends Area {
 
 
 
-        putRoom(armorRoom);
+        addRoom(armorRoom);
 
         Room helmetRoom = new Room("Helmetry", "A room full of helmets");
 
@@ -146,7 +145,7 @@ public class TestingArea extends Area {
 
 
 
-        putRoom(helmetRoom);
+        addRoom(helmetRoom);
 
 
 
@@ -160,7 +159,7 @@ public class TestingArea extends Area {
         }
 
 
-        putRoom(weaponRoom);
+        addRoom(weaponRoom);
 
 
 
@@ -170,14 +169,14 @@ public class TestingArea extends Area {
         ladderRoom.setCustomDirection("You can see a ladder going up. You see an opening to the east.");
 
         ladderRoom.addEntity(new WarpStone());
-        putRoom(ladderRoom);
+        addRoom(ladderRoom);
 
         Room daggerRoom = new Room("Empty room", "The room is very barren.");
         Knife d = new Knife(Material.IRON);
         d.addBehaviour(new IronBehaviour());
         daggerRoom.addEntity(d);
         daggerRoom.addEntity(new IronHelmet());
-        putRoom(daggerRoom);
+        addRoom(daggerRoom);
 
         Room emonRoom = new Room("Attic", "You're in a wooden attic.");
         NPC emon = new NPC("Emon", "A handy man. Probably fixes small keys.",
@@ -185,12 +184,12 @@ public class TestingArea extends Area {
         emon.addSubject("keys", new Subject("Yup, I fix small keys."));
         emon.addSubject("beer", new Subject("I love beer!"));
         emonRoom.addEntity(emon);
-        putRoom(emonRoom);
+        addRoom(emonRoom);
 
         Room mushRoom = new Room("Mushy Room", "The air is very damp.");
         mushRoom.addItem(new Mushroom());
 
-        putRoom(mushRoom);
+        addRoom(mushRoom);
 
         Room wolfRoom = new Room("Wolf Room", "You see some bones scattered on the ground.");
         wolfRoom.addEntity(new Prop("pile of bones", "upon further examination, those seem to be animal bones, probably rats and rabbit's."));
@@ -198,7 +197,7 @@ public class TestingArea extends Area {
         wolfRoom.addEntity(new Snake());
         wolfRoom.addEntity(new Apple());
 
-        putRoom(wolfRoom);
+        addRoom(wolfRoom);
 
         Room shopRoom = new Room("Shop", "You see several items neatly disposed on a table");
         shopRoom.addEntity(new Prop("table", "You can see a knife and an apple on the table",
@@ -210,7 +209,7 @@ public class TestingArea extends Area {
         bob.simpleAddItem(new Apple(), 2);
         bob.simpleAddItem(new Scroll("mazesolution", "Parched scroll", "what seems like a fairly old scroll","Down, Right, Up, Right, Down", 0.1), 20);
         shopRoom.addEntity(bob);
-        putRoom(shopRoom);
+        addRoom(shopRoom);
 
         Room sanctuary = new Room("Sanctuary", "There is a holy aura permeating this place.");
         NPC priest = new NPC("Asdolfo", "A holy man, hood up.", "hooded man", "Greetings, child. I can bless items for you. Should you be wounded, you can use this fountain to strengthen your spirits.");
@@ -220,29 +219,29 @@ public class TestingArea extends Area {
         priest.addReactionItem("holysword", sword);
         sanctuary.addEntity(priest);
         sanctuary.addEntity(new HolyFountain());
-        putRoom(sanctuary);
+        addRoom(sanctuary);
 
         Room cavernRoom = new Room( "Cavernous opening", "The tunnel suddenly opens up in this place.");
 
-        putRoom(cavernRoom);
+        addRoom(cavernRoom);
 
         Room mazeMain = new Room("Maze", "These walls all look the same, you feel very disorientated");
-        putRoom(mazeMain);
+        addRoom(mazeMain);
 
         Room maze1 = new Room("Maze", "These walls all look the same, you feel very disorientated");
-        putRoom(maze1);
+        addRoom(maze1);
 
         Room maze2 = new Room( "Maze", "These walls all look the same, you feel very disorientated");
 
-        putRoom(maze2);
+        addRoom(maze2);
 
         Room maze3 = new Room( "Maze", "These walls all look the same, you feel very disorientated");
         //add corrosive slime
-        putRoom(maze3);
+        addRoom(maze3);
 
         Room maze4 = new Room("Maze", "These walls all look the same, you feel very disorientated");
 
-        putRoom(maze4);
+        addRoom(maze4);
 
         Room swordRoom = new Room("Lake in the mountain", "You suddenly find yourself at the coast of a lake. A little path leads you to a circle of stones, in which you see an exquisitely crafted sword.");
         swordRoom.addItem(new HolySword());
@@ -250,7 +249,7 @@ public class TestingArea extends Area {
                 "a calm lake", null, null));
         swordRoom.addEntity(new Prop("Circle of stones", "a circle made with roundish stones, around 5 m wide",
                 "a circle of stones", null, Material.STONE));
-        putRoom(swordRoom);
+        addRoom(swordRoom);
 
         Room miniBossRoom = new Room( "Skeleton Room", "Everything in this room is of a very white colour. Upon further examination, you realise it's because everything is made of bones. Human ones.");
         //add miniboss
@@ -259,13 +258,13 @@ public class TestingArea extends Area {
         spellbook.addSpell(new LightHeal(), 3);
         spellbook.addSpell(new MidasSpell(), 5);
         miniBossRoom.addEntity(sb, 1);
-        putRoom(miniBossRoom);
+        addRoom(miniBossRoom);
 
         Room brokenKeyRoom = new Room("Hearth room", "This room is quite warm.");
         brokenKeyRoom.addEntity(new Prop("hearth", "the hearth is alit. somebody has been here recently", null, null, Material.STONE));
         brokenKeyRoom.addEntity(new Prop("table", "a fairly used wooden table.", null, null, Material.WOOD));
         brokenKeyRoom.addItem(new Key("brokenkey", "Broken key", "It seems this key has been broken clean in two."));
-        putRoom(brokenKeyRoom);
+        addRoom(brokenKeyRoom);
 
         Room gateRoom = new Room("Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         LockedDoor bossgate = new LockedDoor("Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON, gateRoom, "east");
@@ -274,21 +273,21 @@ public class TestingArea extends Area {
 
         gateRoom.addEntity(bossgate);
         //        gateRoom.lockDirection("east", "bossgate");
-        putRoom(gateRoom);
+        addRoom(gateRoom);
 
         Room bossRoom = new Room("Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
         bossRoom.setCustomDirection("You sense a magical barrier east.");
         bossRoom.addEntity(new LeatherArmour());
         bossRoom.lockDirection("east", "boss");
         bossRoom.addEntity(new Demon());
-        putRoom(bossRoom);
+        addRoom(bossRoom);
 
         Room princessRoom = new Room("Princess room", "a royal room, full of decorations.");
         NPC peach = new NPC("Peach", "A princess in a pink dress is here", "pink princess", "Congratulations, you saved me!");
         peach.addSubject("mario", new Subject("Thank you Mario! but your princess is in another castle!"));
         //maybe exit
         princessRoom.addEntity(peach);
-        putRoom(princessRoom);
+        addRoom(princessRoom);
 
 
         maze1.addExit("north", mazeMain);

@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
 import com.al0ne.Behaviours.Room;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.ConcreteItems.Key;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -19,10 +20,17 @@ public class LockedDoor extends Door {
 //        this.requiresItem=key;
     }
 
-//    public LockedDoor(String id, String name, String key) {
-//        super(id, name, "A sturdy wooden door", "a wooden door", Material.WOOD);
-//        this.requiresItem=key;
-//    }
+    public LockedDoor(String name, String description, Material m, Room r, String direction) {
+        super(name, description, Utility.getArticle(name)+" "+name, m);
+        addBehaviour(new LockedDoorBehaviour(getID(), direction));
+        r.lockDirection(direction, getID());
+    }
+
+    public LockedDoor(Material m, Room r, String direction) {
+        super("Locked door", "A locked door.", "A locked door", m);
+        addBehaviour(new LockedDoorBehaviour(getID(), direction));
+        r.lockDirection(direction, getID());
+    }
 
 //    @Override
 //    public void usedWith(Interactable item, Room currentRoom, Player player){

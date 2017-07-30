@@ -36,7 +36,7 @@ public class Area implements Serializable{
         return rooms;
     }
 
-    public void putRoom(Room room){
+    public void addRoom(Room room){
         rooms.put(room.getID(), room);
     }
 

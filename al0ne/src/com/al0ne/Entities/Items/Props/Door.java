@@ -8,8 +8,8 @@ import com.al0ne.Behaviours.Room;
 
 public class Door extends Prop {
 
-    public Door(String name) {
-        super(name, "a sturdy door", "a sturdy door", "The door is now open.", Material.WOOD);
+    public Door(String name, Material m) {
+        super(name, "A sturdy door.", "a sturdy door", "The door is now open.", m);
         addCommand(Command.OPEN);
     }
 

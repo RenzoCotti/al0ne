@@ -333,7 +333,7 @@ public class Room extends Entity {
     public void printRoom(){
         Item item = player.getOffHand();
         if(isLit || (item != null && item instanceof LightItem && ((LightItem) item).isLit())){
-            printLongDescription(null, null);
+            printLongDescription(null);
             printItems();
             printProps();
             printNPCs();

@@ -8,8 +8,6 @@ import com.al0ne.Behaviours.Quests.KillQuest;
 import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Status;
-import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
-import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 
 import java.util.ArrayList;
@@ -69,7 +67,7 @@ public class Enemy extends WorldCharacter {
 
     //testing purposes
     @Override
-    public void printLongDescription(Player player, Room room) {
+    public void printLongDescription(Player player) {
         System.out.println("HP: "+currentHealth+"/"+maxHealth+" DMG: "+damage+" ATK: "+attack+" DEX: "+dexterity+" ARM: "+armor);
         printToLog(longDescription);
         printHealthDescription();
@@ -220,7 +218,7 @@ public class Enemy extends WorldCharacter {
                     int inflictProbability = 100-inflictStatuses.get(s);
                     int inflictStatus = Utility.randomNumber(100);
                     if(inflictStatus > inflictProbability){
-                        if (player.putStatus(s)){
+                        if (player.addStatus(s)){
                             printToLog(s.getOnApply());
                         }
                     }

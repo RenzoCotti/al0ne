@@ -64,8 +64,8 @@ public abstract class Item extends Interactable {
     }
 
     @Override
-    public void printLongDescription(Player player, Room room) {
-        super.printLongDescription(player, room);
+    public void printLongDescription(Player player) {
+        super.printLongDescription(player);
         printToLog("Size: "+(Size.intToString(this.size))+".");
         printToLog("Condition: "+getIntegrity()+"%.");
         String m = Material.stringify(this.material);

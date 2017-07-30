@@ -51,14 +51,14 @@ public class VillageArea extends Area {
 //        yourRoom.addEntity(bob);
 //        yourRoom.addEntity(new GoldCoin());
         yourRoom.visit();
-        putRoom(yourRoom);
+        addRoom(yourRoom);
 
 
         Room hallway = new Room("Hallway", "A hallway. Connects your room and your " +
                 "parents's to the rest of the house.");
 
 
-        putRoom(hallway);
+        addRoom(hallway);
 
         Room parentsRoom = new Room("Your parent's room",
                 "Your parents's room. It's quite warm in here");
@@ -67,7 +67,7 @@ public class VillageArea extends Area {
                 "A pot filled with water, containing a fairly dried up flower.",
                 "a flower pot", null, Material.CLAY));
         parentsRoom.addEntity(new Prop("bed", "Your parent's bed, it fits two people."));
-        putRoom(parentsRoom);
+        addRoom(parentsRoom);
 
         Room mainHouse = new Room("Living Room", "Your house's living room.");
         mainHouse.addEntity(new Prop("hearth", "A hearth made of stone blocks.",
@@ -102,26 +102,26 @@ public class VillageArea extends Area {
 //        mom.addReactionItem("eggs", "geteggs", );
         mainHouse.addEntity(mom);
 
-        putRoom(mainHouse);
+        addRoom(mainHouse);
 
         Room neighbourhood = new Room("Neighbourhood",
                 "There are several houses in this area, most of them are not terribly run down.");
-        putRoom(neighbourhood);
+        addRoom(neighbourhood);
 
         Room forest1 = new Room("Forest path", "This is a thin path through the woods.");
         forest1.addEntity(new Wolf());
         forest1.addEntity(new Helmet(Material.IRON));
-        putRoom(forest1);
+        addRoom(forest1);
 
         Room forest2 = new Room("Clearing", "The woods open up in this area," +
                 " the sun's light shines through the leaves.");
         forest2.addEntity(new Wolf());
-        putRoom(forest2);
+        addRoom(forest2);
 
         Room forest3 = new Room("Temple ruins", "These are the ruins of an old temple.");
         forest3.addEntity(new Wolf());
         forest3.addEntity(new Shield(Material.WOOD));
-        putRoom(forest3);
+        addRoom(forest3);
 
         dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
                 true, new Pair(new Sword(Material.IRON), 1),
@@ -141,7 +141,7 @@ public class VillageArea extends Area {
 //                "a door bell", "you rung the door bell.", Material.BRASS, "neighbourkey");
 //        doorBell.addCommand(Command.PRESS);
 //        neighbourPorch.addEntity(doorBell);
-        putRoom(neighbourPorch);
+        addRoom(neighbourPorch);
 
         Room neighbourHouse = new Room("Neighbour's house",
                 "How did you even get in here?");
@@ -149,21 +149,21 @@ public class VillageArea extends Area {
         neighbourHouse.addEntity(new Prop("Corpse", "The decomposed corpse of a child. " +
                 "It seems it's holding something in its hand."));
         neighbourHouse.addEntity(new InvisibleProp("hand", "It's holding a white rose."));
-        putRoom(neighbourHouse);
+        addRoom(neighbourHouse);
 
         Room square = new Room("Square", "The village square, quite deserted at this time of day.");
         square.setCustomDirection("To the east you see your town's church, to the north the village hall, " +
                 "to the west the market and to the south your neighbourhood.");
 
         square.addEntity(new Prop("Fountain", "A fountain made of stone"));
-        putRoom(square);
+        addRoom(square);
 
         Room villageChurch = new Room("Village Church",
                 "The village's church. It's a fairly large building made out of large blocks of stone, " +
                         "with a tall bell tower.");
         villageChurch.addEntity(new InvisibleProp("tower", "A tall tower, with a huge brass bell at the top"));
 
-        putRoom(villageChurch);
+        addRoom(villageChurch);
 
         Room villageGraveyard = new Room("Graveyard", "There are a lot of tombstones here.");
 
@@ -172,7 +172,7 @@ public class VillageArea extends Area {
                 "your family tomb", null, Material.STONE));
         villageGraveyard.addEntity(new JunkItem("dried flower",
                 "a dried white rose that was on your family tomb.", 0.05, Size.SMALL));
-        putRoom(villageGraveyard);
+        addRoom(villageGraveyard);
 
         Room villageHall = new Room("Hall", "This place is strangely deserted. Weird.");
 
@@ -188,7 +188,7 @@ public class VillageArea extends Area {
         villageHall.addEntity(drawers);
         villageHall.addEntity(new Note("vacation", "Hello, we are taking a day off " +
                 "in preparation for the celebration of tomorrow."));
-        putRoom(villageHall);
+        addRoom(villageHall);
 
         Room  villageMarket = new Room( "Market", "This is the market. " +
                 "There's a mixed smell of sweat and food lingering in the air ");
@@ -198,7 +198,7 @@ public class VillageArea extends Area {
                 "Hi, I'm Varra. Want to see the items i sell?");
         Varra.simpleAddItem(eggs, 3);
         villageMarket.addEntity(Varra);
-        putRoom(villageMarket);
+        addRoom(villageMarket);
 
 
 

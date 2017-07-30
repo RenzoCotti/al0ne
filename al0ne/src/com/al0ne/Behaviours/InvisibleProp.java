@@ -15,6 +15,7 @@ public class InvisibleProp extends Prop{
     protected boolean addsItem=false;
     protected ArrayList<Interactable> items;
     protected String onToggle;
+    protected boolean addsOnExamine=false;
 
     public InvisibleProp(String name, String description, String shortDescription, Material m) {
         super(name, description, shortDescription, null, m);
@@ -36,6 +37,11 @@ public class InvisibleProp extends Prop{
         this.items = items;
     }
 
+    public void setAddsOnExamine(ArrayList<Interactable> items) {
+        this.addsOnExamine = true;
+        this.items = items;
+    }
+
     @Override
     public String used(Player player) {
         Room currentRoom = player.getCurrentRoom();
@@ -48,5 +54,16 @@ public class InvisibleProp extends Prop{
             }
             return "";
         }
+    }
+
+    @Override
+    public void printLongDescription(Player player) {
+        if(addsOnExamine){
+            for(Interactable i : items){
+                player.getCurrentRoom().addEntity(i);
+            }
+        }
+        super.printLongDescription(player);
+
     }
 }

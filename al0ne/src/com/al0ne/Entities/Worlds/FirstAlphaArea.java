@@ -28,7 +28,7 @@ public class FirstAlphaArea extends Area {
 //        cave1.addOneItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addOneItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.addEntity(new Door("Generic Door"));
+        cave1.addEntity(new Door("Door", Material.WOOD));
         cave1.addEntity(new GiantRat());
         cave1.addEntity(new Chest());
         Prop river = new Prop("River", "a watery river");
@@ -39,13 +39,13 @@ public class FirstAlphaArea extends Area {
 
         cave1.addEntity(new MoneyTree());
 
-        putRoom(cave1);
+        addRoom(cave1);
 
 
         Room cave2 = new Room( "Cave 2", "The rocks are crumbly here.");
         cave2.addItem(new Apple(), 2);
 
-        putRoom(cave2);
+        addRoom(cave2);
 
         Room cave3 = new Room("Cave 3", "Nothing worth of notice here.");
         Door trapdoor1 = new Door("Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor", Material.WOOD);
@@ -55,7 +55,7 @@ public class FirstAlphaArea extends Area {
         cave3.addEntity(rug);
         cave3.lockDirection("down", "trapdoor");
 
-        putRoom(cave3);
+        addRoom(cave3);
 
         Room cellar = new Room("Cellar", "Very damp and filled to the brim with bottles of beer! :D");
         cellar.addItem(new Beer());
@@ -63,7 +63,7 @@ public class FirstAlphaArea extends Area {
         cellar.addItem(new Beer());
         cellar.addItem(new Beer());
 
-        putRoom(cellar);
+        addRoom(cellar);
 
         Room cave4 = new Room( "Shop Room", "Lots of items are in this room, all with a price tag on.");
         NPC emon = new NPC("Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
@@ -71,13 +71,13 @@ public class FirstAlphaArea extends Area {
         emon.addSubject("beer", new Subject("I love beer!"));
         cave4.addEntity(emon);
 
-        putRoom(cave4);
+        addRoom(cave4);
 
         Room bossRoom = new Room("Boss Room", "Lots of bones cover the ground. You shiver.");
         Wolf boss = new Wolf();
         bossRoom.addEntity(boss);
 
-        putRoom(bossRoom);
+        addRoom(bossRoom);
 
 
         bossRoom.addExit("west",cave2);

@@ -1,18 +1,18 @@
 package com.al0ne.Entities.Worlds;
 
-import com.al0ne.Behaviours.Area;
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Entities.Items.Props.Lightswitch;
+import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
-import com.al0ne.Entities.Items.ConcreteItems.Battery;
-import com.al0ne.Entities.Items.ConcreteItems.Coin.Credit;
 import com.al0ne.Entities.Items.ConcreteItems.Flashlight;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
+import com.al0ne.Entities.Statuses.DeathStatus;
+
+import java.util.ArrayList;
 
 public class DeltaBlock extends Area {
     public DeltaBlock() {
@@ -22,7 +22,7 @@ public class DeltaBlock extends Area {
                 "The smell of urine permeates this shady alley. " +
                         "You can hear the rain ticking heavily on the roof above you.");
 
-        putRoom(alley);
+        addRoom(alley);
 
         Room startbath = new Room("Dark bathroom", "Very dark, humid and smelling of blood.");
         startbath.setLit(false);
@@ -43,8 +43,42 @@ public class DeltaBlock extends Area {
         startbath.addEntity(new Flashlight());
         startbath.addEntity(new Lightswitch("light switch", "A light switch. " +
                 "Should do something if pressed."));
+        startbath.addEntity(new Prop("broken mirror",
+                "The moment you see your fragmented reflection through the broken mirror, you are quite shocked." +
+                        "You look like a ghost, extremely pale, red eyes... Better find medical aid as soon as possible.",
+                Material.GLASS));
 
-        putRoom(startbath);
+        addRoom(startbath);
+
+
+        Room shadyBuilding = new Room("Shady building", "You do not recognise this building, " +
+                "although you can figure out it's a residential one.");
+        shadyBuilding.addEntity(new LockedDoor(Material.IRON, shadyBuilding, "west"));
+        shadyBuilding.addEntity(new Prop("Torn rug",
+                "A stained and very ruined rug. It's beige.", Material.FABRIC));
+        shadyBuilding.addEntity(new Prop("Trash bin", "A small plastic trash bin. " +
+                "It's overfull, and garbage has spilled on the floor.", Material.PLASTIC));
+        InvisibleProp garbage = new InvisibleProp("Garbage", "You can see an empty soda can and a banana peel.");
+
+        garbage.setAddsOnExamine(new ArrayList<Interactable>(){
+            {add(new JunkItem("empty soda can", "An empty can of a soft drink.", 0.1, Material.ALUMINIUM));
+            add(new JunkItem("banana peel", "A yellow-blackish banana peel. Yuck.", 0.1, Size.SMALL));}});
+        shadyBuilding.addEntity(garbage);
+        addRoom(shadyBuilding);
+
+
+
+
+
+
+
+
+
+
+
+
+        shadyBuilding.addExit("south", startbath);
+        startbath.addExit("north", shadyBuilding);
 
 
 
@@ -55,6 +89,8 @@ public class DeltaBlock extends Area {
         Player player = new Player("You", "You don't remember anything about you.", true, startbath,
                 20, 40, 40, 0, 1, 20);
 
+        player.addStatus(new DeathStatus("Kidney failure", 60, "You feel dizzy.",
+                "Your kidney hurts like hell.", "You died of kidney failure."));
 
 //        player.simpleAddItem(new Credit(), 5);
 //

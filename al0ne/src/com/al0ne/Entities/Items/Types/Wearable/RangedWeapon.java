@@ -3,7 +3,6 @@ package com.al0ne.Entities.Items.Types.Wearable;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -61,8 +60,8 @@ public class RangedWeapon extends Weapon{
     }
 
     @Override
-    public void printLongDescription(Player player, Room room) {
-        super.printLongDescription(player, room);
+    public void printLongDescription(Player player) {
+        super.printLongDescription(player);
         if(needsReloading()){
             printToLog("Its magazine holds: "+inMagazine+"/"+magazineSize+" rounds.");
         }
