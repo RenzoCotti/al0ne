@@ -19,7 +19,7 @@ public class Canteen extends ChargeItem{
                 "A canteeen made with the bladder of an animal.",
                 0.6, Size.SMALL, Material.LEATHER, 5);
         this.addCommand(Command.DRINK);
-        setRefillable("water", "You refill your canteen.");
+        setRefillable("water", "You checkRefill your canteen.");
         setUnique();
     }
 
@@ -64,8 +64,8 @@ public class Canteen extends ChargeItem{
     }
 
     @Override
-    public int refill(Player player, Entity entity) {
-        if(super.refill(player, entity) == 1){
+    public int checkRefill(Player player, Entity entity) {
+        if(super.checkRefill(player, entity) == 1){
             //bug, can overfill if already full for weight
             weight=0.6;
             player.recalculateWeight();

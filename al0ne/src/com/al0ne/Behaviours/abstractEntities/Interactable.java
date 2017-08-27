@@ -2,7 +2,7 @@ package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Engine.Physics.Behaviour;
+import com.al0ne.Engine.Physics.InteractableBehaviour;
 import com.al0ne.Engine.Physics.Physics;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public abstract class Interactable extends Entity {
     //todo: add plural?
 
-    protected ArrayList<Behaviour> behaviours;
+    protected ArrayList<InteractableBehaviour> behaviours;
 
 
     protected boolean canDrop;
@@ -62,7 +62,7 @@ public abstract class Interactable extends Entity {
 
     }
 
-//    public void useResult(HashMap<Integer, Object> result, Player player, Behaviour interacted, Interactable inter){
+//    public void useResult(HashMap<Integer, Object> result, Player player, InteractableBehaviour interacted, Interactable inter){
 //
 //        Room currentRoom = player.getCurrentRoom();
 //        for(Integer i : result.keySet()){
@@ -104,8 +104,8 @@ public abstract class Interactable extends Entity {
 //                    currentRoom.unlockDirection((String)result.get(i));
 //                    break;
 //                case 7:
-//                    //refill
-//                    ((ChargeItem) this).refill(player, inter);
+//                    //checkRefill
+//                    ((ChargeItem) this).checkRefill(player, inter);
 //                    break;
 //                case 8:
 //                    //modify health
@@ -124,12 +124,12 @@ public abstract class Interactable extends Entity {
 //        }
 //    }
 
-    public void addBehaviour(Behaviour behaviour){
+    public void addBehaviour(InteractableBehaviour behaviour){
         behaviours.add(behaviour);
     }
 
     public boolean hasProperty(String property){
-        for (Behaviour b : behaviours){
+        for (InteractableBehaviour b : behaviours){
             if (b.getName().equals(property)){
                 return true;
             }
@@ -137,7 +137,7 @@ public abstract class Interactable extends Entity {
         return false;
     }
 
-    public ArrayList<Behaviour> getBehaviours() {
+    public ArrayList<InteractableBehaviour> getBehaviours() {
         return behaviours;
     }
 

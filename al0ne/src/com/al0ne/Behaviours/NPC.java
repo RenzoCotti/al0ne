@@ -22,6 +22,7 @@ public class NPC extends WorldCharacter {
 
     //maps subjects to answers
     protected HashMap<String, Subject> subjects;
+    //a reaction item is an item that, when given to the npc, produces a result
     protected HashMap<String, PairReactionItem> reactionItems;
     protected String intro;
     protected boolean knowName;
@@ -55,7 +56,7 @@ public class NPC extends WorldCharacter {
         this.type='n';
     }
 
-
+    //is the npc a shopkeeper?
     public boolean isShopkeeper() {
         return isShopkeeper;
     }

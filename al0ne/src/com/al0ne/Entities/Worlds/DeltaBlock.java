@@ -5,6 +5,7 @@ import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
+import com.al0ne.Entities.Items.ConcreteItems.Battery;
 import com.al0ne.Entities.Items.Props.Lightswitch;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
@@ -41,6 +42,7 @@ public class DeltaBlock extends Area {
         startbath.addEntity(serratedKnife);
         startbath.addEntity(jeansAndTShirt);
         startbath.addEntity(new Flashlight());
+        startbath.addEntity(new Battery("AA"));
         startbath.addEntity(new Lightswitch("light switch", "A light switch. " +
                 "Should do something if pressed."));
         startbath.addEntity(new Prop("broken mirror",
@@ -65,6 +67,13 @@ public class DeltaBlock extends Area {
             add(new JunkItem("banana peel", "A yellow-blackish banana peel. Yuck.", 0.1, Size.SMALL));}});
         shadyBuilding.addEntity(garbage);
         addRoom(shadyBuilding);
+
+
+        Room beggarMaze = new Room("Alley with a fire barrel", "");
+        NPC beggar1 = new NPC("a beggar",
+                "A filthy man, extremely this. Probably hasn't eaten in months.",
+                "Could you give me some credits mate?");
+//        beggar1.addReactionItem("credit", );
 
 
 

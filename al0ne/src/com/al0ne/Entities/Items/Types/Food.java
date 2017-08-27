@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Engine.Physics.Behaviours.ConsumableBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.FoodBehaviour;
 import com.al0ne.Entities.Statuses.ConcreteStatuses.Hunger;
 
@@ -19,6 +20,7 @@ public class Food extends Item {
         super(name, name, description, weight, size, null, null);
         addCommand(Command.EAT);
         addBehaviour(new FoodBehaviour());
+        addBehaviour(new ConsumableBehaviour());
         this.foodValue = foodValue;
     }
 

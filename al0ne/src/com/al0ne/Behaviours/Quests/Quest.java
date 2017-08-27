@@ -1,15 +1,11 @@
 package com.al0ne.Behaviours.Quests;
 
-import com.al0ne.Behaviours.Pairs.InteractionResult;
-import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.GameChanges;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
 import com.al0ne.Engine.Physics.Physics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -38,17 +34,17 @@ public abstract class Quest implements Serializable{
     protected String questID;
     protected String questName;
     protected boolean completed;
-    protected ArrayList<Pair> toAdd;
+//    protected ArrayList<Pair> toAdd;
     protected String requiredQuest;
-    protected HashMap<Integer, Object> rewards;
+    protected ArrayList<InteractionBehaviour> rewards;
     //TODO QUEST GIVER? ON COMPLETION MESSAGE?
 
     public Quest(String questName){
         this.questID = "quest"+(++questCounter);
         this.questName = questName;
         this.completed = false;
-        this.toAdd = new ArrayList<>();
-        this.rewards = new HashMap<>();
+//        this.toAdd = new ArrayList<>();
+        this.rewards = new ArrayList<>();
     }
 
     //to implement in different kind of quests
@@ -56,7 +52,7 @@ public abstract class Quest implements Serializable{
 
     public void questReward(Player player){
         printToLog("- - - Quest completed: "+getQuestName()+" - - -");
-        Physics.useResult(new InteractionResult(rewards, null, null, toAdd), player);
+        Physics.useResult(rewards, player);
     }
 
     public String getQuestID() {
@@ -79,14 +75,14 @@ public abstract class Quest implements Serializable{
         this.completed = true;
     }
 
-    public ArrayList<Pair> getToAdd() {
-        return toAdd;
-    }
+//    public ArrayList<Pair> getToAdd() {
+//        return toAdd;
+//    }
 
-    public void addEntity(Entity entity, int count){
-        toAdd.add(new Pair(entity, count));
-        this.rewards.put(3, toAdd);
-    }
+//    public void addEntity(Entity entity, int count){
+//        toAdd.add(new Pair(entity, count));
+//        this.rewards.put(3, toAdd);
+//    }
 
     public String getRequiredQuest() {
         return requiredQuest;
@@ -96,11 +92,11 @@ public abstract class Quest implements Serializable{
         this.requiredQuest = requiredQuest;
     }
 
-    public HashMap<Integer, Object> getRewards() {
+    public ArrayList<InteractionBehaviour> getRewards() {
         return rewards;
     }
 
-    public void addRewards(int number, Object object) {
-        this.rewards.put(number, object);
+    public void addRewards(InteractionBehaviour b) {
+        this.rewards.add(b);
     }
 }

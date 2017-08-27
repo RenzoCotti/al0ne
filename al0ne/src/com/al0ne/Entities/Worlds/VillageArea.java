@@ -11,6 +11,7 @@ import com.al0ne.Behaviours.Quests.KillQuest;
 import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionAdd;
 import com.al0ne.Entities.Enemies.Wolf;
 import com.al0ne.Entities.Items.Types.Food;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
@@ -91,7 +92,8 @@ public class VillageArea extends Area {
         Food eggs = new Food("eggs", "A pack of six fresh eggs.", 0.3, Size.SMALL, 3);
 
         Quest getEggs = new FetchQuest(eggs, 1);
-        getEggs.addEntity(dad, 1);
+        getEggs.addRewards(new InteractionAdd(dad, 1));
+//        getEggs.addEntity(dad, 1);
 
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",

@@ -12,21 +12,22 @@ public class Battery extends Item{
         super(type, "Battery", "Hopefully it's charged",
                 0.1, Size.MICRO, Material.IRON, null);
         switch (type){
-            case "aabattery":
+            case "AA":
                 setName("AA battery");
                 setLongDescription("An AA battery. "+longDescription);
                 setWeight(0.05);
-                setSize(Size.toInt(Size.MICRO));
+                addBehaviour(new BatteryBehaviour("aabattery"));
                 break;
-            case "aaabattery":
+            case "AAA":
                 setName("AAA battery");
                 setLongDescription("An AAA battery. "+longDescription);
                 setWeight(0.02);
-                setSize(Size.toInt(Size.MICRO));
+                addBehaviour(new BatteryBehaviour("aaabattery"));
                 break;
 
         }
-        addBehaviour(new BatteryBehaviour(type));
+        setSize(Size.toInt(Size.MICRO));
+
     }
 
 }

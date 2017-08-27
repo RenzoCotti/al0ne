@@ -1,19 +1,15 @@
 package com.al0ne.Engine.Physics;
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.InteractionResult;
-import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.RequiresBatteryBehaviour;
+import com.al0ne.Engine.Physics.InteractionResult.*;
 import com.al0ne.Entities.Items.Types.ChargeItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -24,21 +20,22 @@ public class Physics implements Serializable{
 
     public static boolean interactionBetween(Player player, Interactable first, Interactable second) {
 
-        HashMap<Integer, Object> result = null;
-        InteractionResult ir = null;
-        for (Behaviour b: first.getBehaviours()){
-            for(Behaviour b1: second.getBehaviours()){
+        ArrayList<InteractionBehaviour> result = null;
+        //we first check interaction with first and second,
+        for (InteractableBehaviour b: first.getBehaviours()){
+            //and then of second with first
+            for(InteractableBehaviour b1: second.getBehaviours()){
                 result = Physics.propertyCheck(first, b, second, b1);
 
+                //if 1 on 2 didnt do anything, do 2 on 1
                 if(result == null){
                     result = Physics.propertyCheck(second, b1, first, b);
                 } else {
-                    ir = new InteractionResult(result, first, second, b.toAdd);
+                    //otherwise, something happened, exit this and process the result
                     break;
                 }
 
                 if(result != null) {
-                    ir = new InteractionResult(result, second, first, b1.toAdd);
                     break;
                 }
             }
@@ -52,16 +49,17 @@ public class Physics implements Serializable{
             return true;
         }
 
-        Physics.useResult(ir, player);
+        Physics.useResult(result, player);
 
         return true;
     }
 
-    private static HashMap<Integer, Object> propertyCheck(Interactable first, Behaviour b, Interactable second, Behaviour b1){
+    private static ArrayList<InteractionBehaviour>
+    propertyCheck(Interactable first, InteractableBehaviour b, Interactable second, InteractableBehaviour b1){
 
         String firstName = b.getName();
         String secondName = b1.getName();
-        HashMap<Integer, Object> result = new HashMap<>();
+        ArrayList<InteractionBehaviour> result = new ArrayList<>();
 
 
     /*return codes:
@@ -72,7 +70,7 @@ public class Physics implements Serializable{
     * 4: remove this from where it was
     * 5: remove other from where it was
     * 6: unlock door
-    * 7: refill charge
+    * 7: checkRefill charge
     * 8: modify health
     * 9: modify integrity
     * */
@@ -82,11 +80,11 @@ public class Physics implements Serializable{
                 switch (secondName){
                     case "water":
                         printToLog("The "+first.getName()+" rusts a bit");
-                        result.put(9, -15);
+                        result.add(new InteractionIntegrity(first, -15));
                         return result;
                     case "acid":
                         printToLog("The "+first.getName()+" corrodes greatly!");
-                        result.put(9, -40);
+                        result.add(new InteractionIntegrity(first, -40));
                         return result;
                 }
 
@@ -94,7 +92,7 @@ public class Physics implements Serializable{
                 switch (secondName){
                     case "fire":
                         printToLog("The "+first.getName()+" catches fire!");
-                        result.put(4, 0);
+                        result.add(new InteractionDestroy(first));
                         return result;
                 }
 
@@ -111,15 +109,16 @@ public class Physics implements Serializable{
 
                         if(doorName.equals(doorUnlocked)){
                             printToLog("You unlock the "+first.getName());
-                            result.put(6, doorName);
+                            result.add(new InteractionUnlock(doorName));
                             return result;
                         }
                 }
             case "requiresbattery":
                 String batteryType = ((RequiresBatteryBehaviour) b).getBatteryType();
                 if(batteryType.equals(secondName)){
-                    result.put(4, second.getID());
-                    result.put(7, first.getID());
+                    result.add(new InteractionDestroy(second));
+                    result.add(new InteractionRefill((ChargeItem) first));
+                    printToLog("You recharge the "+first.getName());
                     return result;
                 }
         }
@@ -128,76 +127,12 @@ public class Physics implements Serializable{
 
 
 
-    public static void useResult(InteractionResult ir, Player player){
+    public static void useResult(ArrayList<InteractionBehaviour> result, Player player){
 
-
-        Room currentRoom = player.getCurrentRoom();
-        HashMap<Integer, Object> result = ir.getResult();
-        ArrayList<Pair> toAdd = ir.getToAdd();
-
-        Interactable first = ir.getFirst();
-        Interactable second = ir.getSecond();
-
-
-        for(Integer i : result.keySet()){
-            switch (i){
-
-                case 1:
-                    //success, no need to print
-                    break;
-                case 3:
-                    //tries to add to inventory, if can't add to room
-                    for (Pair p: toAdd){
-                        currentRoom.addEntity(p.getEntity(), p.getCount());
-                    }
-                    break;
-
-//                case 2:
-//                    //add to room
-//                    Pair pair1 = interacted.getEntity().getPair();
-//                    Entity entity = pair1.getEntity();
-//                    int count = pair1.getCount();
-//                    currentRoom.addEntity(entity, count);
-//                    break;
-                case 4:
-                    //remove this
-                    if(player.hasItemInInventory((String)result.get(i))){
-                        Item item = (Item) player.getInventory().get(result.get(i)).getEntity();
-                        player.removeOneItem(item);
-                    } else{
-                        currentRoom.getEntities().remove(result.get(i));
-                    }
-                    break;
-                case 6:
-                    currentRoom.unlockDirection((String)result.get(i));
-                    break;
-                case 7:
-                    if(second == null || first == null){
-                        System.out.println("probably a quest tried to recharge an item");
-                        break;
-                    }
-                    //refill
-                    ((ChargeItem) first).refill(player, second);
-                    break;
-                case 8:
-                    //modify health
-                    player.modifyHealth((Integer)result.get(i));
-                    break;
-                case 9:
-                    if(second == null){
-                        System.out.println("probably a quest tried to change an object's integrity");
-                        break;
-                    }
-                    //modify integrity
-                    ir.getFirst().modifyIntegrity((Integer) result.get(i));
-                    break;
-
-                default:
-                    System.out.println("ERROR: no behaviour code found");
-                    break;
-
-            }
+        for(InteractionBehaviour b : result){
+            b.interactionEffect(player);
         }
+
     }
 
 }

@@ -32,7 +32,7 @@ public abstract class ChargeItem extends Item{
         this.propertyRequired = property;
     }
 
-    public int refill(Player player, Entity entity){
+    public int checkRefill(Player player, Entity entity){
         if(!canRecharge){
             return 0;
         } else if (entity.getType() == 'i' || entity.getType() == 'p'){
@@ -55,6 +55,11 @@ public abstract class ChargeItem extends Item{
             }
         }
         return 0;
+    }
+
+    public int refill(){
+        this.currentCharges = maxCharges;
+        return 1;
     }
 
     public int getMaxCharges() {
