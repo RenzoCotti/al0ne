@@ -1,10 +1,11 @@
 package com.al0ne.Behaviours;
 
-import com.al0ne.Behaviours.Pairs.PairReactionItem;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Quests.Quest;
 import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -23,7 +24,7 @@ public class NPC extends WorldCharacter {
     //maps subjects to answers
     protected HashMap<String, Subject> subjects;
     //a reaction item is an item that, when given to the npc, produces a result
-    protected HashMap<String, PairReactionItem> reactionItems;
+    protected HashMap<String, ArrayList<InteractionBehaviour>> reactionItems;
     protected String intro;
     protected boolean knowName;
 
@@ -66,12 +67,12 @@ public class NPC extends WorldCharacter {
         subjects.put(subjectID, subject);
     }
 
-    public void addReactionItem(String itemID, String quest, Item item){
-        reactionItems.put(itemID, new PairReactionItem(quest, item));
+    public void addReactionItem(String itemID, ArrayList<InteractionBehaviour> behaviours){
+        reactionItems.put(itemID, behaviours);
     }
 
-    public void addReactionItem(String itemID, Item item){
-        reactionItems.put(itemID, new PairReactionItem(null, item));
+    public void addReactionItem(String itemID, InteractionBehaviour behaviour){
+        reactionItems.put(itemID, new ArrayList<InteractionBehaviour>(){{add(behaviour);}});
     }
 
     public boolean talkAbout(String subject, Player player){

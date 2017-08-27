@@ -183,7 +183,7 @@ public class Room extends Entity {
         ArrayList<NPC> npcList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='n'){
+            if (e instanceof NPC){
                 NPC npc = (NPC) e;
                 npcList.add(npc);
             }
@@ -194,7 +194,7 @@ public class Room extends Entity {
     public NPC getNPC(String name) {
         ArrayList<NPC> npcs = getNPCList();
         for (Entity e : npcs){
-            if (e.getName().toLowerCase().equals(name)){
+            if (e.getName().toLowerCase().contains(name)){
                 return (NPC) e;
             }
         }

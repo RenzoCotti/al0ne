@@ -18,8 +18,8 @@ public class Area implements Serializable{
 
 
 
-    public Area(String worldName) {
-        this.areaName = worldName;
+    public Area(String areaName) {
+        this.areaName = areaName;
         this.rooms = new HashMap<>();
 //        this.lootTable = new LootTable();
     }

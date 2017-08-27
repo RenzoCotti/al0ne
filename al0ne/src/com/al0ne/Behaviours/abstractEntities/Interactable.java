@@ -2,7 +2,7 @@ package com.al0ne.Behaviours.abstractEntities;
 
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Player;
-import com.al0ne.Engine.Physics.InteractableBehaviour;
+import com.al0ne.Engine.Physics.Behaviour;
 import com.al0ne.Engine.Physics.Physics;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public abstract class Interactable extends Entity {
     //todo: add plural?
 
-    protected ArrayList<InteractableBehaviour> behaviours;
+    protected ArrayList<Behaviour> behaviours;
 
 
     protected boolean canDrop;
@@ -62,7 +62,7 @@ public abstract class Interactable extends Entity {
 
     }
 
-//    public void useResult(HashMap<Integer, Object> result, Player player, InteractableBehaviour interacted, Interactable inter){
+//    public void useResult(HashMap<Integer, Object> result, Player player, Behaviour interacted, Interactable inter){
 //
 //        Room currentRoom = player.getCurrentRoom();
 //        for(Integer i : result.keySet()){
@@ -124,12 +124,12 @@ public abstract class Interactable extends Entity {
 //        }
 //    }
 
-    public void addBehaviour(InteractableBehaviour behaviour){
+    public void addBehaviour(Behaviour behaviour){
         behaviours.add(behaviour);
     }
 
     public boolean hasProperty(String property){
-        for (InteractableBehaviour b : behaviours){
+        for (Behaviour b : behaviours){
             if (b.getName().equals(property)){
                 return true;
             }
@@ -137,7 +137,7 @@ public abstract class Interactable extends Entity {
         return false;
     }
 
-    public ArrayList<InteractableBehaviour> getBehaviours() {
+    public ArrayList<Behaviour> getBehaviours() {
         return behaviours;
     }
 

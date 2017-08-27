@@ -1,8 +1,8 @@
 package com.al0ne.Engine.Physics.Behaviours;
 
-import com.al0ne.Engine.Physics.InteractableBehaviour;
+import com.al0ne.Engine.Physics.Behaviour;
 
-public class BatteryBehaviour extends InteractableBehaviour {
+public class BatteryBehaviour extends Behaviour {
     public BatteryBehaviour(String s) {
         super(s);
     }

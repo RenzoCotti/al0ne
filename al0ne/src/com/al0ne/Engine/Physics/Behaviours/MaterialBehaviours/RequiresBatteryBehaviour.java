@@ -1,8 +1,8 @@
 package com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours;
 
-import com.al0ne.Engine.Physics.InteractableBehaviour;
+import com.al0ne.Engine.Physics.Behaviour;
 
-public class RequiresBatteryBehaviour extends InteractableBehaviour {
+public class RequiresBatteryBehaviour extends Behaviour {
     protected String batteryType;
     public RequiresBatteryBehaviour(String batteryType) {
         super("requiresbattery");

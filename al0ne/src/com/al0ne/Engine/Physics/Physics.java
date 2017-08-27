@@ -22,9 +22,9 @@ public class Physics implements Serializable{
 
         ArrayList<InteractionBehaviour> result = null;
         //we first check interaction with first and second,
-        for (InteractableBehaviour b: first.getBehaviours()){
+        for (Behaviour b: first.getBehaviours()){
             //and then of second with first
-            for(InteractableBehaviour b1: second.getBehaviours()){
+            for(Behaviour b1: second.getBehaviours()){
                 result = Physics.propertyCheck(first, b, second, b1);
 
                 //if 1 on 2 didnt do anything, do 2 on 1
@@ -55,7 +55,7 @@ public class Physics implements Serializable{
     }
 
     private static ArrayList<InteractionBehaviour>
-    propertyCheck(Interactable first, InteractableBehaviour b, Interactable second, InteractableBehaviour b1){
+    propertyCheck(Interactable first, Behaviour b, Interactable second, Behaviour b1){
 
         String firstName = b.getName();
         String secondName = b1.getName();

@@ -4,6 +4,7 @@ import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionAdd;
 import com.al0ne.Entities.Enemies.Snake;
 import com.al0ne.Entities.Items.Types.Container;
 import com.al0ne.Entities.Items.Types.Wearable.*;
@@ -216,7 +217,7 @@ public class TestingArea extends Area {
         HolySword sword = new HolySword();
         sword.setType("holy");
         sword.setDamage(8);
-        priest.addReactionItem("holysword", sword);
+        priest.addReactionItem("holysword", new InteractionAdd(sword, 1));
         sanctuary.addEntity(priest);
         sanctuary.addEntity(new HolyFountain());
         addRoom(sanctuary);
@@ -269,7 +270,7 @@ public class TestingArea extends Area {
         Room gateRoom = new Room("Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         LockedDoor bossgate = new LockedDoor("Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON, gateRoom, "east");
         Key bosskey = bossgate.generateKey("Shiny key");
-        emon.addReactionItem("brokenkey", bosskey);
+        emon.addReactionItem("brokenkey", new InteractionAdd(bosskey, 1));
 
         gateRoom.addEntity(bossgate);
         //        gateRoom.lockDirection("east", "bossgate");

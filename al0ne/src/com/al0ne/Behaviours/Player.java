@@ -563,4 +563,15 @@ public class Player extends WorldCharacter {
 
         }
     }
+
+    public boolean completeQuest(String questID){
+        Quest q = quests.get(questID);
+        if(q != null && !q.isCompleted()){
+            q.setCompleted();
+            q.questReward(this);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

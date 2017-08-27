@@ -9,12 +9,12 @@ import java.util.ArrayList;
 /**
  * Created by BMW on 09/07/2017.
  */
-public abstract class InteractableBehaviour implements Serializable{
+public abstract class Behaviour implements Serializable{
     public String name;
     protected ArrayList<Pair> toAdd;
 
 
-    public InteractableBehaviour(String s){
+    public Behaviour(String s){
         this.toAdd = new ArrayList<>();
         this.name = s;
     }

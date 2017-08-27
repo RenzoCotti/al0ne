@@ -3,21 +3,25 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionPrint;
 import com.al0ne.Entities.Items.ConcreteItems.Battery;
 import com.al0ne.Entities.Items.Props.Lightswitch;
 import com.al0ne.Entities.Items.Props.LockedDoor;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Flashlight;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
+import com.al0ne.Entities.Items.Types.Wearable.Weapon;
 import com.al0ne.Entities.Statuses.DeathStatus;
 
 import java.util.ArrayList;
 
 public class DeltaBlock extends Area {
     public DeltaBlock() {
-        super("cyberworld");
+        super("deltablock");
 
         Room alley = new Room("Dark alley",
                 "The smell of urine permeates this shady alley. " +
@@ -69,11 +73,51 @@ public class DeltaBlock extends Area {
         addRoom(shadyBuilding);
 
 
-        Room beggarMaze = new Room("Alley with a fire barrel", "");
+        Room beggarMaze = new Room("Fire barrel", "");
         NPC beggar1 = new NPC("a beggar",
                 "A filthy man, extremely this. Probably hasn't eaten in months.",
                 "Could you give me some credits mate?");
-//        beggar1.addReactionItem("credit", );
+        beggar1.addReactionItem("credit", new InteractionPrint("Thank you so much! I really owe you one"));
+        beggar1.setShortDescription("a really scruffy man");
+        beggarMaze.addEntity(beggar1);
+        beggarMaze.addEntity(new Prop("Fire barrel",
+                "A barrel full of gasoline and combustible stuff. The fire is roaring."));
+        addRoom(beggarMaze);
+
+        Room trashMaze = new Room("Alley full of trash",
+                "This alley has been used as a giant trash bin. Pretty much the standard in Delta block these days.");
+        trashMaze.addEntity(new Prop("Trash container", "It's yellow, although the paint has mostly chipped off," +
+                " revealing a very rusty structure underneath"));
+        trashMaze.addEntity(new Prop("trash", "Some junk on the ground, namely cans, broken glass bottles and similar.",
+                "some trash on the ground"));
+        addRoom(trashMaze);
+
+        Room mazeSewers = new Room("Manhole access", "");
+        mazeSewers.addEntity(new Prop("Manhole", "You see a locked manhole, probably leading to the sewers."));
+        addRoom(mazeSewers);
+
+        Room mazeEntrance = new Room("Dimly lit back street", "This place looks familiar...");
+        Room maze1 = new Room("Dimly lit back street", "This place looks familiar...");
+        Room maze2 = new Room("Dimly lit back street", "This place looks familiar...");
+
+        addRoom(mazeEntrance);
+        addRoom(maze1);
+        addRoom(maze2);
+
+        Room unconsciousMan = new Room("Unconscious man", "This place smells of urine, " +
+                "probably because of the unconscious guy sleeping in his own pee");
+        unconsciousMan.addEntity(new InvisibleProp("unconscious man", "Not very reactive at all. " +
+                "The empty bottles of vodka near him might have something to do with it."));
+        unconsciousMan.addEntity(new JunkItem("Empty bottle of vodka",
+                "A bottle of vodka of a well known brand. Cheap shit.", 0.3, Material.GLASS), 2);
+        unconsciousMan.addEntity(new Weapon("brokenbottle","broken bottle of vodka",
+                "This bottle of vodka is broken, the sharpness might come in handy.", "sharp",
+                0, 1,0.3, Size.SMALL, Material.GLASS), 1);
+        addRoom(unconsciousMan);
+
+
+
+
 
 
 
@@ -87,7 +131,26 @@ public class DeltaBlock extends Area {
 
 
         shadyBuilding.addExit("south", startbath);
+        shadyBuilding.addExit("north", beggarMaze);
         startbath.addExit("north", shadyBuilding);
+        beggarMaze.addExit("east", trashMaze);
+        beggarMaze.addExit("south", shadyBuilding);
+        beggarMaze.addExit("west", mazeEntrance);
+        trashMaze.addExit("west", beggarMaze);
+        mazeEntrance.addExit("north", mazeSewers);
+        mazeEntrance.addExit("east", beggarMaze);
+        mazeEntrance.addExit("south", maze1);
+        mazeEntrance.addExit("west", mazeEntrance);
+        mazeSewers.addExit("south", mazeEntrance);
+        maze1.addExit("north", mazeEntrance);
+        maze1.addExit("east", mazeEntrance);
+        maze1.addExit("south", mazeEntrance);
+        maze1.addExit("west", maze2);
+        maze2.addExit("north", unconsciousMan);
+        maze2.addExit("east", maze1);
+        maze2.addExit("south", mazeEntrance);
+        maze2.addExit("west", mazeEntrance);
+        unconsciousMan.addExit("south", maze2);
 
 
 
@@ -100,6 +163,7 @@ public class DeltaBlock extends Area {
 
         player.addStatus(new DeathStatus("Kidney failure", 60, "You feel dizzy.",
                 "Your kidney hurts like hell.", "You died of kidney failure."));
+//        player.addQuest(new TravelQuest());
 
 //        player.simpleAddItem(new Credit(), 5);
 //
