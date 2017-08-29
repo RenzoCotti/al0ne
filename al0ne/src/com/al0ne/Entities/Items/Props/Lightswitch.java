@@ -12,8 +12,13 @@ public class Lightswitch extends Prop{
 
     @Override
     public String used(Player player) {
-        player.getCurrentRoom().setLit(true);
 
+        if(player.getCurrentRoom().isLit()){
+            player.getCurrentRoom().setLit(false);
+            return "It gets darker.";
+        }
+        player.getCurrentRoom().setLit(true);
+        player.getCurrentRoom().printRoom();
         return "It gets brighter.";
     }
 }

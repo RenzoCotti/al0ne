@@ -15,6 +15,7 @@ import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Flashlight;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
 import com.al0ne.Entities.Items.Types.Wearable.Weapon;
+import com.al0ne.Entities.NPCs.Shopkeeper;
 import com.al0ne.Entities.Statuses.DeathStatus;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ public class DeltaBlock extends Area {
     public DeltaBlock() {
         super("deltablock");
 
-        Room alley = new Room("Dark alley",
+        Room residential1 = new Room("Residential district 1",
                 "The smell of urine permeates this shady alley. " +
                         "You can hear the rain ticking heavily on the roof above you.");
 
-        addRoom(alley);
+        addRoom(residential1);
 
         Room startbath = new Room("Dark bathroom", "Very dark, humid and smelling of blood.");
         startbath.setLit(false);
@@ -116,6 +117,26 @@ public class DeltaBlock extends Area {
         addRoom(unconsciousMan);
 
 
+        Room graffittiMaze = new Room("Graffiti on the wall",
+                "On the brick wall on your left you see some graffiti.");
+        graffittiMaze.addEntity(new InvisibleProp("graffiti", "A black and white graffiti " +
+                "of a guy wearing a baseball cap and a jacket that partly covers his face. He seems to be about to throw a " +
+                "roll of toilet paper. Certainly odd."));
+        graffittiMaze.addEntity(new InvisibleProp("brick wall", "looks very rough and quickly made, " +
+                "the bricks have started breaking in some points."));
+        addRoom(graffittiMaze);
+
+        Room drugMaze = new Room("Dark Alley", "It is really dark in here");
+        Shopkeeper drugDealer1 = new Shopkeeper("Shady", "lul",
+                "You're looking for some... special... items?");
+        drugDealer1.simpleAddItem(new JunkItem("weed", "Some pot you bought from a guy on the street. " +
+                "Hopefully it's not just dried grass.", 0.05, Size.VSMALL), 20);
+        drugDealer1.simpleAddItem(new JunkItem("Ecstasy",
+                "Happiness in pills. Well, until the effect wears out, that is.",
+                0.01, Size.MICRO), 50);
+        drugMaze.addEntity(drugDealer1);
+        addRoom(drugMaze);
+
 
 
 
@@ -151,6 +172,10 @@ public class DeltaBlock extends Area {
         maze2.addExit("south", mazeEntrance);
         maze2.addExit("west", mazeEntrance);
         unconsciousMan.addExit("south", maze2);
+        unconsciousMan.addExit("west", graffittiMaze);
+        graffittiMaze.addExit("west", drugMaze);
+        graffittiMaze.addExit("east", graffittiMaze);
+        drugMaze.addExit("east", graffittiMaze);
 
 
 
