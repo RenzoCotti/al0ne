@@ -15,11 +15,11 @@ public class Subject implements Serializable{
     private boolean addsQuest;
     private Quest quest;
 
-    public Subject(String answer, boolean givesItem, Pair item, boolean addsQuest, Quest quest) {
+    public Subject(String answer, Pair item, Quest quest) {
         this.answer = answer;
-        this.givesItem = givesItem;
+        this.givesItem = true;
         this.item = item;
-        this.addsQuest = addsQuest;
+        this.addsQuest = false;
         this.quest = quest;
     }
 
@@ -31,19 +31,19 @@ public class Subject implements Serializable{
         this.quest = null;
     }
 
-    public Subject(String answer, boolean givesItem, Pair item) {
+    public Subject(String answer, Pair item) {
         this.answer = answer;
-        this.givesItem = givesItem;
+        this.givesItem = true;
         this.item = item;
         this.addsQuest = false;
         this.quest = null;
     }
 
-    public Subject(String answer, boolean addsQuest, Quest quest) {
+    public Subject(String answer, Quest quest) {
         this.answer = answer;
         this.givesItem = false;
         this.item = null;
-        this.addsQuest = addsQuest;
+        this.addsQuest = true;
         this.quest = quest;
     }
 

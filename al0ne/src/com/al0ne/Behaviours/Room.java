@@ -116,6 +116,12 @@ public class Room extends Entity {
     }
 
     public void addEntity(Entity entity) {
+
+        //avoiding a room containing itself
+        if(entity.equals(this)){
+            return;
+        }
+
         if(entities.get(entity.getID()) != null){
             entities.get(entity.getID()).addCount();
             return;
@@ -124,6 +130,12 @@ public class Room extends Entity {
     }
 
     public void addEntity(Entity entity, int qty) {
+
+        //avoiding a room containing itself
+        if(entity.equals(this)){
+            return;
+        }
+
         if(entities.get(entity.getID()) != null){
             entities.get(entity.getID()).modifyCount(qty);
             return;
@@ -398,6 +410,50 @@ public class Room extends Entity {
 
     public void addExit(String exit, Room room) {
         this.exits.put(exit, room.getID());
+    }
+
+    //this connects the two rooms in a symmetric fashion, eg R1 --W--> R2 and R2 --E--> R1
+    public void connectRoom(String exit, Room room){
+        String other;
+
+        switch (exit){
+            case "north":
+                other="south";
+                break;
+            case "south":
+                other="north";
+                break;
+            case "east":
+                other="west";
+                break;
+            case "west":
+                other="east";
+                break;
+            case "southeast":
+                other="northwest";
+                break;
+            case "southwest":
+                other="northeast";
+                break;
+            case "northeast":
+                other="southwest";
+                break;
+            case "northwest":
+                other="southeast";
+                break;
+            case "up":
+                other="down";
+                break;
+            case "down":
+                other="up";
+                break;
+            default:
+                System.out.println("Connecting room failed. "+room.getName()+" and "+this.getName());
+                return;
+        }
+
+        this.exits.put(exit, room.getID());
+        room.exits.put(other, this.getID());
     }
 
     //this function locks direction behind doorID

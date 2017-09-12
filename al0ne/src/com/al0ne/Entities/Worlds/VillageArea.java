@@ -97,7 +97,7 @@ public class VillageArea extends Area {
 
         mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!",
-                true, new Pair(new BrassCoin(), 3), true, getEggs));
+                new Pair(new BrassCoin(), 3), getEggs));
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
@@ -126,12 +126,11 @@ public class VillageArea extends Area {
         addRoom(forest3);
 
         dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
-                true, new Pair(new Sword(Material.IRON), 1),
+                new Pair(new Sword(Material.IRON), 1),
 //                true, new TravelQuest("gotemple", forest3)));
-                true, new KillQuest(new Wolf(), 3)));
+                new KillQuest(new Wolf(), 3)));
 
-        mom.addSubject("dad", new Subject("go to the temple",
-                true, new TravelQuest(forest3)));
+        mom.addSubject("dad", new Subject("go to the temple", new TravelQuest(forest3)));
 //                true, new KillQuest("killwolves", wolf, 3)));
 
 

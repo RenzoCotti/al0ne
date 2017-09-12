@@ -12,9 +12,20 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class TeleportProp extends Prop{
     protected String roomID;
+    protected String teleportMessage;
     public TeleportProp(String name, String description, Room r) {
         super(name, description);
         this.roomID = r.getID();
+        teleportMessage = "You are now in another room";
+    }
+    public TeleportProp(String name, String description, Room r, String s) {
+        super(name, description);
+        this.roomID = r.getID();
+        teleportMessage = s;
+    }
+
+    public void setTeleportMessage(String teleportMessage) {
+        this.teleportMessage = teleportMessage;
     }
 
     @Override
@@ -22,7 +33,7 @@ public class TeleportProp extends Prop{
         if(Main.game.getCurrentWorld().getRooms().get(roomID) != null){
             Room newCurrentRoom = Main.game.getCurrentWorld().getRooms().get(roomID);
             player.setCurrentRoom(newCurrentRoom);
-            printToLog("You see a blinding light, and suddenly you don't recognise this place anymore.");
+            printToLog(teleportMessage);
             printToLog();
             newCurrentRoom.printRoom();
         } else{

@@ -3,6 +3,7 @@ package com.al0ne.Entities.Worlds;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
+import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
@@ -11,6 +12,7 @@ import com.al0ne.Engine.Physics.InteractionResult.InteractionPrint;
 import com.al0ne.Entities.Items.ConcreteItems.Battery;
 import com.al0ne.Entities.Items.Props.Lightswitch;
 import com.al0ne.Entities.Items.Props.LockedDoor;
+import com.al0ne.Entities.Items.Props.TeleportProp;
 import com.al0ne.Entities.Items.Types.Wearable.BodyClothing;
 import com.al0ne.Entities.Items.ConcreteItems.Flashlight;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
@@ -141,43 +143,111 @@ public class DeltaBlock extends Area {
 
 
 
+        
 
-
-
-
-
-
-
-
-
-
-        shadyBuilding.addExit("south", startbath);
-        shadyBuilding.addExit("north", beggarMaze);
-        startbath.addExit("north", shadyBuilding);
-        beggarMaze.addExit("east", trashMaze);
-        beggarMaze.addExit("south", shadyBuilding);
-        beggarMaze.addExit("west", mazeEntrance);
-        trashMaze.addExit("west", beggarMaze);
-        mazeEntrance.addExit("north", mazeSewers);
-        mazeEntrance.addExit("east", beggarMaze);
-        mazeEntrance.addExit("south", maze1);
+        shadyBuilding.connectRoom("south", startbath);
+        shadyBuilding.connectRoom("north", beggarMaze);
+        beggarMaze.connectRoom("east", trashMaze);
+        beggarMaze.connectRoom("west", mazeEntrance);
+        mazeEntrance.connectRoom("north", mazeSewers);
+        mazeEntrance.connectRoom("south", maze1);
         mazeEntrance.addExit("west", mazeEntrance);
         mazeSewers.addExit("south", mazeEntrance);
-        maze1.addExit("north", mazeEntrance);
         maze1.addExit("east", mazeEntrance);
         maze1.addExit("south", mazeEntrance);
-        maze1.addExit("west", maze2);
-        maze2.addExit("north", unconsciousMan);
+        maze1.connectRoom("west", maze2);
+        maze2.connectRoom("north", unconsciousMan);
         maze2.addExit("east", maze1);
         maze2.addExit("south", mazeEntrance);
         maze2.addExit("west", mazeEntrance);
-        unconsciousMan.addExit("south", maze2);
-        unconsciousMan.addExit("west", graffittiMaze);
-        graffittiMaze.addExit("west", drugMaze);
-        graffittiMaze.addExit("east", graffittiMaze);
-        drugMaze.addExit("east", graffittiMaze);
+        unconsciousMan.connectRoom("west", graffittiMaze);
+        graffittiMaze.connectRoom("west", drugMaze);
 
 
+
+
+
+
+        Room hospitalReception = new Room("Hospital reception", "");
+        hospitalReception.addEntity(new Prop("Desk",
+                "A white desk, with some papers and a computer on top.", Material.IRON));
+        hospitalReception.addEntity(new Prop("Plant", "A decorative fake plant, it's about 1m tall."));
+        NPC hospitalReceptionist = new NPC("a receptionist", "A receptionist in her 40s. " +
+                "She looks tired and a bit flushed because of the stress, " +
+                "the white apron she has to wear just makes it more obvious.", "Oh my God. You need a doctor, now.");
+        hospitalReceptionist.addSubject("doctor",
+                new Subject("Just go in the waiting room, a doctor will be there shortly."));
+        hospitalReceptionist.addSubject("hospital",
+                new Subject("It certainly has seen better days, but it does its job."));
+        hospitalReception.addEntity(hospitalReceptionist);
+
+        addRoom(hospitalReception);
+
+
+        Room hospitalWR = new Room("Smelly room", "This looks like the hospital waiting room.");
+        hospitalWR.addEntity(new Prop("Chairs", "Some metal chairs. They look uncomfortable to sit on, " +
+                "and you can see some rust on their legs.", Material.IRON));
+        hospitalWR.addEntity(new Prop("Painting", "It's a print of a famous painting representing a" +
+                "storm over a city full of neon lights."));
+        hospitalWR.addEntity(new Prop("Magazines", "Fairly generic magazines. Gossip, a few newspapers and... oh. " +
+                "What's that, an adult magazine?"));
+        NPC wrNPC1 = new NPC("a bloody person", "This person's face is bloody, and he has a few bruises as well. " +
+                "Looks that he was beaten up pretty badly.", "Mind your own fucking business.");
+        NPC wrNPC2 = new NPC("a very pale person", "This person's skin is so pale he looks as if he were a ghost. " +
+                "His eyes are watery, and he looks as if he hasn't slept in ages.", "Please, just let me be. Been waiting for the last 6h here.");
+        hospitalWR.addEntity(wrNPC1);
+        hospitalWR.addEntity(wrNPC2);
+
+        addRoom(hospitalWR);
+
+        Room ER1 = new Room("Emergency Room 1", "This room has a very bright light, almost blinding.");
+        NPC surgeon = new NPC("a surgeon", "A woman wearing a surgical mask, a green hairnet, " +
+                "some latex gloves and a white apron. She looks concerned.", "Please wait for your turn.");
+        ER1.addEntity(surgeon);
+        ER1.addEntity(new Prop("Surgery table", "A table covered in green plastic. It's quite large."));
+        //TODO add medicines in here
+        ER1.addEntity(new Prop("Locked cupboard", "You can see through the glass what " +
+                "probably are medicines, painkillers and such."));
+        addRoom(ER1);
+
+        Room ER2 = new Room("Emergency Room 2", "The walls of this room are disturbingly " +
+                "white, they look even too sterile.");
+        ER2.addEntity(new Prop("Surgery table", "A table covered in green plastic. It's quite large."));
+        ER2.addEntity(new Prop("Locked cupboard", "You can see through the glass what " +
+                "probably are medicines, painkillers and such."));
+        addRoom(ER2);
+
+        Room hospitalUpper = new Room("Upper floor", "This is the floor where in-patients recover.");
+        hospitalUpper.addEntity(new TeleportProp("Elevator", "An elevator made out of metal", hospitalReception));
+        hospitalReception.addEntity(new TeleportProp("Elevator", "An elevator made out of metal", hospitalUpper));
+        addRoom(hospitalUpper);
+
+        Room patientRoom1 = new Room("Patient rooms 1", "An oddly empty room.");
+        patientRoom1.addEntity(new Prop("Beds", "Clean beds, looks like nobody is " +
+                "staying here for the time being."));
+        patientRoom1.addEntity(new Prop("TV", "A news presenter is rambling about a recent homicide."));
+        addRoom(patientRoom1);
+
+        Room patientRoom2 = new Room("Patient rooms 2", "As soon as you enter, " +
+                "you hear a very distinct sound of snoring.");
+        patientRoom2.addEntity(new Prop("Beds", "Two of the 5 beds are occupied. In one, a person is sleeping."));
+        patientRoom2.addEntity(new Prop("Broken TV", "The screen somehow cracked, even though the TV is quite high up."));
+        NPC pat1 = new NPC("a patient", "His leg is pretty messed up.", "Don't mind my leg, " +
+                "it's still recovering from the surgery.");
+        pat1.addSubject("leg", new Subject("It got pretty messed up in a car accident, luckily the surgery looks promising."));
+        pat1.addSubject("car accident", new Subject("A fucker ran me over and didn't even stop. " +
+                "I had passed out, and luckily somebody called an ambulance."));
+        pat1.addSubject("surgery", new Subject("It was last week, and made by this really cute female surgeon."));
+        patientRoom2.addEntity(pat1);
+        patientRoom2.addEntity(new Prop("sleeping patient", "He's sleeping quite deeply. Better not disturb him."));
+        addRoom(patientRoom2);
+
+        hospitalReception.connectRoom("west", ER1);
+        hospitalReception.connectRoom("east", ER2);
+        hospitalReception.connectRoom("up", hospitalUpper);
+        hospitalReception.connectRoom("north", hospitalWR);
+        hospitalUpper.connectRoom("west", patientRoom1);
+        hospitalUpper.connectRoom("east", patientRoom2);
 
 
 
