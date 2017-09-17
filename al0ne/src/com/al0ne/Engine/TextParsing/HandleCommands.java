@@ -8,6 +8,7 @@ import com.al0ne.Behaviours.Pairs.SpellPair;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Types.Container;
@@ -963,16 +964,16 @@ public class HandleCommands {
         ArrayList<Pair> entities = getPotentialItem(enemyName, player, 1).getItems();
         if (entities.size() == 1 && !execute) {
             Entity enemy = entities.get(0).getEntity();
-            if( enemy instanceof NPC){
+            if( enemy instanceof NPC && ((NPC) enemy).isQuestCharacter()){
                 printToLog("It's best not to attack "+ enemy.getName()+".");
                 return false;
-            } else if(enemy instanceof Enemy){
-                return PlayerActions.attack(player, (Enemy) entities.get(0).getEntity());
+            } else if(enemy instanceof WorldCharacter){
+                return PlayerActions.attack(player, (WorldCharacter) entities.get(0).getEntity());
             } else {
                 printToLog("The "+enemy.getName().toLowerCase() +" isn't threatening.");
             }
             return false;
-        } else if (entities.size() == 1 && execute) {
+        } else if (entities.size() == 1) {
             if(entities.get(0).getEntity().getType() == 'n'){
                 ((Enemy)entities.get(0).getEntity()).handleLoot(player);
                 currentRoom.getEntities().remove(entities.get(0).getEntity().getID());

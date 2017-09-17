@@ -1,4 +1,4 @@
-package com.al0ne.Entities.Worlds;
+package com.al0ne.Entities.Areas;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;

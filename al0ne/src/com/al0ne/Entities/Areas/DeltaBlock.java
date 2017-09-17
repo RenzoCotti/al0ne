@@ -1,14 +1,14 @@
-package com.al0ne.Entities.Worlds;
+package com.al0ne.Entities.Areas;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Enums.Size;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionPrint;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionUnlock;
 import com.al0ne.Entities.Items.ConcreteItems.Battery;
 import com.al0ne.Entities.Items.Props.Lightswitch;
 import com.al0ne.Entities.Items.Props.LockedDoor;
@@ -143,7 +143,7 @@ public class DeltaBlock extends Area {
 
 
 
-        
+
 
         shadyBuilding.connectRoom("south", startbath);
         shadyBuilding.connectRoom("north", beggarMaze);
@@ -249,6 +249,25 @@ public class DeltaBlock extends Area {
         hospitalUpper.connectRoom("west", patientRoom1);
         hospitalUpper.connectRoom("east", patientRoom2);
 
+
+        Room checkpointDelta = new Room("Checkpoint", "You approach a  military checkpoint separating " +
+                "the delta block from the epsilon area.");
+        checkpointDelta.lockDirection("west", "needdocs");
+        NPC checkpointGuard = new NPC("a checkpoint guard", "A fairly large man, with a stern look in his eyes. " +
+                "He's wearing a bulletproof vest.", "Hey, show me your documents");
+        ArrayList<InteractionBehaviour> guardReactions = new ArrayList<>();
+        guardReactions.add(new InteractionUnlock("needdocs"));
+        guardReactions.add(new InteractionPrint("Neat, you can pass."));
+        checkpointGuard.addReactionItem("yourdocuments", guardReactions);
+        checkpointGuard.addSubject("documents", new Subject("Yes, your personal " +
+                "documents stating you're from delta block. Now."));
+        checkpointGuard.addSubject("epsilon area", new Subject("You need some documents in order to go to epsilon."));
+        checkpointDelta.addEntity(checkpointGuard);
+        NPC checkpointArmedGuard = new NPC("an armed guard", "Tough looking, wears a bulletproof vest and wields an assault rifle. " +
+                "He's currently aiming at you.", "Give your documents to the other guy.");
+        checkpointDelta.addEntity(checkpointArmedGuard);
+        checkpointDelta.addEntity(new Prop("blockade", "you see a barricade blocking access to the west. " +
+                "The only way through is through a guarded door."));
 
 
 

@@ -9,6 +9,7 @@ import com.al0ne.Behaviours.Quests.TravelQuest;
 import com.al0ne.Behaviours.abstractEntities.Enemy;
 import com.al0ne.Behaviours.abstractEntities.Entity;
 import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Types.Container;
@@ -85,7 +86,7 @@ public class PlayerActions {
     // to the type of damage).
     //at this point, we make the enemy attack, if its still alive
     //and we snooze him this turn (all aggrod enemies in the room attack at EOT)
-    public static boolean attack(Player player, Enemy enemy){
+    public static boolean attack(Player player, WorldCharacter enemy){
         Room currentRoom = player.getCurrentRoom();
         Pair p = currentRoom.getEntityPair(enemy.getID());
             String type;
@@ -128,6 +129,13 @@ public class PlayerActions {
 
         int inflictedDamage = player.getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
 
+        String nameToUse;
+        if(enemy instanceof NPC){
+            nameToUse = enemy.getName();
+        } else {
+            nameToUse = "the "+enemy.getName().toLowerCase();
+        }
+
 //            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
             if(attackRoll > dodgeRoll){
 
@@ -140,7 +148,7 @@ public class PlayerActions {
                         //weapon jammed, no shooting
                         printToLog("Your weapon malfunctions and you aren't able to shoot.");
                     } else {
-                        printToLog("You shoot and hit the "+enemy.getName().toLowerCase()+".");
+                        printToLog("You shoot and hit "+nameToUse+".");
                         if(!enemy.modifyHealth(-(inflictedDamage))){
                             handleWeaponWearing(weapon, player);
                             enemy.handleLoot(player);
@@ -153,11 +161,11 @@ public class PlayerActions {
                     int damageAfterIntegrity = Math.round((inflictedDamage*condition)/100);
 
                     if(inflictedDamage <= 0){
-                        printToLog("Your attack doesn't hurt the "+enemy.getName().toLowerCase()+".");
+                        printToLog("Your attack doesn't hurt "+nameToUse+".");
                     } else if( damageAfterIntegrity <= 0 ){
-                        printToLog("Your weapon is too worn to hurt the enemy.");
+                        printToLog("Your weapon is too worn to hurt "+nameToUse+".");
                     } else {
-                        printToLog("You attack and hit the "+enemy.getName().toLowerCase()+".");
+                        printToLog("You attack and hit "+nameToUse+".");
                         if(!enemy.modifyHealth(-(damageAfterIntegrity))){
                             enemy.handleLoot(player);
                             handleWeaponWearing(weapon, player);
@@ -167,7 +175,7 @@ public class PlayerActions {
                     }
 
                 } else{
-                    printToLog("The "+enemy.getName().toLowerCase()+" seem not to be affected by your attack.");
+                    printToLog("Your attack does not seem to affect "+nameToUse);
                 }
 
                 System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
@@ -175,10 +183,10 @@ public class PlayerActions {
 
             } else{
                 if(weapon instanceof RangedWeapon){
-                    printToLog("You shoot, but the "+enemy.getName().toLowerCase()+" dodges.");
+                    printToLog("You shoot, but "+nameToUse+"."+" dodges.");
                     handleWeaponWearing(weapon, player);
                 } else {
-                    printToLog("You attack, but the "+enemy.getName().toLowerCase()+" dodges.");
+                    printToLog("You attack, but "+nameToUse+"."+" dodges.");
                 }
             }
 
@@ -213,13 +221,20 @@ public class PlayerActions {
 
 
 
-    public static boolean handToHand(Player player, Enemy enemy){
+    public static boolean handToHand(Player player, WorldCharacter enemy){
         Room currentRoom = player.getCurrentRoom();
         int inflictedDamage = player.getDamage() - Math.max(enemy.getArmorLevel(), 0);
 
+        String nameToUse;
+        if(enemy instanceof NPC){
+            nameToUse = enemy.getName();
+        } else {
+            nameToUse = "the "+enemy.getName().toLowerCase();
+        }
+
         System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
         if(inflictedDamage <= 0){
-            printToLog("Your punch bounces against the "+enemy.getName().toLowerCase()+"'s armor.");
+            printToLog("Your punch bounces against"+ nameToUse+"'s armor.");
             return false;
         } else{
             boolean attackResult = enemy.modifyHealth(-inflictedDamage);
@@ -230,7 +245,7 @@ public class PlayerActions {
                 return true;
             } else {
                 //enemy is alive
-                printToLog("You punch and hit the "+enemy.getName().toLowerCase()+".");
+                printToLog("You punch and hit "+ nameToUse+".");
                 return true;
             }
         }

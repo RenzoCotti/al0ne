@@ -1,10 +1,10 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Area;
-import com.al0ne.Entities.Worlds.DeltaBlock;
-import com.al0ne.Entities.Worlds.TestingArea;
-import com.al0ne.Entities.Worlds.FirstAlphaArea;
-import com.al0ne.Entities.Worlds.VillageArea;
+import com.al0ne.Entities.Areas.DeltaBlock;
+import com.al0ne.Entities.Areas.TestingArea;
+import com.al0ne.Entities.Areas.FirstAlphaArea;
+import com.al0ne.Entities.Areas.VillageArea;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -17,7 +17,7 @@ public class WarpGame extends Game{
         this.warpstone = false;
 
 
-        Area startingArea = new DeltaBlock();
+        Area startingArea = new FirstAlphaArea();
         Area alphaWorld = new TestingArea();
 
 

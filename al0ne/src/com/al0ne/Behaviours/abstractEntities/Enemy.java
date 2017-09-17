@@ -24,25 +24,17 @@ public class Enemy extends WorldCharacter {
     static final int CHANCE_OF_SPECIAL = 20;
 
     protected boolean elite;
-    protected boolean aggro;
-    protected boolean snooze;
 
-    protected ArrayList<String> resistances;
-    //maps status to percentage of applying
-    protected HashMap<Status, Integer> inflictStatuses;
+
+
 
     //special: 0 means not at all, 1 random, 2 assured
 
     public Enemy(String name, String description, String shortDescription,
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
         super(name, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
-        this.resistances = new ArrayList<>();
-        this.inflictStatuses = new HashMap<>();
-        this.alive = true;
         this.type='e';
         this.elite=false;
-        this.aggro = false;
-        this.snooze = false;
 
 //        if(special == 0){
 //            return;
@@ -61,9 +53,6 @@ public class Enemy extends WorldCharacter {
 
     }
 
-    public void addInflictedStatus(Status status, Integer chanceToApply){
-        inflictStatuses.put(status, chanceToApply);
-    }
 
     //testing purposes
     @Override
@@ -154,132 +143,6 @@ public class Enemy extends WorldCharacter {
         }
     }
 
-
-    public ArrayList<String> getResistances() {
-        return resistances;
-    }
-
-    public void addResistance(String resistances) {
-        this.resistances.add(resistances);
-    }
-
-
-    public ArrayList<PairDrop> getLoot() {
-        ArrayList<PairDrop> loot = new ArrayList<>();
-        for(Pair p : inventory.values()){
-            loot.add((PairDrop)p);
-        }
-        return loot;
-    }
-
-    public void addItemLoot(Item item, Integer amount, Integer probability) {
-        this.inventory.put(item.getID(), new PairDrop(item, amount, probability));
-    }
-
-    public void addItemLoot(Item item) {
-        this.inventory.put(item.getID(), new PairDrop(item, 1, 100));
-    }
-
-
-    public boolean addLoot(Room room) {
-        boolean dropped = false;
-        for (PairDrop pair : getLoot()){
-            int rolled = Utility.randomNumber(100);
-            if(((100 - pair.getProbability()) - rolled <= 0) || elite){
-                Item currentLoot = (Item) pair.getEntity();
-
-                if(pair.getCount() > 5){
-                    int randomAmount = (int)(Math.random() * (2*pair.getCount() - pair.getCount()/2) + pair.getCount()/2);
-                    room.addItem(currentLoot, randomAmount);
-                } else{
-                    room.addItem(currentLoot, pair.getCount());
-                }
-                dropped = true;
-            }
-            System.out.println("Loot: rolled "+rolled+"; expected "+pair.getProbability());
-        }
-        return dropped;
-    }
-
-
-    public void isAttacked(Player player, Room room){
-
-        aggro = true;
-
-        int attackRoll = Utility.randomNumber(100)+attack;
-        int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
-//        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
-        if(attackRoll > dodgeRoll){
-            printToLog("The "+name.toLowerCase()+" attacks and hits you.");
-            int inflictedDamage = damage-player.getArmorLevel();
-            if (inflictedDamage>0){
-                for (Status s : inflictStatuses.keySet()){
-                    //possibly resistance from player?
-                    int inflictProbability = 100-inflictStatuses.get(s);
-                    int inflictStatus = Utility.randomNumber(100);
-                    if(inflictStatus > inflictProbability){
-                        if (player.addStatus(s)){
-                            printToLog(s.getOnApply());
-                        }
-                    }
-                }
-                if(player.modifyHealth(-inflictedDamage)) {
-                    player.setCauseOfDeath(shortDescription);
-                }
-            } else{
-                printToLog("Your armor absorbs the damage.");
-            }
-        } else{
-            printToLog("The "+name.toLowerCase()+" attacks, but you manage to dodge.");
-        }
-    }
-
-    public boolean isWeakAgainst(String type){
-        for (String s : resistances){
-            if (s.equals(type)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isAggro() {
-        return aggro;
-    }
-
-    public void setAggro(boolean aggro) {
-        this.aggro = aggro;
-    }
-
-    public boolean isSnooze() {
-        return snooze;
-    }
-
-    public void setSnooze(boolean snooze) {
-        this.snooze = snooze;
-    }
-
-    public boolean handleLoot(Player player){
-        if(!alive){
-            Room room = player.getCurrentRoom();
-            printToLog("You defeated the "+ name.toLowerCase());
-            if(addLoot(room)){
-                printToLog("The "+name.toLowerCase()+" drops some items.");
-            }
-            for (String s : player.getQuests().keySet()){
-                Quest q = player.getQuests().get(s);
-                if(q instanceof KillQuest){
-                    if(getID().equals(((KillQuest) q).getToKillID())){
-                        ((KillQuest) q).addCurrentCount();
-                        q.checkCompletion(player);
-                    }
-                }
-            }
-            room.getEntities().remove(ID);
-            return true;
-        }
-        return false;
-    }
 
     public boolean isElite() {
         return elite;

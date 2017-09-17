@@ -1,14 +1,10 @@
-package com.al0ne.Entities.Worlds;
+package com.al0ne.Entities.Areas;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
 import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
-import com.al0ne.Entities.Enemies.GiantRat;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
-import com.al0ne.Entities.Items.ConcreteItems.Canteen;
-import com.al0ne.Entities.Items.ConcreteItems.Chest;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Beer;
 import com.al0ne.Entities.Items.Props.*;
@@ -28,16 +24,18 @@ public class FirstAlphaArea extends Area {
 //        cave1.addOneItem(new Key("cave1key","Ordinary Key"));
 //        cave1.addOneItem(new Key("cave2key","Next Room Key"));
 //        cave1.addProp(new LockedDoor("cave1door", "Generic Door","A sturdy wooden door blocks the passage to the east.","A sturdy wooden door lies open to the east.","cave1key"));
-        cave1.addEntity(new Door("Door", Material.WOOD));
-        cave1.addEntity(new GiantRat());
-        cave1.addEntity(new Chest());
-        Prop river = new Prop("River", "a watery river");
-        river.addBehaviour(new WaterBehaviour());
-        cave1.addEntity(river);
-        cave1.addEntity(new Canteen());
-        cave1.lockDirection("east", "cave1door");
+//        cave1.addEntity(new Door("Door", Material.WOOD));
+//        cave1.addEntity(new GiantRat());
+//        cave1.addEntity(new Chest());
+//        Prop river = new Prop("River", "a watery river");
+//        river.addBehaviour(new WaterBehaviour());
+//        cave1.addEntity(river);
+//        cave1.addEntity(new Canteen());
+//        cave1.lockDirection("east", "cave1door");
+        NPC emon1 = new NPC("Emon", "A handy man. Probably fixes small keys.", "handy man", "Hi, i'm eamon and i fix small keys");
 
-        cave1.addEntity(new MoneyTree());
+        cave1.addEntity(emon1);
+//        cave1.addEntity(new MoneyTree());
 
         addRoom(cave1);
 

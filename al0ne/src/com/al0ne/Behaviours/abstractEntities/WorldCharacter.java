@@ -1,8 +1,11 @@
 package com.al0ne.Behaviours.abstractEntities;
 
-import com.al0ne.Behaviours.Item;
+import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Status;
+import com.al0ne.Behaviours.Pairs.PairDrop;
+import com.al0ne.Behaviours.Quests.KillQuest;
+import com.al0ne.Behaviours.Quests.Quest;
+import com.al0ne.Engine.Utility;
 import com.al0ne.Entities.Items.Types.Wearable.*;
 
 import java.util.ArrayList;
@@ -43,6 +46,15 @@ public abstract class WorldCharacter extends Entity {
     protected boolean alive;
 
     private String causeOfDeath;
+
+    protected ArrayList<String> resistances;
+    //maps status to percentage of applying
+    protected HashMap<Status, Integer> inflictStatuses;
+
+    protected boolean aggro;
+    protected boolean snooze;
+
+    protected boolean questCharacter;
 
 
     public WorldCharacter(String id, String name, String longDescription, String shortDescription,
@@ -87,6 +99,13 @@ public abstract class WorldCharacter extends Entity {
 
         this.status = new HashMap<>();
         this.causeOfDeath = "unknown causes";
+
+        this.aggro = false;
+        this.snooze = false;
+        this.questCharacter = false;
+
+        this.resistances = new ArrayList<>();
+        this.inflictStatuses = new HashMap<>();
 
     }
 
@@ -364,5 +383,166 @@ public abstract class WorldCharacter extends Entity {
     public void setCauseOfDeath(String causeOfDeath) {
         this.causeOfDeath = causeOfDeath;
     }
+
+
+    public void addInflictedStatus(Status status, Integer chanceToApply){
+        inflictStatuses.put(status, chanceToApply);
+    }
+
+    public ArrayList<String> getResistances() {
+        return resistances;
+    }
+
+    public void addResistance(String resistances) {
+        this.resistances.add(resistances);
+    }
+
+
+    public ArrayList<PairDrop> getLoot() {
+        ArrayList<PairDrop> loot = new ArrayList<>();
+        for(Pair p : inventory.values()){
+            if(p instanceof PairDrop){
+                loot.add((PairDrop)p);
+            } else {
+                loot.add(new PairDrop(p.getEntity(), p.getCount(), 10));
+            }
+        }
+        return loot;
+    }
+
+    public void addItemLoot(Item item, Integer amount, Integer probability) {
+        this.inventory.put(item.getID(), new PairDrop(item, amount, probability));
+    }
+
+    public void addItemLoot(Item item) {
+        this.inventory.put(item.getID(), new PairDrop(item, 1, 100));
+    }
+
+
+    public boolean addLoot(Room room) {
+        boolean dropped = false;
+        for (PairDrop pair : getLoot()){
+            int rolled = Utility.randomNumber(100);
+            if(((100 - pair.getProbability()) - rolled <= 0) ){
+                Item currentLoot = (Item) pair.getEntity();
+
+                if(pair.getCount() > 5){
+                    int randomAmount = (int)(Math.random() * (2*pair.getCount() - pair.getCount()/2) + pair.getCount()/2);
+                    room.addItem(currentLoot, randomAmount);
+                } else{
+                    room.addItem(currentLoot, pair.getCount());
+                }
+                dropped = true;
+            }
+            System.out.println("Loot: rolled "+rolled+"; expected "+pair.getProbability());
+        }
+        return dropped;
+    }
+
+    public boolean handleLoot(Player player){
+        if(!alive){
+
+            String nameToUse;
+            if(this instanceof NPC){
+                nameToUse = name;
+            } else {
+                nameToUse = "the " + name.toLowerCase();
+            }
+
+            Room room = player.getCurrentRoom();
+            printToLog("You defeated " + nameToUse);
+            if(addLoot(room)){
+                printToLog(nameToUse + " drops some items.");
+            }
+            for (String s : player.getQuests().keySet()){
+                Quest q = player.getQuests().get(s);
+                if(q instanceof KillQuest){
+                    if(getID().equals(((KillQuest) q).getToKillID())){
+                        ((KillQuest) q).addCurrentCount();
+                        q.checkCompletion(player);
+                    }
+                }
+            }
+            room.getEntities().remove(ID);
+            return true;
+        }
+        return false;
+    }
+
+
+    public void isAttacked(Player player, Room room){
+
+        aggro = true;
+
+        String nameToUse;
+        if(this instanceof NPC){
+            nameToUse = name;
+        } else {
+            nameToUse = "The " + name.toLowerCase();
+        }
+
+        int attackRoll = Utility.randomNumber(100)+attack;
+        int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
+//        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
+        if(attackRoll > dodgeRoll){
+            printToLog(nameToUse+" attacks and hits you.");
+            int inflictedDamage = damage-player.getArmorLevel();
+            if (inflictedDamage>0){
+                for (Status s : inflictStatuses.keySet()){
+                    //possibly resistance from player?
+                    int inflictProbability = 100-inflictStatuses.get(s);
+                    int inflictStatus = Utility.randomNumber(100);
+                    if(inflictStatus > inflictProbability){
+                        if (player.addStatus(s)){
+                            printToLog(s.getOnApply());
+                        }
+                    }
+                }
+                if(player.modifyHealth(-inflictedDamage)) {
+                    player.setCauseOfDeath(shortDescription);
+                }
+            } else{
+                printToLog("Your armor absorbs the damage.");
+            }
+        } else{
+            printToLog(nameToUse+" attacks, but you manage to dodge.");
+        }
+    }
+
+    public boolean isWeakAgainst(String type){
+        for (String s : resistances){
+            if (s.equals(type)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAggro() {
+        return aggro;
+    }
+
+    public void setAggro(boolean aggro) {
+        this.aggro = aggro;
+    }
+
+    public boolean isSnooze() {
+        return snooze;
+    }
+
+    public void setSnooze(boolean snooze) {
+        this.snooze = snooze;
+    }
+
+    public boolean isQuestCharacter() {
+        return questCharacter;
+    }
+
+    public void setQuestCharacter(boolean questCharacter) {
+        this.questCharacter = questCharacter;
+    }
+
+
+
 
 }
