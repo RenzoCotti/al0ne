@@ -1,6 +1,7 @@
 package com.al0ne.Engine.Editing;
 
 import com.al0ne.Behaviours.Area;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Item;
 import com.al0ne.Behaviours.NPC;
 import com.al0ne.Behaviours.Prop;
@@ -29,8 +30,8 @@ public class EditingGame implements Serializable{
     private Entity currentEntity;
 
 
-    public EditingGame(String s, char tech) {
-        this.currentEdit = new Game(s, tech);
+    public EditingGame(String s) {
+        this.currentEdit = new Game(s);
         this.items = new HashMap<>();
         this.props = new HashMap<>();
         this.npcs = new HashMap<>();

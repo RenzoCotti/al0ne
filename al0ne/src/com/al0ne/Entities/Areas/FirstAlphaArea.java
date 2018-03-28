@@ -3,6 +3,7 @@ package com.al0ne.Entities.Areas;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
 import com.al0ne.Entities.Items.ConcreteItems.Food.Apple;
@@ -15,7 +16,7 @@ public class FirstAlphaArea extends Area {
 
     public FirstAlphaArea() {
 
-        super("cave");
+        super("cave", TechLevel.LOW);
 
 
 
@@ -47,7 +48,7 @@ public class FirstAlphaArea extends Area {
 
         Room cave3 = new Room("Cave 3", "Nothing worth of notice here.");
         Door trapdoor1 = new Door("Trapdoor","You can see a trapdoor on the floor.","a wooden trapdoor", Material.WOOD);
-        HideItem rug = new HideItem("Rug", "A ragged rug. Ruggity rug.", "a dusty rug",
+        HideProp rug = new HideProp("Rug", "A ragged rug. Ruggity rug.", "a dusty rug",
                 "The rug is now out of the way.", Material.FABRIC, trapdoor1);
         rug.addCommand(Command.MOVE);
         cave3.addEntity(rug);

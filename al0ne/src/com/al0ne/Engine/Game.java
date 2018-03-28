@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Area;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Player;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Behaviours.Enums.CommandMap;
@@ -27,13 +28,8 @@ public class Game implements Serializable {
     protected CommandMap commands;
     protected String notes;
 
-    //b: base
-    //l: low
-    //m: mid
-    //h: high
-    protected char techLevel;
 
-    public Game(String name, char techLevel) {
+    public Game(String name) {
         this.gameName = name;
         this.worlds = new HashMap<>();
         this.turnCounter = 0;
@@ -41,9 +37,6 @@ public class Game implements Serializable {
         this.debugMode=false;
         this.commands = new CommandMap();
         this.notes = "";
-        this.techLevel = techLevel;
-
-
     }
 
     public Player getPlayer() {

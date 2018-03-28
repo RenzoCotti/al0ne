@@ -11,7 +11,7 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 14/04/2017.
  */
-public abstract class Readable extends Item {
+public class Readable extends Item {
     protected String content;
     public Readable(String id, String name, String description, Size size, String content, double weight) {
         super(id, name, description, weight, size, Material.PAPER, null);

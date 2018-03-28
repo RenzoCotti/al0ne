@@ -1,6 +1,7 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 import com.al0ne.Behaviours.Area;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Room;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
@@ -138,24 +139,24 @@ public class GameEditorUI {
                 errorMessage.setText("");
 
                 String techString = techDisplay.getSelectionModel().getSelectedItem().toLowerCase();
-                char techLevel = 'b';
+                TechLevel techLevel = TechLevel.BASE;
                 switch (techString){
                     case "prehistoric":
-                        techLevel = 'b';
+                        techLevel = TechLevel.BASE;
                         break;
                     case "medieval":
-                        techLevel = 'l';
+                        techLevel = TechLevel.LOW;
                         break;
                     case "industrial":
-                        techLevel = 'm';
+                        techLevel = TechLevel.MEDIUM;
                         break;
                     case "futuristic":
-                        techLevel = 'h';
+                        techLevel = TechLevel.HIGH;
                         break;
                 }
 
-                EditingGame newGame = new EditingGame(nameText.getText(), techLevel);
-                Area newArea = new Area(worldText.getText());
+                EditingGame newGame = new EditingGame(nameText.getText());
+                Area newArea = new Area(worldText.getText(), techLevel);
 
                 nameText.setText("");
                 worldText.setText("");

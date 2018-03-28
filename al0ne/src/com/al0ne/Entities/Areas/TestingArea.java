@@ -2,6 +2,7 @@ package com.al0ne.Entities.Areas;
 
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionAdd;
@@ -24,6 +25,7 @@ import com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon.LongBow;
 import com.al0ne.Entities.Items.ConcreteItems.Weapons.RangedWeapon.Pistol;
 import com.al0ne.Entities.Items.Props.TeleportProp;
 import com.al0ne.Entities.Items.Props.WorldSwitch;
+import com.al0ne.Entities.NPCs.ManGenerator;
 import com.al0ne.Entities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.Entities.Spells.ConcreteSpells.LightHeal;
 import com.al0ne.Entities.Enemies.Demon;
@@ -43,17 +45,28 @@ import com.al0ne.Entities.Spells.MidasSpell;
 public class TestingArea extends Area {
 
     public TestingArea() {
-        super("test");
+        super("test", TechLevel.LOW);
+
+        ManGenerator mg = new ManGenerator(getTechLevel());
+
+
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
 
-        Container chest = new Chest();
-        chest.addItem(new SilverCoin(), 100);
-        chest.addItem(new Knife(Material.IRON), 1);
-        startRoom.addEntity(chest);
-        startRoom.addEntity(new Snake());
-        startRoom.addEntity(new Pistol(5, "9mm", 7));
-        startRoom.addEntity(new Bullet9mm(), 10);
+        for (int i = 0; i < 10; i++){
+            if(i > 7){
+                startRoom.addEntity(mg.generate("wamen"+i, "hello there general kenobesse.", true));
+            } else {
+                startRoom.addEntity(mg.generate("man"+i, "hello there general kenobi."));
+            }
+        }
+//        Container chest = new Chest();
+//        chest.addItem(new SilverCoin(), 100);
+//        chest.addItem(new Knife(Material.IRON), 1);
+//        startRoom.addEntity(chest);
+//        startRoom.addEntity(new Snake());
+//        startRoom.addEntity(new Pistol(5, "9mm", 7));
+//        startRoom.addEntity(new Bullet9mm(), 10);
 
         LockedDoor ld = new LockedDoor("wooden door", "a wooden door", "an opened wooden door", Material.WOOD, startRoom, "west");
         startRoom.addEntity(ld.generateKey("generic key"));

@@ -3,6 +3,7 @@ package com.al0ne.Entities.Areas;
 import com.al0ne.Behaviours.*;
 import com.al0ne.Behaviours.Enums.Command;
 import com.al0ne.Behaviours.Enums.Material;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Behaviours.Pairs.Pair;
 import com.al0ne.Behaviours.Pairs.Subject;
 import com.al0ne.Behaviours.Enums.Size;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
  */
 public class VillageArea extends Area {
     public VillageArea() {
-        super("medievaly");
+        super("medievaly", TechLevel.LOW);
 
         Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");

@@ -1,5 +1,7 @@
 package com.al0ne.Behaviours;
 
+import com.al0ne.Behaviours.Enums.TechLevel;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -13,14 +15,16 @@ public class Area implements Serializable{
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
     protected Player player;
+    protected TechLevel techLevel;
 //    protected LootTable lootTable;
     //todo add random events with chance, for both rooms and areas
 
 
 
-    public Area(String areaName) {
+    public Area(String areaName, TechLevel tech) {
         this.areaName = areaName;
         this.rooms = new HashMap<>();
+        this.techLevel = tech;
 //        this.lootTable = new LootTable();
     }
 
@@ -53,5 +57,7 @@ public class Area implements Serializable{
         this.startingRoom = player.getCurrentRoom().getID();
     }
 
-
+    public TechLevel getTechLevel() {
+        return techLevel;
+    }
 }

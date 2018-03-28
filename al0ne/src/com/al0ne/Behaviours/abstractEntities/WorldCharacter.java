@@ -13,9 +13,7 @@ import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
-/**
- * placeholder class for attackable npcs
- */
+
 public abstract class WorldCharacter extends Entity {
 
 

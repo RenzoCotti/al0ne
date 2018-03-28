@@ -1,6 +1,7 @@
 package com.al0ne.Engine;
 
 import com.al0ne.Behaviours.Area;
+import com.al0ne.Behaviours.Enums.TechLevel;
 import com.al0ne.Entities.Areas.DeltaBlock;
 import com.al0ne.Entities.Areas.TestingArea;
 import com.al0ne.Entities.Areas.FirstAlphaArea;
@@ -13,11 +14,11 @@ public class WarpGame extends Game{
     private boolean warpstone;
 
     public WarpGame() {
-        super("warpgame", 'h');
+        super("warpgame");
         this.warpstone = false;
 
 
-        Area startingArea = new FirstAlphaArea();
+        Area startingArea = new TestingArea();
         Area alphaWorld = new TestingArea();
 
 
