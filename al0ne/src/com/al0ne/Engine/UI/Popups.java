@@ -1,15 +1,16 @@
 package com.al0ne.Engine.UI;
 
-import com.al0ne.Behaviours.*;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.*;
+import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.AbstractEntities.Abstract.Enemy;
+import com.al0ne.AbstractEntities.Abstract.Entity;
+import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Editing.IdNameTypeQty;
-import com.al0ne.Engine.GameChanges;
+import com.al0ne.Engine.Utility.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.EditorUI.*;
-import com.al0ne.Engine.Utility;
+import com.al0ne.Engine.Utility.Utility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

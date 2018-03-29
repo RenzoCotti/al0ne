@@ -1,12 +1,14 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Area;
-import com.al0ne.Behaviours.Enums.TechLevel;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.AbstractEntities.Area;
+import com.al0ne.AbstractEntities.Enums.TechLevel;
+import com.al0ne.AbstractEntities.Room;
 import com.al0ne.Engine.*;
 import com.al0ne.Engine.Editing.EditingGame;
+import com.al0ne.Engine.Game.Game;
 import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
+import com.al0ne.Engine.Utility.GameChanges;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

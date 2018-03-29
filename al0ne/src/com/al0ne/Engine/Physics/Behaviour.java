@@ -1,7 +1,7 @@
 package com.al0ne.Engine.Physics;
 
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.AbstractEntities.Abstract.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,20 +1,15 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.NPC;
-import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Abstract.Enemy;
+import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.NPCs.Shopkeeper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**

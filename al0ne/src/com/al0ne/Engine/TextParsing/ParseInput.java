@@ -1,8 +1,13 @@
 package com.al0ne.Engine.TextParsing;
 
-import com.al0ne.Behaviours.*;
+import com.al0ne.AbstractEntities.*;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Abstract.Status;
 import com.al0ne.Engine.*;
-import com.al0ne.Behaviours.Enums.Command;
+import com.al0ne.AbstractEntities.Enums.Command;
+import com.al0ne.Engine.Game.Game;
+import com.al0ne.Engine.Utility.GameChanges;
+import com.al0ne.Engine.Utility.Utility;
 
 import java.util.HashMap;
 

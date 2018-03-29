@@ -1,9 +1,6 @@
 package com.al0ne.Engine.Physics.InteractionResult;
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Player.Player;
 
 public class InteractionQuest extends InteractionBehaviour {
     private String questID;

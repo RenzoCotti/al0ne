@@ -1,8 +1,8 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.AbstractEntities.Room;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.UI.Popups;

@@ -1,22 +1,21 @@
 package com.al0ne.Engine.TextParsing;
 
-import com.al0ne.Behaviours.*;
-import com.al0ne.Behaviours.Enums.Command;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Pairs.PotentialItems;
-import com.al0ne.Behaviours.Pairs.SpellPair;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
-import com.al0ne.Behaviours.abstractEntities.WorldCharacter;
+import com.al0ne.AbstractEntities.*;
+import com.al0ne.AbstractEntities.Enums.Command;
+import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.AbstractEntities.Pairs.PotentialItems;
+import com.al0ne.AbstractEntities.Pairs.SpellPair;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Player.PlayerActions;
+import com.al0ne.AbstractEntities.Abstract.*;
 import com.al0ne.Engine.Main;
-import com.al0ne.Engine.Utility;
-import com.al0ne.Entities.Items.Types.Container;
-import com.al0ne.Entities.Items.Types.Wearable.RangedWeapon;
-import com.al0ne.Entities.Items.Types.Wearable.Weapon;
-import com.al0ne.Entities.Items.ConcreteItems.Books.Spellbook;
-import com.al0ne.Entities.NPCs.Shopkeeper;
-import com.al0ne.Entities.Spells.*;
+import com.al0ne.Engine.Utility.Utility;
+import com.al0ne.ConcreteEntities.Items.Types.Container;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.RangedWeapon;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Books.Spellbook;
+import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
+import com.al0ne.ConcreteEntities.Spells.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,7 +117,7 @@ public class HandleCommands {
 
     //this attempts to get items from a token;
     //number = 0: tries to get from the inventory
-    //number = 1: tries to get from Entities
+    //number = 1: tries to get from ConcreteEntities
     //number = 2: tries to get from containers
     public static PotentialItems getPotentialItem(String s, Player player, int number) {
 

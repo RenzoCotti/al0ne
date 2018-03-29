@@ -1,8 +1,8 @@
 package com.al0ne.Engine.UI;
 
-import com.al0ne.Engine.GameChanges;
+import com.al0ne.Engine.Utility.GameChanges;
 import com.al0ne.Engine.Main;
-import com.al0ne.Engine.Utility;
+import com.al0ne.Engine.Utility.Utility;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;

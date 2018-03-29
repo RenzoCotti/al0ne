@@ -1,7 +1,7 @@
 package com.al0ne.Engine.Physics.InteractionResult;
 
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Room;
 
 public class InteractionUnlock extends InteractionBehaviour {
     private String doorID;

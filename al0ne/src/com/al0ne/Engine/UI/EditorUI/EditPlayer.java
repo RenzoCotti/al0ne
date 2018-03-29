@@ -1,17 +1,17 @@
 package com.al0ne.Engine.UI.EditorUI;
 
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Pairs.Pair;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Room;
+import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.Items.Types.Drinkable;
-import com.al0ne.Entities.Items.Types.Food;
-import com.al0ne.Entities.Items.Types.Wearable.Armor;
-import com.al0ne.Entities.Items.Types.Wearable.Weapon;
+import com.al0ne.ConcreteEntities.Items.Types.Drinkable;
+import com.al0ne.ConcreteEntities.Items.Types.Food;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;

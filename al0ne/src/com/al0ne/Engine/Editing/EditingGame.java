@@ -1,13 +1,12 @@
 package com.al0ne.Engine.Editing;
 
-import com.al0ne.Behaviours.Area;
-import com.al0ne.Behaviours.Enums.TechLevel;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.NPC;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.abstractEntities.Enemy;
-import com.al0ne.Behaviours.abstractEntities.Entity;
-import com.al0ne.Engine.Game;
+import com.al0ne.AbstractEntities.Area;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.NPC;
+import com.al0ne.AbstractEntities.Prop;
+import com.al0ne.AbstractEntities.Abstract.Enemy;
+import com.al0ne.AbstractEntities.Abstract.Entity;
+import com.al0ne.Engine.Game.Game;
 
 import java.io.Serializable;
 import java.util.HashMap;

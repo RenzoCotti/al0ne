@@ -1,9 +1,9 @@
 package com.al0ne.Engine.Physics.InteractionResult;
 
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Room;
+import com.al0ne.AbstractEntities.Abstract.Interactable;
 
 public class InteractionDestroy extends InteractionBehaviour {
     private Interactable toDestroy;

@@ -1,6 +1,5 @@
 package com.al0ne.Engine.UI;
 
-import com.al0ne.Engine.GameChanges;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

@@ -1,14 +1,12 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.Item;
-import com.al0ne.Behaviours.NPC;
-import com.al0ne.Behaviours.Pairs.Subject;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.NPC;
+import com.al0ne.AbstractEntities.Pairs.Subject;
+import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.NPCs.Shopkeeper;
+import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;

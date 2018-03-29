@@ -1,13 +1,17 @@
 package com.al0ne.Engine;
 
-import com.al0ne.Behaviours.*;
+import com.al0ne.AbstractEntities.*;
+import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.Engine.Editing.EditingGame;
 import com.al0ne.Engine.Editing.EditorInfo;
+import com.al0ne.Engine.Game.Game;
+import com.al0ne.Engine.Game.WarpGame;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.TextParsing.ParseInput;
 import com.al0ne.Engine.UI.MainMenu;
 import com.al0ne.Engine.UI.PlayUI;
 import com.al0ne.Engine.UI.Popups;
+import com.al0ne.Engine.Utility.GameChanges;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -103,6 +107,8 @@ public class Main extends Application{
             player.removeIfDestroyed();
 
             GameChanges.consumeItems(player);
+
+            currentRoom.triggerEvents(player);
         }
 
 
@@ -168,7 +174,7 @@ public class Main extends Application{
         }
     }
 
-    //clears the screen by printing 20 new lines
+    //clears the screen by printing 33 new lines
     public static void clearScreen() {
         for (int i = 0; i < 33; i++) {
             printToLog();

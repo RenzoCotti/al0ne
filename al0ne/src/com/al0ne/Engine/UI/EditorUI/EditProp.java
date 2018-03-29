@@ -1,13 +1,13 @@
 package com.al0ne.Engine.UI.EditorUI;
 
-import com.al0ne.Behaviours.Enums.Material;
-import com.al0ne.Behaviours.InvisibleProp;
-import com.al0ne.Behaviours.Prop;
-import com.al0ne.Behaviours.abstractEntities.Entity;
+import com.al0ne.AbstractEntities.Enums.Material;
+import com.al0ne.ConcreteEntities.Items.Props.Types.InvisibleProp;
+import com.al0ne.AbstractEntities.Prop;
+import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.Engine.Editing.IdNameType;
 import com.al0ne.Engine.Main;
-import com.al0ne.Entities.Items.Props.Door;
-import com.al0ne.Entities.Items.Props.LockedDoor;
+import com.al0ne.ConcreteEntities.Items.Props.Types.Door;
+import com.al0ne.ConcreteEntities.Items.Props.Types.LockedDoor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;

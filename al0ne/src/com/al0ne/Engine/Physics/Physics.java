@@ -1,12 +1,12 @@
 package com.al0ne.Engine.Physics;
 
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.abstractEntities.Interactable;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Abstract.Interactable;
 import com.al0ne.Engine.Physics.Behaviours.KeyBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.LockedDoorBehaviour;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.RequiresBatteryBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.*;
-import com.al0ne.Entities.Items.Types.ChargeItem;
+import com.al0ne.ConcreteEntities.Items.Types.ChargeItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;

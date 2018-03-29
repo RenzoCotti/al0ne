@@ -1,9 +1,11 @@
 package com.al0ne.Engine.UI;
 
 
-import com.al0ne.Behaviours.Player;
-import com.al0ne.Behaviours.Room;
+import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Room;
 import com.al0ne.Engine.*;
+import com.al0ne.Engine.Utility.GameChanges;
+import com.al0ne.Engine.Utility.Utility;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

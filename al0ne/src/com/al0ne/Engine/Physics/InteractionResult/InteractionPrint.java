@@ -1,6 +1,6 @@
 package com.al0ne.Engine.Physics.InteractionResult;
 
-import com.al0ne.Behaviours.Player;
+import com.al0ne.AbstractEntities.Player.Player;
 
 import static com.al0ne.Engine.Main.printToLog;
 

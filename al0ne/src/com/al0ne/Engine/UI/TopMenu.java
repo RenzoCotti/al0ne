@@ -1,6 +1,8 @@
 package com.al0ne.Engine.UI;
 
 import com.al0ne.Engine.*;
+import com.al0ne.Engine.Utility.GameChanges;
+import com.al0ne.Engine.Utility.Utility;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
