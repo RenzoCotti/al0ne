@@ -347,7 +347,7 @@ public class GameChanges {
         for(Item i: player.getWornItems().values()){
             if(i instanceof LightItem && ((LightItem) i).isLit()){
 
-                if(Utility.randomNumber(3) == 1){
+                if(Utility.randomGreaterThan(70)){
                     i.modifyIntegrity(-1);
                 }
 

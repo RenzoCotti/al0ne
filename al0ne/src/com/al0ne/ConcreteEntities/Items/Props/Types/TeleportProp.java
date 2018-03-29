@@ -29,7 +29,7 @@ public class TeleportProp extends Prop{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         if(Main.game.getCurrentWorld().getRooms().get(roomID) != null){
             Room newCurrentRoom = Main.game.getCurrentWorld().getRooms().get(roomID);
             player.setCurrentRoom(newCurrentRoom);
@@ -39,6 +39,6 @@ public class TeleportProp extends Prop{
         } else{
             System.out.println("Tried to teleport to a non existing room.");
         }
-        return "";
+        return true;
     }
 }

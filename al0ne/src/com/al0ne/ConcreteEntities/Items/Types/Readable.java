@@ -20,9 +20,9 @@ public class Readable extends Item {
     }
 
     @Override
-    public String used(Player player){
+    public boolean used(Player player){
         printToLog("\""+content+"\"");
-        return "";
+        return true;
     }
 
 

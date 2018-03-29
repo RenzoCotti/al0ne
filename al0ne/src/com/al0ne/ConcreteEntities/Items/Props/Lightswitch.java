@@ -3,6 +3,7 @@ package com.al0ne.ConcreteEntities.Items.Props;
 import com.al0ne.AbstractEntities.Enums.Command;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Prop;
+import com.al0ne.ConcreteEntities.Statuses.PrintStatus;
 
 public class Lightswitch extends Prop{
     public Lightswitch(String name, String description) {
@@ -11,14 +12,17 @@ public class Lightswitch extends Prop{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
 
         if(player.getCurrentRoom().isLit()){
             player.getCurrentRoom().setLit(false);
-            return "It gets darker.";
+            player.addStatus(new PrintStatus("It gets darker."));
+            return true;
         }
         player.getCurrentRoom().setLit(true);
         player.getCurrentRoom().printRoom();
-        return "It gets brighter.";
+        player.addStatus(new PrintStatus("It gets brighter."));
+
+        return true;
     }
 }

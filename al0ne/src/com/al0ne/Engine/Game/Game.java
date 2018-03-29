@@ -17,15 +17,15 @@ import java.util.HashMap;
  */
 public class Game implements Serializable {
 
-    protected String gameName;
+    private String gameName;
     protected String startingWorld;
     protected String currentWorld;
-    protected HashMap<String, Area> worlds;
-    protected int turnCounter;
-    protected int worldCount;
-    protected boolean debugMode;
-    protected CommandMap commands;
-    protected String notes;
+    private HashMap<String, Area> worlds;
+    private int turnCounter;
+    private int worldCount;
+    private boolean debugMode;
+    private CommandMap commands;
+    private String notes;
 
 
     public Game(String name) {
@@ -74,10 +74,10 @@ public class Game implements Serializable {
 
     @Override
     public String toString() {
-        return new StringBuffer(" worlds : ")
-                .append(this.worlds).append(" turnCounter : ")
-                .append(this.turnCounter).append(" notes: ")
-                .append(this.notes).toString();
+        return " worlds : " +
+                this.worlds + " turnCounter : " +
+                this.turnCounter + " notes: " +
+                this.notes;
     }
 
     public void addWorld(Area area) {

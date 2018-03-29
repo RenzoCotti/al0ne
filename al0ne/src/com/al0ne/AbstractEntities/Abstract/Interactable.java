@@ -21,7 +21,7 @@ public abstract class Interactable extends Entity {
     protected boolean canDrop;
     protected boolean canTake;
 
-    protected int integrity;
+    private int integrity;
 
     protected Material material;
     protected boolean customName=false;
@@ -39,7 +39,7 @@ public abstract class Interactable extends Entity {
         }
     }
 
-    public void setUndroppable() {
+    protected void setUndroppable() {
         this.canDrop = false;
     }
 
@@ -51,8 +51,8 @@ public abstract class Interactable extends Entity {
     //returns null if can't use
     //String if needs printing
     //"" if no need for print
-    public String used(Player player){
-        return null;
+    public boolean used(Player player){
+        return false;
     }
 
 
@@ -61,68 +61,6 @@ public abstract class Interactable extends Entity {
         Physics.interactionBetween(player, this, inter);
 
     }
-
-//    public void useResult(HashMap<Integer, Object> result, Player player, Behaviour interacted, Interactable inter){
-//
-//        Room currentRoom = player.getCurrentRoom();
-//        for(Integer i : result.keySet()){
-//            switch (i){
-//
-//                case 1:
-//                    //success, no need to print
-//                    break;
-//                case 3:
-//                    //tries to add to inventory, if can't add to room
-//                    Pair pair = interacted.getEntity().getPair();
-//                    if(player.addAllItem(pair)){
-//                        break;
-//                    }
-//                case 2:
-//                    //add to room
-//                    Pair pair1 = interacted.getEntity().getPair();
-//                    Entity entity = pair1.getEntity();
-//                    int count = pair1.getCount();
-//                    currentRoom.addEntity(entity, count);
-//                    break;
-//                case 4:
-//                    //remove this
-//                    if(player.hasItemInInventory(this.getID())){
-//                        player.removeOneItem((Item) this);
-//                    } else{
-//                        currentRoom.getEntities().remove(this.getID());
-//                    }
-//                    break;
-//                case 5:
-//                    //remove other
-//                    if(player.hasItemInInventory(inter.getID())){
-//                        player.removeOneItem((Item) inter);
-//                    } else{
-//                        currentRoom.getEntities().remove(inter.getID());
-//                    }
-//                    break;
-//                case 6:
-//                    currentRoom.unlockDirection((String)result.get(i));
-//                    break;
-//                case 7:
-//                    //checkRefill
-//                    ((ChargeItem) this).checkRefill(player, inter);
-//                    break;
-//                case 8:
-//                    //modify health
-//                    player.modifyHealth((Integer)result.get(i));
-//                    break;
-//                case 9:
-//                    //modify integrity
-//                    this.modifyIntegrity((Integer) result.get(i));
-//                    break;
-//
-//                default:
-//                    System.out.println("ERROR: no behaviour code found");
-//                    break;
-//
-//            }
-//        }
-//    }
 
     public void addBehaviour(Behaviour behaviour){
         behaviours.add(behaviour);
@@ -163,7 +101,7 @@ public abstract class Interactable extends Entity {
         return name.toLowerCase();
     }
 
-    public void setCustomName() {
+    protected void setCustomName() {
         this.customName=true;
     }
 

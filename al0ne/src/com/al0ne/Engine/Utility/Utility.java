@@ -28,6 +28,10 @@ public class Utility {
         return (int)(Math.random() * (max - 1) + 1);
     }
 
+    public static boolean randomGreaterThan (int threshold){
+        return randomNumber(100) > threshold;
+    }
+
     public static void dumpToFile(String fileName, String content){
         FileOutputStream fop = null;
         ObjectOutputStream oos = null;

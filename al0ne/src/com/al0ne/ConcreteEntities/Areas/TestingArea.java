@@ -51,8 +51,9 @@ public class TestingArea extends Area {
 
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
-        startRoom.addEvent(new PrintEvent(50, "You fart."));
+        startRoom.addEvent(new PrintEvent(30, "You fart."));
         startRoom.addEvent(new HealthEvent(10,"you painfully stab your foot on a sharp rock", -1));
+        startRoom.addItem(new Mushroom());
 //        for (int i = 0; i < 10; i++){
 //            if(i > 7){
 //                startRoom.addEntity(mg.generate("wamen"+i, "hello there general kenobesse.", true));

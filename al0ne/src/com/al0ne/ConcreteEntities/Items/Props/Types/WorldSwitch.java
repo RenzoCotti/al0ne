@@ -16,8 +16,8 @@ public class WorldSwitch extends Prop{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         GameChanges.changeWorld(nextWorld);
-        return "";
+        return true;
     }
 }

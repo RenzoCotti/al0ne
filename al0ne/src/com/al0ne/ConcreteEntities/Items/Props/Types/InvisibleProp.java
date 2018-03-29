@@ -15,10 +15,10 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class InvisibleProp extends Prop {
 
-    protected boolean addsItem=false;
+    private boolean addsItem=false;
     protected ArrayList<Interactable> items;
-    protected String onToggle;
-    protected boolean addsOnExamine=false;
+    private String onToggle;
+    private boolean addsOnExamine=false;
 
     public InvisibleProp(String name, String description, String shortDescription, Material m) {
         super(name, description, shortDescription, null, m);
@@ -46,7 +46,7 @@ public class InvisibleProp extends Prop {
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         Room currentRoom = player.getCurrentRoom();
         if(!addsItem){
             return super.used(player);
@@ -55,7 +55,7 @@ public class InvisibleProp extends Prop {
             for(Interactable i : items){
                 currentRoom.addEntity(i);
             }
-            return "";
+            return false;
         }
     }
 

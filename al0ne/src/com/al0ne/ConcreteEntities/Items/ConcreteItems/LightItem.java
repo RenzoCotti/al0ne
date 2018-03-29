@@ -20,13 +20,13 @@ public class LightItem extends ChargeItem{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         if(this.currentCharges > 0 && !this.isLit){
             this.isLit = true;
-            return "";
+            return true;
         } else {
             this.isLit = false;
-            return null;
+            return false;
         }
     }
 

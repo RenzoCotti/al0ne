@@ -25,10 +25,10 @@ public class HideProp extends Prop{
 
     //this object when used removes itself from the room and adds the item it's hiding in the room
     @Override
-    public String used(Player player){
+    public boolean used(Player player){
         Room currentRoom = player.getCurrentRoom();
         currentRoom.getEntities().remove(name);
         currentRoom.getEntities().put(hidden.getID(), new Pair(hidden, 1));
-        return "";
+        return true;
     }
 }

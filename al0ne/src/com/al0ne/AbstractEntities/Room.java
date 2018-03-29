@@ -87,8 +87,7 @@ public class Room extends Entity {
 
     public void triggerEvents(Player p){
         for (Event e: events){
-            int random = Utility.randomNumber(100);
-            if(e.getProbability() >= random){
+            if(Utility.randomGreaterThan(e.getProbability())){
                 e.resolveEvent(p);
             }
         }

@@ -20,8 +20,8 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Prop extends Interactable {
 
-    protected String afterDescription;
-    protected String requiresItem;
+    private String afterDescription;
+    private String requiresItem;
     protected boolean active;
     protected boolean invisible;
 
@@ -35,9 +35,9 @@ public class Prop extends Interactable {
             this.afterDescription = after;
         }
 
-        if(shortDescription == null){
-
-        }
+//        if(shortDescription == null){
+//
+//        }
 
         this.requiresItem="none";
         this.active=false;
@@ -98,12 +98,12 @@ public class Prop extends Interactable {
 
 
     @Override
-    public String used(Player player){
+    public boolean used(Player player){
         if (requiresItem.equals("none")){
             active=true;
-            return "";
+            return true;
         } else{
-            return null;
+            return false;
         }
     }
 

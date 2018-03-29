@@ -384,7 +384,7 @@ public abstract class WorldCharacter extends Entity {
     }
 
 
-    public void addInflictedStatus(Status status, Integer chanceToApply){
+    protected void addInflictedStatus(Status status, Integer chanceToApply){
         inflictStatuses.put(status, chanceToApply);
     }
 
@@ -392,12 +392,12 @@ public abstract class WorldCharacter extends Entity {
         return resistances;
     }
 
-    public void addResistance(String resistances) {
+    protected void addResistance(String resistances) {
         this.resistances.add(resistances);
     }
 
 
-    public ArrayList<PairDrop> getLoot() {
+    private ArrayList<PairDrop> getLoot() {
         ArrayList<PairDrop> loot = new ArrayList<>();
         for(Pair p : inventory.values()){
             if(p instanceof PairDrop){
@@ -409,7 +409,7 @@ public abstract class WorldCharacter extends Entity {
         return loot;
     }
 
-    public void addItemLoot(Item item, Integer amount, Integer probability) {
+    protected void addItemLoot(Item item, Integer amount, Integer probability) {
         this.inventory.put(item.getID(), new PairDrop(item, amount, probability));
     }
 
@@ -418,11 +418,10 @@ public abstract class WorldCharacter extends Entity {
     }
 
 
-    public boolean addLoot(Room room) {
+    protected boolean addLoot(Room room) {
         boolean dropped = false;
         for (PairDrop pair : getLoot()){
-            int rolled = Utility.randomNumber(100);
-            if(((100 - pair.getProbability()) - rolled <= 0) ){
+            if(Utility.randomGreaterThan(pair.getProbability())){
                 Item currentLoot = (Item) pair.getEntity();
 
                 if(pair.getCount() > 5){
@@ -433,12 +432,11 @@ public abstract class WorldCharacter extends Entity {
                 }
                 dropped = true;
             }
-            System.out.println("Loot: rolled "+rolled+"; expected "+pair.getProbability());
         }
         return dropped;
     }
 
-    public boolean handleLoot(Player player){
+    public void handleLoot(Player player){
         if(!alive){
 
             String nameToUse;
@@ -463,9 +461,7 @@ public abstract class WorldCharacter extends Entity {
                 }
             }
             room.getEntities().remove(ID);
-            return true;
         }
-        return false;
     }
 
 
@@ -490,8 +486,7 @@ public abstract class WorldCharacter extends Entity {
                 for (Status s : inflictStatuses.keySet()){
                     //possibly resistance from player?
                     int inflictProbability = 100-inflictStatuses.get(s);
-                    int inflictStatus = Utility.randomNumber(100);
-                    if(inflictStatus > inflictProbability){
+                    if(Utility.randomGreaterThan(inflictProbability)){
                         if (player.addStatus(s)){
                             printToLog(s.getOnApply());
                         }

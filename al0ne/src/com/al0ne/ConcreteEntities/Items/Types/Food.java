@@ -33,10 +33,10 @@ public class Food extends Item {
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         if(!player.hasNeeds()){
             printToLog("Yum, tasty!");
-            return "";
+            return true;
         }
         if (player.hasStatus("starving")){
             player.removeStatus("starving");
@@ -45,6 +45,6 @@ public class Food extends Item {
             Hunger hunger = (Hunger) player.getStatus().get("hunger");
             hunger.modifyDuration(+foodValue*20);
         }
-        return "";
+        return true;
     }
 }

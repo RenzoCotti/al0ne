@@ -62,8 +62,8 @@ public class LockedDoor extends Door {
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         printToLog("The door is locked.");
-        return "";
+        return true;
     }
 }

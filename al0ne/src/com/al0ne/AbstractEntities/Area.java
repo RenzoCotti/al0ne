@@ -18,7 +18,6 @@ public class Area implements Serializable{
     protected Player player;
     protected TechLevel techLevel;
 //    protected LootTable lootTable;
-    //todo add random events with chance, for both rooms and areas
 
 
 

@@ -96,16 +96,18 @@ public class ManGenerator extends Generator{
         switch (randomHead){
             case 1:
                 head = headFeatures.get(Utility.randomNumber(headFeatures.size()));
+                break;
             case 2:
                 head = eyesFeatures.get(Utility.randomNumber(eyesFeatures.size()));
+                break;
             case 3:
                 head = faceFeatures.get(Utility.randomNumber(faceFeatures.size()));
+                break;
         }
         return head;
     }
 
     public NPC generate(String name, String intro){
-        int randomHead = Utility.randomNumber(3);
         String head = generateHead();
 
         int randBody = Utility.randomNumber(bodyFeatures.size());
@@ -122,7 +124,7 @@ public class ManGenerator extends Generator{
         String head = generateHead();
         String body;
 
-        if (Utility.randomNumber(100) > 50){
+        if (Utility.randomGreaterThan(50)){
             if (F){
                 body = female.get(Utility.randomNumber(female.size()));
             } else {

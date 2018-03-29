@@ -81,7 +81,7 @@ public class HandleCommands {
 //            return false;
 //        }
         if (possibleItems.size() == 1 || possibleEntities.size() == 1) {
-            String result = null;
+            boolean result;
             ArrayList<Pair> toUse;
             if(possibleItems.size() == 1){
                 toUse = possibleItems;
@@ -91,11 +91,8 @@ public class HandleCommands {
                 toUse = possibleEntities;
             }
 
-            if(result != null && result.equals("")){
+            if(result){
                 printToLog("You " + s + " the " + toUse.get(0).getEntity().getName());
-            } else if(result != null){
-                printToLog("You " + s + " the " + toUse.get(0).getEntity().getName());
-                printToLog(result);
             } else{
                 printToLog("You can't " + s + " it.");
             }
@@ -312,14 +309,14 @@ public class HandleCommands {
 
             if (inventoryItems.getItems().size() == 1) {
 
-                String result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
+                boolean result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
 
-                if (result == null) {
+                if (!result) {
                     printToLog("You can't use it.");
                 }
             } else if (roomItems.getItems().size() == 1) {
-                String result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
-                if (result == null) {
+                boolean result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
+                if (!result) {
                     printToLog("You can't use it.");
                 }
             } else {

@@ -21,9 +21,9 @@ public class HideItem extends Prop{
 
     //this object when used adds the item it's hiding in the room
     @Override
-    public String used(Player player){
+    public boolean used(Player player){
         Room currentRoom = player.getCurrentRoom();
         currentRoom.addItem(hidden);
-        return "";
+        return true;
     }
 }

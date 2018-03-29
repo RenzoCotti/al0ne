@@ -34,11 +34,7 @@ public class PlayerActions {
         if(player.hasItemInInventory(item.getID())){
             Pair pair = player.getItemPair(item.getID());
 
-            if (npc.isGiven((Item) pair.getEntity(), player)){
-                return true;
-            } else{
-                return false;
-            }
+            return npc.isGiven((Item) pair.getEntity(), player);
         } else{
             printToLog("You don't have it.");
             return true;
@@ -78,7 +74,7 @@ public class PlayerActions {
     }
 
 
-        //this function handles attacking an entity
+    //this function handles attacking an entity
     //if it is an enemy, we roll 1d100, we sum attack,
     //and we check if its bigger than the dodge roll
     //if it is, we roll for damage, subtract the armor
@@ -88,44 +84,43 @@ public class PlayerActions {
     //and we snooze him this turn (all aggrod enemies in the room attack at EOT)
     public static boolean attack(Player player, WorldCharacter enemy){
         Room currentRoom = player.getCurrentRoom();
-        Pair p = currentRoom.getEntityPair(enemy.getID());
-            String type;
-            int armorPen;
-            int condition = 100;
-            Weapon weapon = player.getWeapon();
-            boolean ranged = false;
+        String type;
+        int armorPen;
+        int condition = 100;
+        Weapon weapon = player.getWeapon();
+        boolean ranged = false;
 
-            if(weapon==null){
-                type="fists";
-                armorPen=0;
-            } else if(weapon instanceof RangedWeapon){
-                RangedWeapon rweapon = (RangedWeapon) weapon;
-                int inMagazine = rweapon.getInMagazine();
-                type=weapon.getDamageType();
-                condition = weapon.getIntegrity();
-                armorPen=weapon.getArmorPenetration();
-                ranged = true;
+        if(weapon==null){
+            type="fists";
+            armorPen=0;
+        } else if(weapon instanceof RangedWeapon){
+            RangedWeapon rweapon = (RangedWeapon) weapon;
+            int inMagazine = rweapon.getInMagazine();
+            type=weapon.getDamageType();
+            condition = weapon.getIntegrity();
+            armorPen=weapon.getArmorPenetration();
+            ranged = true;
 
-                if(rweapon.needsReloading() && inMagazine == 0){
-                    if(player.hasItemInInventory(rweapon.getAmmoID())){
-                        printToLog("You need to reload your "+rweapon.getName());
-                    } else{
-                        printToLog("You're out of ammunition.");
-                    }
-                    return true;
-                } else if (!rweapon.needsReloading() && !player.hasItemInInventory(rweapon.getAmmoID())){
+            if(rweapon.needsReloading() && inMagazine == 0){
+                if(player.hasItemInInventory(rweapon.getAmmoID())){
+                    printToLog("You need to reload your "+rweapon.getName());
+                } else{
                     printToLog("You're out of ammunition.");
-                    return true;
                 }
-            } else{
-                type=weapon.getDamageType();
-                condition = weapon.getIntegrity();
-                armorPen=weapon.getArmorPenetration();
+                return true;
+            } else if (!rweapon.needsReloading() && !player.hasItemInInventory(rweapon.getAmmoID())){
+                printToLog("You're out of ammunition.");
+                return true;
             }
+        } else{
+            type=weapon.getDamageType();
+            condition = weapon.getIntegrity();
+            armorPen=weapon.getArmorPenetration();
+        }
 
 
-            int attackRoll = Utility.randomNumber(100)+player.getAttack();
-            int dodgeRoll = Utility.randomNumber(100)+enemy.getDexterity();
+        int attackRoll = Utility.randomNumber(100)+player.getAttack();
+        int dodgeRoll = Utility.randomNumber(100)+enemy.getDexterity();
 
         int inflictedDamage = player.getDamage()-Math.max(enemy.getArmorLevel()-armorPen, 0);
 
@@ -137,58 +132,57 @@ public class PlayerActions {
         }
 
 //            System.out.println("ATK: "+attackRoll+" vs ENEMY DEX: "+dodgeRoll);
-            if(attackRoll > dodgeRoll){
+        if(attackRoll > dodgeRoll){
 
-                if (enemy.isWeakAgainst(type) && type.equals("fists")) {
-                    return handToHand(player, enemy);
+            if (enemy.isWeakAgainst(type) && type.equals("fists")) {
+                return handToHand(player, enemy);
 
-                } else if(enemy.isWeakAgainst(type) && ranged){
-                    int jamRoll = Utility.randomNumber(100);
-                    if(jamRoll > condition){
-                        //weapon jammed, no shooting
-                        printToLog("Your weapon malfunctions and you aren't able to shoot.");
-                    } else {
-                        printToLog("You shoot and hit "+nameToUse+".");
-                        if(!enemy.modifyHealth(-(inflictedDamage))){
-                            handleWeaponWearing(weapon, player);
-                            enemy.handleLoot(player);
-                            currentRoom.getEntities().remove(enemy.getID());
-                            return true;
-                        }
+            } else if(enemy.isWeakAgainst(type) && ranged){
+                if(Utility.randomGreaterThan(condition)){
+                    //weapon jammed, no shooting
+                    printToLog("Your weapon malfunctions and you aren't able to shoot.");
+                } else {
+                    printToLog("You shoot and hit "+nameToUse+".");
+                    if(!enemy.modifyHealth(-(inflictedDamage))){
+                        handleWeaponWearing(weapon, player);
+                        enemy.handleLoot(player);
+                        currentRoom.getEntities().remove(enemy.getID());
+                        return true;
                     }
-                } else if(enemy.isWeakAgainst(type)){
-                    //melee attack
-                    int damageAfterIntegrity = Math.round((inflictedDamage*condition)/100);
-
-                    if(inflictedDamage <= 0){
-                        printToLog("Your attack doesn't hurt "+nameToUse+".");
-                    } else if( damageAfterIntegrity <= 0 ){
-                        printToLog("Your weapon is too worn to hurt "+nameToUse+".");
-                    } else {
-                        printToLog("You attack and hit "+nameToUse+".");
-                        if(!enemy.modifyHealth(-(damageAfterIntegrity))){
-                            enemy.handleLoot(player);
-                            handleWeaponWearing(weapon, player);
-                            currentRoom.getEntities().remove(enemy.getID());
-                            return true;
-                        }
-                    }
-
-                } else{
-                    printToLog("Your attack does not seem to affect "+nameToUse);
                 }
+            } else if(enemy.isWeakAgainst(type)){
+                //melee attack
+                int damageAfterIntegrity = Math.round((inflictedDamage*condition)/100);
 
-                System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
-
+                if(inflictedDamage <= 0){
+                    printToLog("Your attack doesn't hurt "+nameToUse+".");
+                } else if( damageAfterIntegrity <= 0 ){
+                    printToLog("Your weapon is too worn to hurt "+nameToUse+".");
+                } else {
+                    printToLog("You attack and hit "+nameToUse+".");
+                    if(!enemy.modifyHealth(-(damageAfterIntegrity))){
+                        enemy.handleLoot(player);
+                        handleWeaponWearing(weapon, player);
+                        currentRoom.getEntities().remove(enemy.getID());
+                        return true;
+                    }
+                }
 
             } else{
-                if(weapon instanceof RangedWeapon){
-                    printToLog("You shoot, but "+nameToUse+"."+" dodges.");
-                    handleWeaponWearing(weapon, player);
-                } else {
-                    printToLog("You attack, but "+nameToUse+"."+" dodges.");
-                }
+                printToLog("Your attack does not seem to affect "+nameToUse);
             }
+
+            System.out.println(enemy.getName()+" HP: "+enemy.getCurrentHealth()+" damage: "+inflictedDamage);
+
+
+        } else{
+            if(weapon instanceof RangedWeapon){
+                printToLog("You shoot, but "+nameToUse+"."+" dodges.");
+                handleWeaponWearing(weapon, player);
+            } else {
+                printToLog("You attack, but "+nameToUse+"."+" dodges.");
+            }
+        }
 
         enemy.isAttacked(player, currentRoom);
         enemy.setSnooze(true);
@@ -196,24 +190,24 @@ public class PlayerActions {
         return true;
     }
 
-    public static void handleWeaponWearing(Weapon weapon, Player player){
+    private static void handleWeaponWearing(Weapon weapon, Player player){
         if(weapon == null) return;
 
-        int wearNumber = Utility.randomNumber(100);
+        boolean isWorn = Utility.randomGreaterThan(70);
 
         if( weapon instanceof RangedWeapon && ((RangedWeapon) weapon).needsReloading() ){
             ((RangedWeapon) weapon).shoot();
-            if(wearNumber > 70){
+            if(isWorn){
                 weapon.modifyIntegrity(-1);
             }
         } else if(weapon instanceof RangedWeapon && player.hasItemInInventory(((RangedWeapon) weapon).getAmmoID())){
             Item ammo = (Item) player.getItemPair(((RangedWeapon) weapon).getAmmoID()).getEntity();
             player.removeOneItem(ammo);
-            if(wearNumber > 70){
+            if(isWorn){
                 weapon.modifyIntegrity(-1);
             }
         } else {
-            if(wearNumber > 60){
+            if(isWorn){
                 weapon.modifyIntegrity(-2);
             }
         }
@@ -221,7 +215,7 @@ public class PlayerActions {
 
 
 
-    public static boolean handToHand(Player player, WorldCharacter enemy){
+    private static boolean handToHand(Player player, WorldCharacter enemy){
         Room currentRoom = player.getCurrentRoom();
         int inflictedDamage = player.getDamage() - Math.max(enemy.getArmorLevel(), 0);
 
@@ -255,7 +249,7 @@ public class PlayerActions {
 
     //this function handles custom action entities
     //atm supports props and items
-    public static String customAction(Player player, Command action, Entity entity){
+    public static boolean customAction(Player player, Command action, Entity entity){
 
         Room currentRoom = player.getCurrentRoom();
         if(entity.getType()=='i'){
@@ -266,18 +260,18 @@ public class PlayerActions {
                 pair = currentRoom.getEntityPair(entity.getID());
             }
             if (pair == null){
-                return null;
+                return false;
             }
             Item item = (Item) pair.getEntity();
 
             if (item == null){
-                return null;
+                return false;
             }
 
             for (Command command : entity.getRequiredCommand()){
                 if (command.equals(action)){
-                    String result = item.used(player);
-                    if(result != null){
+                    boolean result = item.used(player);
+                    if(result){
                         if (item.hasProperty("consumable")){
 
                             if(!inRoom && !player.getItemPair(entity.getID()).modifyCount(-1)){
@@ -289,9 +283,9 @@ public class PlayerActions {
                                 }
                             }
                         }
-                        return result;
+                        return true;
                     }
-                    return null;
+                    return false;
                 }
             }
 
@@ -303,7 +297,7 @@ public class PlayerActions {
                 }
             }
         }
-        return null;
+        return false;
     }
 
 
@@ -311,10 +305,7 @@ public class PlayerActions {
     public static boolean talkToNPC(Player player, String npcName, String subject){
         Room currentRoom = player.getCurrentRoom();
         NPC npc = currentRoom.getNPC(npcName);
-        if (npc != null && npc.talkAbout(subject, player)){
-            return true;
-        }
-        return false;
+        return npc != null && npc.talkAbout(subject, player);
     }
 
     //this function makes the player drop X amount of target, if it has it
@@ -433,9 +424,8 @@ public class PlayerActions {
     //returns 0 if the item can't be used
     //returns 1 if the item was used successfully
     //returns 2 if the item was used successfully and it doesn't need to print anything
-    public static String simpleUse(Player player, Entity target){
+    public static boolean simpleUse(Player player, Entity target){
 
-        Room currentRoom = player.getCurrentRoom();
         if (target.getType() == 'p'){
             Prop prop = (Prop) target;
             return prop.used(player);
@@ -443,62 +433,46 @@ public class PlayerActions {
         } else if (target.getType() == 'i'){
             Pair pair = player.getInventory().get(target.getID());
             Item item = (Item) pair.getEntity();
-            String result = item.used(player);
-            if(result != null){
+            boolean result = item.used(player);
+            if(result){
                 //if the item is consumable, we subtract 1 from the inventory
                 if (item.hasProperty("consumable")){
                     if(!player.getItemPair(item.getID()).modifyCount(-1)){
                         player.getInventory().remove(item.getID());
                     }
                 }
-                return result;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
 
     //this function makes the player use item on target, item is an inventory Item, target is a Prop/Item
     //one can't use an enemy or an NPC
 
-    public static int interactOnWith(Player player, Entity target, Entity item){
-        Room currentRoom = player.getCurrentRoom();
+    public static void interactOnWith(Player player, Entity target, Entity item){
         if (item.getType() == 'e'){
-            return 0;
+            return;
         } else if(target.getType() == 'n'){
             PlayerActions.give(player, (NPC) target, item);
-            return 0;
+            return;
         }
         if(target.getType() == 'p' && item.getType() == 'p'){
             printToLog("At least one of the items must be from your inventory.");
-            return 0;
+            return;
         }
         System.out.println("Using "+item.getName()+"(i) with "+ target.getName());
 
 
-//        if (item instanceof Item){
-            ((Interactable) item).usedWith((Interactable) target, player);
-//        } else if (target instanceof Item){
-//            ((Interactable) item).usedWith((Interactable) target, currentRoom, player);
-//        }
-//        else if ((target.getType() == 'i' || target.getType() == 'w')&&(item.getType() == 'i')){
-//            System.out.println("3");
-//            ((Item) target).usedWith((Item) item, currentRoom, this);
-//        } else if((item.getType() == 'i' || item.getType() == 'w')&&(target.getType() == 'i')){
-//            System.out.println("4");
-//            ((Item) item).usedWith((Item) target, currentRoom, this);
-//        }
-        return 0;
+        ((Interactable) item).usedWith((Interactable) target, player);
     }
 
     //this function handles examining an entity
-    public static boolean examine(Player player, Entity target){
-        Room currentRoom = player.getCurrentRoom();
+    public static void examine(Player player, Entity target){
         if(target != null){
             target.printLongDescription(player);
-            return true;
         }
-        return false;
     }
 
 
@@ -538,7 +512,7 @@ public class PlayerActions {
     }
 
 
-    public static boolean castSpell(Player player, String spellName){
+    public static void castSpell(Player player, String spellName){
         Room currentRoom = player.getCurrentRoom();
         if (player.hasItemInInventory("spellbook")) {
             Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
@@ -547,10 +521,10 @@ public class PlayerActions {
 
             if(potentialSpells.size() > 1){
                 printToLog("Be more specific.");
-                return false;
+                return;
             }else if (potentialSpells.size() == 0){
                 printToLog("Your spellbook doesn't seem to have the spell "+spellName);
-                return false;
+                return;
             }
 
             if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
@@ -559,7 +533,7 @@ public class PlayerActions {
 
                 if(spell.getCount() <= 0){
                     printToLog("You don't have any castings left.");
-                    return false;
+                    return;
                 }
                 Spell s = spell.getSpell();
                 char castOn = s.getTarget();
@@ -569,30 +543,25 @@ public class PlayerActions {
                         SelfSpell ss = (SelfSpell) s;
                         if(ss.isCasted(player)){
                             spell.modifyCount(-1);
-                            return true;
+                            return;
                         }
-                        return false;
+                        return;
                     case 'w':
                         WorldSpell ws = (WorldSpell) s;
                         if(ws.isCasted(player, currentRoom)){
                             spell.modifyCount(-1);
-                            return true;
                         }
-                        return false;
                 }
                 //TODO: TO REVISE this
-                return false;
             } else {
                 printToLog("Your spellbook doesn't seem to have such a spell.");
-                return false;
             }
         } else{
             printToLog("You need a spellbook to cast spells.");
-            return false;
         }
     }
 
-    public static boolean castAtTarget(Player player, String spellName, String target){
+    public static void castAtTarget(Player player, String spellName, String target){
 
         if (player.hasItemInInventory("spellbook")) {
 
@@ -603,10 +572,10 @@ public class PlayerActions {
 
             if(potentialSpells.size() > 1){
                 printToLog("Be more specific.");
-                return false;
+                return;
             } else if (potentialSpells.size() == 0){
                 printToLog("Your spellbook doesn't seem to have such a spell.");
-                return false;
+                return;
             }
 
 
@@ -616,7 +585,7 @@ public class PlayerActions {
 
                 if(spell.getCount() <= 0){
                     printToLog("You don't have any castings left.");
-                    return false;
+                    return;
                 }
                 Spell s = spell.getSpell();
                 char castOn = s.getTarget();
@@ -631,22 +600,22 @@ public class PlayerActions {
 
                         if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
                             printToLog("Be more specific.");
-                            return false;
+                            return;
                         } else if(possibleItems.size() != 0){
                             printToLog("You need to be holding that item.");
-                            return false;
+                            return;
                         } else if (possibleItemsFromInventory.size() == 0){
                             printToLog("You can't see a "+target);
-                            return false;
+                            return;
                         }
 
                         TargetSpell ts = (TargetSpell) s;
 
                         if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
                             spell.modifyCount(-1);
-                            return true;
+                            return;
                         }
-                        return false;
+                        return;
 
 
                     case 'e':
@@ -654,27 +623,20 @@ public class PlayerActions {
                         ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
                         if(enemies.size() == 0){
                             printToLog("You can't see that enemy");
-                            return false;
                         } else if(enemies.size()>1){
                             printToLog("Be more specific");
-                            return false;
                         } else {
                             if (ds.isCasted(player, enemies.get(0))) {
                                 spell.modifyCount(-1);
-                                return true;
                             }
-                            return false;
                         }
                 }
-                return false;
 
             } else {
                 printToLog("Your spellbook doesn't seem to have such a spell.");
-                return false;
             }
         } else{
             printToLog("You need a spellbook to cast spells.");
-            return false;
         }
     }
 

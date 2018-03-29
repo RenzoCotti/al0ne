@@ -50,13 +50,13 @@ public class Spellbook extends Readable{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
         printToLog("Your spellbook contains these spells:");
         for(SpellPair sp : spells.values()){
             Spell s = sp.getSpell();
             printToLog("- "+s.getName()+": "+sp.getCount()+" castings.");
         }
-        return "";
+        return true;
     }
 
     public HashMap<String, SpellPair> getSpells() {

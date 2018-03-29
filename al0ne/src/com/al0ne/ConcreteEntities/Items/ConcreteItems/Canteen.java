@@ -24,11 +24,11 @@ public class Canteen extends ChargeItem{
     }
 
     @Override
-    public String used(Player player) {
+    public boolean used(Player player) {
 
         if(currentCharges <= 0){
             printToLog("It's empty.");
-            return "";
+            return true;
         }
         if (player.hasStatus("dehydrated")){
             player.removeStatus("dehydrated");
@@ -40,7 +40,7 @@ public class Canteen extends ChargeItem{
         currentCharges--;
         modifyWeight(-0.1);
         player.recalculateWeight();
-        return "";
+        return true;
     }
 
     @Override
