@@ -386,6 +386,11 @@ public class PlayerActions {
     //this function tries to take an item from a container
     public static boolean takeFrom(Player player, Pair item, Container container, int amount){
 
+        if(container.isLocked()){
+            printToLog("It's locked.");
+            return false;
+        }
+
         Item toAdd = (Item) item.getEntity();
         int currentCounter = item.getCount();
         if (!player.addAmountItem(item, amount)){
@@ -404,6 +409,11 @@ public class PlayerActions {
     //this function puts an x items into a container, if the space is enough
 
     public static boolean putIn(Player player, Pair item, Container container, int amount){
+
+        if(container.isLocked()){
+            printToLog("It's locked.");
+            return false;
+        }
 
         int count = item.getCount();
         if (!container.putIn(item, amount)){

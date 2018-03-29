@@ -8,6 +8,10 @@ import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Abstract.Interactable;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Chest;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
+import com.al0ne.ConcreteEntities.Items.Types.Container;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionPrint;
@@ -324,7 +328,7 @@ public class DeltaBlock extends Area {
 
         Room checkpointHouse = new Room("Checkpoint barracks", "This place is where the guards " +
                 "relax while they're not on duty.");
-        NPC barracksGuard = new NPC("a checkpoint guard", "A man in his 50s, " +
+        NPC barracksGuard = new NPC("a bored guard", "A man in his 50s, " +
                 "sporting a moustache. " +
                 "He's wearing a bulletproof vest.", "You shouldn't be here.");
         checkpointHouse.addEntity(barracksGuard);
@@ -334,7 +338,82 @@ public class DeltaBlock extends Area {
                 "a table with a journal on top", Material.IRON, new Book("human traffic",
                 "It's countless logs about people getting in and getting out of the Delta block.")));
 
+        Container locker = new Container("locker", "a metal locker", Size.LARGE, Material.IRON);
+        locker.addItem(new Mace("Nightstick", "A hard plastic nightstick.", Material.PLASTIC));
+        locker.addItem(new Armor("Bulletproof vest",
+                "A vest which protects against low calibre bullets.", Material.KEVLAR));
+        locker.lock();
+
+        checkpointHouse.addEntity(locker);
+
+
+
+        Room nearCheck = new Room("Nearby military checkpoint", "You are on a street and " +
+                "see in the distance what seems to be a checkpoint. Better not approach it if one has no documents.");
+
+
+        Room hospitalPark = new Room("Hospital park", "You see on your right the parking lot for " +
+                "visitors of the hospital, and further away the hospital itself.");
+        hospitalPark.addEntity(new Prop("a car", "A blue car, parked over two parking spots. " +
+                "How irritating."));
+        hospitalPark.addEntity(new Prop("a motorcycle", "A naked motorcycle, black in colour."));
+        hospitalPark.addEntity(new Prop("a clamped car", "The driver is likely to have parked there " +
+                "too long."));
+
+        Room highwayEntrance = new Room("Highway entrance", "You end up near the highway entrance." +
+                "You can't go in without a vehicle, it would be suicide.");
+
+        Room industrialZone = new Room("Industrial zone", "Down this road you can see several " +
+                "run down factories. It's not that they were abandoned, they still are quite active; it's just that" +
+                "their external appearance is quite neglected.");
+
+        Room SFEntrance = new Room("Silicon Factory Entrance", "This is Delta-block's" +
+                " famous silicon factory. It's where they take rock, collected through Omega zone slaves's death," +
+                " and refine it into silicon, a very useful commodity nowadays.");
+        SFEntrance.addEntity(new Prop("sign", "It reads: \"Silicatum\""));
+
+        Room SFReception = new Room("Reception", "This is the reception of the factory. Oddly" +
+                "enough, nobody sems to be here.");
+
+        Room SFBreak = new Room("Break room", "This room smells of smoke and sweat.");
+//        SFBreak.addEntity(new Prop("pile of clothes", "You can see some stained clothes, still" +
+//                "humid you'd bet"));
+        SFBreak.addEntity(new JunkItem("erotic calendar", "A calendar with pictures" +
+                " of pretty yet little dressed ladies.", 0.2, Size.SMALL));
+        SFBreak.addEntity(new Container("locker", "A locker", Size.LARGE, Material.IRON, true));
+
+        Room SFWork1 = new Room("Machine room", "A hall with lots of machines to refine" +
+                " the ore into silicon");
+        SFWork1.addEntity(new InvisibleProp("machines", "You have absolutely no idea what they do"));
+
+        Room SFWork2 = new Room("Furnace room", "A huge furnace dominates this room.");
+        SFWork2.addEntity(new InvisibleProp("furnace", "It's what they use to purify the silica"));
+        SFWork2.addEntity(mg.generate("a worker", "Sorry, I'm very busy"));
+
+
+        Room SFWarehouse = new Room("Silicon warehouse",
+                "Full of boxes and spare parts made of silicon.");
+        Container boxes = new Container("boxes", "a few stacked boxes.",
+                Size.LARGE, Material.CARDBOARD);
+        boxes.addItem(new Mace("wrench", "a metal wrench", Material.IRON));
+        boxes.addItem(new JunkItem("spare parts", "Some random silica made parts.",
+                1, Material.SILICA));
+        SFWarehouse.addEntity(boxes);
+
+
+        industrialZone.connectRoom("west", SFEntrance);
+        SFEntrance.connectRoom("west", SFReception);
+        SFEntrance.connectRoom("north", SFWarehouse);
+        SFReception.connectRoom("west", SFBreak);
+        SFBreak.connectRoom("west", SFWork1);
+        SFWork1.connectRoom("west", SFWork2);
+        highwayEntrance.connectRoom("west", hospitalPark);
+        hospitalPark.connectRoom("west", nearCheck);
+        hospitalPark.connectRoom("north", hospitalReception);
         checkpointDelta.connectRoom("south", checkpointHouse);
+        nearCheck.connectRoom("west", checkpointDelta);
+
+
 
 
 

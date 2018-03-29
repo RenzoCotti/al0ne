@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public enum Material {
 
+    //materials are of the kind (DMG)/TOUGHNESS/WEIGHT/PRICE
+
     //Base Tech materials
     CLAY(0, 2, 0), STONE(1, 1, 4, 0), WOOD(1, 2, 3, 0), LEATHER(1, 1, 4), FUR(1, 2, 2),
     FABRIC(0.5, 0),
@@ -18,10 +20,10 @@ public enum Material {
 
     //Mid Tech materials
     PLASTIC(0, 0, 0.5, 0), KEVLAR(6, 2, 10), STEEL(4, 4, 3, 2), COTTON(1, 1),
-    ALUMINIUM(1, 1, 1, 2),
+    ALUMINIUM(1, 1, 1, 2), CARDBOARD (1, 1, 1),
 
     //High Tech materials
-    NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10),
+    NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10), SILICA(1, 0, 1, 4),
 
     UNDEFINED(0, 0);
 

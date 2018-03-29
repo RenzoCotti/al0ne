@@ -13,12 +13,13 @@ import static com.al0ne.Engine.Main.printToLog;
 /**
  * Created by BMW on 11/04/2017.
  */
-public abstract class Container extends Item{
+public class Container extends Item{
 
     protected ArrayList<Pair> items;
     protected boolean canAdd;
     protected int currentSize;
     protected double currentWeight;
+    protected boolean locked;
 
     public Container(String id, String name, String description, double weight, Size size,
                      Material material, boolean canAdd) {
@@ -28,6 +29,29 @@ public abstract class Container extends Item{
         this.currentSize = 0;
         this.type='C';
         this.items = new ArrayList<>();
+        this.locked = false;
+    }
+
+    public Container(String name, String description, Size size, Material material) {
+        super(name, name, description, 10000, size, material, null);
+        this.canAdd = false;
+        this.currentWeight = 0;
+        this.currentSize = 0;
+        this.type='C';
+        this.items = new ArrayList<>();
+        this.locked = false;
+
+    }
+
+    public Container(String name, String description, Size size, Material material, boolean locked) {
+        super(name, name, description, 10000, size, material, null);
+        this.canAdd = false;
+        this.currentWeight = 0;
+        this.currentSize = 0;
+        this.type='C';
+        this.items = new ArrayList<>();
+        this.locked = locked;
+
     }
 
     public boolean hasItem(Item item){
@@ -57,6 +81,7 @@ public abstract class Container extends Item{
 
     //return true/false if successful
     public boolean putIn(Pair pair, Integer amount){
+
         Item item = (Item) pair.getEntity();
         if (canAdd && (item.getSize())*amount+currentSize < size){
             if(hasItem(item)){
@@ -113,6 +138,18 @@ public abstract class Container extends Item{
         items.add(new Pair(item, value));
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void unlock() {
+        this.locked = false;
+    }
+
+    public void lock(){
+        this.locked = true;
+    }
+
     @Override
     public void printLongDescription(Player player) {
         if (items.size() == 0) {
@@ -120,6 +157,10 @@ public abstract class Container extends Item{
             return;
         }
         printToLog(longDescription);
+        if(locked) {
+            printToLog("It's locked.");
+            return;
+        }
         printToLog("It contains: ");
         for (Pair pair: items){
             Item item = (Item) pair.getEntity();

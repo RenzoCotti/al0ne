@@ -11,9 +11,9 @@ import static java.lang.Math.max;
  * Created by BMW on 23/03/2017.
  */
 public class Armor extends Protective {
-    public Armor(String id, String name, String description,
-                 double weight, int armor, int encumberment, Material material) {
-        super(id, name, description, weight, armor, encumberment, Size.LARGE, material);
+    public Armor(String name, String description, Material m) {
+        super(name, name, description, Math.max(m.getWeight()*2, 3), Math.max(m.getToughness()-2, 0),
+                (int) Math.max(m.getWeight()*10, 40), Size.LARGE, m);
         this.part = "body";
     }
 
