@@ -22,9 +22,9 @@ public class MedievalWorld extends World {
         player.simpleAddItem(bc, 1);
         player.wear(bc);
 
-        Area alphaArea = new TestingArea(player);
-        Area villageArea = new VillageArea(player);
-        Area caveWorld = new FirstAlphaArea(player);
+        Area alphaArea = new TestingArea(this);
+        Area villageArea = new VillageArea(this);
+        Area caveWorld = new FirstAlphaArea(this);
 
 
 

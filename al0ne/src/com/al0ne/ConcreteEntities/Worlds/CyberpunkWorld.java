@@ -15,7 +15,7 @@ public class CyberpunkWorld extends World{
                 "Your kidney hurts like hell.", "You died of kidney failure."));
 
 
-        DeltaBlock d = new DeltaBlock(player);
+        DeltaBlock d = new DeltaBlock(this);
         addArea(d);
 
         player.setStart(d);

@@ -16,9 +16,9 @@ import com.al0ne.ConcreteEntities.Items.Props.Types.HideProp;
 public class FirstAlphaArea extends Area {
 
 
-    public FirstAlphaArea(Player p) {
+    public FirstAlphaArea(World w) {
 
-        super("cave", TechLevel.LOW, p);
+        super("cave", w);
 
 
 

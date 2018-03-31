@@ -32,8 +32,8 @@ import java.util.ArrayList;
  * Created by BMW on 30/04/2017.
  */
 public class VillageArea extends Area {
-    public VillageArea(Player p) {
-        super("medievaly", TechLevel.LOW, p);
+    public VillageArea(World w) {
+        super("medievaly", w);
 
         Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");

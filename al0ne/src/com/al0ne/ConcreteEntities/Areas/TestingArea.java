@@ -43,8 +43,8 @@ import com.al0ne.ConcreteEntities.Spells.MidasSpell;
  */
 public class TestingArea extends Area {
 
-    public TestingArea(Player p) {
-        super("test", TechLevel.LOW, p);
+    public TestingArea(World w) {
+        super("test", w);
 
         ManGenerator mg = new ManGenerator(getTechLevel());
 

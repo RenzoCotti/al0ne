@@ -31,8 +31,8 @@ import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
 import java.util.ArrayList;
 
 public class DeltaBlock extends Area {
-    public DeltaBlock(Player p) {
-        super("deltablock", TechLevel.HIGH, p);
+    public DeltaBlock(World w) {
+        super("deltablock", w);
 
         ManGenerator mg = new ManGenerator(getTechLevel());
 
@@ -416,7 +416,7 @@ public class DeltaBlock extends Area {
 
 
 
-        player.addQuest(new TravelQuest(hospitalReception));
+        getPlayer().addQuest(new TravelQuest(hospitalReception));
         setStartingRoom(startbath);
 
     }

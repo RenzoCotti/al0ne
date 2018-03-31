@@ -29,9 +29,7 @@ public class World implements Serializable{
     }
 
     public void addArea(Area a) {
-        a.setPlayer(player);
         this.areas.add(a);
-
     }
 
     public Area getStartingArea() {

@@ -16,17 +16,15 @@ public class Area implements Serializable{
     protected String areaName;
     protected String startingRoom;
     protected HashMap<String, Room> rooms;
-    protected Player player;
-    protected TechLevel techLevel;
+    protected World parentWorld;
 //    protected LootTable lootTable;
 
 
 
-    public Area(String areaName, TechLevel tech, Player p) {
+    public Area(String areaName, World w) {
         this.areaName = areaName;
         this.rooms = new HashMap<>();
-        this.techLevel = tech;
-        this.player = p;
+        this.parentWorld = w;
 //        this.lootTable = new LootTable();
     }
 
@@ -36,6 +34,10 @@ public class Area implements Serializable{
 
     public void setStartingRoom(Room startingRoom) {
         this.startingRoom = startingRoom.getID();
+    }
+
+    public Player getPlayer() {
+        return parentWorld.getPlayer();
     }
 
     public HashMap<String, Room> getRooms() {
@@ -50,15 +52,7 @@ public class Area implements Serializable{
         return areaName;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
     public TechLevel getTechLevel() {
-        return techLevel;
+        return parentWorld.getTechLevel();
     }
 }
