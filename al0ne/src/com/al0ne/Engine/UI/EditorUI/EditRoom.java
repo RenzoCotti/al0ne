@@ -125,11 +125,12 @@ public class EditRoom extends EditTab{
                     r = new Room(nameText.getText(), descText.getText());
 
                 } else {
-                    r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(idLabel.getText());
-                    r.setName(nameText.getText());
-                    r.setLongDescription(descText.getText());
-                    r.setCustomDirection(customExit.getText());
-                    idLabel.setText("Create new Room:");
+                    //TODO this file needs to be tweaked
+//                    r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(idLabel.getText());
+//                    r.setName(nameText.getText());
+//                    r.setLongDescription(descText.getText());
+//                    r.setCustomDirection(customExit.getText());
+//                    idLabel.setText("Create new Room:");
                 }
 
                 nameText.setStyle("");
@@ -138,27 +139,27 @@ public class EditRoom extends EditTab{
 
 
                 if(!exit.equals("")){
-                    r.setCustomDirection(exit);
+//                    r.setCustomDirection(exit);
                 }
 
                 if(entities.size() > 0){
                     for(Pair p: entities.values()){
-                        r.addEntity(p.getEntity(), p.getCount());
+//                        r.addEntity(p.getEntity(), p.getCount());
                     }
                     entities.clear();
                 }
 
                 if(exits.keySet().size() > 0){
                     for(String dir : exits.keySet()){
-                        r.addExit(dir, exits.get(dir));
+//                        r.addExit(dir, exits.get(dir));
                     }
                     exits.clear();
                 }
 
-                Main.edit.getCurrentEdit().getCurrentWorld().addRoom(r);
+//                Main.edit.getCurrentEdit().getCurrentWorld().addRoom(r);
 
                 if(isStarting){
-                    Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);
+//                    Main.edit.getCurrentEdit().getCurrentWorld().setStartingRoom(r);
                 }
 
 
@@ -193,9 +194,9 @@ public class EditRoom extends EditTab{
         edit.setOnAction(t -> {
             int selectedIndex = list.getSelectionModel().getSelectedIndex();
             if(selectedIndex > -1){
-                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(list.getSelectionModel().getSelectedItem().getId());
-                LoadRoom loadRoom = new LoadRoom();
-                loadRoom.loadRoom(r);
+//                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(list.getSelectionModel().getSelectedItem().getId());
+//                LoadRoom loadRoom = new LoadRoom();
+//                loadRoom.loadRoom(r);
             }
         });
 
@@ -204,10 +205,10 @@ public class EditRoom extends EditTab{
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     IdNameType rowData = row.getItem();
-                    Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(rowData.getId());
+//                    Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(rowData.getId());
 
                     LoadRoom loadRoom = new LoadRoom();
-                    loadRoom.loadRoom(r);
+//                    loadRoom.loadRoom(r);
                 }
             });
             return row ;
@@ -218,7 +219,7 @@ public class EditRoom extends EditTab{
             if(selectedIndex > -1){
                 IdNameType idName = list.getSelectionModel().getSelectedItem();
                 list.getItems().remove(idName);
-                Main.edit.getCurrentEdit().getCurrentWorld().getRooms().remove(idName.getId());
+//                Main.edit.getCurrentEdit().getCurrentWorld().getRooms().remove(idName.getId());
 
                 list.setItems(getTableItems());
             }
@@ -242,9 +243,9 @@ public class EditRoom extends EditTab{
     @Override
     public ObservableList<IdNameType> getTableItems() {
         ArrayList<IdNameType> temp = new ArrayList<>();
-        for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
-            temp.add(new IdNameType(r.getID(), r.getName(), "Room"));
-        }
+//        for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
+//            temp.add(new IdNameType(r.getID(), r.getName(), "Room"));
+//        }
 
         return FXCollections.observableArrayList (temp);
     }
@@ -252,9 +253,9 @@ public class EditRoom extends EditTab{
 
     public static ObservableList<IdNameType> getRooms(){
         ArrayList<IdNameType> temp = new ArrayList<>();
-        for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
-            temp.add(new IdNameType(r.getID(), r.getName(), "Room"));
-        }
+//        for(Room r: Main.edit.getCurrentEdit().getCurrentWorld().getRooms().values()){
+//            temp.add(new IdNameType(r.getID(), r.getName(), "Room"));
+//        }
 
         return FXCollections.observableArrayList (temp);
     }

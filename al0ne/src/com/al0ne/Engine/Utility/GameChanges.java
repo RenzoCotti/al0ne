@@ -299,30 +299,19 @@ public class GameChanges {
 
 
 
-
-    public static boolean changeWorld(String s){
+    public static void changeWorld(int i){
         //save old state
-        Area oldArea = Main.game.getWorld(Main.game.getCurrentWorldName());
-        oldArea.setPlayer(Main.player);
+        World oldWorld = Main.game.getCurrentWorld();
+        oldWorld.setPlayer(Main.player);
 
-        for(Area w : Main.game.getWorlds().values()){
-            if(s.equals(w.getAreaName())){
-                Main.game.setCurrentWorld(s);
-                Main.player = Main.game.getPlayer();
-                Main.clearScreen();
-                printToLog("Your see black and feel very cold for a moment, and suddenly you are somewhere else.");
-                printToLog();
-                player.getCurrentRoom().printRoom();
-                player.getCurrentRoom().visit();
-                return true;
-            }
-        }
 
-        System.out.println("404: world not found\nAvailable worlds:");
-        for(Area w : Main.game.getWorlds().values()){
-            printToLog("- "+w.getAreaName());
-        }
-        return false;
+        Main.game.setCurrentWorld(i);
+        Main.player = Main.game.getPlayer();
+        Main.clearScreen();
+        printToLog("Your see black and feel very cold for a moment, and suddenly you are somewhere else.");
+        printToLog();
+        player.getCurrentRoom().printRoom();
+        player.getCurrentRoom().visit();
 
     }
 

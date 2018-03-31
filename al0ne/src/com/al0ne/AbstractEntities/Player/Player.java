@@ -1,5 +1,6 @@
 package com.al0ne.AbstractEntities.Player;
 
+import com.al0ne.AbstractEntities.Area;
 import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Quests.Quest;
 import com.al0ne.AbstractEntities.Room;
@@ -43,6 +44,8 @@ public class Player extends WorldCharacter {
 
     //stores current room the player is in
     private Room currentRoom;
+
+    private Area currentArea;
     
     //Maximum carry weight of the player
     private double maxWeight;
@@ -63,10 +66,9 @@ public class Player extends WorldCharacter {
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
-    public Player(boolean needs, double maxWeight, Room currentRoom, String story) {
+    public Player(boolean needs, double maxWeight, String story) {
         super("alpha", "player", story, "da",
         10, 70, 30, 0, 1);
-        this.currentRoom = currentRoom;
         this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.quests = new HashMap<>();
@@ -81,11 +83,10 @@ public class Player extends WorldCharacter {
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
-    public Player( String name, String story, boolean needs, Room currentRoom,
+    public Player( String name, String story, boolean needs,
                   int maxHealth, int attack, int dexterity, int armor, int damage, double maxWeight ) {
         super("alpha", name, story, "da",
                 maxHealth, attack, dexterity, armor, damage);
-        this.currentRoom = currentRoom;
         this.maxWeight = maxWeight;
         this.currentWeight=0;
         this.quests = new HashMap<>();
@@ -99,6 +100,18 @@ public class Player extends WorldCharacter {
     }
 
 
+    public Area getCurrentArea() {
+        return currentArea;
+    }
+
+    public void setStart(Area currentArea) {
+        this.currentArea = currentArea;
+        this.currentRoom = currentArea.getStartingRoom();
+    }
+
+    public void setCurrentArea(Area currentArea) {
+        this.currentArea = currentArea;
+    }
 
     //returns true if the player has basic needs
     public boolean hasNeeds() {

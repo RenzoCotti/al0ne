@@ -145,7 +145,6 @@ public class Main extends Application{
         }
 
 
-
         printToLog();
         player.getCurrentRoom().printName();
     }

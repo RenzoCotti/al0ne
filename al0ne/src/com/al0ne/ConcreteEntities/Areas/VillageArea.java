@@ -32,8 +32,8 @@ import java.util.ArrayList;
  * Created by BMW on 30/04/2017.
  */
 public class VillageArea extends Area {
-    public VillageArea() {
-        super("medievaly", TechLevel.LOW);
+    public VillageArea(Player p) {
+        super("medievaly", TechLevel.LOW, p);
 
         Room yourRoom = new Room("Your bedroom", "You are in a fairly chaotic bedroom. " +
                 "It's not like your mom doesn't tell you to tidy it up.");
@@ -241,14 +241,7 @@ public class VillageArea extends Area {
 
         setStartingRoom(yourRoom);
 
-        Player p = new Player(true, 10, getStartingRoom(),
-                "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
-                        "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet.");
-        BodyClothing bc = new BodyClothing("roughclothes", "clothes",
-                "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FABRIC);
-        p.simpleAddItem(bc, 1);
-        p.wear(bc);
+
 //        p.simpleAddItem(new FoodBehaviour("eggs", "asd", 0, Size.NORMAL, 0), 1);
-        setPlayer(p);
     }
 }

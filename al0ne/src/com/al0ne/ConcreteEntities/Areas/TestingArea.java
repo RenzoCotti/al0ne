@@ -22,8 +22,8 @@ import com.al0ne.ConcreteEntities.Items.ConcreteItems.Helmet.Sallet;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Shield.*;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.*;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.RangedWeapon.LongBow;
-import com.al0ne.ConcreteEntities.Items.Props.Types.TeleportProp;
-import com.al0ne.ConcreteEntities.Items.Props.Types.WorldSwitch;
+import com.al0ne.ConcreteEntities.Items.Props.Types.MoveProps.RoomSwitchProp;
+import com.al0ne.ConcreteEntities.Items.Props.Types.MoveProps.WorldSwitch;
 import com.al0ne.ConcreteEntities.NPCs.ManGenerator;
 import com.al0ne.ConcreteEntities.Spells.ConcreteSpells.Fireball;
 import com.al0ne.ConcreteEntities.Spells.ConcreteSpells.LightHeal;
@@ -43,8 +43,8 @@ import com.al0ne.ConcreteEntities.Spells.MidasSpell;
  */
 public class TestingArea extends Area {
 
-    public TestingArea() {
-        super("test", TechLevel.LOW);
+    public TestingArea(Player p) {
+        super("test", TechLevel.LOW, p);
 
         ManGenerator mg = new ManGenerator(getTechLevel());
 
@@ -81,7 +81,7 @@ public class TestingArea extends Area {
         sb.addSpell(new Fireball(), 10);
         sb.addSpell(new LightHeal(), 5);
         sb.addSpell(new TeleportSpell(), 10);
-        attic.addEntity(new WorldSwitch("suspicious rock", "Very suspicios, let me tell you.", "medievaly"));
+        attic.addEntity(new WorldSwitch("suspicious rock", "Very suspicios, let me tell you.", 1));
 
 
         attic.addEntity(new LongBow());
@@ -101,8 +101,8 @@ public class TestingArea extends Area {
         Room shieldRoom = new Room("Shieldery", "A room full of shields");
 
 
-        startRoom.addEntity(new TeleportProp("rock", "another suspicious rock. ha!", shieldRoom));
-        shieldRoom.addEntity(new TeleportProp("rock", "another suspicious rock. ha!", startRoom));
+        startRoom.addEntity(new RoomSwitchProp("rock", "another suspicious rock. ha!", shieldRoom));
+        shieldRoom.addEntity(new RoomSwitchProp("rock", "another suspicious rock. ha!", startRoom));
 
 
         for(Material m : Material.getMetals()){
@@ -292,7 +292,6 @@ public class TestingArea extends Area {
 
         Room bossRoom = new Room("Hell", "As soon as you enter this room, you're stunned by the amount of heat there is in this room. It feels as if the floor could melt.");
         bossRoom.setCustomDirection("You sense a magical barrier east.");
-        bossRoom.addEntity(new LeatherArmour());
         bossRoom.lockDirection("east", "boss");
         bossRoom.addEntity(new Demon());
         addRoom(bossRoom);
@@ -368,8 +367,5 @@ public class TestingArea extends Area {
         
         setStartingRoom(startRoom);
 
-        Player p = new Player(true, 20, getStartingRoom(), "You are alpha. And omega. Maybe.");
-
-        setPlayer(p);
     }
 }

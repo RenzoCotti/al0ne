@@ -1,9 +1,8 @@
 package com.al0ne.Engine.Game;
 
-import com.al0ne.AbstractEntities.Area;
-import com.al0ne.ConcreteEntities.Areas.TestingArea;
-import com.al0ne.ConcreteEntities.Areas.FirstAlphaArea;
-import com.al0ne.ConcreteEntities.Areas.VillageArea;
+import com.al0ne.AbstractEntities.World;
+import com.al0ne.ConcreteEntities.Worlds.CyberpunkWorld;
+import com.al0ne.ConcreteEntities.Worlds.MedievalWorld;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -16,19 +15,19 @@ public class WarpGame extends Game{
         this.warpstone = false;
 
 
-        Area startingArea = new TestingArea();
-        Area alphaWorld = new TestingArea();
+
+        World medievalWorld = new MedievalWorld();
+
+        World cyberPunkWorld = new CyberpunkWorld();
+
+        addWorld(medievalWorld);
+        addWorld(cyberPunkWorld);
 
 
-        Area villageArea = new VillageArea();
-        Area caveWorld = new FirstAlphaArea();
-        addWorld(startingArea);
-        addWorld(villageArea);
-        addWorld(caveWorld);
-        addWorld(alphaWorld);
 
-        this.currentWorld = startingArea.getAreaName();
-        this.startingWorld = startingArea.getAreaName();
+
+        this.currentWorld = 0;
+        this.startingWorld = 0;
     }
 
     public boolean hasWarpstone() {

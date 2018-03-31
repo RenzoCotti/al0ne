@@ -112,9 +112,9 @@ public class EditPlayer extends EditTab{
             boolean needs = realisticMode.isSelected();
 
             if(!name.equals("") && !story.equals("") &&
-                    Main.edit.getCurrentEdit().getCurrentWorld().getStartingRoom() != null){
-                Room startingRoom = Main.edit.getCurrentEdit().getCurrentWorld().getStartingRoom();
-                Player p = new Player(name, story, needs, startingRoom, maxHealthValue,
+                    Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea().getStartingRoom() != null){
+                Room startingRoom = Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea().getStartingRoom();
+                Player p = new Player(name, story, needs, maxHealthValue,
                         attackValue, dexValue, armorValue, damageValue, weightValue);
 
                 if(inventory.size() > 0){
@@ -141,7 +141,7 @@ public class EditPlayer extends EditTab{
                     storyText.setStyle("-fx-border-color: red;");
                 }
 
-                if(Main.edit.getCurrentEdit().getCurrentWorld().getStartingRoom() == null){
+                if(Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea() == null){
                     errorMessage.setText("Please create and \nset a room as starting room.");
                 }
 

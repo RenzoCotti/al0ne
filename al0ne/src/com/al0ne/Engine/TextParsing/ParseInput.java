@@ -24,7 +24,7 @@ public class ParseInput {
 
         Player player = game.getPlayer();
 
-        HashMap<String, Room> rooms = game.getRooms();
+        HashMap<String, Room> rooms = player.getCurrentArea().getRooms();
 
         String lowerInput = input.toLowerCase();
 
@@ -242,13 +242,22 @@ public class ParseInput {
             case WARP:
                 if(game.isInDebugMode()){
 
-                    if (parsedInput.length < 2) {
-                        printToLog("The syntax is: WARP world_name");
+                    if (parsedInput.length != 2) {
+                        printToLog("The syntax is: WARP world_number");
                     } else {
-                        if (GameChanges.changeWorld(Utility.stitchFromTo(parsedInput, 1, parsedInput.length))) {
+                        int number;
+                        try {
+                            number = Integer.parseInt(parsedInput[1]);
+                            GameChanges.changeWorld(number);
                             printToLog();
-//                            player.getCurrentRoom().printRoom();
-                            System.out.println(player.getCurrentRoom().getID());
+                        } catch (Exception e){
+                            printToLog("List of worlds available for warp");
+                            printToLog("#\tName");
+                            printToLog("---------------------------------");
+
+                            for(int i = 0; i < Main.game.getWorldCount(); i++){
+                                printToLog(i+"\t"+Main.game.getWorld(i).getWorldName());
+                            }
                         }
 
                     }

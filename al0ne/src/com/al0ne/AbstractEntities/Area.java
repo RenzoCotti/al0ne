@@ -11,6 +11,7 @@ import java.util.HashMap;
  */
 public class Area implements Serializable{
 
+    //TODO a world is a superclass of areas?
 
     protected String areaName;
     protected String startingRoom;
@@ -21,10 +22,11 @@ public class Area implements Serializable{
 
 
 
-    public Area(String areaName, TechLevel tech) {
+    public Area(String areaName, TechLevel tech, Player p) {
         this.areaName = areaName;
         this.rooms = new HashMap<>();
         this.techLevel = tech;
+        this.player = p;
 //        this.lootTable = new LootTable();
     }
 
@@ -54,7 +56,6 @@ public class Area implements Serializable{
 
     public void setPlayer(Player player) {
         this.player = player;
-        this.startingRoom = player.getCurrentRoom().getID();
     }
 
     public TechLevel getTechLevel() {

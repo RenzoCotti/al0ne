@@ -24,7 +24,8 @@ public class TeleportSpell extends SelfSpell{
             printToLog("You feel the spell binding to this place.");
             return true;
         } else {
-            Room newCurrentRoom = Main.game.getCurrentWorld().getRooms().get(roomID);
+            Room newCurrentRoom = player.getCurrentArea().getRooms().get(roomID);
+
             player.setCurrentRoom(newCurrentRoom);
             this.roomID = null;
 

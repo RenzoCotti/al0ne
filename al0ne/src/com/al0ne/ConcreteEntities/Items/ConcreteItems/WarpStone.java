@@ -2,11 +2,14 @@ package com.al0ne.ConcreteEntities.Items.ConcreteItems;
 
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.World;
 import com.al0ne.Engine.Utility.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.AbstractEntities.Enums.Size;
 import com.al0ne.Engine.Utility.Utility;
 import com.al0ne.AbstractEntities.Enums.Material;
+
+import javax.rmi.CORBA.Util;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -26,15 +29,12 @@ public class WarpStone extends Item{
 
     @Override
     public boolean used(Player player) {
-        int chosen = Utility.randomNumber(Main.game.getWorldCount()*2);
-        int i = 1;
-        for (String s : Main.game.getWorlds().keySet()){
-            if(i == chosen && !Main.game.getCurrentWorldName().equals(Main.game.getWorld(s).getAreaName())){
-                GameChanges.changeWorld(s);
-                printToLog("Your vision fades to black for a moment.\nWhen you can see again, you are someplace completely different.");
-                return true;
-            }
-            i++;
+
+        if(Utility.randomGreaterThan(50)) {
+            //then teleport
+            int random = Utility.randomNumber(Main.game.getWorldCount()) - 1;
+            GameChanges.changeWorld(random);
+            return true;
         }
         printToLog("The stone fizzles, but does nothing.");
         return true;

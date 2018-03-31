@@ -104,6 +104,7 @@ public class CommandMap implements Serializable{
         aliases.put("mv", Command.LINUX);
         aliases.put("rm", Command.LINUX);
         aliases.put("cd", Command.LINUX);
+        aliases.put("?", Command.HELP);
         aliases.put("fire", Command.SHOOT);
         aliases.put("load", Command.RELOAD);
         aliases.put("journal", Command.QUEST);

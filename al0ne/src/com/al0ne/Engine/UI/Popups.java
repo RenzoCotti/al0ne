@@ -114,11 +114,14 @@ public class Popups{
 
         int total = 0;
         int visited = 0;
-        for(Area w : Main.game.getWorlds().values()){
-            total += w.getRooms().values().size();
-            for(Room r : w.getRooms().values()){
-                if (!r.isFirstVisit()){
-                    visited++;
+        //TODO do we want to count all worlds?
+        for(World w : Main.game.getWorlds()){
+            for (Area a : w.getAreas()){
+                total+=a.getRooms().values().size();
+                for(Room r : a.getRooms().values()){
+                    if (!r.isFirstVisit()){
+                        visited++;
+                    }
                 }
             }
         }
@@ -227,7 +230,8 @@ public class Popups{
         //case this is a room we're editing
         if(e != null && e instanceof Room){
             //and it's a room that already exist, fill the HashMap
-            HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getRooms();
+            //TODO FIX
+            HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea().getRooms();
             if(rooms.get(e.getID()) != null){
                 for(String id: rooms.get(e.getID()).getEntities().keySet()){
                     entities.put(id, rooms.get(e.getID()).getEntities().get(id));
@@ -309,7 +313,9 @@ public class Popups{
 
             if(e != null && e instanceof Room){
                 //and it's a room that already exist, fill the HashMap
-                HashMap<String, Room> rooms = Main.edit.getCurrentEdit().getCurrentWorld().getRooms();
+                //TODO
+                HashMap<String, Room> rooms = Main.edit.getCurrentEdit().
+                        getCurrentWorld().getStartingArea().getRooms();
                 if(rooms.get(e.getID()) != null){
                     entityList.setItems(FXCollections.observableArrayList(getEntities(entities, e.getID())));
                 } else {
@@ -407,11 +413,11 @@ public class Popups{
                 direction = direction.toLowerCase();
 
                 if(roomsList.getSelectionModel().getSelectedItem() != null){
-                    Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
-                            get(roomsList.getSelectionModel().getSelectedItem().getId());
-
-                    exits.put(direction, target);
-                    exitList.setItems(getExits(exits, room));
+//                    Room target = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().
+//                            get(roomsList.getSelectionModel().getSelectedItem().getId());
+//
+//                    exits.put(direction, target);
+//                    exitList.setItems(getExits(exits, room));
                 } else {
                     roomsList.setStyle("-fx-border-color: red;");
                     errorMessage.setText("Please select a destination room.");
@@ -445,14 +451,14 @@ public class Popups{
             Room r = exits.get(dir);
             temp.add(new IdNameType(r.getID(), r.getName(), dir));
         }
-        if(!ID.equals("Create new Room:")){
-            HashMap<String, String> exitsRoom = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(ID).getExits();
-            for(String dir : exitsRoom.keySet()){
-                String id = exitsRoom.get(dir);
-                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(id);
-                temp.add(new IdNameType(id, r.getName(), dir));
-            }
-        }
+//        if(!ID.equals("Create new Room:")){
+//            HashMap<String, String> exitsRoom = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(ID).getExits();
+//            for(String dir : exitsRoom.keySet()){
+//                String id = exitsRoom.get(dir);
+//                Room r = Main.edit.getCurrentEdit().getCurrentWorld().getRooms().get(id);
+//                temp.add(new IdNameType(id, r.getName(), dir));
+//            }
+//        }
         return FXCollections.observableArrayList(temp);
     }
 

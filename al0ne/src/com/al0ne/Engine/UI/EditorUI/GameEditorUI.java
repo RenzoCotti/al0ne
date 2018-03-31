@@ -78,7 +78,7 @@ public class GameEditorUI {
                 String gameName = gameList.getSelectionModel().getSelectedItem();
                 Game g = GameChanges.copyGame(Main.edit.getGames().get(gameName).getCurrentEdit());
                 if(g != null && g.getPlayer() != null &&
-                        g.getWorlds().get(g.getCurrentWorldName()).getStartingRoom() != null){
+                        g.getWorlds().get(g.getCurrentWorldIndex()).getStartingArea().getStartingRoom() != null){
 
                     Stage game = PlayUI.createContent();
 
@@ -158,13 +158,14 @@ public class GameEditorUI {
                 }
 
                 EditingGame newGame = new EditingGame(nameText.getText());
-                Area newArea = new Area(worldText.getText(), techLevel);
+//                Area newArea = new Area(worldText.getText(), techLevel, );
 
                 nameText.setText("");
                 worldText.setText("");
 
-                newGame.getCurrentEdit().addWorld(newArea);
-                newGame.setCurrentWorld(newArea);
+                //TODO
+//                newGame.getCurrentEdit().addWorld(newArea);
+//                newGame.setCurrentWorld(newArea);
 
                 Main.edit.addGame(newGame);
                 Main.edit.setCurrentEdit(newGame);

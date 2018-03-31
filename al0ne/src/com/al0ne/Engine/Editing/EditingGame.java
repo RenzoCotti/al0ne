@@ -6,6 +6,7 @@ import com.al0ne.AbstractEntities.NPC;
 import com.al0ne.AbstractEntities.Prop;
 import com.al0ne.AbstractEntities.Abstract.Enemy;
 import com.al0ne.AbstractEntities.Abstract.Entity;
+import com.al0ne.AbstractEntities.World;
 import com.al0ne.Engine.Game.Game;
 
 import java.io.Serializable;
@@ -55,12 +56,12 @@ public class EditingGame implements Serializable{
         this.currentEdit = currentEdit;
     }
 
-    public Area getCurrentWorld() {
-        return currentEdit.getWorlds().get(currentEdit.getCurrentWorldName());
+    public World getCurrentWorld() {
+        return currentEdit.getCurrentWorld();
     }
 
-    public void setCurrentWorld(Area currentArea) {
-        currentEdit.setCurrentWorld(currentArea.getAreaName());
+    public void setCurrentWorld(int i) {
+        currentEdit.setCurrentWorld(i);
     }
 
     public HashMap<String, Item> getItems() {

@@ -16,9 +16,9 @@ import com.al0ne.ConcreteEntities.Items.Props.Types.HideProp;
 public class FirstAlphaArea extends Area {
 
 
-    public FirstAlphaArea() {
+    public FirstAlphaArea(Player p) {
 
-        super("cave", TechLevel.LOW);
+        super("cave", TechLevel.LOW, p);
 
 
 
@@ -94,12 +94,5 @@ public class FirstAlphaArea extends Area {
 
 
         setStartingRoom(cave1);
-
-        Player p = new Player(true, 20, getStartingRoom(), "You are a caveman.");
-        Mace club = new Mace("wooden club", "A fairly large club.",
-                1, 1, 0.5, Material.WOOD);
-        p.simpleAddItem(club, 1);
-        p.wear(club);
-        setPlayer(p);
     }
 }

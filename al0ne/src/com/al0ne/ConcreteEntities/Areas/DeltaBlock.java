@@ -8,7 +8,6 @@ import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Abstract.Interactable;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Chest;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
 import com.al0ne.ConcreteEntities.Items.Types.Container;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
@@ -22,19 +21,18 @@ import com.al0ne.ConcreteEntities.Items.Props.*;
 import com.al0ne.ConcreteEntities.Items.Props.Types.HideItem;
 import com.al0ne.ConcreteEntities.Items.Props.Types.InvisibleProp;
 import com.al0ne.ConcreteEntities.Items.Props.Types.LockedDoor;
-import com.al0ne.ConcreteEntities.Items.Props.Types.TeleportProp;
+import com.al0ne.ConcreteEntities.Items.Props.Types.MoveProps.RoomSwitchProp;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.BodyClothing;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Knife;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
 import com.al0ne.ConcreteEntities.NPCs.ManGenerator;
 import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
-import com.al0ne.ConcreteEntities.Statuses.DeathStatus;
 
 import java.util.ArrayList;
 
 public class DeltaBlock extends Area {
-    public DeltaBlock() {
-        super("deltablock", TechLevel.HIGH);
+    public DeltaBlock(Player p) {
+        super("deltablock", TechLevel.HIGH, p);
 
         ManGenerator mg = new ManGenerator(getTechLevel());
 
@@ -261,9 +259,9 @@ public class DeltaBlock extends Area {
 
         Room hospitalUpper = new Room("Upper floor",
                 "This is the floor where in-patients recover.");
-        hospitalUpper.addEntity(new TeleportProp("Elevator",
+        hospitalUpper.addEntity(new RoomSwitchProp("Elevator",
                 "An elevator made out of metal", hospitalReception));
-        hospitalReception.addEntity(new TeleportProp("Elevator",
+        hospitalReception.addEntity(new RoomSwitchProp("Elevator",
                 "An elevator made out of metal", hospitalUpper));
         addRoom(hospitalUpper);
 
@@ -417,23 +415,9 @@ public class DeltaBlock extends Area {
 
 
 
-        Player player = new Player("You", "You don't remember anything about you.",
-                true, startbath,
-                20, 40, 40, 0, 1, 20);
 
-        player.addStatus(new DeathStatus("Kidney failure", 60, "You feel dizzy.",
-                "Your kidney hurts like hell.", "You died of kidney failure."));
         player.addQuest(new TravelQuest(hospitalReception));
+        setStartingRoom(startbath);
 
-//        player.simpleAddItem(new Credit(), 5);
-//
-//        player.addOneItem(new Pair(serratedKnife, 1));
-//
-//        player.addOneItem(new Pair(jeansAndTShirt, 1));
-//        player.simpleAddItem(new Flashlight(), 1);
-        //        player.wear(serratedKnife);
-//        player.wear(jeansAndTShirt);
-//        player.simpleAddItem(new Battery("aabattery"), 2);
-        setPlayer(player);
     }
 }
