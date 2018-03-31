@@ -102,8 +102,6 @@ public class Main extends Application{
             //we make the statuses tick
             player.handleStatuses();
 
-            currentRoom.handleQuestRoom(player);
-
             player.removeIfDestroyed();
 
             GameChanges.consumeItems(player);

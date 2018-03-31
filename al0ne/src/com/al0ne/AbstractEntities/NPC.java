@@ -81,9 +81,9 @@ public class NPC extends WorldCharacter {
         for (String s : subjects.keySet()){
             if (s.equals(subject)){
                 Subject temp = subjects.get(s);
-                if(temp.addsQuest()){
-                    player.addQuest(temp.getQuest());
-                }
+//                if(temp.addsQuest()){
+//                    player.addQuest(temp.getQuest());
+//                }
                 if(temp.givesItem()){
                     if(!player.addAmountItem(temp.getItem(), temp.getItem().getCount())){
                         player.getCurrentRoom().addEntity(temp.getItem().getEntity(), temp.getItem().getCount());

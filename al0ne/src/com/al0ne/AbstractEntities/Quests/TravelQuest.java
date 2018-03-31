@@ -15,6 +15,12 @@ public class TravelQuest extends Quest{
         this.targetRoom = r.getID();
     }
 
+    public TravelQuest( Room r, boolean visible) {
+        super("Go to "+r.getName(), visible);
+        this.targetRoom = r.getID();
+        this.visibleToThePlayer = true;
+    }
+
     @Override
     public boolean checkCompletion(Player player) {
         if (player.getCurrentRoom().getID().equals(targetRoom)){

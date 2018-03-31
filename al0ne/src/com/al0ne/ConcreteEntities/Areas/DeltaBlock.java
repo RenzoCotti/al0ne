@@ -4,6 +4,7 @@ import com.al0ne.AbstractEntities.*;
 import com.al0ne.AbstractEntities.Enums.Material;
 import com.al0ne.AbstractEntities.Enums.Size;
 import com.al0ne.AbstractEntities.Enums.TechLevel;
+import com.al0ne.AbstractEntities.Events.CompleteQuestEvent;
 import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
@@ -73,6 +74,8 @@ public class DeltaBlock extends Area {
                 Material.GLASS));
 
         addRoom(startbath);
+        setStartingRoom(startbath);
+
 
 
         Room shadyBuilding = new Room("Shady building", "You do not recognise this building, " +
@@ -212,6 +215,11 @@ public class DeltaBlock extends Area {
                 new Subject("It certainly has seen better days, but it does its job."));
         hospitalReception.addEntity(hospitalReceptionist);
 
+        TravelQuest reception = new TravelQuest(hospitalReception, true);
+        getParentWorld().addQuest(reception);
+
+        hospitalReception.addEvent(new CompleteQuestEvent(reception));
+
         addRoom(hospitalReception);
 
 
@@ -324,6 +332,7 @@ public class DeltaBlock extends Area {
                 "The only way through is through a guarded door."));
 
 
+
         Room checkpointHouse = new Room("Checkpoint barracks", "This place is where the guards " +
                 "relax while they're not on duty.");
         NPC barracksGuard = new NPC("a bored guard", "A man in his 50s, " +
@@ -360,6 +369,18 @@ public class DeltaBlock extends Area {
 
         Room highwayEntrance = new Room("Highway entrance", "You end up near the highway entrance." +
                 "You can't go in without a vehicle, it would be suicide.");
+
+        addRoom(checkpointDelta);
+        addRoom(checkpointHouse);
+        addRoom(nearCheck);
+        addRoom(hospitalPark);
+        addRoom(highwayEntrance);
+
+        highwayEntrance.connectRoom("west", hospitalPark);
+        hospitalPark.connectRoom("west", nearCheck);
+        hospitalPark.connectRoom("north", hospitalReception);
+        checkpointDelta.connectRoom("south", checkpointHouse);
+        nearCheck.connectRoom("west", checkpointDelta);
 
         Room industrialZone = new Room("Industrial zone", "Down this road you can see several " +
                 "run down factories. It's not that they were abandoned, they still are quite active; it's just that" +
@@ -399,25 +420,25 @@ public class DeltaBlock extends Area {
         SFWarehouse.addEntity(boxes);
 
 
+
+        addRoom(industrialZone);
+        addRoom(SFEntrance);
+        addRoom(SFReception);
+        addRoom(SFBreak);
+        addRoom(SFWarehouse);
+        addRoom(SFWork1);
+        addRoom(SFWork2);
+
         industrialZone.connectRoom("west", SFEntrance);
         SFEntrance.connectRoom("west", SFReception);
         SFEntrance.connectRoom("north", SFWarehouse);
         SFReception.connectRoom("west", SFBreak);
         SFBreak.connectRoom("west", SFWork1);
         SFWork1.connectRoom("west", SFWork2);
-        highwayEntrance.connectRoom("west", hospitalPark);
-        hospitalPark.connectRoom("west", nearCheck);
-        hospitalPark.connectRoom("north", hospitalReception);
-        checkpointDelta.connectRoom("south", checkpointHouse);
-        nearCheck.connectRoom("west", checkpointDelta);
 
 
 
 
-
-
-        getPlayer().addQuest(new TravelQuest(hospitalReception));
-        setStartingRoom(startbath);
-
+        hospitalReception.connectRoom("south", startbath);
     }
 }

@@ -34,6 +34,7 @@ public abstract class Quest implements Serializable{
     protected String questID;
     protected String questName;
     protected boolean completed;
+    protected boolean visibleToThePlayer;
 //    protected ArrayList<Pair> toAdd;
     protected String requiredQuest;
     protected ArrayList<InteractionBehaviour> rewards;
@@ -45,6 +46,16 @@ public abstract class Quest implements Serializable{
         this.completed = false;
 //        this.toAdd = new ArrayList<>();
         this.rewards = new ArrayList<>();
+        this.visibleToThePlayer = false;
+    }
+
+    public Quest(String questName, boolean visible){
+        this.questID = "quest"+(++questCounter);
+        this.questName = questName;
+        this.completed = false;
+//        this.toAdd = new ArrayList<>();
+        this.rewards = new ArrayList<>();
+        this.visibleToThePlayer = visible;
     }
 
     //to implement in different kind of quests
@@ -73,16 +84,8 @@ public abstract class Quest implements Serializable{
 
     public void setCompleted() {
         this.completed = true;
+        this.setVisibleToThePlayer(false);
     }
-
-//    public ArrayList<Pair> getToAdd() {
-//        return toAdd;
-//    }
-
-//    public void addEntity(Entity entity, int count){
-//        toAdd.add(new Pair(entity, count));
-//        this.rewards.put(3, toAdd);
-//    }
 
     public String getRequiredQuest() {
         return requiredQuest;
@@ -98,5 +101,13 @@ public abstract class Quest implements Serializable{
 
     public void addRewards(InteractionBehaviour b) {
         this.rewards.add(b);
+    }
+
+    public boolean isVisibleToThePlayer() {
+        return visibleToThePlayer;
+    }
+
+    public void setVisibleToThePlayer(boolean visibleToThePlayer) {
+        this.visibleToThePlayer = visibleToThePlayer;
     }
 }

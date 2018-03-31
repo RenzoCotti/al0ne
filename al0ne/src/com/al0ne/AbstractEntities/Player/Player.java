@@ -6,6 +6,7 @@ import com.al0ne.AbstractEntities.Quests.Quest;
 import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.AbstractEntities.Abstract.WorldCharacter;
+import com.al0ne.AbstractEntities.World;
 import com.al0ne.Engine.Utility.Utility;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.*;
@@ -57,9 +58,6 @@ public class Player extends WorldCharacter {
 
 
 
-    protected HashMap<String, Quest> quests;
-
-
     // add also money pouch?
 
 
@@ -71,7 +69,6 @@ public class Player extends WorldCharacter {
         10, 70, 30, 0, 1);
         this.maxWeight = maxWeight;
         this.currentWeight=0;
-        this.quests = new HashMap<>();
         if(needs){
             addStatus(new Thirst());
             addStatus(new Hunger());
@@ -89,7 +86,6 @@ public class Player extends WorldCharacter {
                 maxHealth, attack, dexterity, armor, damage);
         this.maxWeight = maxWeight;
         this.currentWeight=0;
-        this.quests = new HashMap<>();
         setLongDescription("You are "+name+".\n"+story);
         if(needs){
             addStatus(new Thirst());
@@ -102,6 +98,10 @@ public class Player extends WorldCharacter {
 
     public Area getCurrentArea() {
         return currentArea;
+    }
+
+    public World getCurrentWorld(){
+        return currentArea.getParentWorld();
     }
 
     public void setStart(Area currentArea) {
@@ -532,41 +532,34 @@ public class Player extends WorldCharacter {
 
 
     public HashMap<String, Quest> getQuests() {
-        return quests;
-    }
-
-    public void setQuests(HashMap<String, Quest> quests) {
-        this.quests = quests;
-    }
-
-    public void addQuest(Quest quest){
-        printToLog("- - - New quest: "+quest.getQuestName()+" - - -");
-        quests.putIfAbsent(quest.getQuestID(), quest);
+        return getCurrentArea().getParentWorld().getQuests();
     }
 
 
-    //returns true if the player has finished the quest
-    public boolean hasDoneQuest(String id) {
-        if(this.quests.get(id) != null){
-            return this.quests.get(id).isCompleted();
-        }
-        return false;
+    public void addQuest(Quest q){
+        printToLog("- - - New quest: "+q.getQuestName()+" - - -");
+        getQuests().get(q.getQuestID()).setVisibleToThePlayer(true);
     }
+
+    public void completeQuest(String questID){
+        getCurrentWorld().completeQuest(questID);
+    }
+
 
     //prints the quests
     public void printQuests(){
-        if (quests.size()==0){
+        if (getQuests().size()==0){
             printToLog("You have no quests currently.");
         } else {
 
             boolean first = true;
 
-            for (Quest q : quests.values()) {
-                if(!q.isCompleted() && first){
+            for (Quest q : getQuests().values()) {
+                if(q.isVisibleToThePlayer() && first){
                     first = false;
                     printToLog("You have these quests:");
                     printToLog("- "+q.getQuestName());
-                } else if(!q.isCompleted()){
+                } else if(q.isVisibleToThePlayer()){
                     printToLog("- "+q.getQuestName());
                 }
             }
@@ -579,14 +572,5 @@ public class Player extends WorldCharacter {
         }
     }
 
-    public boolean completeQuest(String questID){
-        Quest q = quests.get(questID);
-        if(q != null && !q.isCompleted()){
-            q.setCompleted();
-            q.questReward(this);
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 }

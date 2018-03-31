@@ -43,18 +43,9 @@ public class Room extends Entity {
 
     private boolean firstVisit;
 
-    private boolean questRoom;
-
     private boolean isLit;
 
     private ArrayList<Event> events;
-
-    private String questID;
-    private String onQuestCompletion;
-
-    private boolean addsEntity;
-    private Entity toAdd;
-
 
 
     public Room(String name, String description) {
@@ -64,7 +55,6 @@ public class Room extends Entity {
         this.customDirections = null;
         this.entities = new HashMap<>();
         this.firstVisit = true;
-        this.questRoom = false;
         this.isLit = true;
         this.events = new ArrayList<>();
     }
@@ -91,22 +81,6 @@ public class Room extends Entity {
                 e.resolveEvent(p);
             }
         }
-    }
-
-    public void setQuestRoom(String questID, String onQuestCompletion){
-        this.questRoom = true;
-        this.questID = questID;
-        this.onQuestCompletion = onQuestCompletion;
-        this.addsEntity = false;
-        this.toAdd = null;
-    }
-
-    public void setQuestRoom(String questID, String onQuestCompletion, Entity toAdd){
-        this.questRoom = true;
-        this.questID = questID;
-        this.onQuestCompletion = onQuestCompletion;
-        this.addsEntity = true;
-        this.toAdd = toAdd;
     }
 
 
@@ -164,16 +138,6 @@ public class Room extends Entity {
             return;
         }
         this.entities.put(entity.getID(), new Pair(entity, qty));
-    }
-
-    public Enemy getEnemy(String name) {
-        ArrayList<Enemy> enemies = getEnemyList();
-        for (Entity e : enemies){
-            if (e.getName().toLowerCase().contains(name)){
-                return (Enemy) e;
-            }
-        }
-        return null;
     }
 
     public Entity getEntity(String name) {
@@ -502,27 +466,6 @@ public class Room extends Entity {
         return getEnemyList().size() > 0;
     }
 
-    public String getQuestID() {
-        return questID;
-    }
-
-    public Entity getToAdd() {
-        return toAdd;
-    }
-
-    public void setToAdd(Entity toAdd) {
-        this.toAdd = toAdd;
-    }
-
-    public void handleQuestRoom(Player player){
-        if(questRoom && player.hasDoneQuest(questID)){
-            printToLog(onQuestCompletion);
-            if(addsEntity){
-                addEntity(toAdd);
-            }
-            questID=null;
-        }
-    }
 
     public String getCustomDirections() {
         return customDirections;

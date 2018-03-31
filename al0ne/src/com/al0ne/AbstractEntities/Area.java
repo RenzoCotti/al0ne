@@ -13,10 +13,10 @@ public class Area implements Serializable{
 
     //TODO a world is a superclass of areas?
 
-    protected String areaName;
-    protected String startingRoom;
-    protected HashMap<String, Room> rooms;
-    protected World parentWorld;
+    private String areaName;
+    private String startingRoom;
+    private HashMap<String, Room> rooms;
+    private World parentWorld;
 //    protected LootTable lootTable;
 
 
@@ -54,5 +54,9 @@ public class Area implements Serializable{
 
     public TechLevel getTechLevel() {
         return parentWorld.getTechLevel();
+    }
+
+    public World getParentWorld() {
+        return parentWorld;
     }
 }

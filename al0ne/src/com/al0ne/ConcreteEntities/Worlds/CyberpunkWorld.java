@@ -20,7 +20,6 @@ public class CyberpunkWorld extends World{
 
         player.setStart(d);
 
-
     }
 
 }

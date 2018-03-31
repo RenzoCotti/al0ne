@@ -9,11 +9,16 @@ import java.util.ArrayList;
 public abstract class Event implements Serializable{
     //concept: you get in a room, and each turn that passes, you have a x out of 10 chance that something will happen
 
-    protected int probability;
+    private int probability;
     protected ArrayList<InteractionBehaviour> effects;
 
     public Event(int probability) {
         this.probability = probability;
+        this.effects = new ArrayList<>();
+    }
+
+    public Event() {
+        this.probability = 100;
         this.effects = new ArrayList<>();
     }
 
