@@ -371,19 +371,6 @@ public class Player extends WorldCharacter {
 
 
 
-    //this function tries to get an item from the inventory
-    //if there is no such item, it returns null
-    public ArrayList<Pair> getByType(char type){
-        ArrayList<Pair> listOfItems = new ArrayList<>();
-        for(Pair p: inventory.values()){
-            Item currentItem = (Item) p.getEntity();
-            if(currentItem.getType() == type){
-                listOfItems.add(p);
-            }
-        }
-        return listOfItems;
-    }
-
     //getter for currentRoom
     public Room getCurrentRoom() {
         return currentRoom;
@@ -393,8 +380,6 @@ public class Player extends WorldCharacter {
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
-
-
 
 
 

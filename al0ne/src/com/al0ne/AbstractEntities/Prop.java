@@ -41,7 +41,6 @@ public class Prop extends Interactable {
 
         this.requiresItem="none";
         this.active=false;
-        this.type='p';
         this.canTake=false;
         this.invisible=false;
     }
@@ -54,7 +53,6 @@ public class Prop extends Interactable {
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
-        this.type='p';
         this.canTake=false;
         this.invisible=false;
 
@@ -66,7 +64,6 @@ public class Prop extends Interactable {
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
-        this.type='p';
         this.canTake=false;
         this.invisible=false;
     }
@@ -78,7 +75,6 @@ public class Prop extends Interactable {
         this.afterDescription = description;
         this.requiresItem="none";
         this.active=false;
-        this.type='p';
         this.canTake=false;
         this.invisible=false;
 
@@ -91,7 +87,6 @@ public class Prop extends Interactable {
         this.afterDescription = after;
         this.requiresItem="none";
         this.active=false;
-        this.type='p';
         this.canTake=false;
         this.invisible=false;
     }

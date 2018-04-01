@@ -12,13 +12,14 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class Fireball extends DamagingSpell {
     public Fireball() {
-        super("fireball", "Fireball", "The ability to summon fire and throw it at your enemies", 6, 'e', "fire");
+        super("fireball", "Fireball", "The ability to summon fire and throw it at your enemies",
+                6, Enemy.class,  "fire");
     }
 
 
     @Override
     public boolean isCasted(Player player, Entity entity) {
-        if(canCastOn(entity.getType())){
+        if(canCastOn(entity)){
             Enemy enemy = (Enemy) entity;
             if(enemy.isWeakAgainst(damageType)){
                 enemy.modifyHealth(-damage);

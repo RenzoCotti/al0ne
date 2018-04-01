@@ -106,7 +106,7 @@ public class EditProp extends EditTab{
                 //we are editing an item
                 if(entity != null && create.getText().equals("Save changes")){
                     Prop old;
-                    if(entity.getType() == 'p'){
+                    if(entity instanceof Prop){
                         old = (Prop) entity;
 
                     } else {

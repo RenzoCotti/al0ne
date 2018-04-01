@@ -27,7 +27,6 @@ public class Container extends Item{
         this.canAdd = canAdd;
         this.currentWeight = 0;
         this.currentSize = 0;
-        this.type='C';
         this.items = new ArrayList<>();
         this.locked = false;
     }
@@ -37,7 +36,6 @@ public class Container extends Item{
         this.canAdd = false;
         this.currentWeight = 0;
         this.currentSize = 0;
-        this.type='C';
         this.items = new ArrayList<>();
         this.locked = false;
 
@@ -48,7 +46,6 @@ public class Container extends Item{
         this.canAdd = false;
         this.currentWeight = 0;
         this.currentSize = 0;
-        this.type='C';
         this.items = new ArrayList<>();
         this.locked = locked;
 

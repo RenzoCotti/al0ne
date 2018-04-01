@@ -39,7 +39,6 @@ public class NPC extends WorldCharacter {
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;
-        this.type='n';
         this.knowName = false;
     }
 
@@ -48,7 +47,6 @@ public class NPC extends WorldCharacter {
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;
-        this.type='n';
     }
 
     public NPC(String name, String description, String shortDescription, String intro) {
@@ -56,7 +54,6 @@ public class NPC extends WorldCharacter {
         this.subjects = new HashMap<>();
         this.reactionItems = new HashMap<>();
         this.intro=intro;
-        this.type='n';
     }
 
     //is the npc a shopkeeper?

@@ -9,7 +9,7 @@ import com.al0ne.AbstractEntities.Room;
 public abstract class WorldSpell extends Spell {
     public WorldSpell(String id, String name, String description) {
         super(id, name, description);
-        this.target = 'w';
+        this.target = Room.class;
     }
 
     public abstract boolean isCasted(Player player, Room currentRoom);

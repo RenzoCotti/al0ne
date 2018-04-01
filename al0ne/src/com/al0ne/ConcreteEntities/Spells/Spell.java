@@ -1,5 +1,7 @@
 package com.al0ne.ConcreteEntities.Spells;
 
+import com.al0ne.AbstractEntities.Abstract.Entity;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  */
 public abstract class Spell implements Serializable{
 
-    protected char target;
+    protected Class target;
     protected String id;
     protected String name;
     protected String description;
@@ -18,7 +20,7 @@ public abstract class Spell implements Serializable{
         this.description = description;
     }
 
-    public char getTarget() {
+    public Class getTarget() {
         return target;
     }
 
@@ -34,7 +36,7 @@ public abstract class Spell implements Serializable{
         return description;
     }
 
-    public boolean canCastOn(char c){
-        return target == c;
+    public boolean canCastOn(Entity e){
+        return e.getClass().equals(target);
     }
 }

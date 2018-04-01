@@ -495,8 +495,7 @@ public class HandleCommands {
 
         //we get only the items we can pickup
         for (Pair p : possibleItems) {
-            if (p.getEntity().getType() == 'i' || p.getEntity().getType() == 'w' ||
-                    p.getEntity().getType() == 'C' || p.getEntity().getType() == 'p') {
+            if (p.getEntity() instanceof Item) {
                 items.add(p);
             }
         }
@@ -970,7 +969,7 @@ public class HandleCommands {
             }
             return false;
         } else if (entities.size() == 1) {
-            if(entities.get(0).getEntity().getType() == 'n'){
+            if(entities.get(0).getEntity() instanceof Enemy){
                 ((Enemy)entities.get(0).getEntity()).handleLoot(player);
                 currentRoom.getEntities().remove(entities.get(0).getEntity().getID());
                 printToLog("You executed the "+entities.get(0).getEntity().getName());
@@ -992,7 +991,7 @@ public class HandleCommands {
         if (entity == null) {
             printToLog("You can't see " + npc + " here.");
             return false;
-        } else if (entity.getType() != 'n') {
+        } else if (!(entity instanceof NPC)) {
             printToLog("You can't talk to it. ");
             return false;
         }
@@ -1009,7 +1008,7 @@ public class HandleCommands {
         for (Pair pair : player.getCurrentRoom().getEntities().values()) {
             Entity en = pair.getEntity();
 
-            if (en.getType() == 'e' && en.getName().equals(s)) {
+            if (en instanceof Enemy && en.getName().equals(s)) {
                 potentialEnemies.add((Enemy) en);
                 return potentialEnemies;
             }

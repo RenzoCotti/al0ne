@@ -25,16 +25,6 @@ public abstract class Entity implements Serializable, Cloneable{
     protected String shortDescription;
 
 
-    /**
-     * i: item
-     * p: prop
-     * n: npc
-     * e: enemy
-     * w: wearable
-     * C: container
-    * */
-    protected char type;
-
     protected ArrayList<Command> requiredCommand;
 
 
@@ -54,13 +44,6 @@ public abstract class Entity implements Serializable, Cloneable{
     }
 
 
-
-
-
-
-    public char getType() {
-        return type;
-    }
 
 
     public String getName() {

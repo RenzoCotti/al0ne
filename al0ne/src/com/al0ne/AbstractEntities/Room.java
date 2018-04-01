@@ -8,6 +8,7 @@ import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.LightItem;
 import com.al0ne.ConcreteEntities.Items.Types.Container;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Wearable;
 import com.al0ne.Engine.Utility.Utility;
 
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class Room extends Entity {
         ArrayList<Enemy> enemyList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='e'){
+            if (e instanceof Enemy){
                 Enemy enemy = (Enemy) e;
                 enemyList.add(enemy);
             }
@@ -100,7 +101,7 @@ public class Room extends Entity {
         ArrayList<Container> containers = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity c = p.getEntity();
-            if (c.getType()=='C'){
+            if (c instanceof Container){
                 Container container = (Container) c;
                 containers.add(container);
             }
@@ -210,7 +211,7 @@ public class Room extends Entity {
         ArrayList<Prop> propList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='p'){
+            if (e instanceof Prop){
                 Prop prop = (Prop) e;
                 propList.add(prop);
             }
@@ -222,7 +223,7 @@ public class Room extends Entity {
         ArrayList<Pair> itemList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
-            if (e.getType()=='i' || e.getType()=='w' || e.getType()=='C'){
+            if (e instanceof Item){
 //                printToLog(e.getID());
                 itemList.add(p);
             }

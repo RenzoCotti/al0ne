@@ -24,7 +24,6 @@ public class Enemy extends WorldCharacter {
     public Enemy(String name, String description, String shortDescription,
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
         super(name, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
-        this.type='e';
         this.elite=false;
 
 //        if(special == 0){

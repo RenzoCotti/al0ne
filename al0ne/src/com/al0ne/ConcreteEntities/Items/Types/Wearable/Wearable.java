@@ -13,7 +13,6 @@ public abstract class Wearable extends Item{
 
     public Wearable(String id, String name, String description, double weight, Size size, Material material) {
         super(id, name, description, weight, size, material, null);
-        this.type='w';
     }
 
     public String getPart() {

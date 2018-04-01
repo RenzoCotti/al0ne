@@ -8,7 +8,7 @@ import com.al0ne.AbstractEntities.Player.Player;
 public abstract class SelfSpell extends Spell{
     public SelfSpell(String id, String name, String description) {
         super(id, name, description);
-        this.target = 's';
+        this.target = Player.class;
     }
 
     public abstract boolean isCasted(Player player);

@@ -37,8 +37,7 @@ public abstract class ChargeItem extends Item {
     public int checkRefill(Player player, Entity entity){
         if(!canRecharge){
             return 0;
-        } else if (entity.getType() == 'i' || entity.getType() == 'p'){
-            if(entity.getType() == 'i'){
+        } else if(entity instanceof Item){
                 Item item = (Item) entity;
                 if (item.hasProperty(propertyRequired)){
                     currentCharges = maxCharges;
@@ -46,15 +45,14 @@ public abstract class ChargeItem extends Item {
                     return 1;
                 }
                 return 0;
-            } else{
-                Prop item = (Prop) entity;
-                if (item.hasProperty(propertyRequired)){
-                    currentCharges = maxCharges;
-                    printToLog(onRefill);
-                    return 1;
-                }
-                return 0;
+        } else if(entity instanceof Prop){
+            Prop item = (Prop) entity;
+            if (item.hasProperty(propertyRequired)){
+                currentCharges = maxCharges;
+                printToLog(onRefill);
+                return 1;
             }
+            return 0;
         }
         return 0;
     }

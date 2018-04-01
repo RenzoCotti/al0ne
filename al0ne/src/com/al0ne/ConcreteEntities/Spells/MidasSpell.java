@@ -14,15 +14,15 @@ import static com.al0ne.Engine.Main.printToLog;
  */
 public class MidasSpell extends TargetSpell{
     public MidasSpell() {
-        super("midas", "Touch of gold", "This spell turns an item to gold", 'i');
+        super("midas", "Touch of gold", "This spell turns an item to gold", Item.class);
     }
 
     @Override
     public boolean isCasted(Player player, Entity entity) {
-        if(entity.getType() != 'i' && entity.getType() != 'w'){
+        if(!(entity instanceof Item)){
             printToLog("You can only target objects.");
             return false;
-        } else{
+        } else {
             Item item = (Item) entity;
 
             if (item.isUnique()){

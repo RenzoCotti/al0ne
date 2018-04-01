@@ -10,6 +10,8 @@ import com.al0ne.AbstractEntities.Quests.Quest;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.*;
+import com.al0ne.AbstractEntities.World;
+import com.al0ne.ConcreteEntities.Items.Types.Wearable.Wearable;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility.Utility;
 import com.al0ne.ConcreteEntities.Items.Types.Container;
@@ -252,7 +254,7 @@ public class PlayerActions {
     public static boolean customAction(Player player, Command action, Entity entity){
 
         Room currentRoom = player.getCurrentRoom();
-        if(entity.getType()=='i'){
+        if(entity instanceof Item){
             boolean inRoom = false;
             Pair pair = player.getInventory().get(entity.getID());
             if (pair == null){
@@ -289,7 +291,7 @@ public class PlayerActions {
                 }
             }
 
-        } else if (entity.getType() == 'p'){
+        } else if (entity instanceof Prop){
             Prop prop = (Prop) entity;
             for (Command command : prop.getRequiredCommand()){
                 if(command.equals(action)){
@@ -339,7 +341,7 @@ public class PlayerActions {
                 player.getInventory().remove(target.getEntity().getID());
             }
             //we unequip the item if it was equipped
-            if (target.getEntity().getType()=='w' &&  player.isWearingItem(target.getEntity().getID())){
+            if (target.getEntity() instanceof Wearable &&  player.isWearingItem(target.getEntity().getID())){
                 player.unequipItem(target.getEntity().getID());
             }
             return 1;
@@ -436,11 +438,11 @@ public class PlayerActions {
     //returns 2 if the item was used successfully and it doesn't need to print anything
     public static boolean simpleUse(Player player, Entity target){
 
-        if (target.getType() == 'p'){
+        if (target instanceof Prop){
             Prop prop = (Prop) target;
             return prop.used(player);
 
-        } else if (target.getType() == 'i'){
+        } else if (target instanceof Item){
             Pair pair = player.getInventory().get(target.getID());
             Item item = (Item) pair.getEntity();
             boolean result = item.used(player);
@@ -462,16 +464,15 @@ public class PlayerActions {
     //one can't use an enemy or an NPC
 
     public static void interactOnWith(Player player, Entity target, Entity item){
-        if (item.getType() == 'e'){
-            return;
-        } else if(target.getType() == 'n'){
-            PlayerActions.give(player, (NPC) target, item);
+        if (item instanceof Enemy || item instanceof NPC){
+            printToLog("It's not an object.");
             return;
         }
-        if(target.getType() == 'p' && item.getType() == 'p'){
-            printToLog("At least one of the items must be from your inventory.");
-            return;
-        }
+
+//        if(target.getType() == 'p' && item.getType() == 'p'){
+//            printToLog("At least one of the items must be from your inventory.");
+//            return;
+//        }
         System.out.println("Using "+item.getName()+"(i) with "+ target.getName());
 
 
@@ -546,22 +547,21 @@ public class PlayerActions {
                     return;
                 }
                 Spell s = spell.getSpell();
-                char castOn = s.getTarget();
 
-                switch (castOn) {
-                    case 's':
-                        SelfSpell ss = (SelfSpell) s;
-                        if(ss.isCasted(player)){
-                            spell.modifyCount(-1);
-                            return;
-                        }
+                if (s instanceof SelfSpell){
+                    SelfSpell ss = (SelfSpell) s;
+                    if(ss.isCasted(player)){
+                        spell.modifyCount(-1);
                         return;
-                    case 'w':
-                        WorldSpell ws = (WorldSpell) s;
-                        if(ws.isCasted(player, currentRoom)){
-                            spell.modifyCount(-1);
-                        }
+                    }
+                    return;
+                } else if(s instanceof WorldSpell){
+                    WorldSpell ws = (WorldSpell) s;
+                    if(ws.isCasted(player, currentRoom)){
+                        spell.modifyCount(-1);
+                    }
                 }
+
                 //TODO: TO REVISE this
             } else {
                 printToLog("Your spellbook doesn't seem to have such a spell.");
@@ -598,48 +598,42 @@ public class PlayerActions {
                     return;
                 }
                 Spell s = spell.getSpell();
-                char castOn = s.getTarget();
+                Class castOn = s.getTarget();
 
-                switch (castOn) {
-                    case 'w':
-                    case 'i':
-                        PotentialItems inventoryItems = HandleCommands.getPotentialItem(target, player, 0);
-                        ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
-                        PotentialItems items = HandleCommands.getPotentialItem(target, player, 1);
-                        ArrayList<Pair> possibleItems = items.getItems();
+                if (castOn.equals(Item.class)){
+                    PotentialItems inventoryItems = HandleCommands.getPotentialItem(target, player, 0);
+                    ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
+                    PotentialItems items = HandleCommands.getPotentialItem(target, player, 1);
+                    ArrayList<Pair> possibleItems = items.getItems();
 
-                        if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
-                            printToLog("Be more specific.");
-                            return;
-                        } else if(possibleItems.size() != 0){
-                            printToLog("You need to be holding that item.");
-                            return;
-                        } else if (possibleItemsFromInventory.size() == 0){
-                            printToLog("You can't see a "+target);
-                            return;
-                        }
-
-                        TargetSpell ts = (TargetSpell) s;
-
-                        if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
-                            spell.modifyCount(-1);
-                            return;
-                        }
+                    if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
+                        printToLog("Be more specific.");
                         return;
+                    } else if(possibleItems.size() != 0){
+                        printToLog("You need to be holding that item.");
+                        return;
+                    } else if (possibleItemsFromInventory.size() == 0){
+                        printToLog("You can't see a "+target);
+                        return;
+                    }
 
+                    TargetSpell ts = (TargetSpell) s;
 
-                    case 'e':
-                        DamagingSpell ds = (DamagingSpell) s;
-                        ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
-                        if(enemies.size() == 0){
-                            printToLog("You can't see that enemy");
-                        } else if(enemies.size()>1){
-                            printToLog("Be more specific");
-                        } else {
-                            if (ds.isCasted(player, enemies.get(0))) {
-                                spell.modifyCount(-1);
-                            }
+                    if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
+                        spell.modifyCount(-1);
+                    }
+                } else if(castOn.equals(Enemy.class)){
+                    DamagingSpell ds = (DamagingSpell) s;
+                    ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
+                    if(enemies.size() == 0){
+                        printToLog("You can't see that enemy");
+                    } else if(enemies.size()>1){
+                        printToLog("Be more specific");
+                    } else {
+                        if (ds.isCasted(player, enemies.get(0))) {
+                            spell.modifyCount(-1);
                         }
+                    }
                 }
 
             } else {

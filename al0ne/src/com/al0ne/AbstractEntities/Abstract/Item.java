@@ -24,7 +24,6 @@ public abstract class Item extends Interactable {
         super(id, name, description,
                 "temp", material);
         this.weight = weight;
-        this.type='i';
         this.size=Size.toInt(size);
         this.unique = false;
         this.canDrop = true;
