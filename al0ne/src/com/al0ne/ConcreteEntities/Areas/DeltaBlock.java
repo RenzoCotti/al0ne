@@ -217,7 +217,6 @@ public class DeltaBlock extends Area {
         TravelQuest reception = new TravelQuest(hospitalReception, true);
         getParentWorld().addQuest(reception);
 
-        hospitalReception.addEvent(new CompleteQuestEvent(reception));
 
         addRoom(hospitalReception);
 

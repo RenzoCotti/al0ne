@@ -322,16 +322,6 @@ public class Player extends WorldCharacter {
     }
 
 
-    public void addQuest(Quest q){
-        printToLog("- - - New quest: "+q.getQuestName()+" - - -");
-        getQuests().get(q.getQuestID()).setVisibleToThePlayer(true);
-    }
-
-    public void completeQuest(String questID){
-        getCurrentWorld().completeQuest(questID);
-    }
-
-
 
 
 

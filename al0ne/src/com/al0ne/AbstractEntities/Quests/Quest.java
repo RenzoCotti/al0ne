@@ -19,14 +19,6 @@ import static com.al0ne.Engine.Main.printToLog;
  * - go to x
  * - take x
  *
- * A Quest can, on completion:
- * - unlock something
- * - teleport somewhere
- * - add entities somewhere (add item?)
- * - add another quest
- * - change world
- * - remove entity
- * - ...
  */
 public abstract class Quest implements Serializable{
     private static int questCounter = 0;
@@ -35,9 +27,7 @@ public abstract class Quest implements Serializable{
     private String questName;
     private boolean completed;
     protected boolean visibleToThePlayer;
-
     private ArrayList<InteractionBehaviour> rewards;
-    //TODO QUEST GIVER? ON COMPLETION MESSAGE?
 
     public Quest(String questName){
         this.questID = "quest"+(++questCounter);

@@ -11,6 +11,6 @@ public class InteractionAddQuest extends InteractionBehaviour {
 
     @Override
     public void interactionEffect(Player p) {
-        p.addQuest(q);
+        p.getCurrentWorld().getQuests().get(q.getQuestID()).setVisibleToThePlayer(true);
     }
 }

@@ -508,12 +508,6 @@ public class PlayerActions {
                 //set next room
                 player.setCurrentRoom(rooms.get(nextRoomId));
 
-                for(Quest q : player.getQuests().values()){
-                    if(q instanceof TravelQuest){
-                        q.checkCompletion(player);
-                    }
-                }
-
                 return true;
             }
         }

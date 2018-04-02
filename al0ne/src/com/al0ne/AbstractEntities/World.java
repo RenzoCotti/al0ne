@@ -33,15 +33,14 @@ public class World implements Serializable{
     }
 
     public void addArea(Area a) {
+        if(startingArea == null){
+            startingArea = a;
+        }
         this.areas.add(a);
     }
 
     public Area getStartingArea() {
         return startingArea;
-    }
-
-    public void setStartingArea(Area startingArea) {
-        this.startingArea = startingArea;
     }
 
     public TechLevel getTechLevel() {

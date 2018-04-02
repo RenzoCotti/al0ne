@@ -10,6 +10,6 @@ public class InteractionCompleteQuest extends InteractionBehaviour {
 
     @Override
     public void interactionEffect(Player p) {
-        p.completeQuest(questID);
+        p.getCurrentWorld().completeQuest(questID);
     }
 }

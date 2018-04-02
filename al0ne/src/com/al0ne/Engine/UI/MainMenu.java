@@ -20,7 +20,7 @@ public class MainMenu {
 
     public static Scene createMainMenu(Stage stage){
         VBox mainContainer = new VBox();
-        mainContainer.setPrefSize(650, 400);
+        mainContainer.setPrefSize(650, 500);
         mainContainer.setPadding(new Insets(50, 10, 10, 10));
 
 
@@ -74,32 +74,32 @@ public class MainMenu {
                 GameChanges.load(file.getName(), file.getAbsolutePath(), true);
             }
         });
-        Button openEditor = new Button("Open Editor");
-        openEditor.setOnAction(t->{
-            Popups.openEditor();
-        });
+//        Button openEditor = new Button("Open Editor Disabled");
+//        openEditor.setOnAction(t->{
+//            Popups.openEditor();
+//        });
 
-        Button loadEditor = new Button("Load Editor");
-        loadEditor.setOnAction(t->{
-            FileChooser loadFile = new FileChooser();
-            loadFile.setTitle("Load Editor");
-            loadFile.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
-                    "Editor files (*.edtr) ", "*.edtr"));
-            File file = loadFile.showOpenDialog(stage);
-
-            if (file != null) {
-                if(GameChanges.load(file.getName(), file.getAbsolutePath(), false)){
-                    Popups.openEditor();
-                } else {
-                    System.out.println("the editor file is corrupted");
-                }
-            }
-        });
+//        Button loadEditor = new Button("Load Editor Disabled");
+//        loadEditor.setOnAction(t->{
+//            FileChooser loadFile = new FileChooser();
+//            loadFile.setTitle("Load Editor");
+//            loadFile.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+//                    "Editor files (*.edtr) ", "*.edtr"));
+//            File file = loadFile.showOpenDialog(stage);
+//
+//            if (file != null) {
+//                if(GameChanges.load(file.getName(), file.getAbsolutePath(), false)){
+//                    Popups.openEditor();
+//                } else {
+//                    System.out.println("the editor file is corrupted");
+//                }
+//            }
+//        });
         Button exit = new Button("Exit");
         exit.setOnAction(t->System.exit(0));
 
         buttonContainer.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
-        buttonContainer.getChildren().addAll(playGame, loadGame, openEditor, loadEditor, exit);
+        buttonContainer.getChildren().addAll(playGame, loadGame, exit);
 
 //        mainContainer.add(buttonContainer, 1, 3);
         mainContainer.getChildren().add(buttonContainer);

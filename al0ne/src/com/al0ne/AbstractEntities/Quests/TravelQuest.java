@@ -1,5 +1,6 @@
 package com.al0ne.AbstractEntities.Quests;
 
+import com.al0ne.AbstractEntities.Events.CompleteQuestEvent;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Room;
 
@@ -19,6 +20,7 @@ public class TravelQuest extends Quest{
         super("Go to "+r.getName(), visible);
         this.targetRoom = r.getID();
         this.visibleToThePlayer = true;
+        r.addEvent(new CompleteQuestEvent(this));
     }
 
     @Override
