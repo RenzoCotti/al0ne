@@ -3,11 +3,9 @@ package com.al0ne.ConcreteEntities.Areas;
 import com.al0ne.AbstractEntities.*;
 import com.al0ne.AbstractEntities.Enums.Command;
 import com.al0ne.AbstractEntities.Enums.Material;
-import com.al0ne.AbstractEntities.Enums.TechLevel;
 import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Enums.Size;
-import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.FetchQuest;
 import com.al0ne.AbstractEntities.Quests.KillQuest;
 import com.al0ne.AbstractEntities.Quests.Quest;
@@ -18,13 +16,14 @@ import com.al0ne.ConcreteEntities.Enemies.Wolf;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.JunkItem;
 import com.al0ne.ConcreteEntities.Items.Props.Types.InvisibleProp;
 import com.al0ne.ConcreteEntities.Items.Types.Food;
-import com.al0ne.ConcreteEntities.Items.Types.Wearable.BodyClothing;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Helmet;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Shield;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Books.Note;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Sword;
 import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionAddQuest;
+import com.al0ne.Engine.Physics.InteractionResult.InteractionCompleteQuest;
 
 import java.util.ArrayList;
 
@@ -97,11 +96,19 @@ public class VillageArea extends Area {
 
         Quest getEggs = new FetchQuest(eggs, 1);
         getEggs.addRewards(new InteractionAdd(dad, 1));
+
 //        getEggs.addEntity(dad, 1);
 
-        mom.addSubject("favour", new Subject("Could you be so kind to go out and buy some eggs for me? " +
-                "Here's some money for that. Thanks!",
-                new Pair(new BrassCoin(), 3), getEggs));
+
+        Subject favour = new Subject("Could you be so kind to go out and buy some eggs for me? " +
+                "Here's some money for that. Thanks!");
+        favour.addEffect(new InteractionAdd(new BrassCoin(), 3));
+        favour.addEffect(new InteractionAddQuest(getEggs));
+
+        mom.addSubject("favour", favour);
+
+
+
         mom.addSubject("eggs", new Subject("Yes, i need about six. " +
                 "I'll give you a piece of cake when you come back"));
         mom.addSubject("sister", new Subject("She's in a better place now, honey. The wolf took her away."));
@@ -129,10 +136,15 @@ public class VillageArea extends Area {
         forest3.addEntity(new Shield(Material.WOOD));
         addRoom(forest3);
 
-        dad.addSubject("woods", new Subject("They are pretty nice huh? kill 3 wolves for me son.",
-                new Pair(new Sword(Material.IRON), 1),
-//                true, new TravelQuest("gotemple", forest3)));
-                new KillQuest(new Wolf(), 3)));
+
+        Subject woodsSubject = new Subject("They are pretty nice huh? kill 3 wolves for me son.",
+                new Sword(Material.IRON), 1);
+        woodsSubject.addEffect(new InteractionAddQuest(new KillQuest(new Wolf(), 3)));
+
+        //TODO CHECK WITH ADDING QUESTS, CURRENTLY WILL PROBABLY CRASH, SINCE NO QUEST WILL BE SEEN
+
+        dad.addSubject("woods", woodsSubject);
+
 
         mom.addSubject("dad", new Subject("go to the temple", new TravelQuest(forest3)));
 //                true, new KillQuest("killwolves", wolf, 3)));

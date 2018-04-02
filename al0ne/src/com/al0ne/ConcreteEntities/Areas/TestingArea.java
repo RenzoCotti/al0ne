@@ -231,7 +231,7 @@ public class TestingArea extends Area {
         HolySword sword = new HolySword();
         sword.setType("holy");
         sword.setDamage(8);
-        priest.addReactionItem("holysword", new InteractionAdd(sword, 1));
+        priest.addReactionItem("holysword", new Subject("Here you go, a magic sword!", sword, 1));
         sanctuary.addEntity(priest);
         sanctuary.addEntity(new HolyFountain());
         addRoom(sanctuary);
@@ -284,7 +284,7 @@ public class TestingArea extends Area {
         Room gateRoom = new Room("Hellish Gate", "The main feature of this room is a huge gate with even a bigger lock on it.");
         LockedDoor bossgate = new LockedDoor("Huge gate", "This gate has a huge lock on it.", "huge gate", Material.IRON, gateRoom, "east");
         Key bosskey = bossgate.generateKey("Shiny key");
-        emon.addReactionItem("brokenkey", new InteractionAdd(bosskey, 1));
+        emon.addReactionItem("brokenkey", new Subject("Here's the fixed key for you", bosskey, 1));
 
         gateRoom.addEntity(bossgate);
         //        gateRoom.lockDirection("east", "bossgate");

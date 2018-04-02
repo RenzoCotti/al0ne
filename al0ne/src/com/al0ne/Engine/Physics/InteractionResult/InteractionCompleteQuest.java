@@ -2,9 +2,9 @@ package com.al0ne.Engine.Physics.InteractionResult;
 
 import com.al0ne.AbstractEntities.Player.Player;
 
-public class InteractionQuest extends InteractionBehaviour {
+public class InteractionCompleteQuest extends InteractionBehaviour {
     private String questID;
-    public InteractionQuest(String questID) {
+    public InteractionCompleteQuest(String questID) {
         this.questID = questID;
     }
 

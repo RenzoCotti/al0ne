@@ -2,6 +2,7 @@ package com.al0ne.AbstractEntities;
 
 import com.al0ne.AbstractEntities.Enums.TechLevel;
 import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Quests.Quest;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -58,5 +59,9 @@ public class Area implements Serializable{
 
     public World getParentWorld() {
         return parentWorld;
+    }
+
+    public void addQuest(Quest q){
+        parentWorld.addQuest(q);
     }
 }

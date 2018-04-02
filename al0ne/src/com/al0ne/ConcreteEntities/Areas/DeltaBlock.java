@@ -101,8 +101,7 @@ public class DeltaBlock extends Area {
         NPC beggar1 = new NPC("a beggar",
                 "A filthy man, extremely this. Probably hasn't eaten in months.",
                 "Could you give me some credits mate?");
-        beggar1.addReactionItem("credit", new InteractionPrint("Thank you so much! " +
-                "I really owe you one"));
+        beggar1.addReactionItem("credit", new Subject("Thank you so much mate!"));
         beggar1.setShortDescription("a really scruffy man");
         beggarMaze.addEntity(beggar1);
         beggarMaze.addEntity(new Prop("Fire barrel",
@@ -314,10 +313,8 @@ public class DeltaBlock extends Area {
         NPC checkpointGuard = new NPC("a checkpoint guard", "A fairly large man, " +
                 "with a stern look in his eyes. " +
                 "He's wearing a bulletproof vest.", "Hey, show me your documents");
-        ArrayList<InteractionBehaviour> guardReactions = new ArrayList<>();
-        guardReactions.add(new InteractionUnlock("needdocs"));
-        guardReactions.add(new InteractionPrint("Neat, you can pass."));
-        checkpointGuard.addReactionItem("yourdocuments", guardReactions);
+        checkpointGuard.addReactionItem("yourdocuments", new Subject("Neat, you can pass",
+                new InteractionUnlock("needdocs")));
         checkpointGuard.addSubject("documents", new Subject("Yes, your personal " +
                 "documents stating you're from delta block. Now."));
         checkpointGuard.addSubject("epsilon area", new Subject("You need some documents " +
