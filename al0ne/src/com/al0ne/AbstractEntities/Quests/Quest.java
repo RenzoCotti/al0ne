@@ -29,22 +29,20 @@ import static com.al0ne.Engine.Main.printToLog;
  * - ...
  */
 public abstract class Quest implements Serializable{
-    public static int questCounter = 0;
+    private static int questCounter = 0;
 
-    protected String questID;
-    protected String questName;
-    protected boolean completed;
+    private String questID;
+    private String questName;
+    private boolean completed;
     protected boolean visibleToThePlayer;
-//    protected ArrayList<Pair> toAdd;
-    protected String requiredQuest;
-    protected ArrayList<InteractionBehaviour> rewards;
+
+    private ArrayList<InteractionBehaviour> rewards;
     //TODO QUEST GIVER? ON COMPLETION MESSAGE?
 
     public Quest(String questName){
         this.questID = "quest"+(++questCounter);
         this.questName = questName;
         this.completed = false;
-//        this.toAdd = new ArrayList<>();
         this.rewards = new ArrayList<>();
         this.visibleToThePlayer = false;
     }
@@ -53,13 +51,12 @@ public abstract class Quest implements Serializable{
         this.questID = "quest"+(++questCounter);
         this.questName = questName;
         this.completed = false;
-//        this.toAdd = new ArrayList<>();
         this.rewards = new ArrayList<>();
         this.visibleToThePlayer = visible;
     }
 
     //to implement in different kind of quests
-    public abstract boolean checkCompletion(Player player);
+    public abstract void checkCompletion(Player player);
 
     public void questReward(Player player){
         printToLog("- - - Quest completed: "+getQuestName()+" - - -");
@@ -85,14 +82,6 @@ public abstract class Quest implements Serializable{
     public void setCompleted() {
         this.completed = true;
         this.setVisibleToThePlayer(false);
-    }
-
-    public String getRequiredQuest() {
-        return requiredQuest;
-    }
-
-    public void setRequiredQuest(String requiredQuest) {
-        this.requiredQuest = requiredQuest;
     }
 
     public ArrayList<InteractionBehaviour> getRewards() {

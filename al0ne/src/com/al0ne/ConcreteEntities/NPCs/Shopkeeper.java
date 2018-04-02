@@ -5,6 +5,7 @@ import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.AbstractEntities.Pairs.Pair;
+import com.al0ne.Engine.Utility.GameChanges;
 
 import java.util.HashMap;
 
@@ -42,8 +43,8 @@ public class Shopkeeper extends NPC {
     public void buy(Player player, String toBuy){
         if (hasItemInInventory(toBuy)){
             Pair item = getItemPair(toBuy);
-            if (player.hasEnoughMoney(item.getCount())){
-                player.removeAmountMoney(item.getCount());
+            if (GameChanges.hasEnoughMoney(player, item.getCount())){
+                GameChanges.removeAmountMoney(player, item.getCount());
                 //todo: need to sort out prices
 
                 Pair pairInv = player.getItemPair(item.getEntity().getID());

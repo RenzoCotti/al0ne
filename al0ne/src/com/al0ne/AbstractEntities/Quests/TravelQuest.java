@@ -22,13 +22,11 @@ public class TravelQuest extends Quest{
     }
 
     @Override
-    public boolean checkCompletion(Player player) {
+    public void checkCompletion(Player player) {
         if (player.getCurrentRoom().getID().equals(targetRoom)){
             setCompleted();
             questReward(player);
-            return true;
         }
-        return false;
     }
 
     public String getTargetRoom() {

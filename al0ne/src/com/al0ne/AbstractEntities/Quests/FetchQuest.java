@@ -23,17 +23,15 @@ public class FetchQuest extends Quest{
     }
 
     @Override
-    public boolean checkCompletion(Player player) {
+    public void checkCompletion(Player player) {
         if(player.hasItemInInventory(getEntityRequired().getEntity().getID())){
             Pair pair = player.getItemPair(getEntityRequired().getEntity().getID());
             if(pair.getCount() >= entityRequired.getCount()){
-                player.removeXItem((Item) pair.getEntity(), entityRequired.getCount());
+                player.removeAmountItem((Item) pair.getEntity(), entityRequired.getCount());
                 questReward(player);
                 setCompleted();
-                return true;
             }
         }
-        return false;
     }
 
     public Pair getEntityRequired() {

@@ -3,6 +3,7 @@ package com.al0ne.Engine.TextParsing;
 import com.al0ne.AbstractEntities.*;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Abstract.Status;
+import com.al0ne.AbstractEntities.Player.PrintPlayer;
 import com.al0ne.Engine.*;
 import com.al0ne.AbstractEntities.Enums.Command;
 import com.al0ne.Engine.Game.Game;
@@ -164,7 +165,7 @@ public class ParseInput {
             case EXAMINE:
                 return HandleCommands.handleExamine(parsedInput, player);
             case INVENTORY:
-                player.printInventory();
+                PrintPlayer.printInventory(player);
                 return false;
             case HELP:
                 HandleCommands.printHelp();
@@ -187,15 +188,15 @@ public class ParseInput {
             case DROP:
                 return HandleCommands.handleDrop(parsedInput, player);
             case EQUIPMENT:
-                player.printArmor();
-                player.printWielded();
+                PrintPlayer.printArmor(player);
+                PrintPlayer.printWielded(player);
                 return false;
             case HEALTH:
 //                player.printHealth();
-                player.printHealthStatus();
+                PrintPlayer.printHealthStatus(player);
                 return false;
             case QUEST:
-                player.printQuests();
+                PrintPlayer.printQuests(player);
                 return false;
             case WAIT:
                 printToLog("You wait.");
@@ -235,7 +236,7 @@ public class ParseInput {
             case WEIGHT:
                 if(game.isInDebugMode()){
 
-                    player.printWeight();
+                    PrintPlayer.printWeight(player);
                     return false;
                 }
 

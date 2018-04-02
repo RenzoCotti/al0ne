@@ -136,36 +136,6 @@ public class Player extends WorldCharacter {
 
     }
 
-    //this function prints the currently equipped weapon
-    public void printWielded(){
-        if(getWeapon() == null){
-            printToLog("You're using your fists");
-            return;
-        }
-        printToLog("You're using your "+getWeapon().getName());
-    }
-
-    //this function prints all currently equipped armor pieces
-    public void printArmor(){
-
-        boolean first=true;
-        for (Item w : wornItems.values()){
-            if (w != null && !(w instanceof Weapon)){
-                if(first){
-                    printToSingleLine("You're wearing "+w.getShortDescription());
-                    first = false;
-                }else {
-                    printToSingleLine(", "+w.getShortDescription());
-                }
-            }
-        }
-        if(first){
-            printToLog("You're not wearing anything.");
-        } else{
-            printToLog();
-        }
-    }
-
 
     public int getEncumberment(){
         Armor armor = getArmor();
@@ -191,28 +161,6 @@ public class Player extends WorldCharacter {
         return dexterity-getEncumberment();
     }
 
-    //this function prints a string corresponding to the current
-    //health level
-    public void printHealthStatus(){
-        double percentage = ((double)currentHealth/(double)maxHealth)*100;
-
-        if (percentage >= 80){
-            printToLog("You're as healthy as ever.");
-        } else if (percentage >= 60 && percentage < 80){
-            printToLog("You're mostly fine.");
-        } else if (percentage >= 40 && percentage < 60){
-            printToLog("You need to medicate.");
-        } else if (percentage >= 20 && percentage < 40){
-            printToLog("You're bleeding heavily");
-        } else {
-            if (this.currentHealth<=0){
-                return;
-            }
-            printToLog("You're alive by a miracle");
-        }
-    }
-
-
     //gets the requested resource
     public double getMaxWeight() {
         return maxWeight;
@@ -222,15 +170,6 @@ public class Player extends WorldCharacter {
     }
 
 
-    //this function sets currentWeight to the given weight
-    public void setCurrentWeight(double currentWeight) {
-        this.currentWeight = currentWeight;
-    }
-
-    //debug function, prints the current weight.
-    public void printWeight() {
-        printToLog(currentWeight+"/"+maxWeight+" kg.");
-    }
 
     //this function modifies the current weight
     //it rounds off the result correctly
@@ -250,43 +189,20 @@ public class Player extends WorldCharacter {
     }
 
 
-
-
     //returns the inventory hashmap
     public HashMap<String, Pair> getInventory() {
         return inventory;
     }
 
-    //prints the inventory
-    public void printInventory(){
-        if (inventory.size()==0){
-            printToLog("You have no items.");
-        } else {
-            printToLog("You have these items:");
-            for (Pair pair : inventory.values()) {
-                Item currentItem = (Item) pair.getEntity();
-                double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
-                printToLog("- "+pair.getCount()+"x " + currentItem.getName()+". "+weight+" kg.");
-            }
-            printToLog();
-            printWeight();
-        }
-    }
+
 
     //this function removes 1 item from pair to the inventory
     public boolean removeOneItem(Item i) {
-        Pair p = getItemPair(i.getID());
-        if(p != null){
-            modifyWeight(-i.getWeight());
-            if(!p.subCount()){
-                inventory.remove(i.getID());
-            }
-        }
-        return true;
+        return removeAmountItem(i, 1);
     }
 
     //this function removes 1 item from pair to the inventory
-    public boolean removeXItem(Item i, int count) {
+    public boolean removeAmountItem(Item i, int count) {
         Pair p = getItemPair(i.getID());
         if(p != null){
             modifyWeight(-i.getWeight() * count);
@@ -298,25 +214,6 @@ public class Player extends WorldCharacter {
     }
 
 
-            //this function adds 1 item from pair to the inventory
-    //returns true if it's successful, else the player can't carry it
-    public boolean addOneItem(Pair pair) {
-        Item item = (Item) pair.getEntity();
-        if (modifyWeight(item.getWeight())){
-            if (hasItemInInventory(item.getID())){
-                Pair fromInventory = inventory.get(item.getID());
-                fromInventory.addCount();
-                pair.subCount();
-                return true;
-            } else {
-                inventory.put(item.getID(), new Pair(item, 1));
-                pair.subCount();
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
 
     //this function adds X items from pair to the inventory
     //returns true if it's successful, else the player can't carry them
@@ -338,24 +235,17 @@ public class Player extends WorldCharacter {
         }
     }
 
+    //this function adds 1 item from pair to the inventory
+    //returns true if it's successful, else the player can't carry it
+    public boolean addOneItem(Pair pair) {
+        return addAmountItem(pair, 1);
+    }
+
+
     //this function adds all items from pair to the inventory
     //returns true if it's successful, else the player can't carry them
     public boolean addAllItem(Pair pair) {
-        Item item = (Item) pair.getEntity();
-        if (modifyWeight(item.getWeight() * pair.getCount())){
-            if (hasItemInInventory(item.getID())){
-                Pair fromInventory = inventory.get(item.getID());
-                fromInventory.modifyCount(pair.getCount());
-                pair.modifyCount(-pair.getCount());
-                return true;
-            } else {
-                inventory.put(item.getID(), new Pair(item, pair.getCount()));
-                pair.modifyCount(-pair.getCount());
-                return true;
-            }
-        } else {
-            return false;
-        }
+        return addAmountItem(pair, pair.getCount());
     }
 
     //this function adds an item, amount times
@@ -381,95 +271,6 @@ public class Player extends WorldCharacter {
         this.currentRoom = currentRoom;
     }
 
-
-
-
-    //we check if the player has at least amt money
-    public boolean hasEnoughMoney(int amt){
-        return getMoney() >= amt;
-    }
-
-    //we return the money of the player
-    public int getMoney(){
-        Pair gold = inventory.get("gcoin");
-        Pair silver = inventory.get("scoin");
-        Pair brass = inventory.get("bcoin");
-
-        int value=0;
-        if(gold != null){
-            value += gold.getCount()*100;
-        }
-        if(silver != null){
-            value += silver.getCount()*10;
-        }
-        if(brass != null){
-            value += brass.getCount();
-        }
-        return value;
-    }
-
-    //we remove amt money from the player
-    public boolean removeAmountMoney(int amt){
-        Pair gold = inventory.get("gcoin");
-        Pair silver = inventory.get("scoin");
-        Pair brass = inventory.get("bcoin");
-
-        int totalMoney = getMoney();
-        if(totalMoney >= amt){
-
-            totalMoney-=amt;
-
-            Pair tempGold = new Pair(new GoldCoin(), 0);
-            Pair tempSilver = new Pair(new SilverCoin(), 0);
-            Pair tempBrass = new Pair(new BrassCoin(), 0);
-            ArrayList<Pair> values = new ArrayList<>();
-            values.add(tempGold);
-            values.add(tempSilver);
-            values.add(tempBrass);
-
-            while (totalMoney != 0){
-                if(!(totalMoney % 10 == 0)){
-                    //we subtract brass
-                    values.get(2).addCount();
-                    totalMoney--;
-                } else if(!(totalMoney % 100 == 0)){
-                    //we subtract silver
-                    values.get(1).addCount();
-                    totalMoney-=10;
-                } else{
-                    //we subtract gold
-                    values.get(0).addCount();
-                    totalMoney-=100;
-                }
-            }
-
-            int i = 0;
-            for (Pair p : values){
-                Pair money;
-                if(i==0){
-                    money=gold;
-                } else if(i==1){
-                    money=silver;
-                } else{
-                    money=brass;
-                }
-
-                if(money != null){
-                    if(money.setCount(p.getCount())){
-                        inventory.remove(money.getEntity().getID());
-                    }
-                } else if(p.getCount() > 0){
-                    addAllItem(p);
-                }
-                i++;
-            }
-
-            return true;
-
-        }else {
-            return false;
-        }
-    }
 
 
 
@@ -531,31 +332,7 @@ public class Player extends WorldCharacter {
     }
 
 
-    //prints the quests
-    public void printQuests(){
-        if (getQuests().size()==0){
-            printToLog("You have no quests currently.");
-        } else {
 
-            boolean first = true;
-
-            for (Quest q : getQuests().values()) {
-                if(q.isVisibleToThePlayer() && first){
-                    first = false;
-                    printToLog("You have these quests:");
-                    printToLog("- "+q.getQuestName());
-                } else if(q.isVisibleToThePlayer()){
-                    printToLog("- "+q.getQuestName());
-                }
-            }
-
-            if(first){
-                printToLog("You completed all your quests for now.");
-
-            }
-
-        }
-    }
 
 
 }

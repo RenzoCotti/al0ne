@@ -5,6 +5,9 @@ import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Abstract.Enemy;
 import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.BrassCoin;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.GoldCoin;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.Engine.Editing.EditorInfo;
 import com.al0ne.Engine.Game.Game;
 import com.al0ne.Engine.Main;
@@ -19,7 +22,9 @@ import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
@@ -345,6 +350,97 @@ public class GameChanges {
                     printToLog("The "+i.getName()+" stops emitting light.");
                 }
             }
+        }
+    }
+
+
+    //we check if the player has at least amt money
+    public static boolean hasEnoughMoney(Player p, int amt){
+        return getMoney(p) >= amt;
+    }
+
+    //we return the money of the player
+    public static int getMoney(Player p){
+        HashMap<String, Pair> inventory = p.getInventory();
+
+        Pair gold = inventory.get("gcoin");
+        Pair silver = inventory.get("scoin");
+        Pair brass = inventory.get("bcoin");
+
+        int value=0;
+        if(gold != null){
+            value += gold.getCount()*100;
+        }
+        if(silver != null){
+            value += silver.getCount()*10;
+        }
+        if(brass != null){
+            value += brass.getCount();
+        }
+        return value;
+    }
+
+    //we remove amt money from the player
+    public static boolean removeAmountMoney(Player player, int amt){
+        HashMap<String, Pair> inventory = player.getInventory();
+        Pair gold = inventory.get("gcoin");
+        Pair silver = inventory.get("scoin");
+        Pair brass = inventory.get("bcoin");
+
+        int totalMoney = getMoney(player);
+        if(totalMoney >= amt){
+
+            totalMoney-=amt;
+
+            Pair tempGold = new Pair(new GoldCoin(), 0);
+            Pair tempSilver = new Pair(new SilverCoin(), 0);
+            Pair tempBrass = new Pair(new BrassCoin(), 0);
+            ArrayList<Pair> values = new ArrayList<>();
+            values.add(tempGold);
+            values.add(tempSilver);
+            values.add(tempBrass);
+
+            while (totalMoney != 0){
+                if(!(totalMoney % 10 == 0)){
+                    //we subtract brass
+                    values.get(2).addCount();
+                    totalMoney--;
+                } else if(!(totalMoney % 100 == 0)){
+                    //we subtract silver
+                    values.get(1).addCount();
+                    totalMoney-=10;
+                } else{
+                    //we subtract gold
+                    values.get(0).addCount();
+                    totalMoney-=100;
+                }
+            }
+
+            int i = 0;
+            for (Pair p : values){
+                Pair money;
+                if(i==0){
+                    money=gold;
+                } else if(i==1){
+                    money=silver;
+                } else{
+                    money=brass;
+                }
+
+                if(money != null){
+                    if(money.setCount(p.getCount())){
+                        inventory.remove(money.getEntity().getID());
+                    }
+                } else if(p.getCount() > 0){
+                    player.addAllItem(p);
+                }
+                i++;
+            }
+
+            return true;
+
+        } else {
+            return false;
         }
     }
 

@@ -10,7 +10,6 @@ import com.al0ne.AbstractEntities.Quests.Quest;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.*;
-import com.al0ne.AbstractEntities.World;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Wearable;
 import com.al0ne.Engine.TextParsing.HandleCommands;
 import com.al0ne.Engine.Utility.Utility;
@@ -52,12 +51,12 @@ public class PlayerActions {
                     int toReload = rweapon.getMagazineSize()-rweapon.getInMagazine();
                     if(ammo.getCount() >= toReload){
                         rweapon.fullReload();
-                        player.removeXItem((Item) ammo.getEntity(), toReload);
+                        player.removeAmountItem((Item) ammo.getEntity(), toReload);
                         printToLog("You reload your "+rweapon.getName()+".");
                         return true;
                     } else {
                         rweapon.setInMagazine(ammo.getCount()+rweapon.getInMagazine());
-                        player.removeXItem((Item) ammo.getEntity(), ammo.getCount());
+                        player.removeAmountItem((Item) ammo.getEntity(), ammo.getCount());
                         printToLog("You partially reload your "+rweapon.getName()+".");
                         return true;
                     }

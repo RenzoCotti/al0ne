@@ -25,13 +25,11 @@ public class KillQuest extends Quest{
     }
 
     @Override
-    public boolean checkCompletion(Player player) {
+    public void checkCompletion(Player player) {
         if(currentCount >= targetCount){
             questReward(player);
             setCompleted();
-            return true;
         }
-        return false;
     }
 
     public String getToKillID() {
