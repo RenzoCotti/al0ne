@@ -4,11 +4,13 @@ import com.al0ne.AbstractEntities.Area;
 import com.al0ne.AbstractEntities.Enums.Material;
 import com.al0ne.AbstractEntities.Enums.Size;
 import com.al0ne.AbstractEntities.Enums.TechLevel;
+import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.World;
 import com.al0ne.ConcreteEntities.Areas.FirstAlphaArea;
 import com.al0ne.ConcreteEntities.Areas.TestingArea;
 import com.al0ne.ConcreteEntities.Areas.VillageArea;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.MoneyPouch;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.BodyClothing;
 
 public class MedievalWorld extends World {
@@ -21,6 +23,7 @@ public class MedievalWorld extends World {
                 "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FABRIC);
         player.simpleAddItem(bc, 1);
         player.wear(bc);
+        player.simpleAddItem(new MoneyPouch(), 1);
 
         Area alphaArea = new TestingArea(this);
         Area villageArea = new VillageArea(this);

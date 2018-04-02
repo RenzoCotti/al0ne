@@ -4,8 +4,8 @@ import com.al0ne.AbstractEntities.Abstract.Entity;
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Coin;
 import com.al0ne.Engine.Utility.Utility;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.SilverCoin;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -37,20 +37,14 @@ public class MidasSpell extends TargetSpell{
                         player.getInventory().remove(item.getID());
                     }
                     player.recalculateWeight();
-                    int goldAmt = Utility.randomNumber(2*(int) (item.getWeight()*10));
-                    SilverCoin coin = new SilverCoin();
 
-                    if( player.addAmountItem(new Pair(new SilverCoin(), goldAmt), goldAmt) ){
-                        printToLog("You turn the "+item.getName()+" into "+goldAmt+" coins!");
-                        return true;
-                    } else {
-                        int goldDropped = (int) (coin.getWeight()*goldAmt - (player.getMaxWeight() - player.getCurrentWeight()));
-                        player.addAmountItem(new Pair(new SilverCoin(), goldAmt-goldDropped), goldAmt-goldDropped);
-                        player.getCurrentRoom().addEntity(new SilverCoin(), goldDropped);
+                    int amt = Utility.randomNumber(2*(int) (item.getWeight()*10));
 
-                        printToLog("You turn the "+item.getName()+" into gold! "+goldDropped+" coins drop on the floor.");
-                        return true;
-                    }
+                    player.getCurrentRoom().addEntity(new Coin(), amt);
+
+                    printToLog("You turn the "+item.getName()+" into gold! "+amt+" coins drop on the floor.");
+                    return true;
+
                 } else{
                     printToLog("You need to be holding that item.");
                     return false;

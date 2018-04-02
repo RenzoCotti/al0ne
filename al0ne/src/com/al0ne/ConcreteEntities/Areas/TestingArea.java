@@ -7,6 +7,7 @@ import com.al0ne.AbstractEntities.Events.HealthEvent;
 import com.al0ne.AbstractEntities.Events.PrintEvent;
 import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Coin;
 import com.al0ne.Engine.Physics.Behaviours.MaterialBehaviours.IronBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionAdd;
 import com.al0ne.ConcreteEntities.Enemies.Snake;
@@ -51,9 +52,10 @@ public class TestingArea extends Area {
 
 
         Room startRoom = new Room("Generic Room", "You are in a pretty generic-looking cave. It feels pretty damp.");
-        startRoom.addEvent(new PrintEvent(30, "You fart."));
-        startRoom.addEvent(new HealthEvent(10,"you painfully stab your foot on a sharp rock", -1));
+        startRoom.addEvent(new PrintEvent(5, "You fart."));
+//        startRoom.addEvent(new HealthEvent(10,"you painfully stab your foot on a sharp rock", -1));
         startRoom.addItem(new Mushroom());
+        startRoom.addItem(new Coin(), 1000);
 //        for (int i = 0; i < 10; i++){
 //            if(i > 7){
 //                startRoom.addEntity(mg.generate("wamen"+i, "hello there general kenobesse.", true));

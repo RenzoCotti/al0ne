@@ -14,7 +14,6 @@ public class CyberpunkWorld extends World{
         player.addStatus(new DeathStatus("Kidney failure", 60, "You feel dizzy.",
                 "Your kidney hurts like hell.", "You died of kidney failure."));
 
-
         DeltaBlock d = new DeltaBlock(this);
         addArea(d);
 

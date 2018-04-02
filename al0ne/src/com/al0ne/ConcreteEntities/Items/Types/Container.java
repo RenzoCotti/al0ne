@@ -61,6 +61,17 @@ public class Container extends Item{
         return false;
     }
 
+    public Pair getItem(String id){
+        for (Pair p : items){
+            Item currentItem = (Item) p.getEntity();
+            if(id.equals(currentItem.getID())){
+                return p;
+            }
+        }
+        return null;
+    }
+
+
     @Override
     public double getWeight() {
         return weight+currentWeight;
@@ -80,7 +91,7 @@ public class Container extends Item{
     public boolean putIn(Pair pair, Integer amount){
 
         Item item = (Item) pair.getEntity();
-        if (canAdd && (item.getSize())*amount+currentSize < size){
+        if ((item.getSize())*amount+currentSize < size){
             if(hasItem(item)){
                 getPair(item).modifyCount(amount);
                 pair.modifyCount(-amount);
@@ -91,11 +102,23 @@ public class Container extends Item{
                 pair.modifyCount(-amount);
                 currentSize+=item.getSize()*amount;
                 currentWeight+=item.getWeight();
+
             }
             return true;
         } else{
             return false;
         }
+    }
+
+    public boolean playerPutsIn(Pair p, int amount){
+        return canAdd && putIn(p, amount);
+    }
+
+    public void addItem(Item i, int amt){
+        putIn(new Pair(i, amt), amt);
+    }
+    public void addItem(Item i){
+        putIn(new Pair(i, 1), 1);
     }
 
     public void removeItem(Pair pair){
@@ -126,14 +149,6 @@ public class Container extends Item{
         currentSize+=value;
     }
 
-
-    public void addItem(Item item){
-        items.add(new Pair(item, 1));
-    }
-
-    public void addItem(Item item, Integer value){
-        items.add(new Pair(item, value));
-    }
 
     public boolean isLocked() {
         return locked;

@@ -9,6 +9,8 @@ import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Abstract.Interactable;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Credit;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.CreditOr;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
 import com.al0ne.ConcreteEntities.Items.Types.Container;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
@@ -44,11 +46,12 @@ public class DeltaBlock extends Area {
         addRoom(residential1);
 
         Room startbath = new Room("Dark bathroom", "Very dark, humid and smelling of blood.");
-        startbath.setLit(false);
+//        startbath.setLit(false);
         Prop bath = new Prop("Bath", "It's the cold bath you woke into. " +
                 "You can see that the water is still bloody.");
         bath.addBehaviour(new WaterBehaviour());
         startbath.addEntity(bath);
+        startbath.addItem(new Credit(), 1000);
 
         Knife serratedKnife = new Knife("Serrated knife", "A knife with a serrated edge " +
                 "and a plastic handle. " +
@@ -62,6 +65,7 @@ public class DeltaBlock extends Area {
 
         startbath.addEntity(serratedKnife);
         startbath.addEntity(jeansAndTShirt);
+        startbath.addEntity(new CreditOr());
 //        startbath.addEntity(new Flashlight());
 //        startbath.addEntity(new Battery("AA"));
         startbath.addEntity(new Lightswitch("light switch", "A light switch. " +

@@ -20,6 +20,7 @@ import com.al0ne.ConcreteEntities.Items.ConcreteItems.Books.Spellbook;
 import com.al0ne.ConcreteEntities.Spells.*;
 
 import java.util.ArrayList;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Currency;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
@@ -362,6 +363,8 @@ public class PlayerActions {
             //bypassed by taking chest with that in it
             return 0;
         }
+
+
         if(item.getCount() < amt){
             printToLog("There are just "+item.getCount()+" of those.");
             return 0;
@@ -374,7 +377,9 @@ public class PlayerActions {
 
         Item toAdd = (Item) item.getEntity();
         if (!player.addAmountItem(item, amt)){
-            printToLog("Too heavy to carry.");
+            if(! (item.getEntity() instanceof Currency) ){
+                printToLog("Too heavy to carry.");
+            }
             return 0;
         } else {
             if (item.isEmpty()){
@@ -417,7 +422,7 @@ public class PlayerActions {
         }
 
         int count = item.getCount();
-        if (!container.putIn(item, amount)){
+        if (!container.playerPutsIn(item, amount)){
             printToLog("Not enough space in it.");
             return false;
         } else {

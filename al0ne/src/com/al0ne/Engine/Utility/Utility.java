@@ -7,9 +7,6 @@ import com.al0ne.Engine.Main;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Helmet;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.BrassCoin;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.GoldCoin;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.SilverCoin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -160,39 +157,6 @@ public class Utility {
         Item s = Main.player.getOffHand();
         if(s == null) return "None.";
         return s.getName();
-    }
-
-
-    public static ArrayList<Pair> toCoins(int value){
-
-        int totalMoney = value;
-
-
-            Pair tempGold = new Pair(new GoldCoin(), 0);
-            Pair tempSilver = new Pair(new SilverCoin(), 0);
-            Pair tempBrass = new Pair(new BrassCoin(), 0);
-            ArrayList<Pair> values = new ArrayList<>();
-            values.add(tempGold);
-            values.add(tempSilver);
-            values.add(tempBrass);
-
-            while (totalMoney > 0){
-                if(!(totalMoney % 10 == 0)){
-                    //we subtract brass
-                    values.get(2).addCount();
-                    totalMoney--;
-                } else if(!(totalMoney % 100 == 0)){
-                    //we subtract silver
-                    values.get(1).addCount();
-                    totalMoney = totalMoney - 10;
-                } else{
-                    //we subtract gold
-                    values.get(0).addCount();
-                    totalMoney= totalMoney - 100;
-                }
-            }
-
-            return values;
     }
 
 }

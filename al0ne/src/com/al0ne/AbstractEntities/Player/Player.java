@@ -7,12 +7,10 @@ import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.Item;
 import com.al0ne.AbstractEntities.Abstract.WorldCharacter;
 import com.al0ne.AbstractEntities.World;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Currency;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.MoneyContainer;
 import com.al0ne.Engine.Utility.Utility;
-import com.al0ne.ConcreteEntities.Items.Types.Wearable.Weapon;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.*;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.BrassCoin;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.GoldCoin;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.SilverCoin;
 import com.al0ne.ConcreteEntities.Statuses.ConcreteStatuses.Hunger;
 import com.al0ne.ConcreteEntities.Statuses.ConcreteStatuses.NaturalHealing;
 import com.al0ne.ConcreteEntities.Statuses.ConcreteStatuses.Thirst;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
-import static com.al0ne.Engine.Main.printToSingleLine;
 
 /**
  * a Player is:
@@ -220,7 +217,15 @@ public class Player extends WorldCharacter {
     public boolean addAmountItem(Pair pair, Integer amount) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight() * amount)){
-            if (hasItemInInventory(item.getID())){
+            if(pair.getEntity() instanceof Currency) {
+                if(getMoneyContainer() != null){
+                    getMoneyContainer().putIn(pair, amount);
+                    return true;
+                } else {
+                    printToLog("You need a way to keep that money with you!");
+                    return false;
+                }
+            } else if (hasItemInInventory(item.getID())){
                 Pair fromInventory = inventory.get(item.getID());
                 fromInventory.modifyCount(amount);
                 pair.modifyCount(-amount);
@@ -322,7 +327,19 @@ public class Player extends WorldCharacter {
     }
 
 
+    public MoneyContainer getMoneyContainer(){
+        HashMap<String, Pair> inventory = getInventory();
 
+        for(Pair p : inventory.values()){
+            Item i = (Item) p.getEntity();
+
+            if(i instanceof MoneyContainer){
+                return (MoneyContainer) i;
+            }
+        }
+
+        return null;
+    }
 
 
 }

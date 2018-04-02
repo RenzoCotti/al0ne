@@ -11,6 +11,7 @@ import com.al0ne.AbstractEntities.Quests.KillQuest;
 import com.al0ne.AbstractEntities.Quests.Quest;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Abstract.Interactable;
+import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Coin;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionAdd;
 import com.al0ne.ConcreteEntities.Enemies.Wolf;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.JunkItem;
@@ -18,12 +19,10 @@ import com.al0ne.ConcreteEntities.Items.Props.Types.InvisibleProp;
 import com.al0ne.ConcreteEntities.Items.Types.Food;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Helmet;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Shield;
-import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.BrassCoin;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Books.Note;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Sword;
 import com.al0ne.ConcreteEntities.NPCs.Shopkeeper;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionAddQuest;
-import com.al0ne.Engine.Physics.InteractionResult.InteractionCompleteQuest;
 
 import java.util.ArrayList;
 
@@ -102,7 +101,7 @@ public class VillageArea extends Area {
 
         Subject favour = new Subject("Could you be so kind to go out and buy some eggs for me? " +
                 "Here's some money for that. Thanks!");
-        favour.addEffect(new InteractionAdd(new BrassCoin(), 3));
+        favour.addEffect(new InteractionAdd(new Coin(), 3));
         favour.addEffect(new InteractionAddQuest(getEggs));
 
         mom.addSubject("favour", favour);
