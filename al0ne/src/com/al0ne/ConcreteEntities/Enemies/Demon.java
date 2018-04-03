@@ -21,17 +21,18 @@ public class Demon extends Enemy {
     }
 
     @Override
-    public void isAttacked(Player player, Room room) {
+    public boolean isAttacked(Player player, Room room) {
         if(!alive){
             printToLog("You defeated the "+ name);
             printToLog("The "+name+" drops some items.");
             addLoot(room);
             player.getCurrentRoom().unlockDirection("boss");
             printToLog("You feel the magical barrier waning.");
-            return;
+            return false;
         }
         printToLog("The "+name+" attacks and hits you.");
         //atm it bypasses armor and attack rolls
         player.modifyHealth(-damage);
+        return true;
     }
 }

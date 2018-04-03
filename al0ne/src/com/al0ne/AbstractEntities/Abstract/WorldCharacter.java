@@ -14,7 +14,20 @@ import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
-
+/*
+ * an inventory, storing itemID and ConcreteItems
+* a currentRoom, a Room the player is currently in
+* a maxWeight, double, representing the max carry weight
+* a currentWeight, double
+* a maxHealth, a double representing the max health
+* a currentHealth
+* an attack, int, representing how likely the player is to hit
+* a dexterity, int, representing the player's dodging chance
+* a status, a HashMap <StatusID, Status>
+* a toApply, a queue of status that will be applied at the end of the turn
+* an alive, boolean. Represents if the player is alive or not
+* a wornItems, HashMap<BodyPart, Item>: all equipped items
+*/
 public abstract class WorldCharacter extends Entity {
 
 
@@ -47,8 +60,7 @@ public abstract class WorldCharacter extends Entity {
     private String causeOfDeath;
 
     protected ArrayList<String> resistances;
-    //maps status to percentage of applying
-    protected HashMap<Status, Integer> inflictStatuses;
+
 
     protected boolean aggro;
     protected boolean snooze;
@@ -104,7 +116,6 @@ public abstract class WorldCharacter extends Entity {
         this.questCharacter = false;
 
         this.resistances = new ArrayList<>();
-        this.inflictStatuses = new HashMap<>();
 
     }
 
@@ -384,9 +395,6 @@ public abstract class WorldCharacter extends Entity {
     }
 
 
-    protected void addInflictedStatus(Status status, Integer chanceToApply){
-        inflictStatuses.put(status, chanceToApply);
-    }
 
     public ArrayList<String> getResistances() {
         return resistances;
@@ -465,7 +473,7 @@ public abstract class WorldCharacter extends Entity {
     }
 
 
-    public void isAttacked(Player player, Room room){
+    public boolean isAttacked(Player player, Room room){
 
         aggro = true;
 
@@ -478,28 +486,23 @@ public abstract class WorldCharacter extends Entity {
 
         int attackRoll = Utility.randomNumber(100)+attack;
         int dodgeRoll = Utility.randomNumber(100)+player.getDexterity();
-//        System.out.println("ENEMY ATK: "+attackRoll+" vs DEX: "+dodgeRoll);
         if(attackRoll > dodgeRoll){
             printToLog(nameToUse+" attacks and hits you.");
             int inflictedDamage = damage-player.getArmorLevel();
             if (inflictedDamage>0){
-                for (Status s : inflictStatuses.keySet()){
-                    //possibly resistance from player?
-                    int inflictProbability = 100-inflictStatuses.get(s);
-                    if(Utility.randomGreaterThan(inflictProbability)){
-                        if (player.addStatus(s)){
-                            printToLog(s.getOnApply());
-                        }
-                    }
-                }
+                //player is hit
                 if(player.modifyHealth(-inflictedDamage)) {
                     player.setCauseOfDeath(shortDescription);
                 }
+
+                return true;
             } else{
                 printToLog("Your armor absorbs the damage.");
+                return false;
             }
         } else{
             printToLog(nameToUse+" attacks, but you manage to dodge.");
+            return false;
         }
     }
 

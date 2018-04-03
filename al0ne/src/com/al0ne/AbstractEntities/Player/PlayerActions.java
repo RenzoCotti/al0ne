@@ -335,8 +335,14 @@ public class PlayerActions {
             }
 
             //we modify the player's weight accordingly, and remove the item if necessary
-            player.modifyWeight(-(((Item) target.getEntity()).getWeight()*amt));
-            target.modifyCount(-amt);
+            if(target.getEntity() instanceof Currency){
+                player.modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
+                target.modifyCount(-amt);
+                player.getMoneyContainer().modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
+            } else {
+                player.modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
+                target.modifyCount(-amt);
+            }
             if (target.getCount() == 0){
                 player.getInventory().remove(target.getEntity().getID());
             }
@@ -377,9 +383,9 @@ public class PlayerActions {
 
         Item toAdd = (Item) item.getEntity();
         if (!player.addAmountItem(item, amt)){
-            if(! (item.getEntity() instanceof Currency) ){
+//            if(! (item.getEntity() instanceof Currency) ){
                 printToLog("Too heavy to carry.");
-            }
+//            }
             return 0;
         } else {
             if (item.isEmpty()){

@@ -1,8 +1,11 @@
 package com.al0ne.AbstractEntities.Abstract;
 
 import com.al0ne.AbstractEntities.Player.Player;
+import com.al0ne.AbstractEntities.Room;
+import com.al0ne.Engine.Utility.Utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 
@@ -16,6 +19,9 @@ public class Enemy extends WorldCharacter {
 
     protected boolean elite;
 
+    //maps status to percentage of applying
+    protected HashMap<Status, Integer> inflictStatuses;
+
 
 
 
@@ -25,6 +31,8 @@ public class Enemy extends WorldCharacter {
                  int maxHealth, int attack, int dexterity, int armor, int damage) {
         super(name, name, description, shortDescription,maxHealth, attack, dexterity, armor, damage);
         this.elite=false;
+        this.inflictStatuses = new HashMap<>();
+
 
 //        if(special == 0){
 //            return;
@@ -138,4 +146,25 @@ public class Enemy extends WorldCharacter {
         return elite;
     }
 
+
+    protected void addInflictedStatus(Status status, Integer chanceToApply){
+        inflictStatuses.put(status, chanceToApply);
+    }
+
+    @Override
+    public boolean isAttacked(Player player, Room room) {
+        if( super.isAttacked(player, room)){
+            for (Status s : inflictStatuses.keySet()){
+                //possibly resistance from player?
+                int inflictProbability = 100-inflictStatuses.get(s);
+                if(Utility.randomGreaterThan(inflictProbability)){
+                    if (player.addStatus(s)){
+                        printToLog(s.getOnApply());
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

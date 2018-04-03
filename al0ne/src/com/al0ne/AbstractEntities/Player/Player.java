@@ -22,21 +22,12 @@ import static com.al0ne.Engine.Main.printToLog;
 
 /**
  * a Player is:
- * an inventory, storing itemID and ConcreteItems
  * a currentRoom, a Room the player is currently in
+ * a currentArea, an Area representing the area the player's currently in
  * a maxWeight, double, representing the max carry weight
  * a currentWeight, double
- * a maxHealth, a double representing the max health
- * a currentHealth
- * an attack, int, representing how likely the player is to hit
- * a dexterity, int, representing the player's dodging chance
- * a status, a HashMap <StatusID, Status>
- * a toApply, a queue of status that will be applied at the end of the turn
- * an alive, boolean. Represents if the player is alive or not
  * a hasNeeds, boolean: represents if the current Player will become hungry/thirsty
  * a story, String containing a brief introduction about the player
- * a quests, HashMap<questID, Boolean>, representing all due quests
- * a wornItems, HashMap<BodyPart, Item>: all equipped items
  */
 public class Player extends WorldCharacter {
 
@@ -55,35 +46,16 @@ public class Player extends WorldCharacter {
 
 
 
-    // add also money pouch?
-
-
     //creates a new Player, sets the current Room to currentRoom
     //inventory is empty, weight is 0
     //add thirst and hunger if needs is true
-    public Player(boolean needs, double maxWeight, String story) {
-        super("alpha", "player", story, "da",
-        10, 70, 30, 0, 1);
-        this.maxWeight = maxWeight;
-        this.currentWeight=0;
-        if(needs){
-            addStatus(new Thirst());
-            addStatus(new Hunger());
-        }
-        this.hasNeeds = needs;
-        addStatus(new NaturalHealing());
-    }
-
-    //creates a new Player, sets the current Room to currentRoom
-    //inventory is empty, weight is 0
-    //add thirst and hunger if needs is true
-    public Player( String name, String story, boolean needs,
-                  int maxHealth, int attack, int dexterity, int armor, int damage, double maxWeight ) {
-        super("alpha", name, story, "da",
+    public Player(String story, boolean needs, int maxHealth, int attack,
+                  int dexterity, int armor, int damage, double maxWeight ) {
+        super("player", "player", story, "-",
                 maxHealth, attack, dexterity, armor, damage);
         this.maxWeight = maxWeight;
         this.currentWeight=0;
-        setLongDescription("You are "+name+".\n"+story);
+        setLongDescription(story);
         if(needs){
             addStatus(new Thirst());
             addStatus(new Hunger());
@@ -171,9 +143,9 @@ public class Player extends WorldCharacter {
     //this function modifies the current weight
     //it rounds off the result correctly
     //the weight is bound by maxWeight and 0
-    public boolean modifyWeight(double weight) {
-        if (this.currentWeight+weight <= maxWeight){
-            this.currentWeight+=weight;
+    public boolean modifyWeight(double amt) {
+        if (this.currentWeight+amt <= maxWeight){
+            this.currentWeight+=amt;
             this.currentWeight= Utility.twoDecimals(currentWeight);
 
             if (currentWeight < 0){
@@ -203,6 +175,7 @@ public class Player extends WorldCharacter {
         Pair p = getItemPair(i.getID());
         if(p != null){
             modifyWeight(-i.getWeight() * count);
+            //if the item is depleted, remove it
             if(!p.modifyCount(-count)){
                 inventory.remove(i.getID());
             }
@@ -217,6 +190,8 @@ public class Player extends WorldCharacter {
     public boolean addAmountItem(Pair pair, Integer amount) {
         Item item = (Item) pair.getEntity();
         if (modifyWeight(item.getWeight() * amount)){
+
+            //case we're picking up money, add it to the money container
             if(pair.getEntity() instanceof Currency) {
                 if(getMoneyContainer() != null){
                     getMoneyContainer().putIn(pair, amount);
@@ -257,11 +232,7 @@ public class Player extends WorldCharacter {
     //returns true if it's successful, else the player can't carry it
     @Override
     public boolean simpleAddItem(Item item, Integer amount) {
-        if (modifyWeight(item.getWeight() * amount)){
-            return super.simpleAddItem(item, amount);
-        } else {
-            return false;
-        }
+        return modifyWeight(item.getWeight() * amount) && super.simpleAddItem(item, amount);
     }
 
 
@@ -296,12 +267,10 @@ public class Player extends WorldCharacter {
         ArrayList<Item> toRemove = new ArrayList<>();
         for(Pair p : inventory.values()){
             Item i = (Item) p.getEntity();
-//            System.out.println("Item: "+i.getName()+" "+i.getIntegrity()+"%");
             if(i.getIntegrity() <= 0 ){
                 toRemove.add(i);
             }
         }
-//        System.out.println("N. items to remove: "+toRemove.size());
 
         //removes all items, even if there are multiple copies of different integrity
         for(Item i : toRemove){

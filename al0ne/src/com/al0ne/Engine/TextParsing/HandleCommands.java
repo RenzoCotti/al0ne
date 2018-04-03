@@ -144,17 +144,32 @@ public class HandleCommands {
                     totalItems.setReliability(reliability);
                     return totalItems;
                 }
+
+                if(b instanceof Container){
+                    for(Pair p : ((Container) b).getItems()){
+                        if (p.getEntity().getName().equals(s)) {
+                            potentialItems.add(pair);
+                            int reliability = s.split(" ").length;
+                            totalItems.setReliability(reliability);
+                            return totalItems;
+                        }
+                    }
+                }
             }
 
             //otherwise, parse and check for partial matches
             String[] temp = s.split(" ");
+            //best match indicator
             int max = 0;
-            //we check the given string token by token
+
+            //we check with each pair in inventory if it contains the token
             for (Pair pair : toCheck.values()){
                 int reliability = 0;
-                //and we check with each pair in inventory if it contains the token
+
+                //we check the given input string token by token
                 for (String token : temp) {
                     Entity a = pair.getEntity();
+
 
                     String[] currentItem = a.getName().split(" ");
                     for (String b : currentItem) {
@@ -167,6 +182,26 @@ public class HandleCommands {
                                 potentialItems.add(pair);
                             } else if(reliability == max){
                                 potentialItems.add(pair);
+                            }
+                        }
+                    }
+
+                    if(a instanceof Container){
+                        for(Pair p : ((Container) a).getItems()){
+                            currentItem = p.getEntity().getName().split(" ");
+
+                            for (String b : currentItem) {
+                                if (b.toLowerCase().equals(token)) {
+                                    reliability++;
+                                    if (reliability > max) {
+                                        potentialItems.clear();
+                                        max = reliability;
+                                        totalItems.setReliability(max);
+                                        potentialItems.add(p);
+                                    } else if(reliability == max){
+                                        potentialItems.add(p);
+                                    }
+                                }
                             }
                         }
                     }
@@ -424,10 +459,6 @@ public class HandleCommands {
     }
 
 
-    //this function handles both dropping and taking items:
-    //drop: false-> it's a TAKE action, true-> it's a DROP action
-    //we check if it's a drop/take all action, then we check if we have exactly
-    //1 item, then we take/drop (all)
     public static boolean handleTake(String[] temp, Player player) {
 
         //TODO: FIX GET POSSIBLE ITEMS, ADD RELIABILITY OF GUESS, ADD ONLY IF BIG ENOUGH

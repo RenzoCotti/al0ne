@@ -15,9 +15,11 @@ import com.al0ne.ConcreteEntities.Items.Types.Wearable.BodyClothing;
 
 public class MedievalWorld extends World {
     public MedievalWorld() {
-        super("cyberpunk", TechLevel.HIGH, new Player(true, 10,
-                "You're a boy, chestnut hair, brown eyes, and big dreams for the future." +
-                        "You'd love to become a knight, one day. Or maybe a wizard, you haven't decided yet."));
+        super("medieval", TechLevel.HIGH, new Player( "You're a boy, chestnut hair, brown eyes, " +
+                "and big dreams for the future. You'd love to become a knight, one day. " +
+                "Or maybe a wizard, you haven't decided yet.", true,
+                10, 40, 40, 0, 1, 10));
+
 
         BodyClothing bc = new BodyClothing("roughclothes", "clothes",
                 "Some rough clothes, they look a bit worn", 0.5, Size.NORMAL, Material.FABRIC);

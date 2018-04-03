@@ -114,7 +114,7 @@ public class EditPlayer extends EditTab{
             if(!name.equals("") && !story.equals("") &&
                     Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea().getStartingRoom() != null){
                 Room startingRoom = Main.edit.getCurrentEdit().getCurrentWorld().getStartingArea().getStartingRoom();
-                Player p = new Player(name, story, needs, maxHealthValue,
+                Player p = new Player(story, needs, maxHealthValue,
                         attackValue, dexValue, armorValue, damageValue, weightValue);
 
                 if(inventory.size() > 0){

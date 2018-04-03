@@ -8,7 +8,7 @@ import com.al0ne.ConcreteEntities.Statuses.DeathStatus;
 
 public class CyberpunkWorld extends World{
     public CyberpunkWorld() {
-        super("cyberpunk", TechLevel.HIGH, new Player("You", "You don't remember anything about you.",
+        super("cyberpunk", TechLevel.HIGH, new Player("You don't remember anything about you.",
                 true, 20, 40, 40, 0, 1, 20));
 
         player.addStatus(new DeathStatus("Kidney failure", 60, "You feel dizzy.",
