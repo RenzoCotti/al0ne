@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -73,8 +74,10 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
         String item = Utility.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialItem(item, player, 1).getItems();
-        ArrayList<Pair> possibleItems = getPotentialItem(item, player, 0).getItems();
+        ArrayList<Pair> possibleEntities = getPotentialEntity(item, player,
+                player.getCurrentRoom().getEntities()).getItems();
+        ArrayList<Pair> possibleItems = getPotentialEntity(item, player,
+                player.getInventory()).getItems();
 
 //        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
 //            printToLog("Be more specific.");
@@ -107,8 +110,22 @@ public class HandleCommands {
     }
 
     public static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
-        ArrayList<Pair> result = getPotentialItem(s, player, 0).getItems();
-        result.addAll(getPotentialItem(s, player, 1).getItems());
+        ArrayList<Pair> result = getPotentialEntity(s, player, player.getInventory()).getItems();
+        result.addAll(getPotentialEntity(s, player, player.getCurrentRoom().getEntities()).getItems());
+        return result;
+    }
+
+    public static ArrayList<Pair> getAllItemsContainer(Player p){
+        ArrayList<Container> containers = p.getCurrentRoom().getContainers();
+        ArrayList<Pair> result = new ArrayList<>();
+        for(Container c : containers){
+            if(!c.isLocked())
+                result.addAll(c.getItems());
+        }
+
+        for(Container c : p.getContainers()){
+            result.addAll(c.getItems());
+        }
         return result;
     }
 
@@ -116,137 +133,98 @@ public class HandleCommands {
     //number = 0: tries to get from the inventory
     //number = 1: tries to get from ConcreteEntities
     //number = 2: tries to get from containers
-    public static PotentialItems getPotentialItem(String s, Player player, int number) {
+    public static PotentialItems getPotentialEntity(String s, Player player, HashMap<String, Pair> pool) {
 
-        ArrayList<Pair> potentialItems = new ArrayList<>();
-        PotentialItems totalItems = new PotentialItems(potentialItems, 0);
-
-        if(number == 0 || number == 1){
-            HashMap<String, Pair> toCheck;
-            if(number == 0){
-                toCheck = player.getInventory();
-            } else {
-                toCheck = player.getCurrentRoom().getEntities();
-            }
+        ArrayList<Pair> potentialEntities = new ArrayList<>();
+        PotentialItems totalItems = new PotentialItems(potentialEntities, 0);
 
             //check if there is an exact match
-            for (Pair pair : toCheck.values()) {
-                Entity b;
-                if(number == 0){
-                    b = pair.getEntity();
-                } else {
-                    b = pair.getEntity();
-                }
+            for (Pair pair : pool.values()) {
+                Entity currentEntity = pair.getEntity();
 
-                if (b.getName().equals(s)) {
-                    potentialItems.add(pair);
+                if (currentEntity.getName().toLowerCase().equals(s.toLowerCase())) {
+                    potentialEntities.add(pair);
                     int reliability = s.split(" ").length;
                     totalItems.setReliability(reliability);
                     return totalItems;
                 }
 
-                if(b instanceof Container){
-                    for(Pair p : ((Container) b).getItems()){
+                if(currentEntity instanceof Container){
+                    for(Pair p : ((Container) currentEntity).getItems()){
                         if (p.getEntity().getName().equals(s)) {
-                            potentialItems.add(pair);
+                            potentialEntities.add(pair);
                             int reliability = s.split(" ").length;
                             totalItems.setReliability(reliability);
                             return totalItems;
                         }
                     }
                 }
+
             }
 
             //otherwise, parse and check for partial matches
-            String[] temp = s.split(" ");
+            String[] splitString = s.split(" ");
             //best match indicator
             int max = 0;
 
             //we check with each pair in inventory if it contains the token
-            for (Pair pair : toCheck.values()){
+            for (Pair pair : pool.values()){
                 int reliability = 0;
 
                 //we check the given input string token by token
-                for (String token : temp) {
+                for (String token : splitString) {
                     Entity a = pair.getEntity();
 
 
                     String[] currentItem = a.getName().split(" ");
+
+
                     for (String b : currentItem) {
                         if (b.toLowerCase().equals(token)) {
                             reliability++;
+                            // we found a better match, we wipe the arraylist and add it
                             if (reliability > max) {
-                                potentialItems.clear();
+                                potentialEntities.clear();
                                 max = reliability;
                                 totalItems.setReliability(max);
-                                potentialItems.add(pair);
+                                potentialEntities.add(pair);
                             } else if(reliability == max){
-                                potentialItems.add(pair);
+                                potentialEntities.add(pair);
                             }
                         }
                     }
 
-                    if(a instanceof Container){
-                        for(Pair p : ((Container) a).getItems()){
-                            currentItem = p.getEntity().getName().split(" ");
-
-                            for (String b : currentItem) {
-                                if (b.toLowerCase().equals(token)) {
-                                    reliability++;
-                                    if (reliability > max) {
-                                        potentialItems.clear();
-                                        max = reliability;
-                                        totalItems.setReliability(max);
-                                        potentialItems.add(p);
-                                    } else if(reliability == max){
-                                        potentialItems.add(p);
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
-        } else if (number == 2) {
-            ArrayList<Container> containers = player.getCurrentRoom().getContainers();
-            //check if there is an exact match
-            for (Container container : containers) {
-                ArrayList<Pair> b = container.getItems();
-                for (Pair p : b) {
-                    Item i = (Item) p.getEntity();
-                    if (i.getName().equals(s)) {
-                        potentialItems.add(p);
-                        int reliability = s.split(" ").length;
-                        return new PotentialItems(potentialItems, reliability);
-                    }
-                }
 
-            }
-
-            //otherwise, parse and check for partial matches
-            String[] temp = s.split(" ");
-            //we check the given string token by token
+            //we iterate over all the items in containers
+        for (Pair p : getAllItemsContainer(player)){
 
 
-            for (String token : temp) {
-                //and we check with each pair in inventory if it contains the token
-                for (Container container : containers) {
-                    ArrayList<Pair> b = container.getItems();
-                    for (Pair p : b) {
-                        Item i = (Item) p.getEntity();
-                        String itemName[] = i.getName().toLowerCase().split(" ");
-                        for (String string : itemName) {
-                            if (string.equals(token)) {
-                                potentialItems.add(p);
-                                int reliability = s.split(" ").length;
-                                totalItems.setReliability(reliability);
-                                return totalItems;
-                            }
+            for (String token : splitString) {
+
+                int reliability = 0;
+
+
+                String[] currentItem = p.getEntity().getName().split(" ");
+
+                for (String b : currentItem) {
+                    if (b.toLowerCase().equals(token)) {
+                        reliability++;
+                        if (reliability > max) {
+                            potentialEntities.clear();
+                            max = reliability;
+                            potentialEntities.add(p);
+                            totalItems.setReliability(max);
+                        } else if(reliability == max){
+                            potentialEntities.add(p);
                         }
                     }
                 }
+
             }
         }
+
         return totalItems;
     }
 
@@ -274,15 +252,16 @@ public class HandleCommands {
             secondItem = Utility.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
             //we try to get all potential items from inv
-            inventoryItems = getPotentialItem(firstItem, player, 0);
+            inventoryItems = getPotentialEntity(firstItem, player, player.getInventory());
             //and from the room
-            PotentialItems possibleEntities = getPotentialItem(firstItem, player, 1);
+            PotentialItems possibleEntities = getPotentialEntity(firstItem, player,
+                    player.getCurrentRoom().getEntities());
             if(inventoryItems.getReliability() < possibleEntities.getReliability()){
                 inventoryItems = possibleEntities;
             }
             //prop from room
-            roomItems = getPotentialItem(secondItem, player, 0);
-            possibleEntities = getPotentialItem(secondItem, player, 1);
+            roomItems = getPotentialEntity(secondItem, player, player.getInventory());
+            possibleEntities = getPotentialEntity(secondItem, player, player.getCurrentRoom().getEntities());
             if(roomItems.getReliability() < possibleEntities.getReliability()){
                 roomItems = possibleEntities;
             }
@@ -327,8 +306,8 @@ public class HandleCommands {
 
             firstItem = Utility.stitchFromTo(temp, 1, temp.length);
 
-            inventoryItems = getPotentialItem(firstItem, player, 0);
-            roomItems = getPotentialItem(firstItem, player, 1);
+            inventoryItems = getPotentialEntity(firstItem, player, player.getInventory());
+            roomItems = getPotentialEntity(firstItem, player, player.getCurrentRoom().getEntities());
 
             //there are more possibilities from the items fetched
             if ((inventoryItems.getItems().size() + roomItems.getItems().size() == 0)) {
@@ -399,11 +378,12 @@ public class HandleCommands {
 
         PotentialItems items;
         if (take) {
-            items = HandleCommands.getPotentialItem(item, player, 2);
+            items = HandleCommands.getPotentialEntity(item, player, player.getCurrentRoom().getEntities());
         } else {
-            items = HandleCommands.getPotentialItem(item, player, 0);
+            items = HandleCommands.getPotentialEntity(item, player, player.getInventory());
         }
-        PotentialItems containers = HandleCommands.getPotentialItem(container, player, 1);
+        PotentialItems containers = HandleCommands.getPotentialEntity(container, player,
+                player.getCurrentRoom().getEntities());
 
         ArrayList<Pair> possibleItems = items.getItems();
         ArrayList<Pair> possibleContainers = containers.getItems();
@@ -520,7 +500,7 @@ public class HandleCommands {
         }
 
 
-        possibleItems = getPotentialItem(item, player, 1).getItems();
+        possibleItems = getPotentialEntity(item, player, player.getCurrentRoom().getEntities()).getItems();
 
         ArrayList<Pair> items = new ArrayList<>();
 
@@ -621,7 +601,7 @@ public class HandleCommands {
 
 
 
-        possibleItems = getPotentialItem(item, player, 0).getItems();
+        possibleItems = getPotentialEntity(item, player, player.getInventory()).getItems();
 
         if (possibleItems.size() > 1) {
             printToLog("Be more specific.");
@@ -711,8 +691,8 @@ public class HandleCommands {
 
         String wieldItem = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems items = getPotentialItem(wieldItem, player, 0);
-        PotentialItems entities = getPotentialItem(wieldItem, player, 1);
+        PotentialItems items = getPotentialEntity(wieldItem, player, player.getInventory());
+        PotentialItems entities = getPotentialEntity(wieldItem, player, player.getCurrentRoom().getEntities());
 
         ArrayList<Pair> possibleItems = items.getItems();
         ArrayList<Pair> possibleEntities = entities.getItems();
@@ -901,7 +881,8 @@ public class HandleCommands {
             String item = Utility.stitchFromTo(parsedInput, 1, d);
             String npc = Utility.stitchFromTo(parsedInput, d + 1, parsedInput.length);
 
-            ArrayList<Pair> possibleItemFromInventory = getPotentialItem(item, player, 0).getItems();
+            ArrayList<Pair> possibleItemFromInventory = getPotentialEntity(item, player,
+                    player.getInventory()).getItems();
 
             if ((possibleItemFromInventory.size() > 1)) {
                 printToLog("Be more specific.");
@@ -940,7 +921,7 @@ public class HandleCommands {
 
         String weaponString = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems possibleItems = getPotentialItem(weaponString, player, 0);
+        PotentialItems possibleItems = getPotentialEntity(weaponString, player, player.getInventory());
 
         if(possibleItems.getItems().size() > 1){
             printToLog("Be more specific.");
@@ -987,7 +968,8 @@ public class HandleCommands {
         ParseInput.wrongCommand = 0;
 
         //we get all entities similar to that name
-        ArrayList<Pair> entities = getPotentialItem(enemyName, player, 1).getItems();
+        ArrayList<Pair> entities = getPotentialEntity(enemyName, player,
+                player.getCurrentRoom().getEntities()).getItems();
         if (entities.size() == 1 && !execute) {
             Entity enemy = entities.get(0).getEntity();
             if( enemy instanceof NPC && ((NPC) enemy).isQuestCharacter()){

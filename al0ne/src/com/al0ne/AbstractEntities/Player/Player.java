@@ -9,6 +9,7 @@ import com.al0ne.AbstractEntities.Abstract.WorldCharacter;
 import com.al0ne.AbstractEntities.World;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Currency;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.MoneyContainer;
+import com.al0ne.ConcreteEntities.Items.Types.Container;
 import com.al0ne.Engine.Utility.Utility;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.*;
 import com.al0ne.ConcreteEntities.Statuses.ConcreteStatuses.Hunger;
@@ -308,6 +309,22 @@ public class Player extends WorldCharacter {
         }
 
         return null;
+    }
+
+    public ArrayList<Container> getContainers(){
+        HashMap<String, Pair> inventory = getInventory();
+        ArrayList<Container> result = new ArrayList<>();
+
+        for(Pair p : inventory.values()){
+            Item i = (Item) p.getEntity();
+
+            if(i instanceof Container){
+                result.add((Container) i);
+            }
+        }
+
+        return result;
+
     }
 
 

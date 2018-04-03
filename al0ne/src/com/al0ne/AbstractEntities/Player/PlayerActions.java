@@ -6,8 +6,6 @@ import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Pairs.PotentialItems;
 import com.al0ne.AbstractEntities.Pairs.SpellPair;
 import com.al0ne.AbstractEntities.Prop;
-import com.al0ne.AbstractEntities.Quests.Quest;
-import com.al0ne.AbstractEntities.Quests.TravelQuest;
 import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.*;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Wearable;
@@ -605,9 +603,9 @@ public class PlayerActions {
                 Class castOn = s.getTarget();
 
                 if (castOn.equals(Item.class)){
-                    PotentialItems inventoryItems = HandleCommands.getPotentialItem(target, player, 0);
+                    PotentialItems inventoryItems = HandleCommands.getPotentialEntity(target, player, player.getInventory());
                     ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
-                    PotentialItems items = HandleCommands.getPotentialItem(target, player, 1);
+                    PotentialItems items = HandleCommands.getPotentialEntity(target, player, player.getCurrentRoom().getEntities());
                     ArrayList<Pair> possibleItems = items.getItems();
 
                     if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
