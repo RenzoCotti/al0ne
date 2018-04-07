@@ -159,4 +159,8 @@ public class Utility {
         return s.getName();
     }
 
+    public static String capitalise(String s){
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
 }

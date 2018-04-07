@@ -1,16 +1,22 @@
 package com.al0ne.Engine.UI;
 
+import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.Engine.Utility.GameChanges;
 import com.al0ne.Engine.Main;
 import com.al0ne.Engine.Utility.Utility;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import static com.al0ne.Engine.Main.game;
+import static com.al0ne.Engine.Utility.Utility.capitalise;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -65,21 +71,26 @@ public class SideMenu {
         inv.setItems(GameChanges.getInventoryData());
 
         VBox description = new VBox();
-        Label descTitleLabel = new Label("Description");
-        Label descLabel = new Label("");
+        description.setPadding(new Insets(20, 20, 20, 20));
 
+        Text descTitleLabel = new Text("");
+        Label descLabel = new Label("");
+        descTitleLabel.setStyle("-fx-font-weight: bold");
+
+
+
+        description.managedProperty().bind(description.visibleProperty());
         description.getChildren().addAll(descTitleLabel, descLabel);
-        description.setVisible(false);
-        descTitleLabel.setOnMouseClicked(t -> description.setVisible(false));
 
         VBox inventoryAndDesc = new VBox();
         inventoryAndDesc.getChildren().addAll(inv, description);
-
+        
         inv.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                description.setVisible(true);
                 String id = newSelection.getId();
-                descLabel.setText(Main.player.getInventory().get(id).getEntity().getLongDescription());
+                Pair p = Main.player.getInventory().get(id);
+                descTitleLabel.setText(capitalise(p.getEntity().getName()));
+                descLabel.setText(capitalise(p.getEntity().getLongDescription()));
             }
         });
 
@@ -118,12 +129,6 @@ public class SideMenu {
         weapon.setId("weaponLabel");
         Label offHand = new Label("Off-Hand: "+Utility.getOffHandString());
         offHand.setId("offHandLabel");
-
-
-        //do i want the player to see them?
-//        Label status = new Label("Status:");
-//        status.setPadding(new Insets(20, 0, 0, 0));
-//        status.setStyle("-fx-font-weight: bold");
 
 
         VBox listStats = new VBox();

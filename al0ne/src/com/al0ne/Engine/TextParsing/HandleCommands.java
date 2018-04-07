@@ -74,23 +74,20 @@ public class HandleCommands {
         wrongCommand = 0;
         String item = Utility.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialEntities(item, player, "room").getEntities();
+        Pair p = getPotentialItem(item, player, "both");
 
-        if(possibleEntities.size() > 1){
-            printToLog("Be more precise.");
-            return true;
-            //priority to items in inventory
-        } else if(possibleEntities.size() == 1){
-            if(PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity())){
-                printToLog("You " + s + " the " + possibleEntities.get(0).getEntity().getName());
-            } else{
+        if(p != null){
+            if(PlayerActions.customAction(player, action, p.getEntity())){
+                printToLog("You " + s + " the " + p.getEntity().getName());
+                return true;
+            } else {
                 printToLog("You can't " + s + " it.");
             }
-            return true;
+
         } else {
-            printToLog("You can't see a "+s+".");
-            return true;
+            printToLog("You can't see a " + item + ". ");
         }
+        return false;
     }
 
     public static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
