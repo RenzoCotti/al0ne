@@ -30,7 +30,7 @@ public class PlayerActions {
 
 
     //we give an item to an NPC, if the player has it
-    public static boolean give(Player player, NPC npc, Entity item){
+    public static boolean give(Player player, NPC npc, Item item){
         if(player.hasItemInInventory(item.getID())){
             Pair pair = player.getItemPair(item.getID());
 
@@ -302,9 +302,7 @@ public class PlayerActions {
 
 
     //this function handles talking with an NPC
-    public static boolean talkToNPC(Player player, String npcName, String subject){
-        Room currentRoom = player.getCurrentRoom();
-        NPC npc = currentRoom.getNPC(npcName);
+    public static boolean talkToNPC(Player player, NPC npc, String subject){
         return npc != null && npc.talkAbout(subject, player);
     }
 
@@ -554,7 +552,7 @@ public class PlayerActions {
                     Class castOn = s.getTarget();
 
                     if (castOn.equals(Item.class)){
-                        PotentialItems items = HandleCommands.getPotentialEntity(target, player, false);
+                        PotentialItems items = HandleCommands.getPotentialEntities(target, player, "player");
                         ArrayList<Pair> possibleItems = items.getEntities();
 
                         if(possibleItems.size() > 1){
@@ -572,13 +570,9 @@ public class PlayerActions {
                         }
                     } else if(castOn.equals(Enemy.class)){
                         DamagingSpell ds = (DamagingSpell) s;
-                        ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
-                        if(enemies.size() == 0){
-                            printToLog("You can't see that enemy");
-                        } else if(enemies.size()>1){
-                            printToLog("Be more specific");
-                        } else {
-                            if (ds.isCasted(player, enemies.get(0))) {
+                        WorldCharacter enemy = HandleCommands.getPotentialEnemy(target, player);
+                        if(enemy != null){
+                            if (ds.isCasted(player, enemy)) {
                                 spell.modifyCount(-1);
                             }
                         }

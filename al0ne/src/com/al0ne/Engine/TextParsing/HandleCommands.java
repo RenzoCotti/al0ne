@@ -74,7 +74,7 @@ public class HandleCommands {
         wrongCommand = 0;
         String item = Utility.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialEntity(item, player, true).getEntities();
+        ArrayList<Pair> possibleEntities = getPotentialEntities(item, player, "room").getEntities();
 
         if(possibleEntities.size() > 1){
             printToLog("Be more precise.");
@@ -94,8 +94,8 @@ public class HandleCommands {
     }
 
     public static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
-        ArrayList<Pair> result = getPotentialEntity(s, player, true).getEntities();
-        result.addAll(getPotentialEntity(s, player, false).getEntities());
+        ArrayList<Pair> result = getPotentialEntities(s, player, "room").getEntities();
+        result.addAll(getPotentialEntities(s, player, "player").getEntities());
         return result;
     }
 
@@ -111,17 +111,21 @@ public class HandleCommands {
     }
 
     //this attempts to get items from a token;
-    public static PotentialItems getPotentialEntity(String s, Player player, boolean room) {
+    //0: all
+    //1: room
+    //2: inventory
+    public static PotentialItems getPotentialEntities(String s, Player player, String where) {
 
         ArrayList<Pair> potentialEntities = new ArrayList<>();
         PotentialItems totalItems = new PotentialItems(potentialEntities, 0);
 
         //we create a collection of all items the player can see
         ArrayList<Pair> pool = new ArrayList<>();
-        if(room){
+        if(where.equals("room") || where.equals("both")){
             pool.addAll(player.getCurrentRoom().getEntities().values());
             pool.addAll(getAllItemsInContainers(player));
-        } else {
+        }
+        if (where.equals("player") || where.equals("both")) {
             pool.addAll(player.getInventory().values());
         }
 
@@ -200,10 +204,10 @@ public class HandleCommands {
             secondItem = Utility.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
             //we try to get all potential items from inv
-            inventoryItems = getPotentialEntity(firstItem, player, false);
+            inventoryItems = getPotentialEntities(firstItem, player, "player");
 
             //prop from room
-            roomItems = getPotentialEntity(secondItem, player, true);
+            roomItems = getPotentialEntities(secondItem, player, "room");
 
 
             if (inventoryItems.getEntities().size() > 1 || roomItems.getEntities().size() > 1) {
@@ -233,7 +237,7 @@ public class HandleCommands {
 
             firstItem = Utility.stitchFromTo(temp, 1, temp.length);
 
-            inventoryItems = getPotentialEntity(firstItem, player, false);
+            inventoryItems = getPotentialEntities(firstItem, player, "player");
 
 
             //there are more possibilities from the items fetched
@@ -299,8 +303,8 @@ public class HandleCommands {
 
 
 
-        ArrayList<Pair> possibleItems = getPotentialEntity(item, player, true).getItems();
-        ArrayList<Pair> possibleContainers = getPotentialEntity(container, player, true).getEntities();
+        ArrayList<Pair> possibleItems = getPotentialEntities(item, player, "room").getItems();
+        ArrayList<Pair> possibleContainers = getPotentialEntities(container, player, "room").getEntities();
 
 
         if ((possibleItems.size() > 1 || possibleContainers.size() > 1)) {
@@ -403,7 +407,7 @@ public class HandleCommands {
 
 
 
-        items = getPotentialEntity(item, player, true).getItems();
+        items = getPotentialEntities(item, player, "room").getItems();
 
 
         if (items.size() > 1) {
@@ -434,6 +438,7 @@ public class HandleCommands {
 
         return true;
     }
+
 
     public static boolean handleDrop(String[] temp, Player player){
 
@@ -491,7 +496,7 @@ public class HandleCommands {
 
 
 
-        possibleItems = getPotentialEntity(item, player, false).getItems();
+        possibleItems = getPotentialEntities(item, player, "player").getItems();
 
         if (possibleItems.size() > 1) {
             printToLog("Be more specific.");
@@ -545,24 +550,14 @@ public class HandleCommands {
         String toExamine = Utility.stitchFromTo(temp, 1, temp.length);
         ArrayList<Pair> items = getAllItemsMatching(toExamine, player);
 
-
-        NPC npc = player.getCurrentRoom().getNPC(toExamine);
-
-        if (npc != null) {
-            npc.printLongDescription(null);
-            return false;
-        }
-
         //there are more possibilities from the items fetched
         if (items.size() > 1) {
             printToLog("Be more specific.");
-            return false;
-        } else if (items.size() == 0) {
+        } else if (items.size() == 1) {
+            PlayerActions.examine(player, items.get(0).getEntity());
+        } else {
             printToLog("You can't see such an item");
-            return false;
         }
-        PlayerActions.examine(player, items.get(0).getEntity());
-
         return false;
     }
 
@@ -578,28 +573,19 @@ public class HandleCommands {
 
         String wieldItem = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems items = getPotentialEntity(wieldItem, player, false);
-        PotentialItems entities = getPotentialEntity(wieldItem, player, true);
 
-        ArrayList<Pair> possibleItems = items.getEntities();
-        ArrayList<Pair> possibleEntities = entities.getEntities();
+        Pair inv = getPotentialItem(wieldItem, player, "player");
+        Pair ground = getPotentialItem(wieldItem, player, "room");
 
-        if (possibleItems.size() == 1 && items.getReliability() > entities.getReliability()) {
-            Item item = (Item) player.getItemPair(possibleItems.get(0).getEntity().getID()).getEntity();
-
-            if (player.wear(item)) {
+        if(inv != null) {
+            if (player.wear((Item) inv.getEntity())) {
                 return true;
-            } else {
-                printToLog("You don't seem to have a " + wieldItem);
-                return false;
-            }
-        } else if (possibleItems.size() > 1) {
-            printToLog("Be more specific.");
-            return false;
-        } else if(possibleEntities.size() == 1 && items.getReliability() < entities.getReliability()){
-            printToLog("(first taking the "+possibleEntities.get(0).getEntity().getName()+")");
-            if(PlayerActions.pickUpItem(player, possibleEntities.get(0), 1) == 1){
-                Item item = (Item) player.getItemPair(possibleEntities.get(0).getEntity().getID()).getEntity();
+            } else return false;
+        } else if(ground != null){
+            Item i = (Item) ground.getEntity();
+            printToLog("(first taking the "+i.getName()+")");
+            if(PlayerActions.pickUpItem(player, ground, 1) == 1){
+                Item item = (Item) player.getItemPair(i.getID()).getEntity();
 
                 if (player.wear(item)) {
                    return true;
@@ -611,11 +597,8 @@ public class HandleCommands {
                 printToLog("You can't carry it.");
                 return false;
             }
-        } else if (possibleEntities.size() > 1) {
-            printToLog("Be more specific.");
-            return false;
         } else {
-            printToLog("You don't seem to have a " + wieldItem);
+            printToLog("You don't seem to have see a " + wieldItem);
             return false;
         }
     }
@@ -658,7 +641,7 @@ public class HandleCommands {
 
         if (parsedInput.length < 3) {
             wrongCommand++;
-            printToLog("The syntax is TALK ABOUT x WITH y or also TALK TO y");
+            printToLog("The syntax is TALK ABOUT x WITH y or TALK TO y");
             return false;
         }
         wrongCommand = 0;
@@ -682,26 +665,23 @@ public class HandleCommands {
             npcName = Utility.stitchFromTo(parsedInput, 1, about);
             String subject = Utility.stitchFromTo(parsedInput, about+1, parsedInput.length);
 
-            character = player.getCurrentRoom().getNPC(npcName);
-
+            character = getPossibleNPC(player, npcName);
             if(character != null){
-                PlayerActions.talkToNPC(player, npcName, subject);
-            }
-            return true;
+                PlayerActions.talkToNPC(player, character, subject);
+                return true;
+            } else return false;
         }
 
         //case generic talk
         if (parsedInput[1].equals("to")) {
             npcName = Utility.stitchFromTo(parsedInput, to + 1, parsedInput.length);
 
-            character = player.getCurrentRoom().getNPC(npcName);
+            character = getPossibleNPC(player, npcName);
+            if(character != null){
+                character.printIntro();
+                return true;
+            } else return false;
 
-            if (!HandleCommands.isNPC(player, npcName)) {
-                return false;
-            }
-
-            character.printIntro();
-            return true;
         } else if (with == -1 || !(parsedInput[1].equals("about"))) {
             printToLog("The syntax is: TALK ABOUT x WITH y");
             return false;
@@ -710,17 +690,13 @@ public class HandleCommands {
             String subject = Utility.stitchFromTo(parsedInput, 2, with);
             npcName = Utility.stitchFromTo(parsedInput, with + 1, parsedInput.length);
 
-//            NPC character = player.getCurrentRoom().getNPC(npc);
-
-            if(HandleCommands.isNPC(player, npcName)){
-                if (PlayerActions.talkToNPC(player, npcName, subject)) {
-                    return true;
-                } else {
+            character = getPossibleNPC(player, npcName);
+            if(character != null){
+                if (!PlayerActions.talkToNPC(player, character, subject)) {
                     printToLog("\"Sorry, I don't know anything about it.\"");
-                    return true;
                 }
-            }
-            return false;
+                return true;
+            } else return false;
         }
     }
 
@@ -736,14 +712,12 @@ public class HandleCommands {
             String item = Utility.stitchFromTo(parsedInput, 1, c);
             String npc = Utility.stitchFromTo(parsedInput, c + 1, parsedInput.length);
 
-            NPC character = player.getCurrentRoom().getNPC(npc);
+            NPC character = getPossibleNPC(player, npc);
 
 
-            if (!HandleCommands.isNPC(player, npc)) {
+            if (character == null) {
                 return false;
-            }
-
-            if (character.isShopkeeper()) {
+            } else if(character.isShopkeeper()){
                 Shopkeeper shopkeeper = (Shopkeeper) character;
                 shopkeeper.buy(player, item);
                 return true;
@@ -767,29 +741,12 @@ public class HandleCommands {
             String item = Utility.stitchFromTo(parsedInput, 1, d);
             String npc = Utility.stitchFromTo(parsedInput, d + 1, parsedInput.length);
 
-            ArrayList<Pair> possibleItemFromInventory = getPotentialEntity(item, player, false).getEntities();
-
-            if ((possibleItemFromInventory.size() > 1)) {
-                printToLog("Be more specific.");
-                return false;
-            } else if (possibleItemFromInventory.size() == 0) {
-                printToLog("You don't have that item.");
-                return false;
-            } else {
-
-                NPC character = player.getCurrentRoom().getNPC(npc);
-
-                if (!HandleCommands.isNPC(player, npc)) {
-                    return false;
-                }
-
-                if (PlayerActions.give(player, character, possibleItemFromInventory.get(0).getEntity())) {
-                    return true;
-                } else {
-                    return false;
-                }
-
+            Pair i = getPotentialItem(item, player, "player");
+            if (i != null) {
+                NPC character = getPossibleNPC(player, npc);
+                return character != null && PlayerActions.give(player, character, (Item) i.getEntity());
             }
+            return false;
         }
 
     }
@@ -806,15 +763,11 @@ public class HandleCommands {
 
         String weaponString = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems possibleItems = getPotentialEntity(weaponString, player, false);
+        Pair i = getPotentialItem(weaponString, player, "player");
 
-        if(possibleItems.getEntities().size() > 1){
-            printToLog("Be more specific.");
-        } else if(possibleItems.getEntities().size() == 0){
-            printToLog("You can't see that item.");
-        } else {
-            if(possibleItems.getEntities().get(0).getEntity() instanceof Weapon){
-                return PlayerActions.reload(player, (Weapon) possibleItems.getEntities().get(0).getEntity());
+        if(i != null){
+            if(i.getEntity() instanceof Weapon){
+                return PlayerActions.reload(player, (Weapon) i.getEntity());
             } else {
                 printToLog("That's not a weapon.");
             }
@@ -855,83 +808,68 @@ public class HandleCommands {
         wrongCommand = 0;
 
         //we get all entities similar to that name
-        ArrayList<Pair> entities = getPotentialEntity(enemyName, player, true).getEntities();
-        if (entities.size() == 1 && !execute) {
-            Entity enemy = entities.get(0).getEntity();
-            if( enemy instanceof NPC && ((NPC) enemy).isQuestCharacter()){
-                printToLog("It's best not to attack "+ enemy.getName()+".");
+        WorldCharacter wc = getPotentialEnemy(enemyName, player);
+        if (!execute) {
+            if(wc == null){
                 return false;
-            } else if(enemy instanceof WorldCharacter){
-                return PlayerActions.attack(player, (WorldCharacter) entities.get(0).getEntity());
-            } else {
-                printToLog("The "+enemy.getName().toLowerCase() +" isn't threatening.");
             }
-            return false;
-        } else if (entities.size() == 1) {
-            if(entities.get(0).getEntity() instanceof Enemy){
-                ((Enemy)entities.get(0).getEntity()).handleLoot(player);
-                currentRoom.getEntities().remove(entities.get(0).getEntity().getID());
-                printToLog("You executed the "+entities.get(0).getEntity().getName());
+            if( wc instanceof NPC && wc.isQuestCharacter()){
+                printToLog("It's best not to attack "+ wc.getName()+".");
+                return false;
+            } else {
+                return PlayerActions.attack(player, wc);
+            }
+        } else {
+            if(wc != null){
+                wc.handleLoot(player);
+                currentRoom.getEntities().remove(wc.getID());
+                printToLog("You executed the "+wc.getName());
                 return true;
             }
             return false;
-        } else if (entities.size() > 1) {
-            printToLog("Be more specific");
-            return false;
+        }
+    }
+
+    public static NPC getPossibleNPC(Player player, String npc) {
+        ArrayList<Pair> temp = getPotentialEntities(npc, player, "room").getEntities();
+        if(temp.size() > 1){
+            printToLog("Be more specific.");
+            return null;
+        } else if(temp.size() == 1 && temp.get(0).getEntity() instanceof NPC){
+            return (NPC)temp.get(0).getEntity();
         } else {
-            printToLog("You can't see a " + enemyName);
-            return false;
+            printToLog("You can't seem to see "+npc+".");
+            return null;
         }
     }
 
-    public static boolean isNPC(Player player, String npc) {
-        Entity entity = player.getCurrentRoom().getEntity(npc);
 
-        if (entity == null) {
-            printToLog("You can't see " + npc + " here.");
-            return false;
-        } else if (!(entity instanceof NPC)) {
-            printToLog("You can't talk to it. ");
-            return false;
+    public static WorldCharacter getPotentialEnemy(String s, Player player) {
+
+        ArrayList<Pair> temp = getPotentialEntities(s, player, "room").getEntities();
+        if(temp.size() > 1){
+            printToLog("Be more specific.");
+            return null;
+        } else if(temp.size() == 1 && temp.get(0).getEntity() instanceof Enemy){
+            return (WorldCharacter)temp.get(0).getEntity();
+        } else {
+            printToLog("You can't seem to see a "+s+".");
+            return null;
         }
-        return true;
     }
 
+    public static Pair getPotentialItem(String s, Player player, String where) {
 
-    public static ArrayList<Enemy> getPotentialEnemy(String s, Player player) {
-
-        ArrayList<Enemy> potentialEnemies = new ArrayList<>();
-
-
-        //check if there is an exact match
-        for (Pair pair : player.getCurrentRoom().getEntities().values()) {
-            Entity en = pair.getEntity();
-
-            if (en instanceof Enemy && en.getName().equals(s)) {
-                potentialEnemies.add((Enemy) en);
-                return potentialEnemies;
-            }
+        ArrayList<Pair> temp = getPotentialEntities(s, player, where).getEntities();
+        if(temp.size() > 1){
+            printToLog("Be more specific.");
+            return null;
+        } else if(temp.size() == 1 && temp.get(0).getEntity() instanceof Item){
+            return temp.get(0);
+        } else {
+            printToLog("You can't seem to see that item.");
+            return null;
         }
-
-        //otherwise, parse and check for partial matches
-        String[] temp = s.split(" ");
-        //we check the given string token by token
-        for (String token : temp) {
-            //and we check with each pair in inventory if it contains the token
-            for (Pair p : player.getCurrentRoom().getEntities().values()) {
-                Entity en = p.getEntity();
-                String[] currentEnemy = en.getName().split(" ");
-                for (String b : currentEnemy) {
-                    if (b.toLowerCase().equals(token)) {
-                        if (!potentialEnemies.contains(en)) {
-                            potentialEnemies.add((Enemy) en);
-                        }
-                    }
-                }
-            }
-        }
-
-        return potentialEnemies;
     }
 
 
