@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  * Created by BMW on 23/04/2017.
  */
 public class SimpleItem {
+    private final SimpleStringProperty id;
     private final SimpleStringProperty name;
     private final SimpleIntegerProperty amount;
     private final SimpleDoubleProperty weight;
@@ -16,13 +17,26 @@ public class SimpleItem {
     private final SimpleIntegerProperty damage;
     private final SimpleIntegerProperty defense;
 
-    public SimpleItem(String name, int amount, double weight, int value, int defense, int damage) {
+    public SimpleItem(String id, String name, int amount, double weight, int value, int defense, int damage) {
+        this.id = new SimpleStringProperty(id);
         this.name = new SimpleStringProperty(name);
         this.amount = new SimpleIntegerProperty(amount);
         this.weight = new SimpleDoubleProperty(weight);
         this.value = new SimpleIntegerProperty(value);
         this.damage = new SimpleIntegerProperty(damage);
         this.defense = new SimpleIntegerProperty(defense);
+    }
+
+    public String getId() {
+        return id.get();
+    }
+
+    public SimpleStringProperty idProperty() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id.set(id);
     }
 
     public String getName() {

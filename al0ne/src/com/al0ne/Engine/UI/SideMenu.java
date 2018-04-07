@@ -10,6 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import static com.al0ne.Engine.Main.game;
+
 /**
  * Created by BMW on 24/04/2017.
  */
@@ -26,6 +28,7 @@ public class SideMenu {
         Tab inventoryTab = new Tab();
         inventoryTab.setText("Inventory");
         inventoryTab.setClosable(false);
+
 
 
         TableView<SimpleItem> inv = new TableView<>();
@@ -51,11 +54,36 @@ public class SideMenu {
         defense.setCellValueFactory(new PropertyValueFactory<>("defense"));
         defense.setMinWidth(40);
 
-        inv.getColumns().addAll(amount, itemColumn, weightColumn, value, damage, defense);
+        if(Main.game.isInDebugMode()){
+            inv.getColumns().addAll(amount, itemColumn, weightColumn, value, damage, defense);
+        } else {
+            inv.getColumns().addAll(amount, itemColumn, weightColumn);
+        }
+
+
 
         inv.setItems(GameChanges.getInventoryData());
 
-        inventoryTab.setContent(inv);
+        VBox description = new VBox();
+        Label descTitleLabel = new Label("Description");
+        Label descLabel = new Label("");
+
+        description.getChildren().addAll(descTitleLabel, descLabel);
+        description.setVisible(false);
+        descTitleLabel.setOnMouseClicked(t -> description.setVisible(false));
+
+        VBox inventoryAndDesc = new VBox();
+        inventoryAndDesc.getChildren().addAll(inv, description);
+
+        inv.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                description.setVisible(true);
+                String id = newSelection.getId();
+                descLabel.setText(Main.player.getInventory().get(id).getEntity().getLongDescription());
+            }
+        });
+
+        inventoryTab.setContent(inventoryAndDesc);
 
 
         Tab stats = new Tab();

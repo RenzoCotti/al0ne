@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
+import static com.al0ne.Engine.TextParsing.ParseInput.wrongCommand;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -30,7 +30,7 @@ import static com.al0ne.Engine.Main.printToLog;
 public class HandleCommands {
     //this function handles the command exit
     public static void quit() {
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
         if (ParseInput.lastCommand.equals("quit") || ParseInput.lastCommand.equals("exit")) {
             System.exit(0);
         }
@@ -40,11 +40,11 @@ public class HandleCommands {
     //this handles moving: it checks for exactly one token after the command
     public static boolean move(Player player, HashMap<String, Room> rooms, String direction, String[] temp) {
         if (temp.length > 2) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("Sorry?");
             return false;
         } else {
-            ParseInput.wrongCommand = 0;
+            wrongCommand = 0;
             if (PlayerActions.moveToRoom(player, direction, rooms)) {
                 Main.clearScreen();
                 if (player.getCurrentRoom().isFirstVisit()) {
@@ -66,158 +66,106 @@ public class HandleCommands {
     //this handles trying to apply custom commands on objects
     public static boolean customAction(String[] temp, Player player, Command action, String s) {
         if (temp.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is " + action + " x.");
             return false;
         }
 
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
         String item = Utility.stitchFromTo(temp, 1, temp.length);
 
-        ArrayList<Pair> possibleEntities = getPotentialEntity(item, player,
-                player.getCurrentRoom().getEntities()).getItems();
-        ArrayList<Pair> possibleItems = getPotentialEntity(item, player,
-                player.getInventory()).getItems();
+        ArrayList<Pair> possibleEntities = getPotentialEntity(item, player, true).getEntities();
 
-//        if (!(possibleEntities.size() + possibleItems.size() == 1)) {
-//            printToLog("Be more specific.");
-//            return false;
-//        }
-        if (possibleItems.size() == 1 || possibleEntities.size() == 1) {
-            boolean result;
-            ArrayList<Pair> toUse;
-            if(possibleItems.size() == 1){
-                toUse = possibleItems;
-                result = PlayerActions.customAction(player, action, possibleItems.get(0).getEntity());
-            } else{
-                result = PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity());
-                toUse = possibleEntities;
-            }
-
-            if(result){
-                printToLog("You " + s + " the " + toUse.get(0).getEntity().getName());
+        if(possibleEntities.size() > 1){
+            printToLog("Be more precise.");
+            return true;
+            //priority to items in inventory
+        } else if(possibleEntities.size() == 1){
+            if(PlayerActions.customAction(player, action, possibleEntities.get(0).getEntity())){
+                printToLog("You " + s + " the " + possibleEntities.get(0).getEntity().getName());
             } else{
                 printToLog("You can't " + s + " it.");
             }
             return true;
-        } else if (possibleEntities.size() == 0 && possibleItems.size() == 0) {
-            printToLog("You can't see it.");
-            return true;
         } else {
-            printToLog("You can't " + s + " it.");
+            printToLog("You can't see a "+s+".");
             return true;
         }
     }
 
     public static ArrayList<Pair> getAllItemsMatching(String s, Player player) {
-        ArrayList<Pair> result = getPotentialEntity(s, player, player.getInventory()).getItems();
-        result.addAll(getPotentialEntity(s, player, player.getCurrentRoom().getEntities()).getItems());
+        ArrayList<Pair> result = getPotentialEntity(s, player, true).getEntities();
+        result.addAll(getPotentialEntity(s, player, false).getEntities());
         return result;
     }
 
-    public static ArrayList<Pair> getAllItemsContainer(Player p){
+    public static ArrayList<Pair> getAllItemsInContainers(Player p){
         ArrayList<Container> containers = p.getCurrentRoom().getContainers();
         ArrayList<Pair> result = new ArrayList<>();
         for(Container c : containers){
             if(!c.isLocked())
                 result.addAll(c.getItems());
         }
-
-        for(Container c : p.getContainers()){
-            result.addAll(c.getItems());
-        }
+        
         return result;
     }
 
     //this attempts to get items from a token;
-    //number = 0: tries to get from the inventory
-    //number = 1: tries to get from ConcreteEntities
-    //number = 2: tries to get from containers
-    public static PotentialItems getPotentialEntity(String s, Player player, HashMap<String, Pair> pool) {
+    public static PotentialItems getPotentialEntity(String s, Player player, boolean room) {
 
         ArrayList<Pair> potentialEntities = new ArrayList<>();
         PotentialItems totalItems = new PotentialItems(potentialEntities, 0);
 
-            //check if there is an exact match
-            for (Pair pair : pool.values()) {
+        //we create a collection of all items the player can see
+        ArrayList<Pair> pool = new ArrayList<>();
+        if(room){
+            pool.addAll(player.getCurrentRoom().getEntities().values());
+            pool.addAll(getAllItemsInContainers(player));
+        } else {
+            pool.addAll(player.getInventory().values());
+        }
+
+
+        //we check if there is an exact match over all pairs
+        for (Pair pair : pool) {
+            Entity currentEntity = pair.getEntity();
+
+            if (currentEntity.getName().toLowerCase().equals(s.toLowerCase())) {
+                potentialEntities.add(pair);
+                int reliability = s.split(" ").length;
+                totalItems.setReliability(reliability);
+                return totalItems;
+            }
+        }
+
+        //otherwise, parse and check for partial matches
+        String[] splitString = s.split(" ");
+
+        //best match found so far
+        int max = 0;
+
+        //we check with each pair in inventory if it contains the token
+        for (Pair pair : pool){
+            int reliability = 0;
+
+            //we check the given input string token by token
+            for (String token : splitString) {
                 Entity currentEntity = pair.getEntity();
 
-                if (currentEntity.getName().toLowerCase().equals(s.toLowerCase())) {
-                    potentialEntities.add(pair);
-                    int reliability = s.split(" ").length;
-                    totalItems.setReliability(reliability);
-                    return totalItems;
-                }
-
-                if(currentEntity instanceof Container){
-                    for(Pair p : ((Container) currentEntity).getItems()){
-                        if (p.getEntity().getName().equals(s)) {
-                            potentialEntities.add(pair);
-                            int reliability = s.split(" ").length;
-                            totalItems.setReliability(reliability);
-                            return totalItems;
-                        }
-                    }
-                }
-
-            }
-
-            //otherwise, parse and check for partial matches
-            String[] splitString = s.split(" ");
-            //best match indicator
-            int max = 0;
-
-            //we check with each pair in inventory if it contains the token
-            for (Pair pair : pool.values()){
-                int reliability = 0;
-
-                //we check the given input string token by token
-                for (String token : splitString) {
-                    Entity a = pair.getEntity();
+                String[] splitName = currentEntity.getName().split(" ");
 
 
-                    String[] currentItem = a.getName().split(" ");
-
-
-                    for (String b : currentItem) {
-                        if (b.toLowerCase().equals(token)) {
-                            reliability++;
-                            // we found a better match, we wipe the arraylist and add it
-                            if (reliability > max) {
-                                potentialEntities.clear();
-                                max = reliability;
-                                totalItems.setReliability(max);
-                                potentialEntities.add(pair);
-                            } else if(reliability == max){
-                                potentialEntities.add(pair);
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            //we iterate over all the items in containers
-        for (Pair p : getAllItemsContainer(player)){
-
-
-            for (String token : splitString) {
-
-                int reliability = 0;
-
-
-                String[] currentItem = p.getEntity().getName().split(" ");
-
-                for (String b : currentItem) {
+                for (String b : splitName) {
                     if (b.toLowerCase().equals(token)) {
                         reliability++;
+                        // we found a better match, we wipe the arraylist and add it
                         if (reliability > max) {
                             potentialEntities.clear();
                             max = reliability;
-                            potentialEntities.add(p);
                             totalItems.setReliability(max);
+                            potentialEntities.add(pair);
                         } else if(reliability == max){
-                            potentialEntities.add(p);
+                            potentialEntities.add(pair);
                         }
                     }
                 }
@@ -240,11 +188,11 @@ public class HandleCommands {
         //case complex use: check we have exactly two items, then make the player use them
         if (complex) {
             if (temp.length < 2) {
-                ParseInput.wrongCommand++;
+                wrongCommand++;
                 printToLog("The syntax is USE x WITH y");
                 return false;
             }
-            ParseInput.wrongCommand = 0;
+            wrongCommand = 0;
 
 
             //case use x with y
@@ -252,40 +200,20 @@ public class HandleCommands {
             secondItem = Utility.stitchFromTo(temp, tokenPosition + 1, temp.length);
 
             //we try to get all potential items from inv
-            inventoryItems = getPotentialEntity(firstItem, player, player.getInventory());
-            //and from the room
-            PotentialItems possibleEntities = getPotentialEntity(firstItem, player,
-                    player.getCurrentRoom().getEntities());
-            if(inventoryItems.getReliability() < possibleEntities.getReliability()){
-                inventoryItems = possibleEntities;
-            }
-            //prop from room
-            roomItems = getPotentialEntity(secondItem, player, player.getInventory());
-            possibleEntities = getPotentialEntity(secondItem, player, player.getCurrentRoom().getEntities());
-            if(roomItems.getReliability() < possibleEntities.getReliability()){
-                roomItems = possibleEntities;
-            }
+            inventoryItems = getPotentialEntity(firstItem, player, false);
 
-            if (inventoryItems.getItems().size() > 1 || roomItems.getItems().size() > 1) {
+            //prop from room
+            roomItems = getPotentialEntity(secondItem, player, true);
+
+
+            if (inventoryItems.getEntities().size() > 1 || roomItems.getEntities().size() > 1) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-//            System.out.println("candidate inv items: "+inventoryItems.getItems().size()+", item: "+firstItem);
-//            System.out.println("candidate room items: "+roomItems.getItems().size()+", item: "+secondItem);
-
-            if (inventoryItems.getItems().size() == 1 && roomItems.getItems().size() == 1) {
-//                System.out.println("using: ");
-//                for(Pair p : roomItems.getItems()){
-//                    System.out.println(p.getEntity().getName());
-//                }
-//
-//                System.out.println("on: ");
-//                for(Pair p : inventoryItems.getItems()){
-//                    System.out.println(p.getEntity().getName());
-//                }
-//                if (inventoryUse.get(0).getEntity().getType() == 'i' && itemUse.get(0).getEntity().getType() == 'p'){
-                PlayerActions.interactOnWith(player, roomItems.getItems().get(0).getEntity(), inventoryItems.getItems().get(0).getEntity());
+            if (inventoryItems.getEntities().size() == 1 && roomItems.getEntities().size() == 1) {
+                PlayerActions.interactOnWith(player, roomItems.getEntities().get(0).getEntity(),
+                        inventoryItems.getEntities().get(0).getEntity());
 
             } else {
                 printToLog("You can't see such items");
@@ -295,46 +223,34 @@ public class HandleCommands {
             //case simple use: check we have just one item, then we make the player use it.
         } else {
 
-
             if (temp.length == 1) {
-                ParseInput.wrongCommand++;
+                wrongCommand++;
                 printToLog("The syntax is USE x");
                 return false;
             }
-            ParseInput.wrongCommand = 0;
+            wrongCommand = 0;
 
 
             firstItem = Utility.stitchFromTo(temp, 1, temp.length);
 
-            inventoryItems = getPotentialEntity(firstItem, player, player.getInventory());
-            roomItems = getPotentialEntity(firstItem, player, player.getCurrentRoom().getEntities());
+            inventoryItems = getPotentialEntity(firstItem, player, false);
+
 
             //there are more possibilities from the items fetched
-            if ((inventoryItems.getItems().size() + roomItems.getItems().size() == 0)) {
-                printToLog("You can't see that.");
-                return false;
-            }
-
-            //there are more possibilities from the items fetched
-            if (!(inventoryItems.getItems().size() + roomItems.getItems().size() == 1)) {
+            if (inventoryItems.getEntities().size() > 1) {
                 printToLog("Be more specific.");
                 return false;
             }
 
-            if (inventoryItems.getItems().size() == 1) {
+            if (inventoryItems.getEntities().size() == 1) {
 
-                boolean result = PlayerActions.simpleUse(player, inventoryItems.getItems().get(0).getEntity());
+                boolean result = PlayerActions.simpleUse(player, inventoryItems.getEntities().get(0).getEntity());
 
-                if (!result) {
-                    printToLog("You can't use it.");
-                }
-            } else if (roomItems.getItems().size() == 1) {
-                boolean result = PlayerActions.simpleUse(player, roomItems.getItems().get(0).getEntity());
                 if (!result) {
                     printToLog("You can't use it.");
                 }
             } else {
-                printToLog("You can't use it.");
+                printToLog("You can't see a "+firstItem+".");
             }
 
             return true;
@@ -346,29 +262,35 @@ public class HandleCommands {
     public static boolean takePutContainer(String[] temp, Player player, int fromToken, boolean all, boolean take) {
 
         if(temp.length < 2 && take){
+            wrongCommand++;
             printToLog("The syntax is TAKE x FROM container.");
             return false;
         } else if(temp.length < 2){
+            wrongCommand++;
             printToLog("The syntax is PUT x IN container.");
             return false;
         }
+
+        wrongCommand = 0;
 
         int amount;
         String item;
         String container;
 
 
-
-        try{
-            Integer.parseInt(temp[1]);
-            item = Utility.stitchFromTo(temp, 2, fromToken);
+        //we try to get a specific amount from the input, if there isn't we assume 1
+        try {
+            //take 23 stone, for example
             amount = Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, fromToken);
             container = Utility.stitchFromTo(temp, fromToken + 1, temp.length);
 
         } catch (NumberFormatException ex){
-            if(all){
+            //take all stone
+            if (all) {
                 item = Utility.stitchFromTo(temp, 2, fromToken);
-            } else{
+            } else {
+                //take stone
                 item = Utility.stitchFromTo(temp, 1, fromToken);
             }
             amount=1;
@@ -376,46 +298,31 @@ public class HandleCommands {
         }
 
 
-        PotentialItems items;
-        if (take) {
-            items = HandleCommands.getPotentialEntity(item, player, player.getCurrentRoom().getEntities());
-        } else {
-            items = HandleCommands.getPotentialEntity(item, player, player.getInventory());
-        }
-        PotentialItems containers = HandleCommands.getPotentialEntity(container, player,
-                player.getCurrentRoom().getEntities());
 
-        ArrayList<Pair> possibleItems = items.getItems();
-        ArrayList<Pair> possibleContainers = containers.getItems();
+        ArrayList<Pair> possibleItems = getPotentialEntity(item, player, true).getItems();
+        ArrayList<Pair> possibleContainers = getPotentialEntity(container, player, true).getEntities();
 
-
-        if ((possibleItems.size() == 0 || possibleContainers.size() == 0)) {
-            printToLog("You can't see that.");
-            return false;
-        }
 
         if ((possibleItems.size() > 1 || possibleContainers.size() > 1)) {
             printToLog("Be more specific.");
             return false;
-        }
-
-        if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
+        } else if (possibleItems.size() == 1 && possibleContainers.size() == 1) {
 
             Pair currentPair = possibleItems.get(0);
-
-            int count = possibleItems.get(0).getCount();
             Item currentItem = (Item) currentPair.getEntity();
+            int count = currentPair.getCount();
+
             Container currentContainer = (Container) possibleContainers.get(0).getEntity();
 
             if(all){
-                amount=possibleItems.get(0).getCount();
+                amount=currentPair.getCount();
             }
 
             boolean result;
             if(take){
-                result = PlayerActions.takeFrom(player, possibleItems.get(0), currentContainer, amount);
+                result = PlayerActions.takeFrom(player, currentPair, currentContainer, amount);
             } else{
-                result = PlayerActions.putIn(player, possibleItems.get(0), currentContainer, amount);
+                result = PlayerActions.putIn(player, currentPair, currentContainer, amount);
             }
             if (result && take) {
                 if (all) {
@@ -423,17 +330,15 @@ public class HandleCommands {
                 } else {
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
-                currentPair.setLocation('i');
             } else if(result){
                 if (all) {
                     printToLog(count + " x " + currentItem.getName() + " put in " + currentContainer.getName());
                 } else {
                     printToLog(currentItem.getName() + " put in " + currentContainer.getName());
                 }
-                currentPair.setLocation('c');
             }
         } else {
-            printToLog("You can't take it.");
+            printToLog("You can't see it.");
         }
         return true;
     }
@@ -441,26 +346,25 @@ public class HandleCommands {
 
     public static boolean handleTake(String[] temp, Player player) {
 
-        //TODO: FIX GET POSSIBLE ITEMS, ADD RELIABILITY OF GUESS, ADD ONLY IF BIG ENOUGH
-        ArrayList<Pair> possibleItems;
+        ArrayList<Pair> items;
         Room currentRoom = player.getCurrentRoom();
 
         if (temp.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is TAKE (ALL) x");
             return false;
         }
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
         //handles taking all items in room
         if(temp.length == 2 && temp[1].equals("all")){
-            possibleItems = currentRoom.getItemList();
+            items = currentRoom.getItemList();
 
-            if(possibleItems.size() == 0){
+            if(items.size() == 0){
                 printToLog("There are no items here.");
                 return false;
             }
-            for(Pair p : possibleItems){
+            for(Pair p : items){
                 int oldCount = p.getCount();
                 if(PlayerActions.pickUpItem(player, p, p.getCount()) == 0){
                     break;
@@ -468,7 +372,6 @@ public class HandleCommands {
                 Pair pair = player.getItemPair(p.getEntity().getID());
 
                 Item currentItem = (Item) pair.getEntity();
-                p.setLocation('i');
                 if(oldCount > 1){
                     printToLog("Taken "+oldCount+"x "+currentItem.getName()+".");
                 } else{
@@ -485,13 +388,12 @@ public class HandleCommands {
 
         //we try to get a number from temp, eg. take 12 rock
         int amt = 0;
-        try{
-            Integer.parseInt(temp[1]);
-            item = Utility.stitchFromTo(temp, 2, temp.length);
+        try {
             amt = Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, temp.length);
 
         } catch (NumberFormatException ex){
-            if (2 < temp.length && temp[1].equals("all")) {
+            if (temp.length > 2 && temp[1].equals("all")) {
                 all = true;
                 item = Utility.stitchFromTo(temp, 2, temp.length);
             } else {
@@ -500,16 +402,8 @@ public class HandleCommands {
         }
 
 
-        possibleItems = getPotentialEntity(item, player, player.getCurrentRoom().getEntities()).getItems();
 
-        ArrayList<Pair> items = new ArrayList<>();
-
-        //we get only the items we can pickup
-        for (Pair p : possibleItems) {
-            if (p.getEntity() instanceof Item) {
-                items.add(p);
-            }
-        }
+        items = getPotentialEntity(item, player, true).getItems();
 
 
         if (items.size() > 1) {
@@ -517,22 +411,20 @@ public class HandleCommands {
             return false;
         } else if(items.size() == 1){
             Pair currentPair = items.get(0);
-            Interactable currentItem = (Interactable) currentPair.getEntity();
+            Item currentItem = (Item) currentPair.getEntity();
             int count = currentPair.getCount();
+
             if (all) {
                 if (PlayerActions.pickUpItem(player, currentPair, count) == 1) {
-                    currentPair.setLocation('i');
                     printToLog(count+"x "+currentItem.getName() + " added to your inventory.");
                 }
 
             } else if (amt != 0) {
-                currentPair.setLocation('i');
                 if (PlayerActions.pickUpItem(player, items.get(0), amt) == 1) {
                     printToLog(amt+"x "+currentItem.getName() + " added to your inventory.");
                 }
             } else {
                 if (PlayerActions.pickUpItem(player, items.get(0), 1) == 1) {
-                    currentPair.setLocation('i');
                     printToLog(currentItem.getName() + " added to your inventory.");
                 }
             }
@@ -547,14 +439,14 @@ public class HandleCommands {
 
 
         if (temp.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is DROP (ALL) x");
             return false;
         }
 
         ArrayList<Pair> possibleItems;
 
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
         if(temp.length == 2 && temp[1].equals("all")){
             Collection<Pair> cp = player.getInventory().values();
@@ -572,7 +464,6 @@ public class HandleCommands {
             for(Pair p : toRemove){
                 if(PlayerActions.drop(player, p, p.getCount())==1){
                     Item currentItem = (Item) p.getEntity();
-                    p.setLocation('r');
                     printToLog("Dropped "+currentItem.getName()+".");
                 }
             }
@@ -586,9 +477,8 @@ public class HandleCommands {
         int amt=0;
 
         try{
-            Integer.parseInt(temp[1]);
-            item = Utility.stitchFromTo(temp, 2, temp.length);
             amt = Integer.parseInt(temp[1]);
+            item = Utility.stitchFromTo(temp, 2, temp.length);
 
         } catch (NumberFormatException ex){
             if (temp.length > 2 && temp[1].equals("all")) {
@@ -601,7 +491,7 @@ public class HandleCommands {
 
 
 
-        possibleItems = getPotentialEntity(item, player, player.getInventory()).getItems();
+        possibleItems = getPotentialEntity(item, player, false).getItems();
 
         if (possibleItems.size() > 1) {
             printToLog("Be more specific.");
@@ -612,7 +502,6 @@ public class HandleCommands {
             if (all) {
                 int result = PlayerActions.drop(player, p, p.getCount());
                 if (result == 1) {
-                    p.setLocation('r');
                     printToLog("You drop all the " + i.getName());
                 } else if(result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -620,7 +509,6 @@ public class HandleCommands {
             } else if (amt != 0) {
                 int result = PlayerActions.drop(player, p, amt);
                 if (result == 1) {
-                    p.setLocation('r');
                     printToLog("You drop "+ amt+" "+ i.getName());
                 } else if (result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -628,7 +516,6 @@ public class HandleCommands {
             } else {
                 int result = PlayerActions.drop(player, p, 1);
                 if (result == 1) {
-                    p.setLocation('r');
                     printToLog("You drop the " + i.getName());
                 } else if (result == 0){
                     printToLog("You don't seem to have a " + i.getName() + " with you.");
@@ -648,11 +535,11 @@ public class HandleCommands {
     public static boolean handleExamine(String[] temp, Player player) {
 
         if (temp.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is EXAMINE x");
             return false;
         }
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
 
         String toExamine = Utility.stitchFromTo(temp, 1, temp.length);
@@ -682,20 +569,20 @@ public class HandleCommands {
     public static boolean handleWear(String[] parsedInput, Player player) {
 
         if (parsedInput.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is WIELD x");
             return false;
         }
 
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
         String wieldItem = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems items = getPotentialEntity(wieldItem, player, player.getInventory());
-        PotentialItems entities = getPotentialEntity(wieldItem, player, player.getCurrentRoom().getEntities());
+        PotentialItems items = getPotentialEntity(wieldItem, player, false);
+        PotentialItems entities = getPotentialEntity(wieldItem, player, true);
 
-        ArrayList<Pair> possibleItems = items.getItems();
-        ArrayList<Pair> possibleEntities = entities.getItems();
+        ArrayList<Pair> possibleItems = items.getEntities();
+        ArrayList<Pair> possibleEntities = entities.getEntities();
 
         if (possibleItems.size() == 1 && items.getReliability() > entities.getReliability()) {
             Item item = (Item) player.getItemPair(possibleItems.get(0).getEntity().getID()).getEntity();
@@ -712,7 +599,6 @@ public class HandleCommands {
         } else if(possibleEntities.size() == 1 && items.getReliability() < entities.getReliability()){
             printToLog("(first taking the "+possibleEntities.get(0).getEntity().getName()+")");
             if(PlayerActions.pickUpItem(player, possibleEntities.get(0), 1) == 1){
-                possibleEntities.get(0).setLocation('i');
                 Item item = (Item) player.getItemPair(possibleEntities.get(0).getEntity().getID()).getEntity();
 
                 if (player.wear(item)) {
@@ -771,11 +657,11 @@ public class HandleCommands {
     public static boolean handleTalk(String[] parsedInput, Player player) {
 
         if (parsedInput.length < 3) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is TALK ABOUT x WITH y or also TALK TO y");
             return false;
         }
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
 
 
@@ -842,11 +728,11 @@ public class HandleCommands {
 
         int c = Utility.checkForToken(parsedInput, "from");
         if (c == -1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is: BUY x FROM y");
             return false;
         } else {
-            ParseInput.wrongCommand = 0;
+            wrongCommand = 0;
             String item = Utility.stitchFromTo(parsedInput, 1, c);
             String npc = Utility.stitchFromTo(parsedInput, c + 1, parsedInput.length);
 
@@ -872,17 +758,16 @@ public class HandleCommands {
 
         int d = Utility.checkForToken(parsedInput, "to");
         if (d == -1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is: GIVE x TO y");
             return false;
         } else {
-            ParseInput.wrongCommand = 0;
+            wrongCommand = 0;
 
             String item = Utility.stitchFromTo(parsedInput, 1, d);
             String npc = Utility.stitchFromTo(parsedInput, d + 1, parsedInput.length);
 
-            ArrayList<Pair> possibleItemFromInventory = getPotentialEntity(item, player,
-                    player.getInventory()).getItems();
+            ArrayList<Pair> possibleItemFromInventory = getPotentialEntity(item, player, false).getEntities();
 
             if ((possibleItemFromInventory.size() > 1)) {
                 printToLog("Be more specific.");
@@ -912,24 +797,24 @@ public class HandleCommands {
     public static boolean handleReload(String[] parsedInput, Player player){
 
         if (parsedInput.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is RELOAD x.");
             return false;
         }
 
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
         String weaponString = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-        PotentialItems possibleItems = getPotentialEntity(weaponString, player, player.getInventory());
+        PotentialItems possibleItems = getPotentialEntity(weaponString, player, false);
 
-        if(possibleItems.getItems().size() > 1){
+        if(possibleItems.getEntities().size() > 1){
             printToLog("Be more specific.");
-        } else if(possibleItems.getItems().size() == 0){
+        } else if(possibleItems.getEntities().size() == 0){
             printToLog("You can't see that item.");
         } else {
-            if(possibleItems.getItems().get(0).getEntity() instanceof Weapon){
-                return PlayerActions.reload(player, (Weapon) possibleItems.getItems().get(0).getEntity());
+            if(possibleItems.getEntities().get(0).getEntity() instanceof Weapon){
+                return PlayerActions.reload(player, (Weapon) possibleItems.getEntities().get(0).getEntity());
             } else {
                 printToLog("That's not a weapon.");
             }
@@ -939,7 +824,7 @@ public class HandleCommands {
 
     public static boolean handleAttack(String[] parsedInput, Player player, boolean execute) {
         if (parsedInput.length == 1) {
-            ParseInput.wrongCommand++;
+            wrongCommand++;
             printToLog("The syntax is SHOOT AT/ATTACK/KILL x.");
             return false;
         }
@@ -948,6 +833,8 @@ public class HandleCommands {
 
         String enemyName;
         String toCheck = parsedInput[0]+" at";
+
+        //case for ranged weapons
         if(toCheck.equals("shoot at") || toCheck.equals("fire at")){
             enemyName = Utility.stitchFromTo(parsedInput, 2, parsedInput.length);
 
@@ -965,11 +852,10 @@ public class HandleCommands {
 
 
 
-        ParseInput.wrongCommand = 0;
+        wrongCommand = 0;
 
         //we get all entities similar to that name
-        ArrayList<Pair> entities = getPotentialEntity(enemyName, player,
-                player.getCurrentRoom().getEntities()).getItems();
+        ArrayList<Pair> entities = getPotentialEntity(enemyName, player, true).getEntities();
         if (entities.size() == 1 && !execute) {
             Entity enemy = entities.get(0).getEntity();
             if( enemy instanceof NPC && ((NPC) enemy).isQuestCharacter()){
@@ -1087,7 +973,6 @@ public class HandleCommands {
     }
 
     public static boolean handleCast(String[] parsedInput, Player player){
-        Room currentRoom = player.getCurrentRoom();
         if(parsedInput.length == 1){
             printToLog("The syntax is CAST spell (AT/ON target)");
             return false;
@@ -1101,18 +986,15 @@ public class HandleCommands {
 
             String spellName = Utility.stitchFromTo(parsedInput, 1, parsedInput.length);
 
-            PlayerActions.castSpell(player, spellName);
-
-
+            PlayerActions.castSpell(player, spellName, null);
 
             return false;
         } else {
 
-
             String spellName = Utility.stitchFromTo(parsedInput, 1, tokenAt);
             String target = Utility.stitchFromTo(parsedInput, tokenAt + 1, parsedInput.length);
 
-            PlayerActions.castAtTarget(player, spellName, target);
+            PlayerActions.castSpell(player, spellName, target);
         }
         return false;
     }

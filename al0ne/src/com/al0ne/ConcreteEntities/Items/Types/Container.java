@@ -163,24 +163,26 @@ public class Container extends Item{
     }
 
     @Override
-    public void printLongDescription(Player player) {
+    public String getLongDescription() {
+        String description = super.getLongDescription();
         if (items.size() == 0) {
-            printToLog(longDescription);
-            return;
+            return description;
         }
-        printToLog(longDescription);
         if(locked) {
             printToLog("It's locked.");
-            return;
-        }
-        printToLog("It contains: ");
-        for (Pair pair: items){
-            Item item = (Item) pair.getEntity();
-            if ( pair.getCount() == 1 ){
-                printToLog(item.getShortDescription());
-            } else{
-                printToLog(pair.getCount()+"  "+item.getName());
+            return description+" It's locked";
+        } else {
+            String temp = "";
+            for (Pair pair: items){
+                Item item = (Item) pair.getEntity();
+                if ( pair.getCount() == 1 ){
+                    temp+=item.getShortDescription()+"\n";
+                } else{
+                    temp+=pair.getCount()+"  "+item.getName()+"\n";
+                }
             }
+            return description+"\nIt contains: \n"+temp;
         }
+
     }
 }

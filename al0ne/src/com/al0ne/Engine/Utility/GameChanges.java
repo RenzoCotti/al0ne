@@ -198,6 +198,7 @@ public class GameChanges {
             for (Pair pair : Main.player.getInventory().values()) {
                 Item currentItem = (Item) pair.getEntity();
                 double weight = Utility.twoDecimals(currentItem.getWeight()*pair.getCount());
+                String id = currentItem.getID();
                 String name = currentItem.getName();
                 int damage = 0;
                 int defense = 0;
@@ -214,7 +215,7 @@ public class GameChanges {
                     }
 //                }
 
-                SimpleItem s = new SimpleItem(name, pair.getCount(), weight, currentItem.getPrice(),defense, damage);
+                SimpleItem s = new SimpleItem(id, name, pair.getCount(), weight, currentItem.getPrice(),defense, damage);
                 data.add(s);
             }
         }

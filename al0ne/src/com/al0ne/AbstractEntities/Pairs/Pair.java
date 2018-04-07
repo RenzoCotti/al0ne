@@ -19,21 +19,11 @@ public class Pair implements Serializable{
     //r: in room
     //c: in container
     //i: in inventory
-    private char location;
 
 
     public Pair(Entity entity, int count) {
         this.entity = entity;
         this.count = count;
-        this.location = 'r';
-    }
-
-    public char getLocation() {
-        return location;
-    }
-
-    public void setLocation(char location) {
-        this.location = location;
     }
 
     public Entity getEntity() {

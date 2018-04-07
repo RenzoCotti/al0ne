@@ -525,7 +525,7 @@ public class PlayerActions {
     }
 
 
-    public static void castSpell(Player player, String spellName){
+    public static void castSpell(Player player, String spellName, String target){
         Room currentRoom = player.getCurrentRoom();
         if (player.hasItemInInventory("spellbook")) {
             Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
@@ -550,94 +550,56 @@ public class PlayerActions {
                 }
                 Spell s = spell.getSpell();
 
-                if (s instanceof SelfSpell){
-                    SelfSpell ss = (SelfSpell) s;
-                    if(ss.isCasted(player)){
-                        spell.modifyCount(-1);
-                        return;
+                if(target != null){
+                    Class castOn = s.getTarget();
+
+                    if (castOn.equals(Item.class)){
+                        PotentialItems items = HandleCommands.getPotentialEntity(target, player, false);
+                        ArrayList<Pair> possibleItems = items.getEntities();
+
+                        if(possibleItems.size() > 1){
+                            printToLog("Be more specific.");
+                            return;
+                        } else if (possibleItems.size() == 0){
+                            printToLog("You can't see a "+target);
+                            return;
+                        }
+
+                        TargetSpell ts = (TargetSpell) s;
+
+                        if (ts.isCasted(player, possibleItems.get(0).getEntity())) {
+                            spell.modifyCount(-1);
+                        }
+                    } else if(castOn.equals(Enemy.class)){
+                        DamagingSpell ds = (DamagingSpell) s;
+                        ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
+                        if(enemies.size() == 0){
+                            printToLog("You can't see that enemy");
+                        } else if(enemies.size()>1){
+                            printToLog("Be more specific");
+                        } else {
+                            if (ds.isCasted(player, enemies.get(0))) {
+                                spell.modifyCount(-1);
+                            }
+                        }
                     }
-                    return;
-                } else if(s instanceof WorldSpell){
-                    WorldSpell ws = (WorldSpell) s;
-                    if(ws.isCasted(player, currentRoom)){
-                        spell.modifyCount(-1);
-                    }
-                }
-
-                //TODO: TO REVISE this
-            } else {
-                printToLog("Your spellbook doesn't seem to have such a spell.");
-            }
-        } else{
-            printToLog("You need a spellbook to cast spells.");
-        }
-    }
-
-    public static void castAtTarget(Player player, String spellName, String target){
-
-        if (player.hasItemInInventory("spellbook")) {
-
-            Spellbook spellbook = (Spellbook) player.getItemPair("spellbook").getEntity();
-
-
-            ArrayList<Spell> potentialSpells = HandleCommands.getPotentialSpell(spellName, spellbook);
-
-            if(potentialSpells.size() > 1){
-                printToLog("Be more specific.");
-                return;
-            } else if (potentialSpells.size() == 0){
-                printToLog("Your spellbook doesn't seem to have such a spell.");
-                return;
-            }
-
-
-            if (spellbook.hasSpell(potentialSpells.get(0).getID())) {
-
-                SpellPair spell = spellbook.getSpell(potentialSpells.get(0).getID());
-
-                if(spell.getCount() <= 0){
-                    printToLog("You don't have any castings left.");
-                    return;
-                }
-                Spell s = spell.getSpell();
-                Class castOn = s.getTarget();
-
-                if (castOn.equals(Item.class)){
-                    PotentialItems inventoryItems = HandleCommands.getPotentialEntity(target, player, player.getInventory());
-                    ArrayList<Pair> possibleItemsFromInventory = inventoryItems.getItems();
-                    PotentialItems items = HandleCommands.getPotentialEntity(target, player, player.getCurrentRoom().getEntities());
-                    ArrayList<Pair> possibleItems = items.getItems();
-
-                    if(possibleItems.size() + possibleItemsFromInventory.size() > 1){
-                        printToLog("Be more specific.");
-                        return;
-                    } else if(possibleItems.size() != 0){
-                        printToLog("You need to be holding that item.");
-                        return;
-                    } else if (possibleItemsFromInventory.size() == 0){
-                        printToLog("You can't see a "+target);
-                        return;
-                    }
-
-                    TargetSpell ts = (TargetSpell) s;
-
-                    if (ts.isCasted(player, possibleItemsFromInventory.get(0).getEntity())) {
-                        spell.modifyCount(-1);
-                    }
-                } else if(castOn.equals(Enemy.class)){
-                    DamagingSpell ds = (DamagingSpell) s;
-                    ArrayList<Enemy> enemies = HandleCommands.getPotentialEnemy(target, player);
-                    if(enemies.size() == 0){
-                        printToLog("You can't see that enemy");
-                    } else if(enemies.size()>1){
-                        printToLog("Be more specific");
-                    } else {
-                        if (ds.isCasted(player, enemies.get(0))) {
+                } else {
+                    if (s instanceof SelfSpell){
+                        SelfSpell ss = (SelfSpell) s;
+                        if(ss.isCasted(player)){
+                            spell.modifyCount(-1);
+                        }
+                    } else if(s instanceof WorldSpell){
+                        WorldSpell ws = (WorldSpell) s;
+                        if(ws.isCasted(player, currentRoom)){
                             spell.modifyCount(-1);
                         }
                     }
                 }
 
+
+
+                //TODO: TO REVISE this
             } else {
                 printToLog("Your spellbook doesn't seem to have such a spell.");
             }

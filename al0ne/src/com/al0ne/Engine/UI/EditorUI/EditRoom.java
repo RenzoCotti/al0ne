@@ -166,7 +166,7 @@ public class EditRoom extends EditTab{
 
                 //we update the item list and reset all the fields
 
-//                list.getItems().setAll(getTableItems());
+//                list.getEntities().setAll(getTableItems());
                 list.setItems(getTableItems());
                 LoadRoom loadRoom = new LoadRoom();
                 loadRoom.clearFields();
