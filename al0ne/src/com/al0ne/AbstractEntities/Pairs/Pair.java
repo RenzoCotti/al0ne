@@ -8,18 +8,10 @@ import java.io.Serializable;
  * This represent a quantity of an item/npc/enemy...
  * entity represents the object
  * count the quantity
- * location represents where it is located:
- * c: container
- * r: room
- * i: inventory
  */
 public class Pair implements Serializable{
     private Entity entity;
     private int count;
-    //r: in room
-    //c: in container
-    //i: in inventory
-
 
     public Pair(Entity entity, int count) {
         this.entity = entity;
@@ -38,25 +30,9 @@ public class Pair implements Serializable{
         count++;
     }
 
-    public boolean setCount(Integer amount) {
-        count=amount;
-        if(count <= 0) {
-            return true;
-        }
-        return false;
-    }
-
     public boolean modifyCount(Integer amount) {
         count+=amount;
         if(count <= 0){
-            return false;
-        }
-        return true;
-    }
-
-    public boolean subCount() {
-        count--;
-        if (count <= 0){
             return false;
         }
         return true;

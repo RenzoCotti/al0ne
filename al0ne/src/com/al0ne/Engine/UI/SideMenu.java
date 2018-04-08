@@ -75,6 +75,7 @@ public class SideMenu {
 
         Text descTitleLabel = new Text("");
         Label descLabel = new Label("");
+        descLabel.setPadding(new Insets(10, 0, 0, 0));
         descTitleLabel.setStyle("-fx-font-weight: bold");
 
 
@@ -84,13 +85,17 @@ public class SideMenu {
 
         VBox inventoryAndDesc = new VBox();
         inventoryAndDesc.getChildren().addAll(inv, description);
-        
+
         inv.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 String id = newSelection.getId();
                 Pair p = Main.player.getInventory().get(id);
-                descTitleLabel.setText(capitalise(p.getEntity().getName()));
-                descLabel.setText(capitalise(p.getEntity().getLongDescription()));
+                Item i = (Item) p.getEntity();
+                descTitleLabel.setText(capitalise(i.getName()));
+                if(p.getCount() > 1){
+                    descTitleLabel.setText(descTitleLabel.getText()+", x"+p.getCount());
+                }
+                descLabel.setText("("+i.getWeight()+" Kg)\n"+capitalise(i.getLongDescription()));
             }
         });
 

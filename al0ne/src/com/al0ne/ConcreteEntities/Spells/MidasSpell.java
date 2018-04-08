@@ -33,7 +33,7 @@ public class MidasSpell extends TargetSpell{
                     if (player.isWearingItem(entity.getID())){
                         player.unequipItem(entity.getID());
                     }
-                    if(!player.getInventory().get(item.getID()).subCount()){
+                    if(!player.getInventory().get(item.getID()).modifyCount(-1)){
                         player.getInventory().remove(item.getID());
                     }
                     player.recalculateWeight();

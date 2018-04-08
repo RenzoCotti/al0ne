@@ -1,6 +1,7 @@
 package com.al0ne.AbstractEntities.Enums;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by BMW on 02/05/2017.
@@ -99,19 +100,7 @@ public enum Material {
 
     public static ArrayList<Material> getAllMaterials(){
         ArrayList<Material> materials = new ArrayList<>();
-        materials.add(IRON);
-        materials.add(WOOD);
-        materials.add(GOLD);
-        materials.add(STEEL);
-        materials.add(BRASS);
-        materials.add(SILVER);
-        materials.add(LEATHER);
-        materials.add(STONE);
-        materials.add(CLAY);
-        materials.add(FABRIC);
-        materials.add(GLASS);
-        materials.add(PAPER);
-        materials.add(UNDEFINED);
+        materials.addAll(Arrays.asList(Material.class.getEnumConstants()));
         return materials;
     }
 
@@ -145,7 +134,7 @@ public enum Material {
     public static String materialToString(Material m){
         ArrayList<Material> materials = getAllMaterials();
         for (Material material: materials){
-            if(material.toString().toLowerCase().equals(material.toString().toLowerCase())){
+            if(material.toString().toLowerCase().equals(m.toString().toLowerCase())){
                 String temp = material.toString().toLowerCase();
                 temp = temp.substring(0, 1).toUpperCase()+temp.substring(1, temp.length());
                 return temp;
@@ -164,6 +153,7 @@ public enum Material {
         materials.add(BRASS);
         materials.add(SILVER);
         materials.add(TITANIUM);
+        materials.add(ALUMINIUM);
         return materials;
     }
 
@@ -196,7 +186,8 @@ public enum Material {
         materials.add(KEVLAR);
         materials.add(STEEL);
         materials.add(COTTON);
-        materials.add(SILVER);
+        materials.add(ALUMINIUM);
+        materials.add(CARDBOARD);
         return materials;
     }
 
@@ -204,6 +195,7 @@ public enum Material {
         ArrayList<Material> materials = getMidTechMaterials();
         materials.add(NANITE);
         materials.add(TITANIUM);
+        materials.add(SILICA);
         return materials;
     }
 

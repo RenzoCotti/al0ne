@@ -181,8 +181,6 @@ public abstract class WorldCharacter extends Entity {
 
     //this function equips an item to the correct slot, if it's a wearable
     public boolean wear(Item wearable){
-//        for (Pair pair : inventory.values()){
-//            Item currentItem = (Item) pair.getEntity();
         if (wearable instanceof Armor || wearable instanceof Helmet || wearable instanceof Shield){
             String part = ((Wearable) wearable).getPart();
             if(part.equals("head")){
@@ -199,7 +197,6 @@ public abstract class WorldCharacter extends Entity {
             }
             return true;
         }
-//        }
     }
 
 
@@ -538,8 +535,5 @@ public abstract class WorldCharacter extends Entity {
     public void setQuestCharacter(boolean questCharacter) {
         this.questCharacter = questCharacter;
     }
-
-
-
 
 }

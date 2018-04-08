@@ -49,7 +49,7 @@ public class Shopkeeper extends NPC {
 
                 Pair pairInv = player.getItemPair(item.getEntity().getID());
                 if(pairInv != null){
-                    pairInv.setCount(pairInv.getCount()+1);
+                    pairInv.modifyCount(1);
                 } else {
                     if (!player.simpleAddItem((Item) item.getEntity(), 1)){
                         player.getCurrentRoom().addEntity(item.getEntity(), 1);

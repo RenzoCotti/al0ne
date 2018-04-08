@@ -325,7 +325,7 @@ public class PlayerActions {
 
             //we handle adding items to the room
             if (roomItem != null){
-                roomItem.setCount(roomItem.getCount()+amt);
+                roomItem.modifyCount(amt);
             } else {
                 currentRoom.addItem((Item) target.getEntity(), amt);
             }

@@ -430,7 +430,7 @@ public class HandleCommands {
                 }
             }
         } else {
-            printToLog("You can't see such an item to take.");
+            printToLog("You can't take that.");
         }
 
         return true;
