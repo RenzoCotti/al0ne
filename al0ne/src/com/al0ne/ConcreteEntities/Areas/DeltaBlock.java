@@ -5,6 +5,7 @@ import com.al0ne.AbstractEntities.Enums.Material;
 import com.al0ne.AbstractEntities.Enums.Size;
 import com.al0ne.AbstractEntities.Enums.TechLevel;
 import com.al0ne.AbstractEntities.Events.CompleteQuestEvent;
+import com.al0ne.AbstractEntities.Events.HealthEvent;
 import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
@@ -436,7 +437,126 @@ public class DeltaBlock extends Area {
         SFBreak.connectRoom("west", SFWork1);
         SFWork1.connectRoom("west", SFWork2);
 
+        Room polyEntrance = new Room("Polymer Factory entrance","This is the " +
+                "headquarters of Polymore, delta block's little" +
+                " gem. Ever since polymers became a substitute for wood, the firm has been on a continuous " +
+                "growth");
+        polyEntrance.addEntity(new Prop("Sign", "It states \"Polymore\""));
 
+        Room polyWH = new Room("Polymore Warehouse", "There is a distinct " +
+                "smell of palstic of different kinds in here");
+        polyWH.addEntity(new Prop("boxes", "a pile of empty boxes"));
+
+        Room polyReception = new Room("Polymore reception", "This looks like the " +
+                "reception of this factory.");
+        polyReception.addEntity(mg.generate("a cute receptionist", "Hi! Welcome to" +
+                " polymore.", true));
+        polyReception.addEntity(new Prop("warning sign", "It says not to go" +
+                "to the room to the west without a gas mask."));
+
+        Room chemBaths = new Room("Chemical baths", "The smell here is terrible.");
+        chemBaths.addEvent(new HealthEvent(100,
+                "The toxic fumes destroy your lungs!", -5));
+        //there's a strong smell of chemicals, you can smell it even through the mask
+        chemBaths.addEntity(new Prop("barrels full of chemicals",
+                "They're of various colours, some green, some blue, and most are filled to the" +
+                        " brim.",Material.PLASTIC));
+        NPC hazmatGuy = new NPC("guy in a hazmat suit", "He's wearing a red hazmat suit and " +
+                "looks quite busy", "MMMPH MMFPT MMMPH!");
+        chemBaths.addEntity(hazmatGuy);
+
+        Room dryRoom = new Room("Drying room", "The noise from the fans drying the chemical " +
+                "compounds is deafening.");
+        dryRoom.addEntity(new Prop("fans", "They are quite large, they look about 5 meters " +
+                "wide.", Material.STEEL));
+        dryRoom.addEvent(new HealthEvent(20, "The noise hurts your ears", -1));
+        NPC earmuffsGuy = new NPC("guy wearing earmuffs", "He wears a pair of orange earmuffs. You call out " +
+                "to him but he doesn't hear you.", "...");
+        dryRoom.addEntity(earmuffsGuy);
+
+        Room modernBR = new Room("Modern looking room", "This looks like a break room");
+        modernBR.addEntity(new Prop("vending machine", "You can buy a soda or some chips"));
+        modernBR.addEntity(mg.generate("guy drinking tea", "Hi, can I help you?"));
+        modernBR.addEntity(new Prop("modern painting", "It looks like somebody vomited" +
+                " on a canvas, to be honest."));
+
+
+
+
+
+        Room textWH = new Room("Styratex Warehouse", "You can see some rolls of " +
+                "synthetic weave covered in plastic.");
+        textWH.addEntity(new Prop("some opened rolls", "The material is soft and cold" +
+                " to the touch. Oddly enough, this isn't the famous Styratex."));
+
+        Room styraEntrance = new Room("Styratex Factory entrance", "This is the entrance of " +
+                " StyraTex factory. They started as a" +
+                "synthetic fabric factory, Weavestill, and when they developed the famous fabric StyraTex " +
+                "they changed name.");
+        styraEntrance.addEntity(new Prop("closed gate", "The factory seems to be closed now."));
+
+
+        Room polyStyraRoom = new Room("Inner Industrial district",
+                "To the west you can see the entrance to Polymore, " +
+                        "whereas to the south you see the entrance to StyraTex,");
+
+        industrialZone.connectRoom("south", polyStyraRoom);
+        polyStyraRoom.connectRoom("west", polyEntrance);
+        polyStyraRoom.connectRoom("south", styraEntrance);
+        polyEntrance.connectRoom("north", polyWH);
+        polyEntrance.connectRoom("west", polyReception);
+        polyReception.connectRoom("west", chemBaths);
+        chemBaths.connectRoom("south",dryRoom);
+        chemBaths.connectRoom("west", modernBR);
+
+
+        Room steelFactEntrance = new Room("Steel Factory entrance", "McFalryo Steel & co.'s" +
+                " factory lies here. The guys don't have a good reputation, but the profit they make" +
+                " manages to shut up questioning mouths.");
+        steelFactEntrance.addEntity(new Prop("sign", "It states: \"Mc Falroy Steel & co.\""));
+
+        Room mcFalWH = new Room("McFalroy Warehouse", "There is a distinct smell of " +
+                "oil, probably used to preserve the products.");
+        mcFalWH.addEntity(new Prop("Steel blocks", "They are about 30x30 cm", Material.STEEL));
+        mcFalWH.addEntity(new JunkItem("Steel bar", "A bar of about 50 cm, with a width of 2 cm.",
+                1, Size.NORMAL, Material.STEEL));
+
+        Room mcFalReception = new Room("Reception", "A very neat and clean reception");
+        mcFalReception.addEntity(new Prop("pictures", "They represent historical moments" +
+                " for this firm, such as the founding."));
+        mcFalReception.addEntity(new Prop("certificates", "Those are certificates of " +
+                "excellence of their materials"));
+        mcFalReception.addEntity(mg.generate("a receptionist", "Hello, how can I help you today?"));
+
+        Room artRoom = new Room("Art Exposition", "You can see a lot of paintings here." +
+                "Wow the guys are classy");
+
+        Room meltRoom = new Room("Melting room", "This is where the ore gets melted and" +
+                " turned into a river of very hot steel.");
+        meltRoom.addEntity(new Prop("cauldron", "The ore goes in there, melts and" +
+                "drips out."));
+
+        Room shapingRoom = new Room("Moulding station", "This is where the steel gets shaped into " +
+                "roughly what it's supposed to be.");
+        shapingRoom.addEntity(new Prop("moulds", "Those are full of molten steel, and " +
+                "once it will have cooled off, they will be removed to reveal the hardened steel inside"));
+        shapingRoom.addEntity(new Prop("Oven", "Once the steel has cooled, it gets put" +
+                " in here to temper it and make it stronger."));
+
+        Room forgingRoom = new Room("Forge", "Here the steel gets refined into the final shape");
+        forgingRoom.addEntity(new Prop("hydraulic hammer", "this strikes the steel and shapes it."));
+
+
+        industrialZone.connectRoom("east", steelFactEntrance);
+        steelFactEntrance.connectRoom("east", mcFalReception);
+        steelFactEntrance.connectRoom("north", mcFalWH);
+        mcFalReception.connectRoom("east", meltRoom);
+        meltRoom.connectRoom("east", shapingRoom);
+        shapingRoom.connectRoom("east", forgingRoom);
+
+        Room canteen = new Room("Canteen", "A huge hall, full of tables. " +
+                "There is a distinct smell of food here. Broccoli maybe?");
+        canteen.addEntity(mg.generate("cashier", "2 credits per meal, please."));
 
 
         hospitalReception.connectRoom("south", startbath);

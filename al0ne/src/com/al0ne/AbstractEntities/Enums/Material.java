@@ -24,7 +24,7 @@ public enum Material {
     ALUMINIUM(1, 1, 1, 2), CARDBOARD (1, 1, 1),
 
     //High Tech materials
-    NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10), SILICA(1, 0, 1, 4),
+    NANITE(10, 1, 20), TITANIUM(5, 5, 1, 10), SILICA(1, 0, 1, 4), STYRATEX(5, 2, 7),
 
     UNDEFINED(0, 0);
 
