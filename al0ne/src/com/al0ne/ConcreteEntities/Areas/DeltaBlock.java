@@ -430,6 +430,7 @@ public class DeltaBlock extends Area {
         addRoom(SFWork1);
         addRoom(SFWork2);
 
+        hospitalPark.connectRoom("south", industrialZone);
         industrialZone.connectRoom("west", SFEntrance);
         SFEntrance.connectRoom("west", SFReception);
         SFEntrance.connectRoom("north", SFWarehouse);
@@ -500,6 +501,14 @@ public class DeltaBlock extends Area {
                 "To the west you can see the entrance to Polymore, " +
                         "whereas to the south you see the entrance to StyraTex,");
 
+        addRoom(polyStyraRoom);
+        addRoom(polyEntrance);
+        addRoom(polyWH);
+        addRoom(polyReception);
+        addRoom(chemBaths);
+        addRoom(dryRoom);
+        addRoom(modernBR);
+
         industrialZone.connectRoom("south", polyStyraRoom);
         polyStyraRoom.connectRoom("west", polyEntrance);
         polyStyraRoom.connectRoom("south", styraEntrance);
@@ -547,10 +556,19 @@ public class DeltaBlock extends Area {
         forgingRoom.addEntity(new Prop("hydraulic hammer", "this strikes the steel and shapes it."));
 
 
+        addRoom(steelFactEntrance);
+        addRoom(mcFalReception);
+        addRoom(mcFalWH);
+        addRoom(meltRoom);
+        addRoom(artRoom);
+        addRoom(shapingRoom);
+        addRoom(forgingRoom);
+
         industrialZone.connectRoom("east", steelFactEntrance);
         steelFactEntrance.connectRoom("east", mcFalReception);
         steelFactEntrance.connectRoom("north", mcFalWH);
         mcFalReception.connectRoom("east", meltRoom);
+        mcFalReception.connectRoom("south", artRoom);
         meltRoom.connectRoom("east", shapingRoom);
         shapingRoom.connectRoom("east", forgingRoom);
 
@@ -559,6 +577,6 @@ public class DeltaBlock extends Area {
         canteen.addEntity(mg.generate("cashier", "2 credits per meal, please."));
 
 
-        hospitalReception.connectRoom("south", startbath);
+        startbath.connectRoom("south", forgingRoom);
     }
 }
