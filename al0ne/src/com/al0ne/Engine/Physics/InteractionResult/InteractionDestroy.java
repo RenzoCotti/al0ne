@@ -1,6 +1,7 @@
 package com.al0ne.Engine.Physics.InteractionResult;
 
 import com.al0ne.AbstractEntities.Abstract.Item;
+import com.al0ne.AbstractEntities.Pairs.Pair;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Room;
 import com.al0ne.AbstractEntities.Abstract.Interactable;
@@ -16,8 +17,8 @@ public class InteractionDestroy extends InteractionBehaviour {
         Room currentRoom = player.getCurrentRoom();
         String ID = toDestroy.getID();
         if(player.hasItemInInventory(ID)){
-            Item item = (Item) player.getInventory().get(ID).getEntity();
-            player.removeOneItem(item);
+            Pair p = player.getInventory().get(ID);
+            player.removeOneItem(p);
         } else{
             currentRoom.getEntities().remove(ID);
         }

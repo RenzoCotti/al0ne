@@ -27,7 +27,7 @@ public class FetchQuest extends Quest{
         if(player.hasItemInInventory(getEntityRequired().getEntity().getID())){
             Pair pair = player.getItemPair(getEntityRequired().getEntity().getID());
             if(pair.getCount() >= entityRequired.getCount()){
-                player.removeAmountItem((Item) pair.getEntity(), entityRequired.getCount());
+                player.removeAmountItem(pair, entityRequired.getCount());
                 questReward(player);
                 setCompleted();
             }

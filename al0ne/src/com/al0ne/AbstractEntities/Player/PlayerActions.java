@@ -50,12 +50,12 @@ public class PlayerActions {
                     int toReload = rweapon.getMagazineSize()-rweapon.getInMagazine();
                     if(ammo.getCount() >= toReload){
                         rweapon.fullReload();
-                        player.removeAmountItem((Item) ammo.getEntity(), toReload);
+                        player.removeAmountItem(ammo, toReload);
                         printToLog("You reload your "+rweapon.getName()+".");
                         return true;
                     } else {
                         rweapon.setInMagazine(ammo.getCount()+rweapon.getInMagazine());
-                        player.removeAmountItem((Item) ammo.getEntity(), ammo.getCount());
+                        player.removeAmountItem(ammo, ammo.getCount());
                         printToLog("You partially reload your "+rweapon.getName()+".");
                         return true;
                     }
@@ -201,7 +201,7 @@ public class PlayerActions {
                 weapon.modifyIntegrity(-1);
             }
         } else if(weapon instanceof RangedWeapon && player.hasItemInInventory(((RangedWeapon) weapon).getAmmoID())){
-            Item ammo = (Item) player.getItemPair(((RangedWeapon) weapon).getAmmoID()).getEntity();
+            Pair ammo = player.getItemPair(((RangedWeapon) weapon).getAmmoID());
             player.removeOneItem(ammo);
             if(isWorn){
                 weapon.modifyIntegrity(-1);
@@ -308,49 +308,10 @@ public class PlayerActions {
 
     //this function makes the player drop X amount of target, if it has it
     public static int drop(Player player, Pair target, Integer amt){
-        Room currentRoom = player.getCurrentRoom();
-        if (target != null){
-            //trying to drop more than there are, abort
-            if(target.getCount() < amt){
-                printToLog("You have only "+target.getCount()+" of those.");
-                return 2;
-            }
-
-            Pair roomItem = currentRoom.getEntityPair(target.getEntity().getID());
-            //the item is undroppable
-            if(!((Item) target.getEntity()).canDrop() ){
-                printToLog("You can't drop it.");
-                return 2;
-            }
-
-            //we handle adding items to the room
-            if (roomItem != null){
-                roomItem.modifyCount(amt);
-            } else {
-                currentRoom.addItem((Item) target.getEntity(), amt);
-            }
-
-            //we modify the player's weight accordingly, and remove the item if necessary
-            if(target.getEntity() instanceof Currency){
-                player.modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
-                target.modifyCount(-amt);
-                player.getMoneyContainer().modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
-            } else {
-                player.modifyWeight(-(((Item) target.getEntity()).getWeight() * amt));
-                target.modifyCount(-amt);
-            }
-            if (target.getCount() == 0){
-                player.getInventory().remove(target.getEntity().getID());
-            }
-            //we unequip the item if it was equipped
-            if (target.getEntity() instanceof Wearable &&  player.isWearingItem(target.getEntity().getID())){
-                player.unequipItem(target.getEntity().getID());
-            }
-            return 1;
-        } else {
-            //the item is not in the inventory
+        if(!player.removeAmountItem(target, amt)){
             return 0;
         }
+        return 1;
     }
 
 
@@ -358,35 +319,8 @@ public class PlayerActions {
     //this function tries to pick up an amount from Item
     public static int pickUpItem(Player player, Pair item, Integer amt){
 
-        Room currentRoom = player.getCurrentRoom();
-
-        if(player.hasItemInInventory(item.getEntity().getID()) && ((Item)item.getEntity()).isUnique()){
-            printToLog("You can have just one with you.");
-            //bypassed by taking chest with that in it
+        if(!player.addAmountItem(item, amt)){
             return 0;
-        }
-
-
-        if(item.getCount() < amt){
-            printToLog("There are just "+item.getCount()+" of those.");
-            return 0;
-        }
-
-        if(!((Interactable)item.getEntity()).canTake()){
-            printToLog("You can't take it.");
-            return 0;
-        }
-
-        Item toAdd = (Item) item.getEntity();
-        if (!player.addAmountItem(item, amt)){
-//            if(! (item.getEntity() instanceof Currency) ){
-                printToLog("Too heavy to carry.");
-//            }
-            return 0;
-        } else {
-            if (item.isEmpty()){
-                currentRoom.getEntities().remove(toAdd.getID());
-            }
         }
         return 1;
     }

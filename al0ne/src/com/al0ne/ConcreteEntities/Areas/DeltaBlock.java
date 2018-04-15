@@ -574,7 +574,7 @@ public class DeltaBlock extends Area {
 
         Room canteen = new Room("Canteen", "A huge hall, full of tables. " +
                 "There is a distinct smell of food here. Broccoli maybe?");
-        canteen.addEntity(mg.generate("cashier", "2 credits per meal, please."));
+//        canteen.addEntity(mg.generate("cashier", "2 credits per meal, please."));
 
 
         startbath.connectRoom("south", forgingRoom);

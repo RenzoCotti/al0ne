@@ -163,4 +163,31 @@ public class Utility {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 
+    public static int parseNumber(String[] temp){
+        int amt = 1;
+        try {
+            amt = Integer.parseInt(temp[1]);
+        } catch (NumberFormatException ex){
+            if (temp[1].equals("all")) {
+                return -1;
+            }
+        }
+        return amt;
+    }
+
+    public static String getAllString (String[] temp, int amt){
+        String item;
+        if(amt == -1){
+            //take all shoes
+            item = Utility.stitchFromTo(temp, 2, temp.length);
+        } else if(amt == 1){
+            //take shoes
+            item = Utility.stitchFromTo(temp, 1, temp.length);
+        } else {
+            //take 12 shoes
+            item = Utility.stitchFromTo(temp, 2, temp.length);
+        }
+        return item;
+    }
+
 }

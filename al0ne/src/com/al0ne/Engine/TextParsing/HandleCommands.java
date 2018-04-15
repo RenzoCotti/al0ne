@@ -23,6 +23,8 @@ import java.util.HashMap;
 
 import static com.al0ne.Engine.Main.printToLog;
 import static com.al0ne.Engine.TextParsing.ParseInput.wrongCommand;
+import static com.al0ne.Engine.Utility.Utility.getAllString;
+import static com.al0ne.Engine.Utility.Utility.parseNumber;
 
 /**
  * Created by BMW on 24/04/2017.
@@ -366,71 +368,34 @@ public class HandleCommands {
                 return false;
             }
             for(Pair p : items){
-                int oldCount = p.getCount();
                 if(PlayerActions.pickUpItem(player, p, p.getCount()) == 0){
+                    //we stop whenever we fail to pickup an item
                     break;
-                }
-                Pair pair = player.getItemPair(p.getEntity().getID());
-
-                Item currentItem = (Item) pair.getEntity();
-                if(oldCount > 1){
-                    printToLog("Taken "+oldCount+"x "+currentItem.getName()+".");
-                } else{
-                    printToLog("Taken "+currentItem.getName()+".");
                 }
             }
             return true;
         }
 
 
-        boolean all = false;
 
-        String item;
+        int amt = parseNumber(temp);
+        String item = getAllString(temp, amt);
 
-        //we try to get a number from temp, eg. take 12 rock
-        int amt = 0;
-        try {
-            amt = Integer.parseInt(temp[1]);
-            item = Utility.stitchFromTo(temp, 2, temp.length);
 
-        } catch (NumberFormatException ex){
-            if (temp.length > 2 && temp[1].equals("all")) {
-                all = true;
-                item = Utility.stitchFromTo(temp, 2, temp.length);
-            } else {
-                item = Utility.stitchFromTo(temp, 1, temp.length);
+
+        //we get the best guess for the item
+        Pair p  = getPotentialItem(item, player, "room");
+        if(p != null){
+            int count = p.getCount();
+
+            //means we are taking all
+            if(amt == -1){
+                amt = count;
             }
-        }
 
-
-
-        items = getPotentialEntities(item, player, "room").getItems();
-
-
-        if (items.size() > 1) {
-            printToLog("Be more specific.");
-            return false;
-        } else if(items.size() == 1){
-            Pair currentPair = items.get(0);
-            Item currentItem = (Item) currentPair.getEntity();
-            int count = currentPair.getCount();
-
-            if (all) {
-                if (PlayerActions.pickUpItem(player, currentPair, count) == 1) {
-                    printToLog(count+"x "+currentItem.getName() + " added to your inventory.");
-                }
-
-            } else if (amt != 0) {
-                if (PlayerActions.pickUpItem(player, items.get(0), amt) == 1) {
-                    printToLog(amt+"x "+currentItem.getName() + " added to your inventory.");
-                }
-            } else {
-                if (PlayerActions.pickUpItem(player, items.get(0), 1) == 1) {
-                    printToLog(currentItem.getName() + " added to your inventory.");
-                }
-            }
+            PlayerActions.pickUpItem(player, p, amt);
         } else {
-            printToLog("You can't take that.");
+            printToLog("You can't see a "+item);
         }
 
         return true;
@@ -446,83 +411,46 @@ public class HandleCommands {
             return false;
         }
 
-        ArrayList<Pair> possibleItems;
-
         wrongCommand = 0;
 
+        //drop all items in your inventory
         if(temp.length == 2 && temp[1].equals("all")){
             Collection<Pair> cp = player.getInventory().values();
+            //this is done to prevent a concurrent exception i.e. we remove
+            //stuff from the array we're iterating onto
             ArrayList<Pair> toRemove = new ArrayList<>();
 
             if(cp.size() == 0){
                 printToLog("You don't have any item with you.");
                 return false;
             }
+
             for(Pair p : cp){
                 if(((Item)p.getEntity()).canDrop()){
                     toRemove.add(p);
                 }
             }
             for(Pair p : toRemove){
-                if(PlayerActions.drop(player, p, p.getCount())==1){
-                    Item currentItem = (Item) p.getEntity();
-                    printToLog("Dropped "+currentItem.getName()+".");
-                }
+                PlayerActions.drop(player, p, p.getCount());
             }
             return true;
         }
 
 
-        boolean all = false;
-
         String item;
-        int amt=0;
+        int amt = parseNumber(temp);
+        item = getAllString(temp, amt);
 
-        try{
-            amt = Integer.parseInt(temp[1]);
-            item = Utility.stitchFromTo(temp, 2, temp.length);
 
-        } catch (NumberFormatException ex){
-            if (temp.length > 2 && temp[1].equals("all")) {
-                all = true;
-                item = Utility.stitchFromTo(temp, 2, temp.length);
-            } else {
-                item = Utility.stitchFromTo(temp, 1, temp.length);
+        Pair p = getPotentialItem(item, player, "player");
+
+        if(p != null){
+            if (amt == -1) {
+                amt = p.getCount();
             }
-        }
 
+            PlayerActions.drop(player, p, amt);
 
-
-        possibleItems = getPotentialEntities(item, player, "player").getItems();
-
-        if (possibleItems.size() > 1) {
-            printToLog("Be more specific.");
-            return false;
-        } else if(possibleItems.size() == 1){
-            Item i = (Item)possibleItems.get(0).getEntity();
-            Pair p = possibleItems.get(0);
-            if (all) {
-                int result = PlayerActions.drop(player, p, p.getCount());
-                if (result == 1) {
-                    printToLog("You drop all the " + i.getName());
-                } else if(result == 0){
-                    printToLog("You don't seem to have a " + i.getName() + " with you.");
-                }
-            } else if (amt != 0) {
-                int result = PlayerActions.drop(player, p, amt);
-                if (result == 1) {
-                    printToLog("You drop "+ amt+" "+ i.getName());
-                } else if (result == 0){
-                    printToLog("You don't seem to have a " + i.getName() + " with you.");
-                }
-            } else {
-                int result = PlayerActions.drop(player, p, 1);
-                if (result == 1) {
-                    printToLog("You drop the " + i.getName());
-                } else if (result == 0){
-                    printToLog("You don't seem to have a " + i.getName() + " with you.");
-                }
-            }
         } else {
             printToLog("You can't see such an item to drop. ");
         }

@@ -17,9 +17,7 @@ public class InteractionAdd extends InteractionBehaviour {
     public void interactionEffect(Player p) {
 
         if (toAdd instanceof Item){
-            if (!p.addAmountItem(new Pair(toAdd,  amount), amount)){
-                p.getCurrentRoom().addEntity(toAdd, amount);
-            }
+            p.addAmountItem(new Pair(toAdd,  amount), amount);
         } else {
             p.getCurrentRoom().addEntity(toAdd, amount);
         }

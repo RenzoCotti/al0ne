@@ -43,8 +43,8 @@ public class Shopkeeper extends NPC {
     public void buy(Player player, String toBuy){
         if (hasItemInInventory(toBuy)){
             Pair item = getItemPair(toBuy);
-            if (GameChanges.hasEnoughMoney(player, item.getCount())){
-                GameChanges.removeAmountMoney(player, item.getCount());
+            if (GameChanges.hasEnoughMoney(player, ((Item)item.getEntity()).getPrice())){
+                GameChanges.removeAmountMoney(player, ((Item)item.getEntity()).getPrice());
                 //todo: need to sort out prices
 
                 Pair pairInv = player.getItemPair(item.getEntity().getID());

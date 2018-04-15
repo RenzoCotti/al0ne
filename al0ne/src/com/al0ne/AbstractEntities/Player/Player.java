@@ -19,6 +19,7 @@ import com.al0ne.ConcreteEntities.Statuses.ConcreteStatuses.Thirst;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.al0ne.Engine.Main.player;
 import static com.al0ne.Engine.Main.printToLog;
 
 /**
@@ -167,20 +168,62 @@ public class Player extends WorldCharacter {
 
 
     //this function removes 1 item from pair to the inventory
-    public boolean removeOneItem(Item i) {
-        return removeAmountItem(i, 1);
+    public boolean removeOneItem(Pair p) {
+        return removeAmountItem(p, 1);
     }
 
     //this function removes 1 item from pair to the inventory
-    public boolean removeAmountItem(Item i, int count) {
-        Pair p = getItemPair(i.getID());
-        if(p != null){
-            modifyWeight(-i.getWeight() * count);
-            //if the item is depleted, remove it
-            if(!p.modifyCount(-count)){
-                inventory.remove(i.getID());
-            }
+    public boolean removeAmountItem(Pair p, int count) {
+
+        Item toRemove = (Item) p.getEntity();
+
+
+
+        //trying to drop more than there are, abort
+        if(p.getCount() < count){
+            printToLog("You have only "+p.getCount()+" of those.");
+            return false;
+        } else if(!toRemove.canDrop()){
+            //the item is undroppable
+            printToLog("You can't drop it.");
+            return false;
+        } else if(toRemove instanceof Wearable && isWearingItem(toRemove.getID())){
+            //we unequip the item if it was equipped
+            unequipItem(toRemove.getID());
+            printToLog("(first unequipping the "+toRemove.getName()+")");
         }
+
+        Pair roomItem = currentRoom.getEntityPair(p.getEntity().getID());
+
+        //we handle adding items to the room
+        if (roomItem != null){
+            roomItem.modifyCount(count);
+        } else {
+            currentRoom.addItem((Item) p.getEntity(), count);
+        }
+
+
+
+        if(toRemove instanceof Currency){
+            getMoneyContainer().modifyWeight(-(toRemove.getWeight() * count));
+        } else {
+            modifyWeight(-toRemove.getWeight() * count);
+            p.modifyCount(-count);
+        }
+
+        if(count == 1){
+            printToLog("Dropped "+toRemove.getName()+".");
+        } else {
+            printToLog("Dropped "+p.getCount()+"x "+toRemove.getName()+".");
+
+        }
+
+        //if the item is depleted, remove it
+        if(p.isEmpty()){
+            inventory.remove(toRemove.getID());
+        }
+
+
         return true;
     }
 
@@ -190,43 +233,70 @@ public class Player extends WorldCharacter {
     //returns true if it's successful, else the player can't carry them
     public boolean addAmountItem(Pair pair, Integer amount) {
         Item item = (Item) pair.getEntity();
+
+        if(!item.canTake()){
+            printToLog("You can't take it.");
+            return false;
+        } else if(hasItemInInventory(item.getID()) && item.isUnique()){
+            printToLog("You can have just one with you.");
+            //bypassed by taking chest with that in it
+            return false;
+        } else if(pair.getCount() < amount){
+            printToLog("There are just "+pair.getCount()+" of those.");
+            return false;
+        }
+
         if (modifyWeight(item.getWeight() * amount)){
 
             //case we're picking up money, add it to the money container
             if(pair.getEntity() instanceof Currency) {
                 if(getMoneyContainer() != null){
                     getMoneyContainer().putIn(pair, amount);
-                    return true;
                 } else {
                     printToLog("You need a way to keep that money with you!");
                     return false;
                 }
+                //the player already has the item, we modify the pair
             } else if (hasItemInInventory(item.getID())){
                 Pair fromInventory = inventory.get(item.getID());
                 fromInventory.modifyCount(amount);
                 pair.modifyCount(-amount);
-                return true;
             } else {
+                //its a new item, we create a new pair
                 inventory.put(item.getID(), new Pair(item, amount));
                 pair.modifyCount(-amount);
-                return true;
             }
+
+            //if the pair is depleted, we remove it
+            if(pair.isEmpty()){
+                currentRoom.getEntities().remove(item.getID());
+            }
+
+            if(amount == 1){
+                printToLog(item.getName() + " added to your inventory.");
+            } else {
+                printToLog(amount+"x "+item.getName() + " added to your inventory.");
+            }
+
+
+            return true;
         } else {
+            printToLog("Too heavy to carry.");
             return false;
         }
     }
 
     //this function adds 1 item from pair to the inventory
     //returns true if it's successful, else the player can't carry it
-    public boolean addOneItem(Pair pair) {
-        return addAmountItem(pair, 1);
+    public void addOneItem(Pair pair) {
+         addAmountItem(pair, 1);
     }
 
 
     //this function adds all items from pair to the inventory
     //returns true if it's successful, else the player can't carry them
-    public boolean addAllItem(Pair pair) {
-        return addAmountItem(pair, pair.getCount());
+    public void addAllItem(Pair pair) {
+         addAmountItem(pair, pair.getCount());
     }
 
     //this function adds an item, amount times
