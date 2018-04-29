@@ -6,6 +6,7 @@ import com.al0ne.AbstractEntities.Enums.Size;
 import com.al0ne.AbstractEntities.Enums.TechLevel;
 import com.al0ne.AbstractEntities.Events.CompleteQuestEvent;
 import com.al0ne.AbstractEntities.Events.HealthEvent;
+import com.al0ne.AbstractEntities.Events.PrintEvent;
 import com.al0ne.AbstractEntities.Pairs.Subject;
 import com.al0ne.AbstractEntities.Player.Player;
 import com.al0ne.AbstractEntities.Quests.TravelQuest;
@@ -13,7 +14,10 @@ import com.al0ne.AbstractEntities.Abstract.Interactable;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.Credit;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Coin.CreditOr;
 import com.al0ne.ConcreteEntities.Items.ConcreteItems.Weapons.MeleeWeapon.Mace;
+import com.al0ne.ConcreteEntities.Items.Props.Types.VendingMachine;
 import com.al0ne.ConcreteEntities.Items.Types.Container;
+import com.al0ne.ConcreteEntities.Items.Types.Drinkable;
+import com.al0ne.ConcreteEntities.Items.Types.Food;
 import com.al0ne.ConcreteEntities.Items.Types.Wearable.Armor;
 import com.al0ne.Engine.Physics.Behaviours.WaterBehaviour;
 import com.al0ne.Engine.Physics.InteractionResult.InteractionBehaviour;
@@ -471,8 +475,8 @@ public class DeltaBlock extends Area {
         dryRoom.addEntity(new Prop("fans", "They are quite large, they look about 5 meters " +
                 "wide.", Material.STEEL));
         dryRoom.addEvent(new HealthEvent(20, "The noise hurts your ears", -1));
-        NPC earmuffsGuy = new NPC("guy wearing earmuffs", "He wears a pair of orange earmuffs. You call out " +
-                "to him but he doesn't hear you.", "...");
+        NPC earmuffsGuy = new NPC("guy wearing earmuffs", "He wears a pair of orange earmuffs. " +
+                "You call out to him but he doesn't hear you.", "...");
         dryRoom.addEntity(earmuffsGuy);
 
         Room modernBR = new Room("Modern looking room", "This looks like a break room");
@@ -574,9 +578,89 @@ public class DeltaBlock extends Area {
 
         Room canteen = new Room("Canteen", "A huge hall, full of tables. " +
                 "There is a distinct smell of food here. Broccoli maybe?");
-//        canteen.addEntity(mg.generate("cashier", "2 credits per meal, please."));
+        VendingMachine canteenvm = new VendingMachine("Food dispenser", "a machine that sells meals.",
+                Material.IRON);
+        canteenvm.addItem(new Food("meal", "a prepackaged instant meal, ready to be consumed. " +
+                "Chicken flavoured.", 0.7, Size.NORMAL, 30), 10);
+        canteen.addEntity(canteenvm);
+
+        Room southEntranceFD = new Room("South entrance of the Factory District",
+                "This place reeks of oil and rust.");
+        southEntranceFD.setCustomDirection("To the west you can see the industrial district.");
+
+        Room openedManhole = new Room("Opened manhole",
+                "You can see a man working in a manhole, probably fixing some tubing.");
+        openedManhole.setCustomDirection("To the east you see an overpass");
+        openedManhole.addEntity(mg.generate("worker", "Sorry mate, I'm busy"));
+        openedManhole.addEntity(new Prop("warning sign", "A red and white rusted" +
+                "warning sign.", Material.IRON));
+
+        Room overpass = new Room("Overpass",
+                "You're on an overpass, on top of the highway.");
+        overpass.addEvent(new PrintEvent(20, "A car zooms very fast under you!"));
+        overpass.addEntity(new JunkItem("crumpled can", "A tin soda can that was squashed",
+                0.1, Material.ALUMINIUM));
+
+        Room kiosk = new Room("Battered vending machine", "");
+        VendingMachine kioskvm = new VendingMachine();
+        kioskvm.addItem(new Food("snack", "An energy bar of 150 kcal",
+                0.05, Size.VSMALL, 5), 5);
+        kioskvm.addItem(new Drinkable("Energy drink", "An energetic drink containing " +
+                "loads of caffeine and sugar.", 0.25, Size.SMALL), 3);
+        kioskvm.addItem(new JunkItem("newstab", "broken, unfortunately.",
+                0.2, Size.SMALL), 1);
+        kiosk.addEntity(kioskvm);
+
+        Room rundownShack = new Room("Shack", "A moldy, wooden shack " +
+                "that got run down by the elements.");
+        Shopkeeper ddealer = new Shopkeeper("hooded figure",
+                "doesn't look very much trustworthy", "What are you buying?");
+        ddealer.simpleAddItem(new JunkItem("meth", "don't do drugs, dummy.",
+                0.05, Size.VSMALL), 3);
+        ddealer.simpleAddItem(new JunkItem("coke", "drugs are bad mate.",
+                0.05, Size.VSMALL), 5);
+        //TODO add stimulants, what they do is offer you a free turn every x turns, by returning false
+        //to check if it interferes with enemies attacking
+        rundownShack.addEntity(ddealer);
+
+        Room bloodyAlley = new Room("Bloody alley", "You can see a large crimson " +
+                "stain on the wall");
+        bloodyAlley.addEntity(new InvisibleProp("stain", "Looks like fresh blood."));
+        bloodyAlley.addItem(new JunkItem("shards of glass", "they are a bit bloody",
+                0.1, Material.GLASS ));
+
+        Room aPuddle = new Room("A puddle", "It's fairly dark in here, your feet seem " +
+                "to be in a puddle. There's something on the ground.");
+        aPuddle.setLit(false);
+        //if lit -> disfigured corpse, puddle of blood and water
+
+        Room muddyCorner = new Room("Muddy corner", "The water has made the " +
+                "ground quite muddy.");
+        muddyCorner.addEntity(new Prop("footprints", "They are larger than yours," +
+                " they are set quite deep in the mud, as if the person was carrying something very heavy."));
 
 
-        startbath.connectRoom("south", forgingRoom);
+        addRoom(canteen);
+        addRoom(southEntranceFD);
+        addRoom(openedManhole);
+        addRoom(overpass);
+        addRoom(bloodyAlley);
+        addRoom(aPuddle);
+        addRoom(kiosk);
+        addRoom(rundownShack);
+        addRoom(muddyCorner);
+
+        canteen.connectRoom("west", polyStyraRoom);
+        canteen.connectRoom("east", southEntranceFD);
+        southEntranceFD.connectRoom("east", openedManhole);
+        southEntranceFD.connectRoom("east", overpass);
+        southEntranceFD.connectRoom("north", bloodyAlley);
+        bloodyAlley.connectRoom("north", aPuddle);
+        aPuddle.connectRoom("west", kiosk);
+        aPuddle.connectRoom("north", rundownShack);
+        aPuddle.connectRoom("east", muddyCorner);
+        muddyCorner.connectRoom("north", graffittiMaze);
+
+
     }
 }

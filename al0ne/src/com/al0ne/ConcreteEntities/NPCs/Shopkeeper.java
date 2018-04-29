@@ -33,9 +33,9 @@ public class Shopkeeper extends NPC {
     }
 
     @Override
-    public boolean simpleAddItem(Item item, Integer price) {
-        boolean result =  super.simpleAddItem(item, price);
-        list+=item.getName()+" - "+price+" coins\n";
+    public boolean simpleAddItem(Item item, Integer amt) {
+        boolean result =  super.simpleAddItem(item, amt);
+        list+=item.getName()+" - "+item.getPrice()+" coins\n";
         addSubject("items", new Subject(list));
         return result;
     }

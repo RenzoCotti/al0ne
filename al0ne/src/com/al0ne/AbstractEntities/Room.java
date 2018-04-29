@@ -157,43 +157,24 @@ public class Room extends Entity {
         printArrayInRoom(enemies, "You can see ");
     }
 
-    public void printArrayInRoom(ArrayList entities, String begin){
-        if(entities.size() > 0){
-            printToSingleLine(begin);
-            for (int i=0; i<entities.size(); i++) {
-                Entity currentEntity = ((Entity)entities.get(i));
-                if(currentEntity instanceof NPC){
-                    printToSingleLine(currentEntity.getName());
-                } else{
-                    printToSingleLine(currentEntity.getShortDescription().toLowerCase());
-                }
-                if(i==entities.size()-2){
-                    printToSingleLine(" and ");
-                } else if(i!=entities.size()-1){
-                    printToSingleLine(", ");
-                } else{
-                    printToSingleLine(" here.\n");
-                }
-            }
-        }
-    }
 
 
-    public ArrayList<NPC> getNPCList() {
-        ArrayList<NPC> npcList = new ArrayList<>();
+
+    public ArrayList<Pair> getNPCList() {
+        ArrayList<Pair> npcList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
             if (e instanceof NPC){
-                NPC npc = (NPC) e;
-                npcList.add(npc);
+                npcList.add(p);
             }
         }
         return npcList;
     }
 
     public NPC getNPC(String name) {
-        ArrayList<NPC> npcs = getNPCList();
-        for (Entity e : npcs){
+        ArrayList<Pair> npcs = getNPCList();
+        for (Pair p : npcs){
+            Entity e = p.getEntity();
             if (e.getName().toLowerCase().contains(name)){
                 return (NPC) e;
             }
@@ -202,18 +183,17 @@ public class Room extends Entity {
     }
 
     public void printNPCs() {
-        ArrayList<NPC> npcs = getNPCList();
+        ArrayList<Pair> npcs = getNPCList();
         printArrayInRoom(npcs, "There is ");
     }
 
 
-    public ArrayList<Prop> getPropList() {
-        ArrayList<Prop> propList = new ArrayList<>();
+    public ArrayList<Pair> getPropList() {
+        ArrayList<Pair> propList = new ArrayList<>();
         for (Pair p : entities.values()){
             Entity e = p.getEntity();
             if (e instanceof Prop){
-                Prop prop = (Prop) e;
-                propList.add(prop);
+                propList.add(p);
             }
         }
         return propList;
@@ -237,34 +217,43 @@ public class Room extends Entity {
 
     private void printItems(){
         ArrayList<Pair> items = getItemList();
-        if (items.size()!=0){
-            printToSingleLine("You can see ");
-            for (int i=0; i<items.size(); i++) {
-                Item currentItem = (Item) items.get(i).getEntity();
-                int count = items.get(i).getCount();
-                if(count == 1){
-                    printToSingleLine(currentItem.getShortDescription());
-                } else{
-                    printToSingleLine(count + " " + currentItem.getName());
+        printArrayInRoom(items, "You can see");
+    }
+
+    public void printArrayInRoom(ArrayList<Pair> entities, String begin){
+        if(entities.size() > 0){
+            printToSingleLine(begin);
+            for (int i=0; i<entities.size(); i++) {
+                Entity currentEntity = (entities.get(i).getEntity());
+                if(currentEntity instanceof NPC){
+                    printToSingleLine(currentEntity.getName());
+                } else if (currentEntity instanceof Item){
+                    int count = entities.get(i).getCount();
+                    if(count == 1){
+                        printToSingleLine(currentEntity.getShortDescription());
+                    } else{
+                        printToSingleLine(count + " " + currentEntity.getName());
+                    }
+                } else {
+                    printToSingleLine(currentEntity.getShortDescription().toLowerCase());
                 }
-                if(i==items.size()-2){
+                if(i==entities.size()-2){
                     printToSingleLine(" and ");
-                } else if(i!=items.size()-1){
+                } else if(i!=entities.size()-1){
                     printToSingleLine(", ");
                 } else{
-                    printToSingleLine(" here.");
-                    printToLog();
+                    printToSingleLine(" here.\n");
                 }
             }
         }
     }
 
     private void printProps(){
-        ArrayList<Prop> props = getPropList();
-        ArrayList<Prop> toRemove = new ArrayList<>();
+        ArrayList<Pair> props = getPropList();
+        ArrayList<Pair> toRemove = new ArrayList<>();
 
-        for(Prop p : props){
-            if (p.isInvisible()){
+        for(Pair p : props){
+            if (((Prop) p.getEntity()).isInvisible()){
                 toRemove.add(p);
             }
         }
